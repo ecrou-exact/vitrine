@@ -20,19 +20,32 @@ function show(page) {
   return name;
 }
 
-/** Maps a URL of a Markdown file inside docs/ to a page name, or null. */
+/** Maps a URL of a Markdown file inside docs/ to a page name and section, or null. */
 function pageFromUrl(href) {
   const url = new URL(href, location.href);
   if (url.origin !== location.origin) return null;
   const match = /\/docs\/(.+)\.md$/.exec(url.pathname);
-  return match && pages.has(match[1]) ? match[1] : null;
+  return match && pages.has(match[1]) ? { page: match[1], hash: url.hash } : null;
 }
 
-function navigate(page) {
+/** Scrolls to a heading inside the rendered document once it is ready. */
+function scrollToSection(hash) {
+  if (!hash) return;
+  const id = decodeURIComponent(hash.slice(1));
+  const reveal = () => {
+    const target = doc.shadowRoot?.getElementById(id);
+    if (!target) return;
+    target.scrollIntoView({ block: 'start' });
+    target.focus({ preventScroll: true });
+  };
+  doc.addEventListener('vt-ready', reveal, { once: true });
+}
+
+function navigate(page, hash = '') {
+  scrollToSection(hash);
   const name = show(page);
-  history.pushState({ page: name }, '', `docs.html?page=${encodeURIComponent(name)}`);
-  window.scrollTo({ top: 0 });
-  doc.focus?.();
+  history.pushState({ page: name }, '', `docs.html?page=${encodeURIComponent(name)}${hash}`);
+  if (!hash) window.scrollTo({ top: 0 });
 }
 
 for (const link of links) {
@@ -54,11 +67,12 @@ doc.addEventListener('click', (event) => {
   )
     return;
   const anchor = event.composedPath().find((node) => node instanceof HTMLAnchorElement);
-  const page = anchor ? pageFromUrl(anchor.href) : null;
-  if (!page) return;
+  const target = anchor ? pageFromUrl(anchor.href) : null;
+  if (!target) return;
   event.preventDefault();
-  navigate(page);
+  navigate(target.page, target.hash);
 });
 
 window.addEventListener('popstate', () => show(new URLSearchParams(location.search).get('page')));
+scrollToSection(location.hash);
 show(new URLSearchParams(location.search).get('page'));
