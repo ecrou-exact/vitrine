@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @head -->
+    <title>Playground — Vitrine</title>
+    <meta
+      name="description"
+      content="Try every Vitrine attribute live and copy the resulting HTML or JavaScript."
+    />
+    <script src="assets/playground.js" defer></script>
+  </head>
+  <body data-page="playground">
+    <!-- @header -->
+
+    <main id="main" class="wrap">
+      <header class="page-head">
+        <h1>Playground</h1>
+        <p>
+          Change any attribute and the component updates. Paste your own content: it is set through
+          the
+          <code>content</code> property, so even hostile input stays harmless.
+        </p>
+      </header>
+
+      <div class="playground">
+        <form class="controls" id="controls" aria-label="Component settings"></form>
+        <div class="stage">
+          <div id="preview" aria-live="off"></div>
+          <vt-code
+            id="html-out"
+            language="html"
+            variant="full"
+            label="HTML"
+            search="false"
+            download="false"
+            line-numbers="false"
+          ></vt-code>
+          <vt-code
+            id="js-out"
+            language="js"
+            variant="full"
+            label="JavaScript"
+            search="false"
+            download="false"
+            line-numbers="false"
+          ></vt-code>
+        </div>
+      </div>
+    </main>
+
+    <!-- @footer -->
+  </body>
+</html>
