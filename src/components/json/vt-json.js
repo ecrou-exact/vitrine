@@ -4,7 +4,7 @@ import codeCss from '../../styles/code.css?raw';
 import jsonCss from '../../styles/json.css?raw';
 import { parseEnum, parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
-import { buildCodeView } from '../../core/code-view.js';
+import { buildCodeView, revealMatch } from '../../core/code-view.js';
 import { getConfig } from '../../core/config.js';
 import { h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
@@ -225,7 +225,7 @@ export class VtJson extends VtBase {
       const search = new TextSearch(codeView.code);
       target = {
         run: (query) => search.run(query),
-        go: (index) => search.go(index)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }),
+        go: (index) => revealMatch(search.go(index)),
         clear: () => search.clear(),
       };
       content = [
