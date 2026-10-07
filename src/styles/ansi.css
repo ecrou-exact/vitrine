@@ -1,0 +1,172 @@
+/*
+ * ANSI colors and text styles, shared by <vt-terminal> and <vt-log>.
+ * The 16 colors map to theme colors, so every theme keeps its contrast; each can be
+ * overridden with a public token (--vt-ansi-red…).
+ */
+.vt {
+  --_ansi-0: var(--vt-ansi-black, color-mix(in srgb, var(--_code-fg) 50%, var(--_code-bg-solid)));
+  --_ansi-1: var(--vt-ansi-red, var(--_danger));
+  --_ansi-2: var(--vt-ansi-green, var(--_success));
+  --_ansi-3: var(--vt-ansi-yellow, var(--_warning));
+  --_ansi-4: var(--vt-ansi-blue, var(--_info));
+  --_ansi-5: var(--vt-ansi-magenta, var(--_syntax-keyword));
+  --_ansi-6: var(--vt-ansi-cyan, var(--_syntax-string));
+  --_ansi-7: var(--vt-ansi-white, color-mix(in srgb, var(--_code-fg) 85%, var(--_code-bg-solid)));
+  --_ansi-8: var(--vt-ansi-bright-black, var(--_fg-muted));
+  --_ansi-9: var(--vt-ansi-bright-red, color-mix(in srgb, var(--_ansi-1) 75%, var(--_code-fg)));
+  --_ansi-10: var(--vt-ansi-bright-green, color-mix(in srgb, var(--_ansi-2) 75%, var(--_code-fg)));
+  --_ansi-11: var(--vt-ansi-bright-yellow, color-mix(in srgb, var(--_ansi-3) 75%, var(--_code-fg)));
+  --_ansi-12: var(--vt-ansi-bright-blue, color-mix(in srgb, var(--_ansi-4) 75%, var(--_code-fg)));
+  --_ansi-13: var(
+    --vt-ansi-bright-magenta,
+    color-mix(in srgb, var(--_ansi-5) 75%, var(--_code-fg))
+  );
+  --_ansi-14: var(--vt-ansi-bright-cyan, color-mix(in srgb, var(--_ansi-6) 75%, var(--_code-fg)));
+  --_ansi-15: var(--vt-ansi-bright-white, var(--_code-fg));
+}
+
+/* ---------- ANSI styles ---------- */
+
+.fg-0 {
+  color: var(--_ansi-0);
+}
+.fg-1 {
+  color: var(--_ansi-1);
+}
+.fg-2 {
+  color: var(--_ansi-2);
+}
+.fg-3 {
+  color: var(--_ansi-3);
+}
+.fg-4 {
+  color: var(--_ansi-4);
+}
+.fg-5 {
+  color: var(--_ansi-5);
+}
+.fg-6 {
+  color: var(--_ansi-6);
+}
+.fg-7 {
+  color: var(--_ansi-7);
+}
+.fg-8 {
+  color: var(--_ansi-8);
+}
+.fg-9 {
+  color: var(--_ansi-9);
+}
+.fg-10 {
+  color: var(--_ansi-10);
+}
+.fg-11 {
+  color: var(--_ansi-11);
+}
+.fg-12 {
+  color: var(--_ansi-12);
+}
+.fg-13 {
+  color: var(--_ansi-13);
+}
+.fg-14 {
+  color: var(--_ansi-14);
+}
+.fg-15 {
+  color: var(--_ansi-15);
+}
+.bg-0 {
+  background: var(--_ansi-0);
+}
+.bg-1 {
+  background: var(--_ansi-1);
+}
+.bg-2 {
+  background: var(--_ansi-2);
+}
+.bg-3 {
+  background: var(--_ansi-3);
+}
+.bg-4 {
+  background: var(--_ansi-4);
+}
+.bg-5 {
+  background: var(--_ansi-5);
+}
+.bg-6 {
+  background: var(--_ansi-6);
+}
+.bg-7 {
+  background: var(--_ansi-7);
+}
+.bg-8 {
+  background: var(--_ansi-8);
+}
+.bg-9 {
+  background: var(--_ansi-9);
+}
+.bg-10 {
+  background: var(--_ansi-10);
+}
+.bg-11 {
+  background: var(--_ansi-11);
+}
+.bg-12 {
+  background: var(--_ansi-12);
+}
+.bg-13 {
+  background: var(--_ansi-13);
+}
+.bg-14 {
+  background: var(--_ansi-14);
+}
+.bg-15 {
+  background: var(--_ansi-15);
+}
+
+/* Text on a colored background without its own color: the background color of the
+   terminal, so it reads like a label. */
+.on-bg,
+.fg-inverse {
+  color: var(--_code-bg-solid);
+}
+
+.bg-inverse {
+  background: var(--_code-fg);
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.dim {
+  opacity: 0.7;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.underline.strike {
+  text-decoration: underline line-through;
+}
+
+:is(.terminal, .log) a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+:is(.terminal, .log) a:hover {
+  text-decoration-style: solid;
+}

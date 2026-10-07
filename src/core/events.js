@@ -41,6 +41,8 @@ export const EVENTS = Object.freeze({
   SELECT: 'vt-select',
   /** Tree: a folder was opened or closed. Detail: `{ path, expanded }`. */
   TOGGLE: 'vt-toggle',
+  /** Log: levels shown or search changed. Detail: `{ levels, query, shown }`. */
+  FILTER_CHANGE: 'vt-filter-change',
   /** Terminal: the typing replay finished or was stopped. Detail: `{}`. */
   TYPING_END: 'vt-typing-end',
   /** Diff: moved to a change. Detail: `{ index, total, original, modified }`. */

@@ -68,7 +68,7 @@ const builds = [
 ];
 
 // Per-component ES modules with shared chunks: load only the elements you use.
-const components = ['code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http'];
+const components = ['code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log'];
 /** @type {import('esbuild').BuildOptions} */
 const split = {
   ...shared,
