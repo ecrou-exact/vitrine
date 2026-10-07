@@ -1,0 +1,466 @@
+/*
+ * Shared component frame: container, header, toolbar, tabs, search, states.
+ * Anatomy: docs/DESIGN_SYSTEM.md §6. Colors come only from theme tokens.
+ */
+:host {
+  display: block;
+  min-width: 0;
+  margin-block: var(--vt-margin, 0);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.vt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--_fg);
+  background: var(--_surface);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+  line-height: 1.4;
+  text-align: start;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Chrome always uses the UI font, even when the content inherits the page font. */
+.header,
+.search,
+.notice,
+.message,
+.empty,
+.more,
+.toolbar,
+.toc {
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+  line-height: 1.4;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: var(--_header-height);
+  padding: 0 var(--_space-2) 0 var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--_radius-full);
+  background: var(--_accent);
+}
+
+.title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--_fg);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.badge {
+  flex: none;
+  padding: 2px 6px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.vt {
+  position: relative;
+}
+
+.toolbar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+
+.toolbar.floating {
+  position: absolute;
+  top: var(--_space-2);
+  right: var(--_space-2);
+  z-index: 3;
+  padding: 2px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  opacity: 0;
+  transition: opacity var(--_duration-fast) var(--_easing);
+}
+
+.vt:hover .toolbar.floating,
+.toolbar.floating:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .toolbar.floating {
+    opacity: 1;
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_fg-muted);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--_duration-fast) var(--_easing),
+    color var(--_duration-fast) var(--_easing);
+}
+
+.btn:hover {
+  background: var(--_accent-soft);
+  color: var(--_fg);
+}
+
+.btn[aria-pressed='true'] {
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+}
+
+.btn.done {
+  color: var(--_success);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  background: transparent;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.text-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  min-height: 28px;
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--_duration-fast) var(--_easing);
+}
+
+.text-btn:hover {
+  background: var(--_accent-soft);
+}
+
+.text-btn.done {
+  border-color: var(--_success);
+  color: var(--_success);
+}
+
+.pathbar .text-btn {
+  min-height: 24px;
+  font-size: var(--_font-size-small);
+}
+
+:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (pointer: coarse) {
+  .btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .text-btn,
+  .tab {
+    min-height: 44px;
+  }
+}
+
+/* ---------- Tabs (WAI-ARIA tabs pattern) ---------- */
+
+.tabs {
+  display: flex;
+  align-self: stretch;
+  align-items: stretch;
+  gap: var(--_space-1);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--_space-2);
+  border: 0;
+  background: transparent;
+  color: var(--_fg-muted);
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--_duration-fast) var(--_easing);
+}
+
+.tab::after {
+  content: '';
+  position: absolute;
+  right: var(--_space-2);
+  bottom: -1px;
+  left: var(--_space-2);
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color var(--_duration) var(--_easing);
+}
+
+.tab:hover {
+  color: var(--_fg);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--_fg);
+}
+
+.tab[aria-selected='true']::after {
+  background: var(--_accent);
+}
+
+.tab:focus-visible {
+  outline-offset: -2px;
+}
+
+.tab .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- Search ---------- */
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-1);
+  padding: var(--_space-2) var(--_space-2) var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface);
+}
+
+.search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: inherit;
+}
+
+.search-input::placeholder {
+  color: var(--_fg-muted);
+  opacity: 1;
+}
+
+.search-input:focus-visible {
+  outline-offset: 0;
+  border-color: var(--_accent);
+}
+
+.search-count {
+  flex: none;
+  min-width: 5ch;
+  color: var(--_fg-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+mark.match {
+  border-radius: 2px;
+  background: var(--_highlight);
+  color: inherit;
+}
+
+mark.match.current {
+  background: var(--_highlight-current);
+  box-shadow: 0 0 0 1px var(--_warning);
+}
+
+/* ---------- Body ---------- */
+
+.body {
+  position: relative;
+  min-width: 0;
+  max-height: var(--_max-height, none);
+  overflow: auto;
+  background: var(--_surface-sunken);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--_border-strong) transparent;
+}
+
+.body:focus-visible {
+  outline-offset: -2px;
+}
+
+/* ---------- States ---------- */
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.notice .icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--_warning);
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  overflow-wrap: anywhere;
+}
+
+.message .icon {
+  flex: none;
+  margin-top: 1px;
+  color: var(--_danger);
+}
+
+.message-title {
+  margin: 0;
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.message-detail {
+  margin: var(--_space-1) 0 0;
+  color: var(--_fg-muted);
+}
+
+.empty {
+  padding: var(--_space-5) var(--_space-4);
+  color: var(--_fg-muted);
+  text-align: center;
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+}
+
+.skeleton span {
+  height: 10px;
+  border-radius: var(--_radius-sm);
+  background: var(--_border);
+  animation: vt-pulse 1.4s var(--_easing) infinite;
+}
+
+.skeleton span:nth-child(1) {
+  width: 62%;
+}
+
+.skeleton span:nth-child(2) {
+  width: 84%;
+}
+
+.skeleton span:nth-child(3) {
+  width: 41%;
+}
+
+@keyframes vt-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton span {
+    animation: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

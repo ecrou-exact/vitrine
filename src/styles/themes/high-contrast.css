@@ -1,0 +1,35 @@
+/* Vitrine High Contrast — maximum legibility (WCAG AAA text contrast). */
+[data-theme='high-contrast'] {
+  color-scheme: dark;
+  --vt-bg: #000000;
+  --vt-surface: #000000;
+  --vt-surface-sunken: #0a0a0a;
+  --vt-surface-raised: #141414;
+  --vt-border: #8a8a8a;
+  --vt-border-strong: #ffffff;
+  --vt-fg: #ffffff;
+  --vt-fg-muted: #d6d6d6;
+  --vt-accent: #2ee6d0;
+  --vt-accent-fg: #5eead4;
+  --vt-on-accent: #000000;
+  --vt-accent-soft: rgba(46, 230, 208, 0.22);
+  --vt-highlight: rgba(255, 214, 0, 0.35);
+  --vt-highlight-current: rgba(255, 214, 0, 0.55);
+  --vt-line-highlight: rgba(46, 230, 208, 0.18);
+  --vt-success: #5eead4;
+  --vt-warning: #ffd166;
+  --vt-danger: #ffa08a;
+  --vt-info: #a8c1ff;
+  --vt-diff-added: rgba(46, 230, 208, 0.22);
+  --vt-diff-removed: rgba(255, 160, 138, 0.24);
+  --vt-shadow: 0 0 0 1px #ffffff;
+  --vt-syntax-keyword: #dcc2ff;
+  --vt-syntax-string: #7cf5e0;
+  --vt-syntax-number: #ffd166;
+  --vt-syntax-function: #a8c1ff;
+  --vt-syntax-type: #ffb3a1;
+  --vt-syntax-comment: #c8c8c8;
+  --vt-syntax-attr: #a8c1ff;
+  --vt-syntax-tag: #ffb3a1;
+  --vt-syntax-meta: #e0e0e0;
+}

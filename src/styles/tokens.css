@@ -1,0 +1,51 @@
+/*
+ * Theme-independent tokens: typography, spacing, radius, motion.
+ * Values: docs/DESIGN_SYSTEM.md §3, §4 and §7.
+ * Each private `--_` variable reads the public `--vt-` variable first, so hosts can
+ * override any token on the element or on an ancestor.
+ */
+:host {
+  --_font-ui: var(
+    --vt-font-ui,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'IBM Plex Sans',
+    Roboto,
+    sans-serif
+  );
+  --_font-mono: var(
+    --vt-font-mono,
+    'JetBrains Mono',
+    ui-monospace,
+    'Cascadia Code',
+    'SF Mono',
+    Menlo,
+    Consolas,
+    monospace
+  );
+  --_font-size: var(--vt-font-size, 14px);
+  --_font-size-small: var(--vt-font-size-small, 12px);
+  --_font-size-ui: var(--vt-font-size-ui, 13px);
+  --_line-height: var(--vt-line-height, 1.6);
+  --_space-1: var(--vt-space-1, 4px);
+  --_space-2: var(--vt-space-2, 8px);
+  --_space-3: var(--vt-space-3, 12px);
+  --_space-4: var(--vt-space-4, 16px);
+  --_space-5: var(--vt-space-5, 24px);
+  --_radius-sm: var(--vt-radius-sm, 6px);
+  --_radius: var(--vt-radius, 10px);
+  --_radius-full: var(--vt-radius-full, 999px);
+  --_header-height: var(--vt-header-height, 40px);
+  --_tab-size: var(--vt-tab-size, 4);
+  --_duration-fast: var(--vt-duration-fast, 120ms);
+  --_duration: var(--vt-duration, 180ms);
+  --_easing: var(--vt-easing, cubic-bezier(0.2, 0, 0, 1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --_duration-fast: 0ms;
+    --_duration: 0ms;
+  }
+}

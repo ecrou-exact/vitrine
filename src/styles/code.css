@@ -1,0 +1,134 @@
+/*
+ * Code view: used by <vt-code>, the Markdown source tab and the JSON raw view.
+ */
+.code-view {
+  position: relative;
+}
+
+.code {
+  display: grid;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: var(--_space-3) 0;
+  color: var(--_fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  font-variant-ligatures: var(--vt-font-ligatures, none);
+  line-height: var(--_line-height);
+  tab-size: var(--_tab-size);
+  counter-reset: vt-line var(--_line-start, 0);
+}
+
+.wrap .code {
+  width: auto;
+}
+
+.line {
+  display: flex;
+  min-width: 0;
+}
+
+.gutter {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  flex: none;
+  min-width: calc(var(--_digits, 2) * 1ch + 2 * var(--_space-3));
+  padding: 0 var(--_space-3);
+  border-right: 1px solid var(--_border);
+  background: var(--_surface-sunken);
+  color: color-mix(in srgb, var(--_fg-muted) 70%, transparent);
+  font-size: var(--_font-size-small);
+  line-height: calc(var(--_font-size) * var(--_line-height));
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gutter::before {
+  counter-increment: vt-line;
+  content: counter(vt-line);
+}
+
+.sign {
+  flex: none;
+  width: 2ch;
+  padding-left: var(--_space-2);
+  color: var(--_fg-muted);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.content {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 var(--_space-4);
+  white-space: pre;
+}
+
+.sign + .content {
+  padding-left: var(--_space-1);
+}
+
+.wrap .content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.line.highlighted {
+  background: var(--_line-highlight);
+}
+
+.line.highlighted .gutter {
+  box-shadow: inset 2px 0 0 var(--_accent);
+  color: var(--_fg);
+}
+
+.line.added {
+  background: var(--_diff-added);
+}
+
+.line.removed {
+  background: var(--_diff-removed);
+}
+
+.line.added .sign::before {
+  content: '+';
+  color: var(--_success);
+}
+
+.line.removed .sign::before {
+  content: '\2212';
+  color: var(--_danger);
+}
+
+.line.hunk .content {
+  color: var(--_info);
+}
+
+/* Collapsible: show the first N lines, fade the rest. */
+.collapsed .code {
+  max-height: calc(
+    (var(--_collapse-lines) + 0.6) * var(--_font-size) * var(--_line-height) + var(--_space-3)
+  );
+  overflow: hidden;
+}
+
+.collapsed .code-view::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: calc(0.9 * var(--_font-size) * var(--_line-height));
+  background: linear-gradient(transparent, var(--_surface-sunken));
+  pointer-events: none;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  padding: var(--_space-2);
+  border-top: 1px solid var(--_border);
+  background: var(--_surface);
+}

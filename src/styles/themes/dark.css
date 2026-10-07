@@ -1,0 +1,35 @@
+/* Vitrine Dark — default dark theme. Values: docs/DESIGN_SYSTEM.md §2. */
+[data-theme='dark'] {
+  color-scheme: dark;
+  --vt-bg: #11151c;
+  --vt-surface: #171c25;
+  --vt-surface-sunken: #0c0f14;
+  --vt-surface-raised: #1e2430;
+  --vt-border: #262d3a;
+  --vt-border-strong: #3a4354;
+  --vt-fg: #e8eae6;
+  --vt-fg-muted: #9aa3b2;
+  --vt-accent: #14b8a6;
+  --vt-accent-fg: #14b8a6;
+  --vt-on-accent: #11151c;
+  --vt-accent-soft: rgba(20, 184, 166, 0.16);
+  --vt-highlight: rgba(242, 169, 59, 0.3);
+  --vt-highlight-current: rgba(242, 169, 59, 0.6);
+  --vt-line-highlight: rgba(20, 184, 166, 0.12);
+  --vt-success: #14b8a6;
+  --vt-warning: #f2a93b;
+  --vt-danger: #ff8f73;
+  --vt-info: #7c9cff;
+  --vt-diff-added: rgba(20, 184, 166, 0.16);
+  --vt-diff-removed: rgba(255, 143, 115, 0.14);
+  --vt-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --vt-syntax-keyword: #c4a5ff;
+  --vt-syntax-string: #5eead4;
+  --vt-syntax-number: #f2a93b;
+  --vt-syntax-function: #7c9cff;
+  --vt-syntax-type: #ff8f73;
+  --vt-syntax-comment: #8a93a3;
+  --vt-syntax-attr: #7c9cff;
+  --vt-syntax-tag: #ff8f73;
+  --vt-syntax-meta: #9aa3b2;
+}
