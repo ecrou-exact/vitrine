@@ -100,6 +100,71 @@ const TRIALS = [
     run: () => mount('vt-markdown', {}, '>'.repeat(20_000) + ' deep\n\n' + '['.repeat(50_000)),
   },
   {
+    title: '100,000 tag options',
+    detail: 'Suggestions list 50 at a time; the browse panel pages through the rest.',
+    run: () =>
+      mount(
+        'vt-tags',
+        { variant: 'full', mode: 'edit', label: 'Tags' },
+        JSON.stringify({
+          value: [],
+          options: Array.from({ length: 100_000 }, (_, i) => `tag-${i}`),
+        }),
+      ),
+  },
+  {
+    title: 'Hostile tag data',
+    detail: 'Colors with url(), javascript: links, control characters and HTML in labels.',
+    run: () =>
+      mount(
+        'vt-tags',
+        { counts: '', clickable: '' },
+        JSON.stringify([
+          {
+            value: '<img src=x onerror="window.__xss=20">',
+            color: 'red;background:url(https://evil.example/x)',
+          },
+          { value: 'link', href: 'javascript:window.__xss=21' },
+          { value: 'ctrl\u0000chars\u0007', kind: '"><script>window.__xss=22</script>' },
+          { value: 'x'.repeat(10_000), color: 'var(--evil)' },
+        ]),
+      ),
+  },
+  {
+    title: '200,000-row CSV',
+    detail: 'Parsed once, shown 100 rows at a time; sorting a column stays responsive.',
+    run: () =>
+      mount(
+        'vt-csv',
+        { variant: 'full', 'max-height': '420px' },
+        'id,name,score\n' +
+          Array.from({ length: 200_000 }, (_, i) => `${i},name ${i},${(i * 7919) % 1000}`).join(
+            '\n',
+          ),
+      ),
+  },
+  {
+    title: 'Diff of 20,000 different lines',
+    detail: 'Past 2,000 changes the comparison is simplified to blocks instead of freezing.',
+    run: () =>
+      new Promise((resolve) => {
+        const el = document.createElement('vt-diff');
+        el.setAttribute('variant', 'full');
+        el.setAttribute('max-height', '420px');
+        el.addEventListener('vt-ready', () => resolve({ ok: true, message: 'Rendered' }), {
+          once: true,
+        });
+        el.addEventListener(
+          'vt-error',
+          (event) => resolve({ ok: true, message: `Refused safely: ${event.detail.message}` }),
+          { once: true },
+        );
+        el.original = Array.from({ length: 20_000 }, (_, i) => `a ${i}`).join('\n');
+        el.modified = Array.from({ length: 20_000 }, (_, i) => `b ${i}`).join('\n');
+        arena.replaceChildren(el);
+      }),
+  },
+  {
     title: 'Search 5,000+ matches',
     detail: 'Open the search and type "a": matches stop being marked after 5,000.',
     run: () =>

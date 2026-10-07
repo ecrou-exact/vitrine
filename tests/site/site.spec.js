@@ -11,6 +11,7 @@ const PAGES = [
   '/docs.html',
   '/docs.html?page=security',
   '/examples.html',
+  '/integrations.html',
   '/playground.html',
   '/themes.html',
   '/lab.html',

@@ -93,19 +93,20 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Three elements, two variants</h2>
+            <h2 id="components-title">Six elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
-              <code>variant="full"</code> for the toolbar, search and tabs, or switch features on
-              one attribute at a time.
+              <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
+              attribute at a time, and add <code>mode="edit"</code> to let people change the
+              content.
             </p>
           </div>
           <div class="components">
             <article class="component">
               <h3>&lt;vt-code&gt;</h3>
               <p>
-                Syntax highlighting for 190 languages, line numbers, highlighted lines, diffs,
-                search and download.
+                Syntax highlighting for 190 languages and 258 color themes, line numbers, diffs,
+                search, download, and an editor.
               </p>
               <vt-code class="preview" language="js" line-numbers highlight-lines="2">
                 <script type="text/plain">
@@ -143,6 +144,39 @@
                 </script>
               </vt-json>
               <a href="examples.html#json">JSON examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-csv&gt;</h3>
+              <p>CSV and TSV as an accessible table: sorting by type, pagination and search.</p>
+              <vt-csv class="preview" page-size="10">
+                <template>city,people Paris,2148000 Berlin,3645000 Madrid,3223000</template>
+              </vt-csv>
+              <a href="examples.html#csv">CSV examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-tags&gt;</h3>
+              <p>
+                Show tags from JSON, or a form field with suggestions, #hashtags and a browse panel.
+              </p>
+              <vt-tags class="preview" mode="edit" prefix="#" label="Topics">
+                <template
+                  >{ "value": ["design", "a11y"], "options": ["design", "a11y", "research",
+                  "performance"] }</template
+                >
+              </vt-tags>
+              <a href="examples.html#tags">Tags examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-diff&gt;</h3>
+              <p>
+                Compare two texts or show a patch, side by side or unified, with changed words
+                marked.
+              </p>
+              <vt-diff class="preview" view="unified" language="js">
+                <template data-original>const total = price * 1.2;</template>
+                <template data-modified>const total = price * TAX_RATE;</template>
+              </vt-diff>
+              <a href="examples.html#diff">Diff examples</a>
             </article>
           </div>
         </div>
