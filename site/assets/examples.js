@@ -13,15 +13,40 @@ function dedent(text) {
   return lines.map((l) => l.slice(indent)).join('\n');
 }
 
-/** Builds the two columns of an example: live result and source. */
+/**
+ * Builds the demo window of an example: the live result on a canvas, and the code that
+ * produced it right under it, in the same window.
+ */
 function layout(example, language, source) {
+  const demo = document.createElement('div');
+  demo.className = 'demo';
+
+  const bar = document.createElement('div');
+  bar.className = 'demo-bar';
+  const dots = document.createElement('span');
+  dots.className = 'demo-dots';
+  dots.setAttribute('aria-hidden', 'true');
+  const title = document.createElement('span');
+  title.className = 'demo-title';
+  title.textContent = 'Result';
+  bar.append(dots, title);
+
   const live = document.createElement('div');
-  live.className = 'example-live';
+  live.className = 'demo-canvas';
+
   const code = document.createElement('vt-code');
+  code.className = 'demo-code';
   code.setAttribute('language', language);
+  code.setAttribute('label', language === 'js' ? 'JavaScript' : 'HTML');
+  code.setAttribute('header', '');
   code.setAttribute('copy', '');
+  code.setAttribute('badge', 'false');
+  // Long markup folds; the result stays the focus.
+  if (source.split('\n').length > 16) code.setAttribute('collapsible', '14');
   code.content = source;
-  example.append(live, code);
+
+  demo.append(bar, live, code);
+  example.append(demo);
   return live;
 }
 

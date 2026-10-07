@@ -1715,3 +1715,517 @@ kbd {
     display: none;
   }
 }
+
+/* ======================================================================
+ * One design language for every page.
+ * Controls share one height scale, one radius scale and one focus ring;
+ * every code sample sits in a "demo window" with its result.
+ * ====================================================================== */
+
+:root {
+  --control: 40px;
+  --control-sm: 32px;
+  --ring: 0 0 0 3px color-mix(in srgb, var(--site-accent) 32%, transparent);
+  --shadow-sm: 0 1px 2px rgba(17, 21, 28, 0.05);
+  --shadow-md: 0 1px 2px rgba(17, 21, 28, 0.04), 0 10px 30px rgba(17, 21, 28, 0.07);
+  --header-h: 64px;
+}
+
+:root[data-theme='dark'] {
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* ---------- Focus: the same ring everywhere ---------- */
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  min-height: var(--control);
+  padding: 0 18px;
+  border-radius: var(--radius);
+  font: 600 0.9375rem/1 var(--font-body);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  border-color: transparent;
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:hover {
+  background: color-mix(in srgb, var(--site-accent) 88%, #ffffff);
+}
+
+.btn-secondary {
+  border-color: var(--site-border-strong);
+  background: var(--site-surface);
+  color: var(--site-fg);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  border-color: var(--site-accent);
+  color: var(--site-accent-fg);
+}
+
+.icon-btn {
+  width: var(--control);
+  height: var(--control);
+  border-radius: var(--radius);
+}
+
+/* ---------- Chips: section menus and filters ---------- */
+
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-sm);
+  padding: 0 14px;
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius-full);
+  background: var(--site-surface);
+  color: var(--site-fg);
+  font-size: var(--vt-text-small);
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.jump a:hover {
+  border-color: var(--site-accent);
+  color: var(--site-accent-fg);
+}
+
+/* The section menu sticks under the header and scrolls sideways on small screens. */
+.subnav {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 15;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--space-2);
+  margin: 0 calc(-1 * var(--gutter)) var(--space-4);
+  padding: 10px var(--gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: color-mix(in srgb, var(--site-bg) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--gutter),
+    #000 calc(100% - var(--gutter)),
+    transparent
+  );
+}
+
+.subnav::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Segmented controls ---------- */
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  gap: 2px;
+  padding: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border: 1px solid var(--site-border);
+  border-radius: calc(var(--radius) + 2px);
+  background: var(--site-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.segmented button {
+  min-height: var(--control-sm);
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--site-fg-muted);
+  font: 500 var(--vt-text-small) / 1 var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.segmented button:hover {
+  color: var(--site-fg);
+  background: var(--site-surface-sunken);
+}
+
+.segmented button[aria-pressed='true'],
+.segmented button[aria-selected='true'] {
+  background: var(--site-accent-soft);
+  color: var(--site-accent-fg);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--site-accent) 35%, transparent);
+}
+
+/* ---------- Form fields ---------- */
+
+.field {
+  gap: 6px;
+}
+
+.field > span {
+  font-weight: 500;
+}
+
+.field input[type='text'],
+.field input[type='search'],
+.field input[type='number'],
+.field select,
+.field textarea {
+  min-height: var(--control);
+  padding: 0 12px;
+  border: 1px solid var(--site-border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--site-surface);
+  color: var(--site-fg);
+  font: 400 0.9375rem/1.4 var(--font-body);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--duration-fast) var(--easing),
+    box-shadow var(--duration-fast) var(--easing);
+}
+
+.field textarea {
+  padding: 10px 12px;
+  font: 400 13px/1.55 var(--font-display);
+}
+
+.field select {
+  padding-right: 34px;
+  appearance: none;
+  -webkit-appearance: none;
+  /* A chevron drawn in the text color, light or dark. */
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 13px) 52%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.field :is(input, select, textarea):hover {
+  border-color: color-mix(in srgb, var(--site-accent) 45%, var(--site-border-strong));
+}
+
+.field :is(input, select, textarea):focus-visible {
+  outline: none;
+  border-color: var(--site-accent);
+  box-shadow: var(--ring);
+}
+
+.controls legend {
+  font: 700 0.8125rem/1.3 var(--font-display);
+  letter-spacing: 0;
+}
+
+/* The playground panel scrolls inside itself, with room at the bottom. */
+.controls {
+  max-height: calc(100vh - var(--header-h) - 40px);
+  padding-bottom: var(--space-6);
+  box-shadow: var(--shadow-md);
+  scrollbar-width: thin;
+}
+
+/* ---------- Page heads ---------- */
+
+.page-head {
+  padding: clamp(40px, 7vw, 80px) 0 clamp(20px, 3vw, 32px);
+}
+
+.page-head h1 {
+  font: 700 var(--vt-text-display) / 1.05 var(--font-display);
+  letter-spacing: -0.04em;
+}
+
+.page-head h1::after {
+  content: '_';
+  color: var(--site-accent);
+}
+
+.page-head p {
+  margin-top: var(--space-3);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+/* ---------- Demo windows: a result and the code that renders it ---------- */
+
+.demo {
+  overflow: hidden;
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius-lg);
+  background: var(--site-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.demo-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 38px;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--site-border);
+  background: var(--site-surface);
+  color: var(--site-fg-muted);
+  font: 500 0.75rem/1 var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.demo-dots {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-right: 28px;
+  border-radius: 50%;
+  background: var(--site-accent);
+  box-shadow:
+    14px 0 0 var(--site-border-strong),
+    28px 0 0 var(--site-border-strong);
+}
+
+.demo-canvas {
+  display: grid;
+  align-content: center;
+  gap: var(--space-4);
+  min-height: 120px;
+  padding: clamp(16px, 3vw, 32px);
+  /* Graph paper: the same grid as the page backdrop. */
+  background-color: var(--site-bg);
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--site-fg) 13%, transparent) 1px,
+    transparent 1.2px
+  );
+  background-size: 20px 20px;
+}
+
+.demo-code::part(container) {
+  border: 0;
+  border-top: 1px solid var(--site-border);
+  border-radius: 0;
+}
+
+/* Examples: the explanation, then the window, full width. */
+.example {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  border-bottom: 0;
+}
+
+.example-group {
+  padding-top: var(--space-6);
+}
+
+.example-group > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--site-border);
+  font-size: var(--vt-text-h2);
+}
+
+.example-text h3 {
+  font-size: 1.125rem;
+}
+
+/* ---------- Home ---------- */
+
+.components .preview {
+  max-height: 230px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  -webkit-mask-image: linear-gradient(#000 82%, transparent);
+  mask-image: linear-gradient(#000 82%, transparent);
+}
+
+.install-tabs {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 920px;
+}
+
+/* On narrow screens the typed title is plain text, so the cursor stays with its word. */
+@media (max-width: 640px) {
+  .type-line {
+    display: inline;
+    width: auto !important;
+    animation: none !important;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .section {
+    padding: var(--space-7) 0;
+  }
+
+  .hero {
+    padding-bottom: var(--space-6);
+  }
+}
+
+/* ---------- Lab ---------- */
+
+.trial {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius-lg);
+  background: var(--site-surface);
+  color: var(--site-fg);
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.trial strong {
+  font: 700 0.9375rem/1.3 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.trial-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--site-accent-fg);
+  font: 600 var(--vt-text-small) / 1 var(--font-body);
+}
+
+.trial-run::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid currentColor;
+}
+
+.trial:hover {
+  border-color: var(--site-accent);
+}
+
+.trial[aria-pressed='true'] {
+  border-color: var(--site-accent);
+  background: color-mix(in srgb, var(--site-accent-soft) 60%, var(--site-surface));
+  box-shadow: var(--ring);
+}
+
+.verdict {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  position: relative;
+  margin-top: var(--space-9);
+  padding: var(--space-8) 0 var(--space-6);
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  opacity: 0.6;
+}
+
+.site-footer .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+  gap: var(--space-6) var(--space-7);
+  align-items: start;
+}
+
+.footer-tagline {
+  grid-column: 1;
+  max-width: 34ch;
+  margin-top: calc(-1 * var(--space-4));
+  color: #9aa3b2;
+}
+
+.footer-cols {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.footer-cols div {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.footer-cols h2 {
+  margin: 0 0 4px;
+  color: var(--paper);
+  font: 700 0.8125rem/1.2 var(--font-display);
+  letter-spacing: 0;
+}
+
+.site-footer .footer-cols a {
+  color: #b9c0cc;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.site-footer .footer-cols a:hover {
+  color: var(--teal);
+}
+
+.footer-legal {
+  grid-column: 1 / -1;
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(232, 234, 230, 0.1);
+}
+
+@media (max-width: 760px) {
+  .site-footer .wrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-tagline,
+  .footer-cols {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 0;
+  }
+}

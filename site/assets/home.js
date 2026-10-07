@@ -59,6 +59,52 @@ const SAMPLES = {
       2,
     ),
   },
+  terminal: {
+    tag: 'vt-terminal',
+    attrs: { variant: 'full', label: 'Release', typing: '', 'typing-speed': '28' },
+    content: [
+      '$ npm version minor',
+      'v1.5.0',
+      '$ npm test',
+      '\u001b[1m RUN \u001b[22m \u001b[36mv3.2.4\u001b[39m',
+      ' \u001b[32m✓\u001b[39m tests/parser.test.js \u001b[2m(42 tests)\u001b[22m',
+      ' \u001b[32m✓\u001b[39m tests/render.test.js \u001b[2m(18 tests)\u001b[22m',
+      '\u001b[42m\u001b[30m PASS \u001b[39m\u001b[49m 60 passed in 1.24s',
+      '$ git push --follow-tags',
+    ].join('\n'),
+  },
+  tree: {
+    tag: 'vt-tree',
+    attrs: { variant: 'full', label: 'my-app' },
+    content: [
+      'src/',
+      '  components/',
+      '    + Button.tsx  # new',
+      '    ~ Header.tsx',
+      '  app.ts',
+      'public/',
+      '  logo.svg',
+      '* package.json  # scripts',
+      'README.md',
+    ].join('\n'),
+  },
+  http: {
+    tag: 'vt-http',
+    attrs: { variant: 'full', label: 'Create an order', layout: 'columns' },
+    content: [
+      'POST /v1/orders HTTP/1.1',
+      'Host: api.example.com',
+      'Content-Type: application/json',
+      'Authorization: Bearer example-token-0123456789abcdef',
+      '',
+      '{"sku": "VT-HTTP", "qty": 2}',
+      '',
+      'HTTP/1.1 201 Created',
+      'Content-Type: application/json',
+      '',
+      '{"id": "ord_2041", "status": "created", "total": 59.80}',
+    ].join('\n'),
+  },
 };
 
 const stage = document.querySelector('.showcase-stage');
