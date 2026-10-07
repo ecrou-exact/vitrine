@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work as expected.
+labels: [bug]
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - vt-code
+        - vt-markdown
+        - vt-json
+        - core / other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Vitrine version
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: HTML snippet, attributes and content needed to reproduce.
+      render: html
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: e.g. Firefox 140 on Ubuntu 24.04
+  - type: markdown
+    attributes:
+      value: Security issues must be reported privately — see SECURITY.md.

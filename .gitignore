@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Test and coverage output
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Build output is committed on release tags only (see CONTRIBUTING.md).
+# Keep dist/ tracked so git submodule consumers get prebuilt files.

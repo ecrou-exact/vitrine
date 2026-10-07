@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/auto-define.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/index.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "version",
+          "description": "Library version, injected at build time.",
+          "type": {
+            "text": "string"
+          }
+        },
+        {
+          "kind": "variable",
+          "name": "registry",
+          "default": "new Map()",
+          "description": "Registry of element tag names to their classes.\nComponents register themselves here as they are implemented.",
+          "type": {
+            "text": "Map<string, CustomElementConstructor>"
+          }
+        },
+        {
+          "kind": "function",
+          "name": "defineAll",
+          "description": "Defines every Vitrine custom element that is not already defined.\nSafe to call multiple times.",
+          "return": {
+            "type": {
+              "text": "string[]"
+            }
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "version",
+          "declaration": {
+            "name": "version",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "registry",
+          "declaration": {
+            "name": "registry",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "defineAll",
+          "declaration": {
+            "name": "defineAll",
+            "module": "src/index.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "tag",
+          "declaration": {
+            "name": "ctor",
+            "module": "src/index.js"
+          }
+        }
+      ]
+    }
+  ]
+}

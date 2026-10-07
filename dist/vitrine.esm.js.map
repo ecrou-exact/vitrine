@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * Vitrine \u2014 framework-free web components to display code, Markdown and JSON.\n *\n * @module vitrine\n * @since 0.1.0\n */\n\n/* global __VITRINE_VERSION__ */\n\n/**\n * Library version, injected at build time.\n * @type {string}\n */\nexport const version =\n  // @ts-ignore -- replaced by esbuild `define`\n  typeof __VITRINE_VERSION__ !== 'undefined' ? __VITRINE_VERSION__ : '0.0.0-dev';\n\n/**\n * Registry of element tag names to their classes.\n * Components register themselves here as they are implemented.\n *\n * @type {Map<string, CustomElementConstructor>}\n */\nexport const registry = new Map();\n\n/**\n * Defines every Vitrine custom element that is not already defined.\n * Safe to call multiple times.\n *\n * @since 0.1.0\n * @returns {string[]} The tag names that were defined by this call.\n *\n * @example\n * import { defineAll } from './vitrine.esm.js';\n * defineAll();\n */\nexport function defineAll() {\n  /** @type {string[]} */\n  const defined = [];\n  for (const [tag, ctor] of registry) {\n    if (!customElements.get(tag)) {\n      customElements.define(tag, ctor);\n      defined.push(tag);\n    }\n  }\n  return defined;\n}\n"],
+  "mappings": ";;;AAcO,IAAM;AAAA;AAAA,EAEX,OAA6C,UAAsB;AAAA;AAQ9D,IAAM,WAAW,oBAAI,IAAI;AAazB,SAAS,YAAY;AAE1B,QAAM,UAAU,CAAC;AACjB,aAAW,CAAC,KAAK,IAAI,KAAK,UAAU;AAClC,QAAI,CAAC,eAAe,IAAI,GAAG,GAAG;AAC5B,qBAAe,OAAO,KAAK,IAAI;AAC/B,cAAQ,KAAK,GAAG;AAAA,IAClB;AAAA,EACF;AACA,SAAO;AACT;",
+  "names": []
+}
