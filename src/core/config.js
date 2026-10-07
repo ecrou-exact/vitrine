@@ -20,6 +20,11 @@
  * @property {number} fetchTimeout - Timeout for `src` requests, in milliseconds.
  * @property {string} languagesUrl - Base URL of the lazy-loaded highlight.js language files.
  *   Empty means "next to the Vitrine script".
+ * @property {string} syntaxTheme - Default syntax theme (e.g. `"github"`); empty uses the
+ *   colors of the interface theme.
+ * @property {string} syntaxThemeDark - Syntax theme used when the interface theme is dark.
+ * @property {string} syntaxThemesUrl - Base URL of the syntax theme files. Empty means
+ *   "next to the Vitrine script".
  */
 
 /** @type {Readonly<VitrineConfig>} */
@@ -33,6 +38,9 @@ export const DEFAULT_CONFIG = Object.freeze({
   maxDepth: 512,
   fetchTimeout: 15_000,
   languagesUrl: '',
+  syntaxTheme: '',
+  syntaxThemeDark: '',
+  syntaxThemesUrl: '',
 });
 
 /** Hard ceilings that configuration cannot exceed. */
