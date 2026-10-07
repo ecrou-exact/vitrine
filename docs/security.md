@@ -24,8 +24,13 @@ Vitrine trusts the **page itself**: its HTML, its scripts and its CSS.
 | `<vt-code>`     | As text. Highlighting output is sanitized again (see below). No HTML parsing of the content.                        |
 | `<vt-json>`     | With DOM text APIs only. The built-in parser never evaluates anything, and keys such as `__proto__` are plain data. |
 | `<vt-markdown>` | Through the sanitization pipeline below. Raw HTML is shown as text unless `allow-html` is set.                      |
+| `<vt-csv>`      | Cells, headers and the raw view as text only. No HTML parsing of the content.                                       |
+| `<vt-diff>`     | As text. Highlighting output is sanitized like `<vt-code>`; changed words are wrapped with DOM APIs.                |
+| `<vt-tags>`     | Labels, groups, descriptions and counts as text. Colors, links and part names are validated (see [Tags](#tags)).    |
 
 Interface text (labels, titles, translations, search queries, error messages) is always inserted with `textContent`. Vitrine's own interface is built with `createElement`; the security module is the only place where an HTML string becomes DOM nodes.
+
+Editors are native `<textarea>` elements: what is typed is text, and the highlighted layer under it is built like the read-only view.
 
 ## Markdown sanitization pipeline
 
@@ -92,6 +97,20 @@ A blocked image is replaced by a text placeholder showing its alternative text, 
 
 DOMPurify returns its input unchanged when it considers the environment unsupported, and some non-browser DOM implementations make it fail silently. Before the first use, Vitrine sanitizes a known hostile sample and checks the result. If anything dangerous survives, Vitrine logs "HTML sanitizer unavailable: rich content is shown as plain text." and every later sanitization returns the input as inert text instead of HTML. It fails closed.
 
+## Tags
+
+`<vt-tags>` receives data from pages, backends (`options-src`, `suggest-src`, the `suggest` function) and people typing. Every tag goes through the same normalization:
+
+- **Values are text.** `value`, `label`, `group` and `description` are converted to strings, control characters are replaced by spaces, and they are cut to 200, 200, 100 and 300 characters. They are displayed with `textContent`, never as HTML, and submitted as text in the form value (JSON, CSV or lines).
+- **Colors are validated** before being set as a CSS custom property: at most 60 characters, no `;`, `{`, `}`, `<`, `>` or `\`, no `url(`, `var(` or `expression`, and `CSS.supports('color', value)` must accept it. Anything else is dropped. A color therefore cannot load a resource or inject other declarations.
+- **Links are checked** with the same [URL rules](#url-rules) as Markdown links (`isSafeUrl`): only relative URLs, `http:`, `https:`, `mailto:` and `tel:`. Links that are not in-page or root-relative get `rel="noopener noreferrer"`. Links are only rendered in view mode.
+- **Part names are slugified.** `tag-<value>` and `tag-kind-<kind>` parts are built from slugs limited to `a-z`, `0-9` and `-` (40 characters), so data cannot create arbitrary part names or break the `part` attribute.
+- **Counts** must be finite numbers; `disabled` must be `true`.
+- **Size**: at most 100,000 entries per list; suggestions are cut to 50, and a `suggest-src` response is limited to 2,000,000 characters (or `maxSize` if lower). Invalid JSON gives an empty list.
+- **`pattern`** is compiled from the page's attribute (not from data), limited to 500 characters; an invalid pattern is ignored.
+
+`vt-tag-create` lets the page refuse a tag before it is added, but validation in the browser is never a substitute for validating the submitted value on the server.
+
 ## Loading content with `src`
 
 - Only `http:` and `https:` URLs. Others show "URL blocked: only http(s) URLs can be loaded."
@@ -102,6 +121,16 @@ DOMPurify returns its input unchanged when it considers the environment unsuppor
 - **Cancellation.** Changing `src` or removing the element aborts the pending request. Only the latest request can update the element.
 
 Content loaded with `src` goes through the same rendering and sanitization as any other content.
+
+The same rules (protocol, same-origin unless `allow-remote`, credentials, size limit, timeout, cancellation) apply to the other URLs that Vitrine fetches for an element:
+
+| Attribute                      | Component   | Loads                                                            |
+| ------------------------------ | ----------- | ---------------------------------------------------------------- |
+| `original-src`, `modified-src` | `<vt-diff>` | The two texts to compare                                         |
+| `options-src`                  | `<vt-tags>` | A JSON array of options                                          |
+| `suggest-src`                  | `<vt-tags>` | Suggestions; `{query}` is replaced by the URL-encoded typed text |
+
+Syntax theme files are fetched differently: only names from Vitrine's built-in list become a URL, under the configured `syntaxThemesUrl` (or the `syntax-themes/` folder next to the script), with `http:` or `https:` only and cookies sent to the same origin only. The files are generated at build time without `url()` values, and are applied as constructable stylesheets.
 
 ## Size and complexity limits
 
@@ -114,6 +143,11 @@ Content loaded with `src` goes through the same rendering and sanitization as an
 | JSON tree rows per render | 20,000                           | none                                |
 | Search matches            | 5,000                            | none                                |
 | Search query              | 200 characters                   | none                                |
+| CSV columns per row       | 1,000                            | none                                |
+| CSV cell preview          | 1,000 characters                 | none                                |
+| Diff exact comparison     | 2,000 edits, then simplified     | none                                |
+| Tags per list             | 100,000                          | none                                |
+| Editor undo history       | 300 steps, 20,000,000 characters | none                                |
 
 The JSON parser and the JSON serializer are iterative, so deep nesting cannot overflow the call stack. If the Markdown parser fails on pathological input, the element shows an error instead of breaking the page. Configuration values cannot exceed the ceilings, even when set from page code.
 
@@ -137,17 +171,17 @@ Vitrine needs no `'unsafe-inline'`, no `'unsafe-eval'` and no inline styles: sty
 default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types vitrine
 ```
 
-| Directive                            | Why                                                                                                                                                                                               |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default-src 'self'`                 | Fallback for every resource type not listed.                                                                                                                                                      |
-| `script-src 'self'`                  | The Vitrine script and the lazy-loaded language files. Language files are ES modules loaded with `import()` from the `languages/` folder, so `script-src` must allow the origin that serves them. |
-| `style-src 'self'`                   | Only for your own stylesheets. Vitrine itself does not need any `style-src` source.                                                                                                               |
-| `img-src 'self' data:`               | Images in rendered Markdown. Adjust it to your image policy (below).                                                                                                                              |
-| `connect-src 'self'`                 | Requests made for `src`. Add the origins you load with `allow-remote`.                                                                                                                            |
-| `object-src 'none'`                  | No plugins. Vitrine does not use any.                                                                                                                                                             |
-| `base-uri 'none'`                    | Prevents `<base>` injection from changing how relative URLs resolve.                                                                                                                              |
-| `require-trusted-types-for 'script'` | Enforces Trusted Types for DOM injection sinks.                                                                                                                                                   |
-| `trusted-types vitrine`              | Allows Vitrine's policy (see [Trusted Types](#trusted-types)).                                                                                                                                    |
+| Directive                            | Why                                                                                                                                                                                                   |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default-src 'self'`                 | Fallback for every resource type not listed.                                                                                                                                                          |
+| `script-src 'self'`                  | The Vitrine script and the lazy-loaded language files. Language files are ES modules loaded with `import()` from the `languages/` folder, so `script-src` must allow the origin that serves them.     |
+| `style-src 'self'`                   | Only for your own stylesheets. Vitrine itself does not need any `style-src` source.                                                                                                                   |
+| `img-src 'self' data:`               | Images in rendered Markdown. Adjust it to your image policy (below).                                                                                                                                  |
+| `connect-src 'self'`                 | Requests made for `src`, `original-src`, `modified-src`, `options-src`, `suggest-src`, and for syntax theme files. Add the origins you load with `allow-remote`, and the origin of `syntaxThemesUrl`. |
+| `object-src 'none'`                  | No plugins. Vitrine does not use any.                                                                                                                                                                 |
+| `base-uri 'none'`                    | Prevents `<base>` injection from changing how relative URLs resolve.                                                                                                                                  |
+| `require-trusted-types-for 'script'` | Enforces Trusted Types for DOM injection sinks.                                                                                                                                                       |
+| `trusted-types vitrine`              | Allows Vitrine's policy (see [Trusted Types](#trusted-types)).                                                                                                                                        |
 
 ### Adapting the policy
 
@@ -169,6 +203,8 @@ default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'
 The CSP and the image policy work together: the image policy decides which images are kept in the document, and `img-src` decides which ones the browser may fetch.
 
 If the language files are served from another origin than the page, add that origin to `script-src`. If they cannot load, code is shown without highlighting and a warning is logged.
+
+Syntax themes are loaded with `fetch()`, so their origin must be allowed by `connect-src` (not `style-src`). With the files served from jsDelivr, add `https://cdn.jsdelivr.net` to `connect-src`. If a theme cannot load, the built-in colors are kept and a warning is logged.
 
 ## What Vitrine cannot protect against
 

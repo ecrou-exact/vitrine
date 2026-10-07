@@ -34,6 +34,7 @@ Everything is rendered with DOM text APIs. No HTML is ever parsed, so strings su
 | `expand-controls`         | off                | on     |
 | `path`                    | off                | on     |
 | `line-numbers` (raw view) | off                | on     |
+| `fullscreen`              | off                | on     |
 
 ## Attributes
 
@@ -138,6 +139,22 @@ Input nested deeper than the `maxDepth` setting shows "Nesting is too deep (limi
 <vt-json on-invalid="raw" src="/logs/last-response.txt"></vt-json>
 ```
 
+## Editing
+
+With `mode="edit"`, the raw view (the default view in edit mode) is a JSON editor with live validation: a status bar shows "Valid JSON" or the error with its line and column, and the line of the error is emphasized. Set `status="false"` to hide the status bar. See [Editing](../editing.md#vt-json).
+
+```html
+<vt-json mode="edit" label="settings.json" src="/settings.json"></vt-json>
+```
+
+```js
+const field = document.querySelector('vt-json');
+field.addEventListener('vt-change', () => {
+  const value = field.data; // undefined while the text is not valid JSON
+  if (value !== undefined) save(value);
+});
+```
+
 ## Properties
 
 | Property  | Type     | Description                                                                         |
@@ -194,20 +211,22 @@ In the tree view, search looks at keys and primitive values (strings without the
 
 ## Events
 
-| Event           | `detail`                       | When                                               |
-| --------------- | ------------------------------ | -------------------------------------------------- |
-| `vt-ready`      | `{ type: "json" }`             | The JSON was rendered                              |
-| `vt-tab-change` | `{ tab }`: `"tree"` or `"raw"` | The user changed the view                          |
-| `vt-copy`       | `{ text }`                     | The JSON, a value or a path was copied             |
-| `vt-search`     | `{ query, matches }`           | A search ran                                       |
-| `vt-error`      | `{ message, cause }`           | Invalid JSON, loading failure or content too large |
+| Event                                     | `detail`                             | When                                                                                                      |
+| ----------------------------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `vt-ready`                                | `{ type: "json" }`                   | The JSON was rendered                                                                                     |
+| `vt-tab-change`                           | `{ tab }`: `"tree"` or `"raw"`       | The user changed the view                                                                                 |
+| `vt-copy`                                 | `{ text }`                           | The JSON, a value or a path was copied                                                                    |
+| `vt-search`                               | `{ query, matches }`                 | A search ran                                                                                              |
+| `vt-error`                                | `{ message, cause }`                 | Invalid JSON, loading failure or content too large                                                        |
+| `vt-input`, `vt-change`, `vt-mode-change` | `{ value }`, `{ value }`, `{ mode }` | Edit mode (see [Editing](../editing.md#events)). Invalid JSON in the editor does not dispatch `vt-error`. |
+| `vt-fullscreen-change`                    | `{ fullscreen }`                     | Full screen entered or left                                                                               |
 
 For invalid JSON, `cause` is an object with `message`, `offset`, `line`, `column` and `tooDeep`.
 
 ## Copy and download
 
 - The header copy button ("Copy") copies the pretty-printed JSON, using `indent` and `sort-keys`. It is not the original text: whitespace is normalized, but numbers and duplicate keys are preserved.
-- `download` saves the same text as `application/json`, named after `label` (or `title`), or `data.json`. The value of the `download` attribute is not used as the file name.
+- `download` saves the same text as `application/json`. The file name is the value of the `download` attribute, else a `label` or `title` that ends with an extension, else `data.json`.
 
 ## CSS parts
 
@@ -226,6 +245,8 @@ In addition to the [shared parts](../common-attributes.md#shared-css-parts):
 | `type-badge`                            | The type badge                           |
 | `more-item`                             | The "Show more" row                      |
 | `path`                                  | The path bar                             |
+| `status`                                | The validation status bar (edit mode)    |
+| `editor`                                | The editor's text field (edit mode)      |
 | `code`, `line`, `gutter`, `line-number` | The raw view (same parts as `<vt-code>`) |
 
 ```css

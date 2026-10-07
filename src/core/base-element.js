@@ -246,7 +246,11 @@ export class VtBase extends HTMLElement {
   }
 
   set content(value) {
-    this._content = value === null || value === undefined ? undefined : String(value);
+    const next = value === null || value === undefined ? undefined : String(value);
+    // Setting the text it already shows is a no-op: frameworks echoing edits back
+    // (`:content.prop` + `@vt-input`) must not reset the editor, its caret or its history.
+    if (next !== undefined && next === this._content && next === this.text) return;
+    this._content = next;
     if (this._connected) this.reload();
   }
 
@@ -622,9 +626,11 @@ export class VtBase extends HTMLElement {
    */
   applySyntaxTheme(dark) {
     const config = getConfig();
+    // Element attributes first, then the configuration; the dark choice wins in dark mode.
     const requested =
-      (dark && (this.getAttribute('syntax-theme-dark') || config.syntaxThemeDark)) ||
+      (dark && this.getAttribute('syntax-theme-dark')) ||
       this.getAttribute('syntax-theme') ||
+      (dark && config.syntaxThemeDark) ||
       config.syntaxTheme;
     const name = resolveSyntaxTheme(requested);
     this.syntaxTheme = name;
@@ -687,7 +693,12 @@ export class VtBase extends HTMLElement {
       this.frame.append(...this.chrome(null), errorView(title, detail));
       return;
     }
-    if (!this.text && !(/** @type {typeof VtBase} */ (this.constructor).allowEmpty)) {
+    // An empty editor is still an editor (with its placeholder), not "nothing to display".
+    if (
+      !this.text &&
+      !this.editing &&
+      !(/** @type {typeof VtBase} */ (this.constructor).allowEmpty)
+    ) {
       this.frame.append(...this.chrome(null), emptyView(this.t));
     } else {
       this.renderContent(this.frame);

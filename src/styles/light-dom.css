@@ -23,15 +23,78 @@ vt-json:not(:defined) {
   white-space: pre;
 }
 
-vt-markdown:not(:defined) {
-  white-space: pre-line;
-}
-
 @media (prefers-color-scheme: dark) {
   vt-code:not(:defined),
   vt-json:not(:defined) {
     border-color: var(--vt-border, #262d3a);
     background: var(--vt-surface-sunken, #0c0f14);
     color: var(--vt-fg, #e8eae6);
+  }
+}
+
+/*
+ * Before the script has loaded: the Vitrine mark (window frame and V) drawn with CSS
+ * only, so it works under a strict CSP. Raw inline content stays hidden meanwhile.
+ */
+vt-code:not(:defined),
+vt-json:not(:defined),
+vt-markdown:not(:defined),
+vt-csv:not(:defined),
+vt-tags:not(:defined),
+vt-diff:not(:defined) {
+  position: relative;
+  min-height: 96px;
+  max-height: 160px;
+  overflow: hidden;
+  color: transparent;
+}
+
+:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff):not(:defined)::before {
+  content: '';
+  position: absolute;
+  top: calc(50% - 18px);
+  left: calc(50% - 20px);
+  width: 40px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 3px solid #4a5260;
+  border-top-width: 11px;
+  border-radius: 7px;
+  opacity: 0;
+  animation: vt-pending 300ms 300ms forwards;
+}
+
+:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff):not(:defined)::after {
+  content: '';
+  position: absolute;
+  top: calc(50% - 4px);
+  left: calc(50% - 6px);
+  width: 9px;
+  height: 9px;
+  border-right: 4px solid #14b8a6;
+  border-bottom: 4px solid #14b8a6;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  opacity: 0;
+  animation:
+    vt-pending 300ms 300ms forwards,
+    vt-pending-pulse 1.4s 600ms ease-in-out infinite;
+}
+
+@keyframes vt-pending {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-pending-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff):not(:defined)::after {
+    animation: vt-pending 0ms 300ms forwards;
   }
 }

@@ -125,6 +125,8 @@ export class VtDiff extends VtBase {
     this.diffTimer = undefined;
     /** @type {(() => void) | null} */
     this.updateHistoryButtons = null;
+    /** @type {import('../../core/history.js').EditHistory[]} */
+    this.histories = [];
   }
 
   // ------------------------------------------------------------------ sources
@@ -151,6 +153,8 @@ export class VtDiff extends VtBase {
 
   /** @returns {string} */
   get patch() {
+    // A patch given as content is returned as written (hunk positions included).
+    if (!this.sides()) return this.text ?? '';
     const result = this.compare();
     if (!result) return '';
     return toPatch(result.lines, { originalName: result.names[0], modifiedName: result.names[1] });
@@ -262,6 +266,7 @@ export class VtDiff extends VtBase {
   /** One of the two texts changed. */
   sidesChanged() {
     this.cache = null;
+    this.histories = [];
     this.expanded.clear();
     if (this._connected) this.requestRender();
   }
@@ -683,9 +688,11 @@ export class VtDiff extends VtBase {
       /** @type {(text: string) => void} */ onInput,
       /** @type {string} */ language,
     ) => {
+      const index = this.editors.length;
       const editor = new CodeEditor({
         text,
         language,
+        history: this.histories[index],
         lineNumbers: this.feature('line-numbers'),
         wrap: true,
         highlightLimit: getConfig().highlightLimit,
@@ -698,6 +705,8 @@ export class VtDiff extends VtBase {
         this.updateHistoryButtons?.();
       });
       this.editors.push(editor);
+      // Keep each side's undo history across re-renders.
+      this.histories[index] = editor.history;
       return h(
         'div',
         { class: 'diff-editor' },
