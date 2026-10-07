@@ -13,13 +13,14 @@ const pkg = async (name) =>
  * @returns {Promise<{ name: string, version: string, license: string, url: string, use: string, where: string, licenseFile: string, noticeFile?: string }[]>}
  */
 export async function thirdParty() {
-  const [hljs, marked, purify, echarts, zrender, mono, plex] = await Promise.all(
+  const [hljs, marked, purify, echarts, zrender, jsyaml, mono, plex] = await Promise.all(
     [
       'highlight.js',
       'marked',
       'dompurify',
       'echarts',
       'zrender',
+      'js-yaml',
       '@fontsource/jetbrains-mono',
       '@fontsource/ibm-plex-sans',
     ].map(pkg),
@@ -79,6 +80,15 @@ export async function thirdParty() {
       use: 'Canvas rendering engine of Apache ECharts',
       where: 'dist/vendor/echarts.js, loaded by `<vt-chart>` only',
       licenseFile: 'node_modules/zrender/LICENSE',
+    },
+    {
+      name: 'js-yaml',
+      version: jsyaml.version,
+      license: 'MIT',
+      url: 'https://github.com/nodeca/js-yaml',
+      use: 'YAML reading for `<vt-openapi>`',
+      where: 'dist/vendor/yaml.js, loaded by `<vt-openapi>` for YAML only',
+      licenseFile: 'node_modules/js-yaml/LICENSE',
     },
     {
       name: 'JetBrains Mono',
