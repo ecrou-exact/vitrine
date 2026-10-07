@@ -16,17 +16,41 @@
 }
 
 .panel.split {
+  /* Panes scroll on their own so they can be kept in sync; max-height sets their size. */
+  --_split-height: var(--_max-height, min(70vh, 640px));
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.panel.split > .body {
+  height: var(--_split-height);
+  max-height: none;
 }
 
 .panel.split > .body + .body {
   border-left: 1px solid var(--_border);
 }
 
+.panel.split:is([data-preview='top'], [data-preview='bottom']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.panel.split:is([data-preview='top'], [data-preview='bottom']) > .body {
+  height: calc(var(--_split-height) / 2);
+}
+
+.panel.split:is([data-preview='top'], [data-preview='bottom']) > .body + .body {
+  border-top: 1px solid var(--_border);
+  border-left: 0;
+}
+
 @container (max-width: 640px) {
   .panel.split {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel.split > .body {
+    height: calc(var(--_split-height) / 2);
   }
 
   .panel.split > .body + .body {
@@ -99,7 +123,8 @@
   overflow-wrap: break-word;
 }
 
-.markdown > :first-child {
+.markdown > :first-child,
+.markdown > [data-vt-line]:first-child + * {
   margin-top: 0;
 }
 

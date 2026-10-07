@@ -17,6 +17,8 @@ export const EVENTS = Object.freeze({
   SEARCH: 'vt-search',
   /** Active tab changed. Detail: `{ tab }`. */
   TAB_CHANGE: 'vt-tab-change',
+  /** Split layout changed. Detail: `{ preview, sync }`. */
+  LAYOUT_CHANGE: 'vt-layout-change',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });
