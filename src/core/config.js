@@ -25,6 +25,8 @@
  * @property {string} syntaxThemeDark - Syntax theme used when the interface theme is dark.
  * @property {string} syntaxThemesUrl - Base URL of the syntax theme files. Empty means
  *   "next to the Vitrine script".
+ * @property {string} vendorUrl - Base URL of `echarts.js`, loaded by <vt-chart>. Empty means
+ *   "next to the Vitrine script".
  */
 
 /** @type {Readonly<VitrineConfig>} */
@@ -41,6 +43,7 @@ export const DEFAULT_CONFIG = Object.freeze({
   syntaxTheme: '',
   syntaxThemeDark: '',
   syntaxThemesUrl: '',
+  vendorUrl: '',
 });
 
 /** Hard ceilings that configuration cannot exceed. */

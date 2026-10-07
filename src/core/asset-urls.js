@@ -8,6 +8,7 @@
 
 let languagesUrl = '';
 let syntaxThemesUrl = '';
+let vendorUrl = '';
 
 /** @param {string} url - Base URL of `languages/*.js`. */
 export function setDefaultLanguagesUrl(url) {
@@ -17,6 +18,16 @@ export function setDefaultLanguagesUrl(url) {
 /** @returns {string} */
 export function defaultLanguagesUrl() {
   return languagesUrl;
+}
+
+/** @param {string} url - Base URL of `vendor/*.js` (Apache ECharts for <vt-chart>). */
+export function setDefaultVendorUrl(url) {
+  vendorUrl = url;
+}
+
+/** @returns {string} */
+export function defaultVendorUrl() {
+  return vendorUrl;
 }
 
 /** @param {string} url - Base URL of `syntax-themes/*.css`. */

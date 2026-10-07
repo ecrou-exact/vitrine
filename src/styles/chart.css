@@ -1,0 +1,144 @@
+/*
+ * Charts: a legend of toggle buttons above the plot (drawn by Apache ECharts in the theme
+ * colors), and the data table view.
+ */
+.vt {
+  --_chart-1: var(--vt-chart-1, var(--_accent));
+  --_chart-2: var(--vt-chart-2, var(--_info));
+  --_chart-3: var(--vt-chart-3, var(--_warning));
+  --_chart-4: var(--vt-chart-4, var(--_syntax-keyword));
+  --_chart-5: var(--vt-chart-5, var(--_danger));
+  --_chart-6: var(--vt-chart-6, var(--_syntax-string));
+  --_chart-7: var(--vt-chart-7, var(--_syntax-number));
+  --_chart-8: var(--vt-chart-8, var(--_fg-muted));
+}
+
+.chart-body {
+  padding: var(--_space-3) var(--_space-3) var(--_space-2);
+  background: var(--_surface);
+}
+
+.plot {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  border-radius: var(--_radius-sm);
+}
+
+.plot:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.plot > .loading {
+  height: 100%;
+}
+
+/* ---------- Legend ---------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 var(--_space-1) var(--_space-3);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 500 var(--_font-size-small) / 1 var(--_font-ui);
+  cursor: pointer;
+  transition:
+    opacity var(--_duration-fast) var(--_easing),
+    border-color var(--_duration-fast) var(--_easing);
+}
+
+.legend-item:hover {
+  border-color: var(--_border-strong);
+}
+
+.legend-item[aria-pressed='false'] {
+  opacity: 0.45;
+}
+
+.legend-item[aria-pressed='false'] .swatch {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--_c);
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--_c);
+}
+
+.s-0 {
+  --_c: var(--_chart-1);
+}
+.s-1 {
+  --_c: var(--_chart-2);
+}
+.s-2 {
+  --_c: var(--_chart-3);
+}
+.s-3 {
+  --_c: var(--_chart-4);
+}
+.s-4 {
+  --_c: var(--_chart-5);
+}
+.s-5 {
+  --_c: var(--_chart-6);
+}
+.s-6 {
+  --_c: var(--_chart-7);
+}
+.s-7 {
+  --_c: var(--_chart-8);
+}
+
+/* ---------- Table view ---------- */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--_font-size-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table th,
+.data-table td {
+  padding: 7px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.data-table th:first-child {
+  text-align: left;
+}
+
+.data-table thead th {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.data-table tbody th {
+  font-weight: 500;
+}
+
+/* ---------- Edit mode ---------- */
+
+.chart-edit > .editor-body {
+  max-height: min(36vh, 300px);
+  border-bottom: 1px solid var(--_border);
+}

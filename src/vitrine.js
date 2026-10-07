@@ -7,6 +7,7 @@
  * @module vitrine
  * @since 0.1.0
  */
+import { VtChart } from './components/chart/vt-chart.js';
 import { VtCode } from './components/code/vt-code.js';
 import { VtCsv } from './components/csv/vt-csv.js';
 import { VtDiff } from './components/diff/vt-diff.js';
@@ -34,6 +35,7 @@ export {
   VtTree,
   VtHttp,
   VtLog,
+  VtChart,
   configure,
   getConfig,
   EVENTS,
@@ -72,6 +74,7 @@ export const registry = new Map(
     ['vt-tree', VtTree],
     ['vt-http', VtHttp],
     ['vt-log', VtLog],
+    ['vt-chart', VtChart],
   ]),
 );
 
@@ -87,6 +90,7 @@ const TYPES = /** @type {const} */ ({
   tree: 'vt-tree',
   http: 'vt-http',
   log: 'vt-log',
+  chart: 'vt-chart',
 });
 
 /**
