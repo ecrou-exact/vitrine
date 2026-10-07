@@ -24,6 +24,7 @@ const COMPONENTS = {
   'vt-http': 66 * KB,
   'vt-log': 62 * KB,
   'vt-chart': 48 * KB,
+  'vt-openapi': 48 * KB,
 };
 
 const rawCss = {
