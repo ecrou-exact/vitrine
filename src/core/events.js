@@ -23,6 +23,14 @@ export const EVENTS = Object.freeze({
   CHANGE: 'vt-change',
   /** Mode switched with the edit toggle. Detail: `{ mode }`. */
   MODE_CHANGE: 'vt-mode-change',
+  /** Tags: the selection changed (also `vt-change`). Detail: `{ tag }`. */
+  TAG_ADD: 'vt-tag-add',
+  /** Tags: a tag was removed. Detail: `{ tag }`. */
+  TAG_REMOVE: 'vt-tag-remove',
+  /** Tags: a new tag is about to be created (cancelable). Detail: `{ tag }`. */
+  TAG_CREATE: 'vt-tag-create',
+  /** Tags: a tag was activated in view mode. Detail: `{ tag }`. */
+  TAG_CLICK: 'vt-tag-click',
   /** A table was sorted. Detail: `{ column, name, direction }`. */
   SORT: 'vt-sort',
   /** Full screen entered or left. Detail: `{ fullscreen }`. */

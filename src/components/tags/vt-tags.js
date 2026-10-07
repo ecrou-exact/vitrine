@@ -59,6 +59,7 @@ export const TAG_EVENTS = Object.freeze({
  * @attr {boolean} allow-create - Typed tags that are not in the options can be created (default on).
  * @attr {number} max-tags - Most tags that can be selected.
  * @attr {number} maxlength - Longest tag, in characters (default 50).
+ * @attr {number} minlength - Shortest new tag, in characters (default 1).
  * @attr {string} pattern - Regular expression a new tag must match (whole value).
  * @attr {string} separators - Characters that end a tag while typing (default `,;`).
  * @attr {string} prefix - Tag prefix such as `#` or `@`: typing it starts a tag, it is shown
@@ -105,6 +106,9 @@ export const TAG_EVENTS = Object.freeze({
  * @csspart option - A suggestion. The highlighted one also has `option-active`.
  * @csspart browse-panel - The "browse all" panel.
  * @csspart tags-status - Count and messages under the field.
+ * @csspart group - Group heading in the suggestions list.
+ * @csspart browse-button - "Browse all tags" button.
+ * @csspart clear-button - "Remove all tags" button.
  *
  * @example
  * <form>
@@ -120,7 +124,7 @@ export class VtTags extends VtBase {
 
   static componentAttributes = Object.freeze([
     'name', 'value-format', 'required', 'disabled', 'allow-create', 'max-tags', 'maxlength',
-    'pattern', 'separators', 'prefix', 'case-sensitive', 'options-src', 'suggest-src', 'browse',
+    'minlength', 'pattern', 'separators', 'prefix', 'case-sensitive', 'options-src', 'suggest-src', 'browse',
     'counts', 'clickable', 'clear', 'appearance',
   ]); // prettier-ignore
 
@@ -266,6 +270,8 @@ export class VtTags extends VtBase {
       this.dataError = error;
       this.selected = [];
       this.contentOptions = [];
+      // Report it like any other content error (vt-error, never vt-ready).
+      queueMicrotask(() => this.setError(new Error(this.t('invalidTags'), { cause: error })));
     }
     this.updateForm();
   }
@@ -1036,7 +1042,10 @@ export class VtTags extends VtBase {
   requestSuggestions() {
     clearTimeout(this.suggestTimer);
     this.suggestAbort?.abort();
-    const query = this.query.trim();
+    // The prefix ("#") is typing syntax, not part of the tag: never send it.
+    const query = this.query
+      .trim()
+      .replace(this.prefix ? new RegExp(`^${escapeRegExp(this.prefix)}`) : /^$/, '');
     const src = this.getAttribute('suggest-src');
     if (!query || (!this._suggest && !src)) {
       if (this.suggestions.length) {
@@ -1064,7 +1073,7 @@ export class VtTags extends VtBase {
             }),
           );
         }
-        if (controller.signal.aborted || query !== this.query.trim()) return;
+        if (controller.signal.aborted || !this.query.trim().endsWith(query)) return;
         this.suggestions = normalizeList(data, this.caseSensitive).slice(0, SUGGESTION_LIMIT);
         this.updateList();
       } catch (error) {

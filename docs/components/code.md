@@ -22,6 +22,7 @@ The code is always inserted as text. It is never parsed as HTML, whatever the la
 | `download`         | off                | on     |
 | `line-numbers`     | off                | on     |
 | Wrap toggle button | off                | on     |
+| `fullscreen`       | off                | on     |
 
 Every feature can be turned on or off individually, whatever the variant:
 
@@ -33,7 +34,7 @@ Every feature can be turned on or off individually, whatever the variant:
 
 ## Attributes
 
-This table lists the attributes specific to `<vt-code>`. The shared attributes (`variant`, `theme`, `src`, `allow-remote`, `max-height`, `copy`, `search`, `download`, `header`, `dot`, `label`, `title`, `lang-ui`) are described in [Common attributes](../common-attributes.md).
+This table lists the attributes specific to `<vt-code>`. The shared attributes (`variant`, `theme`, `src`, `allow-remote`, `max-height`, `copy`, `search`, `download`, `header`, `dot`, `label`, `title`, `lang-ui`, `mode`, `edit-toggle`, `placeholder`, `syntax-theme`, `syntax-theme-dark`, `badge`, `history`, `fullscreen`, `status`) are described in [Common attributes](../common-attributes.md).
 
 | Attribute         | Type                           | Default             | Description                                                                 |
 | ----------------- | ------------------------------ | ------------------- | --------------------------------------------------------------------------- |
@@ -155,11 +156,21 @@ Copying or downloading copies the original text, signs included.
 
 An integer from 1 to 16. When absent or invalid, the `--vt-tab-size` custom property is used (default 4).
 
+## Editing
+
+With `mode="edit"`, the code area becomes an editor highlighted in the element's language. `start-line` and `collapsible` do not apply in the editor. See [Editing](../editing.md#vt-code).
+
+```html
+<vt-code mode="edit" edit-toggle language="js" line-numbers label="sum.js">
+  export const sum = (a, b) => a + b;
+</vt-code>
+```
+
 ## Properties
 
-| Property  | Type     | Description                                                                                                           |
-| --------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `content` | `string` | The code. Setting it overrides `src` and inline content; `null` restores them. Reading it returns the displayed text. |
+| Property  | Type     | Description                                                                                                                       |
+| --------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `content` | `string` | The code. Setting it overrides `src` and inline content; `null` restores them. Reading it returns the displayed (or edited) text. |
 
 ```js
 const viewer = document.querySelector('vt-code');
@@ -169,12 +180,14 @@ viewer.content = JSON.stringify(payload, null, 2);
 
 ## Events
 
-| Event       | `detail`             | When                                       |
-| ----------- | -------------------- | ------------------------------------------ |
-| `vt-ready`  | `{ type: "code" }`   | The code was rendered                      |
-| `vt-copy`   | `{ text }`           | The code was copied                        |
-| `vt-search` | `{ query, matches }` | A search ran                               |
-| `vt-error`  | `{ message, cause }` | Loading failed or the content is too large |
+| Event                                     | `detail`                             | When                                            |
+| ----------------------------------------- | ------------------------------------ | ----------------------------------------------- |
+| `vt-ready`                                | `{ type: "code" }`                   | The code was rendered                           |
+| `vt-copy`                                 | `{ text }`                           | The code was copied                             |
+| `vt-search`                               | `{ query, matches }`                 | A search ran                                    |
+| `vt-error`                                | `{ message, cause }`                 | Loading failed or the content is too large      |
+| `vt-input`, `vt-change`, `vt-mode-change` | `{ value }`, `{ value }`, `{ mode }` | Edit mode (see [Editing](../editing.md#events)) |
+| `vt-fullscreen-change`                    | `{ fullscreen }`                     | Full screen entered or left                     |
 
 See [Events](../common-attributes.md#events).
 
@@ -190,6 +203,7 @@ In addition to the [shared parts](../common-attributes.md#shared-css-parts):
 | `gutter`, `line-number` | The line number cell (two names for the same element)   |
 | `wrap-button`           | The wrap toggle button                                  |
 | `show-more`             | The "Show all X lines" button                           |
+| `editor`                | The editor's text field (edit mode)                     |
 
 ```css
 vt-code::part(line-highlighted) {

@@ -274,11 +274,39 @@ export function createTabs({ tabs, selected, label, onSelect, panelId }) {
 export function loadingView(t) {
   return h(
     'div',
-    { class: 'skeleton', part: 'loading', attrs: { role: 'status', 'aria-label': t('loading') } },
-    h('span'),
-    h('span'),
-    h('span'),
+    { class: 'loader', part: 'loading', attrs: { role: 'status' } },
+    loaderMark(),
+    h('span', { class: 'loader-label', text: t('loading') }),
   );
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+/**
+ * The Vitrine mark used as a loader: the window frame and title bar, the status dot
+ * that pulses and the V that draws itself (geometry from brand/LOGO.md, 120 × 120 box).
+ *
+ * @returns {SVGSVGElement}
+ */
+function loaderMark() {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 120 120');
+  svg.setAttribute('class', 'loader-mark');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  /** @type {[string, Record<string, string>][]} */
+  const shapes = [
+    ['rect', { class: 'loader-frame', x: '12', y: '16', width: '96', height: '88', rx: '18' }],
+    ['path', { class: 'loader-frame', d: 'M12 42 L108 42' }],
+    ['circle', { class: 'loader-dot', cx: '29', cy: '29', r: '5' }],
+    ['path', { class: 'loader-v', d: 'M42 60 L60 86 L78 60', pathLength: '100' }],
+  ];
+  for (const [tag, attrs] of shapes) {
+    const shape = document.createElementNS(SVG_NS, tag);
+    for (const [name, value] of Object.entries(attrs)) shape.setAttribute(name, value);
+    svg.append(shape);
+  }
+  return svg;
 }
 
 /**

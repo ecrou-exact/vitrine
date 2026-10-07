@@ -1,10 +1,11 @@
 # Theming
 
-Vitrine elements render inside Shadow DOM, so your page styles do not leak into them by accident. You customize them in three ways:
+Vitrine elements render inside Shadow DOM, so your page styles do not leak into them by accident. You customize them in four ways:
 
 1. Pick a **theme** with the `theme` attribute or the global configuration.
-2. Override **design tokens** (CSS custom properties named `--vt-*`) on the element or any ancestor.
-3. Style individual pieces with **`::part()`** selectors.
+2. Optionally pick a **syntax theme** from the highlight.js collection for the code colors.
+3. Override **design tokens** (CSS custom properties named `--vt-*`) on the element or any ancestor.
+4. Style individual pieces with **`::part()`** selectors.
 
 Styles are applied with constructable stylesheets, so theming works under a strict `style-src` Content Security Policy.
 
@@ -139,8 +140,12 @@ Vitrine never loads fonts. The stacks use fonts already installed or already loa
 | `--vt-space-3`       | `12px`  | Spacing step 3                                      |
 | `--vt-space-4`       | `16px`  | Spacing step 4                                      |
 | `--vt-space-5`       | `24px`  | Spacing step 5                                      |
+| `--vt-space-6`       | `32px`  | Spacing step 6                                      |
+| `--vt-space-7`       | `48px`  | Spacing step 7                                      |
+| `--vt-space-8`       | `64px`  | Spacing step 8                                      |
 | `--vt-radius-sm`     | `6px`   | Buttons, inputs and badges                          |
 | `--vt-radius`        | `10px`  | Container corners                                   |
+| `--vt-radius-lg`     | `16px`  | Large radius                                        |
 | `--vt-radius-full`   | `999px` | Status dot                                          |
 | `--vt-header-height` | `40px`  | Minimum header height                               |
 | `--vt-margin`        | `0`     | Vertical margin around the element (`margin-block`) |
@@ -152,6 +157,10 @@ Vitrine never loads fonts. The stacks use fonts already installed or already loa
 | `--vt-duration-fast` | `120ms`                      | Hover and press transitions          |
 | `--vt-duration`      | `180ms`                      | Expand, collapse and tab transitions |
 | `--vt-easing`        | `cubic-bezier(0.2, 0, 0, 1)` | Easing curve                         |
+
+### Tag tokens
+
+`<vt-tags>` has its own custom properties (`--vt-tag-bg`, `--vt-tag-fg`, `--vt-tag-border`, `--vt-tag-radius`, `--vt-tag-height`, `--vt-tag-gap`, `--vt-tag-font-size`) and per-tag parts. See [Customizing tags](components/tags.md#customizing-tags).
 
 ### Examples
 
@@ -222,9 +231,84 @@ const dark = Vitrine.getTheme('dark');
 
 `getTheme(name)` returns a copy of the theme (changing it has no effect), with token names without the `--vt-` prefix, or `undefined` for an unknown name.
 
+## Syntax themes
+
+By default, code is colored with the `--vt-syntax-*` tokens of the interface theme. A syntax theme replaces those colors with one of the 258 themes of the [highlight.js](https://highlightjs.org/) collection: `github`, `github-dark`, `monokai`, `atom-one-dark`, `nord`, `base16-dracula`…
+
+```html
+<vt-code language="ts" syntax-theme="github" syntax-theme-dark="github-dark">
+  const answer: number = 42;
+</vt-code>
+```
+
+```js
+Vitrine.configure({ syntaxTheme: 'github', syntaxThemeDark: 'github-dark' });
+```
+
+A syntax theme colors the code areas of every component: `<vt-code>`, the source and the code blocks of `<vt-markdown>`, the raw view and the tree of `<vt-json>`, the raw view of `<vt-csv>`, `<vt-diff>`, and the editors. It sets the text color and the background of the code area, and the line numbers follow the text color. The rest of the element (header, buttons, Markdown text, tables, tags) keeps the interface theme.
+
+### Choosing the theme
+
+| Attribute           | Configuration     | Use                                                        |
+| ------------------- | ----------------- | ---------------------------------------------------------- |
+| `syntax-theme`      | `syntaxTheme`     | Syntax theme                                               |
+| `syntax-theme-dark` | `syntaxThemeDark` | Syntax theme used instead when the interface theme is dark |
+| (none)              | `syntaxThemesUrl` | Base URL of the theme files                                |
+
+The theme is chosen in this order, and the first valid name wins:
+
+1. when the interface theme is dark (`dark`, `dim`, `high-contrast`, or a dark registered theme, including through `auto`): the `syntax-theme-dark` attribute, then the `syntaxThemeDark` configuration;
+2. the `syntax-theme` attribute;
+3. the `syntaxTheme` configuration.
+
+When no valid name is found, the built-in `--vt-syntax-*` colors are used. Setting a dark variant lets `auto` switch the code colors with the system preference:
+
+```html
+<vt-json syntax-theme="atom-one-light" syntax-theme-dark="atom-one-dark" src="/data.json"></vt-json>
+```
+
+### Theme names
+
+Names are the highlight.js file names without `.css`. Themes of the base16 family are prefixed with `base16-`: `base16/dracula` becomes `base16-dracula`, and `base16/dracula` is also accepted (`/` is turned into `-`). Names are trimmed and case-insensitive.
+
+Only names in the list built into Vitrine are accepted. An unknown name never causes a request; it is ignored as if no theme were set. List the names from JavaScript:
+
+```js
+Vitrine.listSyntaxThemes(); // ['1c-light', 'a11y-dark', 'a11y-light', 'agate', …]
+```
+
+### How themes are loaded
+
+The themes are converted from highlight.js when Vitrine is built, into `dist/syntax-themes/<name>.css`, one small file each. A theme is fetched the first time an element needs it, then shared by every element on the page.
+
+- The files are looked for in the `syntax-themes/` folder next to the Vitrine script (`dist/syntax-themes/`, for the classic script, the ES module and the per-component modules alike). Set `syntaxThemesUrl` when they are served from somewhere else:
+
+  ```js
+  Vitrine.configure({ syntaxThemesUrl: 'https://static.example.com/vitrine/syntax-themes/' });
+  ```
+
+- Only `http:` and `https:` URLs are used. The request is a `fetch()` that sends cookies to the same origin only.
+- If the file cannot be loaded, the warning `[vitrine] Could not load the "name" syntax theme.` is logged, the built-in colors stay, and the next element that asks for the theme tries again.
+- The stylesheet is applied with a constructable stylesheet, like Vitrine's own styles, so no `style-src` source is needed. Because the file is loaded with `fetch()`, the Content Security Policy must allow its origin in `connect-src` (see [Security](security.md#content-security-policy)).
+
+The conversion keeps the credits comment of each theme (author and license) and only the color, background, font style, font weight and text decoration declarations. It removes:
+
+- every `url(…)` value (background images), so a theme never makes a request;
+- layout rules such as the padding of `pre code.hljs`, because layout belongs to Vitrine.
+
+### Contrast of syntax themes
+
+Most highlight.js themes do not reach the WCAG AA contrast ratio (4.5:1) for every token color. At build time, the lowest contrast between the background and the text or token colors of each theme is measured and published, with the theme's title and whether it is dark, in `dist/syntax-themes/index.json`:
+
+```json
+[{ "name": "a11y-dark", "title": "a11y-dark", "dark": true, "contrast": 7.12 }]
+```
+
+In the current build, 14 of the 258 themes reach 4.5:1 for every color: `a11y-dark`, `a11y-light`, `base16-bright`, `base16-gigavolt`, `dark`, `devibeans`, `gml`, `ir-black`, `qtcreator-dark`, `stackoverflow-dark`, `stackoverflow-light`, `sunburst`, `tomorrow-night-bright` and `vs-dark`. `contrast` is `null` when the background color could not be measured; colors that cannot be parsed are left out of the measurement. The built-in `--vt-syntax-*` colors of the five interface themes all meet WCAG AA (see [Contrast](#contrast)); prefer them, or one of the themes above, when accessibility matters.
+
 ## Styling parts
 
-Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts).
+Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts), [csv](components/csv.md#css-parts), [tags](components/tags.md#css-parts), [diff](components/diff.md#css-parts).
 
 ```css
 /* Uppercase, accent-colored title */
@@ -267,7 +351,7 @@ When the user has enabled the reduced motion preference (`prefers-reduced-motion
 
 ## Contrast
 
-The built-in themes are checked by automated tests:
+The built-in interface themes are checked by automated tests:
 
 - In every built-in theme, the text colors meet WCAG AA (at least 4.5:1): `fg`, `fg-muted` and every syntax color on `surface-sunken`; `fg`, `fg-muted`, `accent-fg`, `success`, `warning`, `danger` and `info` on `surface`; `fg` and `fg-muted` on `bg`; and `on-accent` on `accent`.
 - In `high-contrast`, `fg`, `fg-muted` and every syntax color reach WCAG AAA (at least 7:1) on `surface-sunken`.

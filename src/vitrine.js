@@ -69,6 +69,8 @@ const TYPES = /** @type {const} */ ({
   markdown: 'vt-markdown',
   json: 'vt-json',
   csv: 'vt-csv',
+  tags: 'vt-tags',
+  diff: 'vt-diff',
 });
 
 /**
