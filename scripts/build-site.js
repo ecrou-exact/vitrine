@@ -50,4 +50,97 @@ for (const file of (await readdir(out)).filter((f) => f.endsWith('.html'))) {
   if (/<!-- @\w+ -->/.test(html)) throw new Error(`${file}: unknown partial`);
   await writeFile(`${out}/${file}`, html);
 }
+await writeFile(`${out}/assets/search-index.json`, JSON.stringify(await searchIndex()));
 console.log(`Website assembled in ${out}/`);
+
+/**
+ * Search index for the site-wide search: page titles and section headings of the site
+ * pages, and every heading of the docs (with the same anchors as <vt-markdown>).
+ *
+ * @returns {Promise<{ t: string, p: string, u: string }[]>} Title, page, URL.
+ */
+async function searchIndex() {
+  /** @type {{ t: string, p: string, u: string }[]} */
+  const entries = [];
+  const text = (/** @type {string} */ html) =>
+    html
+      .replace(/<[^>]+>/g, '')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const PAGES = {
+    'index.html': 'Home',
+    'examples.html': 'Examples',
+    'integrations.html': 'Integrations',
+    'playground.html': 'Playground',
+    'themes.html': 'Themes',
+    'lab.html': 'Stress lab',
+  };
+  for (const [file, page] of Object.entries(PAGES)) {
+    const html = await readFile(`site/${file}`, 'utf8');
+    entries.push({ t: page, p: 'Page', u: file });
+    // Headings in order, with the id of the nearest section or element before them.
+    let anchor = '';
+    for (const match of html.matchAll(/<(section|article|h2|h3)\b([^>]*)>([\s\S]*?)(?=<)/g)) {
+      const [, tag, attrs] = match;
+      const id = /\bid="([^"]+)"/.exec(attrs)?.[1];
+      if (tag === 'section' || tag === 'article') {
+        if (id) anchor = id;
+        continue;
+      }
+      const end = html.indexOf(`</${tag}>`, match.index);
+      const title = text(html.slice(match.index, end));
+      if (!title || title.length > 90) continue;
+      entries.push({ t: title, p: page, u: `${file}#${id ?? anchor}`.replace(/#$/, '') });
+    }
+  }
+
+  const slug = (/** @type {string} */ heading, /** @type {Map<string, number>} */ used) => {
+    const base =
+      heading
+        .trim()
+        .toLowerCase()
+        .replace(/[^\p{L}\p{M}\p{N}\p{Pc} -]/gu, '')
+        .replace(/ /g, '-')
+        .slice(0, 100) || 'section';
+    let id = base;
+    for (let n = used.get(base) ?? 0; used.has(id); n += 1) {
+      id = `${base}-${n + 1}`;
+      used.set(base, n + 1);
+    }
+    used.set(id, used.get(id) ?? 0);
+    return id;
+  };
+  const docs = ['', 'components/'];
+  for (const dir of docs) {
+    for (const file of (await readdir(`docs/${dir}`)).filter((f) => f.endsWith('.md'))) {
+      const page = `${dir}${file.replace(/\.md$/, '')}`;
+      if (page === 'README' || page === 'DESIGN_SYSTEM') continue;
+      const markdown = await readFile(`docs/${dir}${file}`, 'utf8');
+      /** @type {Map<string, number>} */
+      const used = new Map();
+      let fenced = false;
+      let pageTitle = page;
+      for (const line of markdown.split('\n')) {
+        if (/^\s*(```|~~~)/.test(line)) fenced = !fenced;
+        if (fenced) continue;
+        const heading = /^(#{1,3})\s+(.+?)\s*#*$/.exec(line);
+        if (!heading) continue;
+        // Visible heading text: inline code, links and emphasis without their syntax.
+        const title = heading[2]
+          .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+          .replace(/[`*_]/g, '')
+          .trim();
+        const id = slug(title, used);
+        if (heading[1] === '#') {
+          pageTitle = title;
+          entries.push({ t: title, p: 'Docs', u: `docs.html?page=${page}` });
+        } else entries.push({ t: title, p: pageTitle, u: `docs.html?page=${page}#${id}` });
+      }
+    }
+  }
+  return entries;
+}
