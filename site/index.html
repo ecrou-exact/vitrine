@@ -24,8 +24,8 @@
               >
             </h1>
             <p class="lede intro">
-              Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees
-              and HTTP calls on any site. One script tag, no framework, safe with content you did
+              Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees,
+              HTTP calls, logs, charts and API references on any site. One script tag, no framework, safe with content you did
               not write.
             </p>
             <div class="hero-actions intro">
@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Nine elements, view or edit</h2>
+            <h2 id="components-title">Twelve elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -233,6 +233,55 @@ Content-Type: application/json
 {"id": 42, "name": "Ada"}</template>
               </vt-http>
               <a href="examples.html#http">HTTP examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-log&gt;</h3>
+              <p>
+                Application logs with levels, timestamps, fields and stack traces, filters and
+                live streaming.
+              </p>
+              <vt-log class="preview" time="short" data-type-in="lines">
+                <template>2026-10-07T18:00:00Z INFO  server listening on :8080
+{"level":40,"time":"2026-10-07T18:00:03Z","msg":"slow query","ms":812}
+2026-10-07T18:00:04Z ERROR payment failed: card declined
+    at Billing.charge (billing.js:88)</template>
+              </vt-log>
+              <a href="examples.html#log">Log examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-chart&gt;</h3>
+              <p>
+                Line, area, bar and donut charts from CSV or JSON, drawn with Apache ECharts in your
+                theme colors.
+              </p>
+              <vt-chart class="preview" type="area" smooth height="180" legend="false">
+                <template>month,visits
+Jan,186
+Feb,305
+Mar,237
+Apr,273
+May,309
+Jun,414</template>
+              </vt-chart>
+              <a href="examples.html#chart">Chart examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-openapi&gt;</h3>
+              <p>
+                API references from OpenAPI in JSON or YAML: endpoints, schemas, and examples with
+                ready-to-run code.
+              </p>
+              <vt-openapi class="preview" examples="false">
+                <template>openapi: 3.1.0
+info: { title: Orders API, version: 1.0.0 }
+paths:
+  /orders:
+    get: { summary: List orders, responses: { '200': { description: OK } } }
+    post: { summary: Create an order, responses: { '201': { description: Created } } }
+  /orders/{id}:
+    delete: { summary: Cancel an order, responses: { '204': { description: Cancelled } } }</template>
+              </vt-openapi>
+              <a href="examples.html#openapi">OpenAPI examples</a>
             </article>
           </div>
         </div>
