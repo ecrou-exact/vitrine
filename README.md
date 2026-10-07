@@ -1,37 +1,60 @@
-# Vitrine
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/logo-horizontal-dark.svg">
+    <img src="brand/logo-horizontal.svg" alt="Vitrine" width="280">
+  </picture>
+</p>
 
-> Drop-in web components to display code, Markdown and JSON beautifully — on any website, with zero framework.
+<p align="center">
+  Drop-in web components to display code, Markdown and JSON beautifully — on any website, with zero framework.
+</p>
 
-[![CI](https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml/badge.svg)](https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+<p align="center">
+  <a href="https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml"><img src="https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0a6e6f.svg" alt="MIT License"></a>
+  <a href="https://ecrou-exact.github.io/vitrine/"><img src="https://img.shields.io/badge/docs-website-0a6e6f.svg" alt="Website"></a>
+</p>
 
-**Website:** https://ecrou-exact.github.io/vitrine/
+<p align="center">
+  <a href="https://ecrou-exact.github.io/vitrine/">Website</a> &nbsp;|&nbsp;
+  <a href="https://ecrou-exact.github.io/vitrine/examples.html">Examples</a> &nbsp;|&nbsp;
+  <a href="https://ecrou-exact.github.io/vitrine/playground.html">Playground</a> &nbsp;|&nbsp;
+  <a href="docs/getting-started.md">Documentation</a>
+</p>
 
-> **Status:** early development. The components below are being built; APIs may change before v1.0.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/preview-dark.png">
+  <img src="docs/assets/preview-light.png" alt="A vt-code element in its full variant: title bar, TypeScript code with line numbers and highlighted lines, next to theme and content type switches.">
+</picture>
+
+> **Status:** pre-release. The three components are implemented and tested; the API may still change before 1.0.
 
 ## Features
 
-- `<vt-code>` — syntax highlighting, line numbers, line highlighting, search, copy, download, diff.
-- `<vt-markdown>` — sanitized GFM rendering, Preview / Source / Split tabs, table of contents, anchors.
-- `<vt-json>` — pretty-printed or collapsible tree view, search, copy value and JSON path.
-- **Simple** and **full** variants, with every feature individually toggleable.
-- **Secure by default**: sanitized output, no `eval`, CSP-friendly, Trusted Types support.
-- **Themable** with CSS custom properties and `::part()`, light and dark themes built in.
-- Works with plain HTML, PHP, WordPress, Django, Vue, React, Svelte, Angular — **no Node.js required** for consumers.
+- **`<vt-code>`** — syntax highlighting for 190+ languages (common ones bundled, the rest loaded on demand), line numbers, highlighted lines, diffs, wrap, collapse, search, copy and download.
+- **`<vt-markdown>`** — sanitized GitHub Flavored Markdown, Preview / Source / Split tabs, table of contents, heading anchors, image and link policies.
+- **`<vt-json>`** — pretty printing or a collapsible tree, JSONPath copy, search inside collapsed nodes, exact big numbers, precise syntax errors.
+- **Simple and full variants**, and every feature can be switched on or off with one attribute.
+- **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
+- **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.
+- **Accessible** — keyboard tabs and trees, labelled controls, screen reader announcements, reduced motion.
+- **Works everywhere** — plain HTML, PHP, WordPress, Django, Vue, React, Svelte, Angular. Consumers never need Node.js.
 
 ## Quick start
 
 ### CDN (classic script)
 
 ```html
-<script
-  src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"
-  integrity="sha384-..."
-  crossorigin="anonymous"
-></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"
+        integrity="sha384-…" crossorigin="anonymous"></script>
 
-<vt-code language="python" line-numbers> def hello(name): return f"Hello {name}" </vt-code>
+<vt-code language="python" line-numbers>
+def hello(name):
+    return f"Hello {name}"
+</vt-code>
 ```
+
+The exact `integrity` value of each release is published in its [release notes](https://github.com/ecrou-exact/vitrine/releases).
 
 ### ES module
 
@@ -46,63 +69,95 @@
 
 ```bash
 git submodule add https://github.com/ecrou-exact/vitrine.git vendor/vitrine
+cd vendor/vitrine && git checkout v1.0.0   # release tags contain the built dist/ folder
 ```
 
 ```html
 <script src="/vendor/vitrine/dist/vitrine.min.js"></script>
 ```
 
-SRI hashes are published in each release's notes.
+### Untrusted content
+
+Content written inside the element is parsed by the browser as part of your page, before Vitrine runs. **For data you did not write, always use the `content` property** (or `data` on `<vt-json>`):
+
+```js
+document.querySelector('vt-markdown').content = commentFromUser;
+```
 
 ## Components
 
-| Element         | Description        | Docs                                                       |
-| --------------- | ------------------ | ---------------------------------------------------------- |
-| `<vt-code>`     | Source code viewer | [docs/components/code.md](docs/components/code.md)         |
-| `<vt-markdown>` | Markdown renderer  | [docs/components/markdown.md](docs/components/markdown.md) |
-| `<vt-json>`     | JSON viewer        | [docs/components/json.md](docs/components/json.md)         |
+| Element         | Simple variant               | Full variant adds                                                   | Reference                                                  |
+| --------------- | ---------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `<vt-code>`     | Highlighted block            | Title bar, line numbers, search, wrap toggle, download, copy        | [docs/components/code.md](docs/components/code.md)         |
+| `<vt-markdown>` | Rendered, sanitized Markdown | Preview / Source / Split tabs, TOC, anchors, search, copy           | [docs/components/markdown.md](docs/components/markdown.md) |
+| `<vt-json>`     | Pretty-printed JSON          | Tree / Raw tabs, types, expand / collapse all, JSONPath bar, search | [docs/components/json.md](docs/components/json.md)         |
+
+Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 
 ## Theming
 
-Components render inside Shadow DOM and are customized with CSS custom properties
-(`--vt-bg`, `--vt-fg`, `--vt-accent`, `--vt-font-mono`, `--vt-radius`, …) and `::part()` selectors.
-See [docs/theming.md](docs/theming.md).
+```html
+<vt-json theme="dim" src="/api/order.json"></vt-json>
+```
+
+```css
+/* Override any token on the element or any ancestor. */
+.docs vt-code {
+  --vt-accent: #7c9cff;
+  --vt-radius: 4px;
+  --vt-font-mono: 'Fira Code', monospace;
+}
+
+vt-code::part(header) {
+  border-bottom-width: 2px;
+}
+```
+
+Built-in themes: `light`, `dark`, `dim`, `paper`, `high-contrast`, and `auto` (follows the system). See [docs/theming.md](docs/theming.md).
 
 ## Security
 
-Untrusted content can be displayed safely: Markdown output is sanitized with DOMPurify, dangerous URL
-schemes are blocked, styles use constructable stylesheets (no inline styles needed), and a `vitrine`
-Trusted Types policy is created when supported. See [SECURITY.md](SECURITY.md) to report a vulnerability.
+Markdown goes through marked and then DOMPurify with a strict allow-list; dangerous URL schemes are removed; external links get `rel="noopener noreferrer"`; images can be blocked or restricted to your origin. Code and JSON are rendered with DOM text APIs only. `src` is same-origin by default, size-limited and cancellable.
+
+The library works under this policy, which the website itself uses:
+
+```text
+default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;
+require-trusted-types-for 'script'; trusted-types vitrine
+```
+
+Details and the threat model: [docs/security.md](docs/security.md). To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Browser support
 
-Last 2 versions of Chrome, Edge, Firefox and Safari. Internet Explorer is not supported.
+Last two versions of Chrome, Edge, Firefox and Safari. Internet Explorer is not supported.
 
 ## Using with frameworks
 
-Vitrine elements are standard Custom Elements. In Vue, tell the compiler to skip them:
+Vitrine elements are standard custom elements. In Vue, declare them as custom elements:
 
 ```js
-// vite.config.js
 vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('vt-') } } });
 ```
 
-React, Svelte and Angular work with the elements directly (Angular needs `CUSTOM_ELEMENTS_SCHEMA`).
+React 19+, Svelte and Angular (`CUSTOM_ELEMENTS_SCHEMA`) work directly. See [docs/frameworks.md](docs/frameworks.md).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). The visual rules are in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) and the logo specification in [brand/LOGO.md](brand/LOGO.md).
 
-## Credits & third-party licenses
+## Credits and third-party licenses
 
-Vitrine will bundle the following libraries. Full license texts are in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+| Component                                                    | License                               | Used for                    |
+| ------------------------------------------------------------ | ------------------------------------- | --------------------------- |
+| [highlight.js](https://github.com/highlightjs/highlight.js)  | BSD-3-Clause                          | Syntax highlighting         |
+| [marked](https://github.com/markedjs/marked)                 | MIT                                   | Markdown parsing (GFM)      |
+| [DOMPurify](https://github.com/cure53/DOMPurify)             | Apache-2.0 OR MPL-2.0                 | HTML sanitization           |
+| [Lucide](https://lucide.dev)                                 | ISC (icons derived from Feather: MIT) | Interface icons             |
+| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | SIL OFL 1.1                           | Website font, logo wordmark |
+| [IBM Plex Sans](https://github.com/IBM/plex)                 | SIL OFL 1.1                           | Website font                |
 
-| Library                                                     | Use                    | License               |
-| ----------------------------------------------------------- | ---------------------- | --------------------- |
-| [highlight.js](https://github.com/highlightjs/highlight.js) | Syntax highlighting    | BSD-3-Clause          |
-| [marked](https://github.com/markedjs/marked)                | Markdown parsing (GFM) | MIT                   |
-| [DOMPurify](https://github.com/cure53/DOMPurify)            | HTML sanitization      | Apache-2.0 OR MPL-2.0 |
+Full license texts, with exact versions: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 
