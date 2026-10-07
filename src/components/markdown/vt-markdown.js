@@ -110,6 +110,7 @@ export class VtMarkdown extends VtBase {
       'line-numbers': true,
       'sync-scroll': true,
       'split-controls': true,
+      fullscreen: true,
     },
   };
 
@@ -315,7 +316,9 @@ export class VtMarkdown extends VtBase {
     const actions = [
       this.searchButton(target),
       ...(tab === 'split' && this.feature('split-controls') ? this.splitButtons() : []),
+      ...(this.editor && this.editing ? this.historyButtons(this.editor) : []),
       this.editToggleButton(),
+      this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -376,6 +379,7 @@ export class VtMarkdown extends VtBase {
       placeholder: this.getAttribute('placeholder') ?? undefined,
       onInput: (text) => this.edited(text),
       onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+      history: this.editHistory ?? undefined,
     });
     return h('div', { class: 'body editor-body', part: 'body source' }, this.editor.element);
   }

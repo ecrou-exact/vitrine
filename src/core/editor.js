@@ -9,11 +9,13 @@
  *
  * Keyboard: Tab indents, Shift+Tab outdents, Enter keeps the indentation of the line.
  * Escape releases the Tab key, so the next Tab moves focus out (no keyboard trap).
+ * Ctrl/Cmd+Z undoes, Ctrl/Cmd+Shift+Z and Ctrl+Y redo (Vitrine's own history, see history.js).
  *
  * @module core/editor
  */
 import { buildCodeView } from './code-view.js';
 import { h } from './dom.js';
+import { EditHistory } from './history.js';
 
 /** Above this length the highlighted layer is refreshed after a pause, not on every key. */
 const LIVE_LIMIT = 60_000;
@@ -36,6 +38,7 @@ const INDENT = '  ';
  * @property {string} [placeholder]
  * @property {(text: string) => void} onInput - Called after every change.
  * @property {(text: string) => void} [onChange] - Called when the field loses focus after changes.
+ * @property {EditHistory} [history] - Undo history to continue (kept across re-renders).
  */
 
 export class CodeEditor {
@@ -64,6 +67,10 @@ export class CodeEditor {
       },
     });
     this.textarea.value = options.text;
+    this.history =
+      options.history && options.history.current.value === options.text
+        ? options.history
+        : new EditHistory(options.text);
     this.layer = this.buildLayer(options.text);
     this.element = h(
       'div',
@@ -71,7 +78,17 @@ export class CodeEditor {
       this.layer,
       this.textarea,
     );
-    this.textarea.addEventListener('input', () => this.onInput());
+    this.textarea.addEventListener('input', (event) =>
+      this.onInput(/** @type {InputEvent} */ (event).inputType || 'other'),
+    );
+    // Undo / redo from the context menu or the platform shortcuts go through our history.
+    this.textarea.addEventListener('beforeinput', (event) => {
+      if (event.inputType === 'historyUndo' || event.inputType === 'historyRedo') {
+        event.preventDefault();
+        if (event.inputType === 'historyUndo') this.undo();
+        else this.redo();
+      }
+    });
     this.textarea.addEventListener('keydown', (event) => this.onKeyDown(event));
     this.textarea.addEventListener('focus', () => {
       this.changedSinceFocus = false;
@@ -133,9 +150,16 @@ export class CodeEditor {
     this.refresh();
   }
 
-  onInput() {
+  /**
+   * @param {string} kind - Input type, used to group keystrokes in the history.
+   */
+  onInput(kind) {
     this.text = this.textarea.value.replace(/\r\n?/g, '\n');
     this.changedSinceFocus = true;
+    this.history.record(
+      { value: this.text, start: this.textarea.selectionStart, end: this.textarea.selectionEnd },
+      kind,
+    );
     if (this.text.length <= LIVE_LIMIT) {
       this.refresh();
     } else {
@@ -151,6 +175,14 @@ export class CodeEditor {
    * @param {KeyboardEvent} event
    */
   onKeyDown(event) {
+    const mod = event.ctrlKey || event.metaKey;
+    const key = event.key.toLowerCase();
+    if (mod && !event.altKey && (key === 'z' || key === 'y')) {
+      event.preventDefault();
+      if (key === 'y' || event.shiftKey) this.redo();
+      else this.undo();
+      return;
+    }
     if (event.key === 'Escape') {
       this.tabReleased = true;
       return;
@@ -237,7 +269,7 @@ export class CodeEditor {
         this.textarea.selectionEnd,
         'end',
       );
-      this.onInput();
+      this.onInput('insertText');
     }
   }
 
@@ -249,6 +281,30 @@ export class CodeEditor {
   replaceRange(start, end, text) {
     this.textarea.setSelectionRange(start, end);
     this.insert(text);
+  }
+
+  /** Undoes the last change. */
+  undo() {
+    this.restore(this.history.undo());
+  }
+
+  /** Redoes the last undone change. */
+  redo() {
+    this.restore(this.history.redo());
+  }
+
+  /**
+   * @param {import('./history.js').Snapshot | null} snapshot
+   */
+  restore(snapshot) {
+    if (!snapshot) return;
+    this.textarea.value = snapshot.value;
+    this.textarea.focus();
+    this.textarea.setSelectionRange(snapshot.start, snapshot.end);
+    this.text = snapshot.value;
+    this.changedSinceFocus = true;
+    this.refresh();
+    this.options.onInput(this.text);
   }
 
   /** Stops pending work. */

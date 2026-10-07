@@ -469,3 +469,52 @@ mark.match.current {
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------- Full screen ---------- */
+
+:host(:fullscreen) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.vt[data-fullscreen] {
+  height: 100%;
+  border-radius: 0;
+  border-width: 0;
+}
+
+/* Window mode: used where the Fullscreen API is not available. */
+.vt[data-fullscreen='window'] {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  height: auto;
+}
+
+.vt[data-fullscreen] > .panel,
+.vt[data-fullscreen] > .body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.vt[data-fullscreen] .body {
+  flex: 1 1 auto;
+  max-height: none;
+}
+
+.vt[data-fullscreen] .panel.split {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.vt[data-fullscreen] .panel.split:is([data-preview='top'], [data-preview='bottom']) {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.vt[data-fullscreen] .panel.split > .body {
+  height: auto;
+  min-height: 0;
+}
