@@ -2,7 +2,7 @@
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import jsonCss from '../../styles/json.css?raw';
-import { parseEnum, parseInteger } from '../../core/attributes.js';
+import { parseBoolean, parseEnum, parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
 import { buildCodeView, revealMatch } from '../../core/code-view.js';
 import { CodeEditor } from '../../core/editor.js';
@@ -77,7 +77,7 @@ export class VtJson extends VtBase {
     simple: {},
     full: {
       header: true, dot: true, copy: true, search: true, download: true, tabs: true,
-      'show-types': true, 'expand-controls': true, path: true, 'line-numbers': true,
+      'show-types': true, 'expand-controls': true, path: true, 'line-numbers': true, fullscreen: true,
     },
   }; // prettier-ignore
 
@@ -259,6 +259,7 @@ export class VtJson extends VtBase {
       this.searchButton(target),
       tree && this.feature('expand-controls') ? this.expandButtons(tree) : null,
       this.editToggleButton(),
+      this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.prettyText(root),
@@ -319,6 +320,7 @@ export class VtJson extends VtBase {
       placeholder: this.getAttribute('placeholder') ?? undefined,
       onInput: (text) => this.edited(text),
       onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+      history: this.editHistory ?? undefined,
     });
     this.editor = editor;
     this.errorLine = error?.line ?? 0;
@@ -339,7 +341,9 @@ export class VtJson extends VtBase {
     const tabs = this.viewTabs('raw');
     const actions = [
       this.searchButton(target),
+      ...this.historyButtons(editor),
       this.editToggleButton(),
+      this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -353,7 +357,7 @@ export class VtJson extends VtBase {
       'div',
       { class: 'panel', attrs: { id: this.panelId, role: tabs ? 'tabpanel' : null } },
       h('div', { class: 'body editor-body', part: 'body' }, editor.element),
-      this.status,
+      parseBoolean(this.getAttribute('status')) === false ? null : this.status,
     );
     frame.append(...this.chrome({ badge: tabs ? '' : 'JSON', tabs, actions }), panel);
     editor.align();
@@ -519,6 +523,7 @@ export class VtJson extends VtBase {
         badge: 'JSON',
         actions: [
           this.editToggleButton(),
+          this.fullscreenButton(),
           this.feature('copy') ? this.copyButton(() => this.text ?? '') : null,
         ],
       }),

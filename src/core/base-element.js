@@ -37,6 +37,7 @@ import { formatNumber, onLocaleChange, translator } from './i18n.js';
 import { getTheme, onThemeChange, resolveTheme, themeSheet } from './themes.js';
 import { loadSyntaxTheme, loadedSyntaxTheme, resolveSyntaxTheme } from './syntax-themes.js';
 import { SearchBar, emptyView, errorView, flashButton, iconButton, loadingView } from './ui.js';
+/** @typedef {import('./history.js').EditHistory} EditHistory */
 
 /** @type {Map<string, CSSStyleSheet>} */
 const sheetCache = new Map();
@@ -62,7 +63,7 @@ export function sheet(css) {
 export const COMMON_ATTRIBUTES = Object.freeze([
   'variant', 'theme', 'src', 'allow-remote', 'max-height', 'copy', 'search', 'download',
   'header', 'dot', 'title', 'label', 'lang-ui', 'mode', 'edit-toggle', 'placeholder',
-  'syntax-theme', 'syntax-theme-dark',
+  'syntax-theme', 'syntax-theme-dark', 'badge', 'history', 'fullscreen', 'status',
 ]); // prettier-ignore
 
 /** @typedef {Record<string, boolean>} Preset */
@@ -91,6 +92,10 @@ export const COMMON_ATTRIBUTES = Object.freeze([
  * @attr {string} syntax-theme - Syntax highlighting theme from the highlight.js collection
  *   (e.g. `github`, `monokai`, `base16-dracula`), loaded on demand.
  * @attr {string} syntax-theme-dark - Syntax theme used instead when the interface theme is dark.
+ * @attr {boolean} badge - Shows the language / type badge in the header (default on).
+ * @attr {boolean} history - Shows undo and redo buttons in edit mode (default on).
+ * @attr {boolean} fullscreen - Shows a full screen button. Full variant: on.
+ * @attr {boolean} status - Shows the status bar under editors that validate (default on).
  *
  * @fires vt-ready - Content rendered. Detail: `{ type }`.
  * @fires vt-copy - Text copied. Detail: `{ text }`.
@@ -99,6 +104,7 @@ export const COMMON_ATTRIBUTES = Object.freeze([
  * @fires vt-input - The content was edited. Detail: `{ value }`.
  * @fires vt-change - The editor lost focus after edits. Detail: `{ value }`.
  * @fires vt-mode-change - The edit toggle switched the mode. Detail: `{ mode }`.
+ * @fires vt-fullscreen-change - Full screen entered or left. Detail: `{ fullscreen }`.
  *
  * @cssprop --vt-bg - Page background (used by the website and fallbacks).
  * @cssprop --vt-surface - Container and header background.
@@ -218,6 +224,12 @@ export class VtBase extends HTMLElement {
     this._connected = false;
     /** @type {"view" | "edit" | null} Mode chosen with the toggle; `null` follows `mode`. */
     this.modeState = null;
+    /** @type {EditHistory | null} Undo history, kept across re-renders. */
+    this.editHistory = null;
+    /** @type {(() => void) | null} */
+    this._historyCleanup = null;
+    /** @type {((event: KeyboardEvent) => void) | null} */
+    this._escapeFullscreen = null;
   }
 
   /**
@@ -261,6 +273,12 @@ export class VtBase extends HTMLElement {
       if (this._content === undefined && !this.hasAttribute('src')) this.reload();
     });
     this._observer.observe(this, { childList: true, characterData: true, subtree: true });
+    const onFullscreen = () => {
+      if (document.fullscreenElement === this) this.setFullscreen('native');
+      else if (this.frame.dataset.fullscreen === 'native') this.setFullscreen(null);
+    };
+    document.addEventListener('fullscreenchange', onFullscreen);
+    this._cleanups.push(() => document.removeEventListener('fullscreenchange', onFullscreen));
     this._connected = true;
     this.reload();
   }
@@ -323,6 +341,8 @@ export class VtBase extends HTMLElement {
    */
   setText(text) {
     this.loading = false;
+    // New content from outside: the undo history of the previous text no longer applies.
+    this.editHistory = null;
     try {
       assertSize(text, getConfig().maxSize);
     } catch (error) {
@@ -403,6 +423,104 @@ export class VtBase extends HTMLElement {
    */
   // eslint-disable-next-line no-unused-vars
   contentEdited(text) {}
+
+  /**
+   * Undo and redo buttons for an editor, kept enabled or disabled as the history changes.
+   *
+   * @param {{ history: EditHistory, undo(): void, redo(): void }} editor
+   * @returns {HTMLButtonElement[]}
+   */
+  historyButtons(editor) {
+    this.editHistory = editor.history;
+    if (parseBoolean(this.getAttribute('history')) === false) return [];
+    const undo = iconButton({
+      icon: 'undo',
+      label: this.t('undo'),
+      key: 'undo',
+      part: 'undo-button',
+      onClick: () => editor.undo(),
+    });
+    const redo = iconButton({
+      icon: 'redo',
+      label: this.t('redo'),
+      key: 'redo',
+      part: 'redo-button',
+      onClick: () => editor.redo(),
+    });
+    const update = () => {
+      undo.disabled = !editor.history.canUndo;
+      redo.disabled = !editor.history.canRedo;
+    };
+    update();
+    this._historyCleanup?.();
+    this._historyCleanup = editor.history.subscribe(update);
+    return [undo, redo];
+  }
+
+  /**
+   * Full screen button (with the `fullscreen` attribute, on in the full variant).
+   *
+   * @returns {HTMLButtonElement | null}
+   */
+  fullscreenButton() {
+    if (!this.feature('fullscreen')) return null;
+    const active = Boolean(this.frame.dataset.fullscreen);
+    return iconButton({
+      icon: active ? 'minimize' : 'maximize',
+      label: this.t(active ? 'exitFullscreen' : 'fullscreen'),
+      key: 'fullscreen',
+      part: 'fullscreen-button',
+      pressed: active,
+      onClick: () => this.toggleFullscreen(),
+    });
+  }
+
+  /**
+   * Enters or leaves full screen. Uses the Fullscreen API, or fills the window where it is
+   * not available (some mobile browsers). Escape leaves full screen in both cases.
+   */
+  async toggleFullscreen() {
+    const mode = this.frame.dataset.fullscreen;
+    if (mode === 'native') {
+      await document.exitFullscreen?.().catch(() => {});
+      return;
+    }
+    if (mode === 'window') {
+      this.setFullscreen(null);
+      return;
+    }
+    if (document.fullscreenEnabled && this.requestFullscreen) {
+      try {
+        await this.requestFullscreen({ navigationUI: 'hide' });
+        return;
+      } catch {
+        // Refused (iframe without allowfullscreen, for example): fill the window instead.
+      }
+    }
+    this.setFullscreen('window');
+  }
+
+  /**
+   * @param {"native" | "window" | null} mode
+   */
+  setFullscreen(mode) {
+    if (mode) this.frame.dataset.fullscreen = mode;
+    else delete this.frame.dataset.fullscreen;
+    if (mode === 'window') {
+      this._escapeFullscreen = (/** @type {KeyboardEvent} */ event) => {
+        if (event.key === 'Escape' && !event.defaultPrevented) this.setFullscreen(null);
+      };
+      this.frame.addEventListener('keydown', this._escapeFullscreen);
+    } else if (this._escapeFullscreen) {
+      this.frame.removeEventListener('keydown', this._escapeFullscreen);
+      this._escapeFullscreen = null;
+    }
+    this.render();
+    /** @type {HTMLElement | null} */ (
+      this.root.querySelector('[data-focus-key="fullscreen"]')
+    )?.focus();
+    emit(this, EVENTS.FULLSCREEN_CHANGE, { fullscreen: Boolean(mode) });
+  }
 
   /**
    * Button switching between view and edit (with the `edit-toggle` attribute).
@@ -621,7 +739,9 @@ export class VtBase extends HTMLElement {
         : null,
       options?.tabs ?? null,
       heading ? null : h('span', { class: 'spacer' }),
-      options?.badge ? h('span', { class: 'badge', part: 'badge', text: options.badge }) : null,
+      options?.badge && parseBoolean(this.getAttribute('badge')) !== false
+        ? h('span', { class: 'badge', part: 'badge', text: options.badge })
+        : null,
     );
     if (toolbar) header.append(toolbar);
     return this.searchBar ? [header, this.searchBar.element] : [header];
