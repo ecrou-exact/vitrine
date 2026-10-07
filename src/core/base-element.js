@@ -176,6 +176,12 @@ export class VtBase extends HTMLElement {
   /** Render the component even without content (e.g. an empty field to type into). */
   static allowEmpty = false;
 
+  /**
+   * Keep lone carriage returns in the text (terminal output redraws lines with them).
+   * Otherwise every line ending becomes `\n`.
+   */
+  static keepCarriageReturns = false;
+
   /** Properties that may be set before the element is defined. */
   /** @type {readonly string[]} */
   static upgradeProperties = ['content'];
@@ -356,7 +362,8 @@ export class VtBase extends HTMLElement {
       this.setError(error);
       return;
     }
-    this.text = text.replace(/\r\n?/g, '\n');
+    const ctor = /** @type {typeof VtBase} */ (this.constructor);
+    this.text = text.replace(ctor.keepCarriageReturns ? /\r\n/g : /\r\n?/g, '\n');
     this.error = null;
     this.contentChanged();
     this._readyPending = true;

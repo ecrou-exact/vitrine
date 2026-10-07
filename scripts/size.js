@@ -19,6 +19,7 @@ const COMPONENTS = {
   'vt-csv': 60 * KB,
   'vt-tags': 32 * KB,
   'vt-diff': 64 * KB,
+  'vt-terminal': 60 * KB,
 };
 
 const rawCss = {
