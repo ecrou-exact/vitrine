@@ -295,3 +295,26 @@ describe('snippets', () => {
     expect(toPython(evil)).toContain('data="\\"\\u2028`${x}`"');
   });
 });
+
+describe('URL display', () => {
+  it('splits a URL and its path parameters in linear time', async () => {
+    const { splitUrl, pathParts } = await import('../../src/components/http/vt-http.js');
+    expect(splitUrl('https://x.dev/a/{id}?q=1#top')).toEqual({
+      origin: 'https://x.dev',
+      path: '/a/{id}',
+      rest: '?q=1#top',
+    });
+    expect(splitUrl('/users/:id')).toEqual({ origin: '', path: '/users/:id', rest: '' });
+    expect(pathParts('/projects/{projectId}/tasks/:task_id')).toEqual([
+      { text: '/projects/', param: false },
+      { text: '{projectId}', param: true },
+      { text: '/tasks/', param: false },
+      { text: ':task_id', param: true },
+    ]);
+    expect(pathParts('/a{b/c}')).toEqual([{ text: '/a{b/c}', param: false }]);
+    const start = performance.now();
+    pathParts('{'.repeat(50_000));
+    splitUrl(`"${'"'.repeat(50_000)}`);
+    expect(performance.now() - start).toBeLessThan(500);
+  });
+});

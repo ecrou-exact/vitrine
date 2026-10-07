@@ -101,6 +101,8 @@ export class VtTerminal extends VtBase {
     this.previewHost = null;
     /** @type {ReturnType<typeof setTimeout> | undefined} */
     this.previewTimer = undefined;
+    /** @type {WeakMap<Element, string>} Text of each rendered command, for the replay. */
+    this.commandTexts = new WeakMap();
     /** Replay requested once (typing runs on first render only, then on demand). */
     this.typingDone = false;
   }
@@ -263,6 +265,7 @@ export class VtTerminal extends VtBase {
     this.player?.stop();
     this.player = new TypingPlayer(terminal, {
       speed: parseInteger(this.getAttribute('typing-speed'), { min: 5, max: 200, fallback: 35 }),
+      commandText: (target) => this.commandTexts.get(target) ?? '',
       onEnd: () => emit(this, EVENTS.TYPING_END, {}),
     });
     this.player.start();
@@ -306,6 +309,7 @@ export class VtTerminal extends VtBase {
   commandRow(entry, index) {
     const text = entry.lines.join('\n');
     const command = h('span', { class: 'cmd', part: 'command-text' });
+    this.commandTexts.set(command, text);
     if (text.length <= HIGHLIGHT_COMMAND) command.append(highlight(text, 'bash'));
     else command.textContent = text;
     const row = h(

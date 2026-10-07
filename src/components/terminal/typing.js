@@ -15,7 +15,9 @@ const AFTER_OUTPUT = 250;
 export class TypingPlayer {
   /**
    * @param {HTMLElement} container - Element holding the `.entry` elements.
-   * @param {{ speed: number, onEnd?: () => void }} options - `speed`: ms per character.
+   * @param {{ speed: number, commandText: (target: Element) => string, onEnd?: () => void }} options
+   *   `speed`: ms per character; `commandText`: the command shown in a `.cmd` element, from
+   *   the parsed transcript (never read back from the page).
    */
   constructor(container, options) {
     this.container = container;
@@ -88,7 +90,7 @@ export class TypingPlayer {
     if (!target) return;
     const final = Array.from(target.childNodes);
     this.finals.set(target, final);
-    const text = target.textContent ?? '';
+    const text = this.options.commandText(target);
     const typed = document.createTextNode('');
     const cursor = document.createElement('span');
     cursor.className = 'typing-cursor';
