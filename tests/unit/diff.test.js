@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { linePairs, mapLine } from '../../src/components/diff/sync.js';
 import {
   diffSequences,
   diffTexts,
@@ -115,5 +116,33 @@ describe('foldLines', () => {
     );
     expect(foldLines(lines, -1, new Set()).length).toBe(20);
     expect(foldLines(lines, 2, new Set([0])).filter((r) => r.type === 'fold').length).toBe(1);
+  });
+});
+
+describe('scroll sync line mapping', () => {
+  const lines = diffTexts('a\nb\nc\nd\n', 'a\nx\ny\nz\nb\nd\n').lines;
+
+  it('pairs unchanged lines and both ends', () => {
+    expect(linePairs(lines)).toEqual([
+      [1, 1],
+      [2, 5],
+      [4, 6],
+      [5, 7],
+    ]);
+  });
+
+  it('maps unchanged lines exactly, both ways', () => {
+    const pairs = linePairs(lines);
+    expect(mapLine(pairs, 2, 0)).toBe(5);
+    expect(mapLine(pairs, 5, 1)).toBe(2);
+    expect(mapLine(pairs, 6, 1)).toBe(4);
+  });
+
+  it('spreads a one-sided block over the space it takes on the other side', () => {
+    const pairs = linePairs(lines);
+    // Added lines 2 to 4 sit between original lines 1 and 2.
+    expect(mapLine(pairs, 3, 1)).toBe(1.5);
+    // Removed line 3 sits between modified lines 5 and 6.
+    expect(mapLine(pairs, 3, 0)).toBe(5.5);
   });
 });
