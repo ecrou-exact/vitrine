@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; require-trusted-types-for 'script'; trusted-types vitrine"
+    />
+    <title>vt-markdown fixture</title>
+    <link rel="stylesheet" href="fixture.css" />
+    <script src="../../../dist/vitrine.min.js"></script>
+    <script src="hostile.js" defer></script>
+  </head>
+  <body>
+    <vt-markdown id="full" variant="full" label="README.md">
+      <script type="text/plain">
+        # Vitrine
+
+        Display **code**, _Markdown_ and `JSON` on any website. See [the docs](#usage) or [GitHub](https://github.com).
+
+        ## Usage
+
+        > Content first. Chrome stays quiet.
+
+        - [x] Sanitized output
+        - [ ] Something left to do
+        - Nested
+          1. one
+          2. two
+
+        | Feature | Simple | Full |
+        |:--|:-:|--:|
+        | Copy | no | yes |
+        | Search | no | yes |
+
+        ```python
+        def hello(name):
+            return f"Hello {name}"
+        ```
+
+        [click me](javascript:alert(1)) · ![tracking pixel](https://evil.example/p.png) · <kbd>Ctrl</kbd>
+
+        ### Third level
+
+        Final paragraph.
+      </script>
+    </vt-markdown>
+    <vt-markdown id="hostile" variant="full" label="hostile.md"></vt-markdown>
+    <vt-markdown id="hostile-html" allow-html label="allow-html"></vt-markdown>
+  </body>
+</html>

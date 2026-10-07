@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; require-trusted-types-for 'script'; trusted-types vitrine"
+    />
+    <title>vt-code fixture</title>
+    <script src="../../../dist/vitrine.min.js"></script>
+  </head>
+  <body>
+    <vt-code id="simple" language="python"> def hello(name): return f"Hello {name}" </vt-code>
+
+    <vt-code
+      id="full"
+      variant="full"
+      language="js"
+      label="example.js"
+      highlight-lines="2"
+      collapsible="3"
+    >
+      <script type="text/plain">
+        const greet = (name) => `Hello ${name}`;
+        // a comment with <b>html</b>
+        console.log(greet('world'));
+        if (a < b && c > d) { return; }
+        export default greet;
+      </script>
+    </vt-code>
+
+    <vt-code id="diff" variant="full" diff label="patch.diff">
+      @@ -1,3 +1,3 @@ const a = 1; -const b = 2; +const b = 3;
+    </vt-code>
+
+    <vt-code id="lazy" variant="full" language="rust">fn main() { println!("hi"); }</vt-code>
+    <vt-code id="remote" src="https://example.com/x.js"></vt-code>
+    <vt-code id="empty"></vt-code>
+  </body>
+</html>
