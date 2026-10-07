@@ -1418,3 +1418,270 @@ kbd {
     animation: none !important;
   }
 }
+
+/* ================================================================ motion
+ * One system for the whole site: content rises in as it is reached, controls answer
+ * the pointer, the header settles when the page scrolls, the theme switch spreads from
+ * its button, and pages crossfade. Everything here is off with reduced motion: the
+ * `motion` class is only set when the system allows it (theme-init.js).
+ */
+
+@view-transition {
+  navigation: auto;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--easing);
+}
+
+/* The theme switch draws its own circular reveal (site.js). */
+.theme-switching::view-transition-old(root),
+.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.theme-switching::view-transition-old(site-header),
+.theme-switching::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* ---------- Reveal on scroll ---------- */
+
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 520ms var(--easing),
+    transform 620ms var(--easing);
+  transition-delay: var(--reveal-delay, 0ms);
+  /* Safety net: shown after 2 s even if the script never runs. */
+  animation: reveal-failsafe 0ms 2s forwards;
+}
+
+.motion [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 520ms var(--easing) var(--reveal-delay, 0ms),
+    transform 620ms var(--easing) var(--reveal-delay, 0ms);
+  animation: none;
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  transition:
+    background-color var(--duration) var(--easing),
+    box-shadow var(--duration) var(--easing),
+    border-color var(--duration) var(--easing);
+}
+
+.site-header.scrolled {
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--site-bg) 82%, transparent);
+  box-shadow:
+    0 1px 0 var(--site-border),
+    0 8px 24px rgba(17, 21, 28, 0.06);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+}
+
+.scroll-progress {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal-deep), var(--teal));
+  transform: scaleX(var(--progress, 0));
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+.site-nav a {
+  position: relative;
+}
+
+.motion .site-nav a::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  left: 10px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--site-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 260ms var(--easing);
+}
+
+.motion .site-nav a:hover::after,
+.motion .site-nav a[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Controls ---------- */
+
+.motion .btn {
+  transition:
+    background-color var(--duration-fast) var(--easing),
+    border-color var(--duration-fast) var(--easing),
+    box-shadow var(--duration) var(--easing),
+    transform var(--duration) var(--easing);
+}
+
+.motion .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(10, 110, 111, 0.18);
+}
+
+.motion .btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+
+.motion .btn-secondary:hover {
+  border-color: var(--site-accent);
+}
+
+.motion .icon-btn,
+.motion .segmented button,
+.motion .swatch {
+  transition:
+    background-color var(--duration-fast) var(--easing),
+    color var(--duration-fast) var(--easing),
+    transform var(--duration) var(--easing);
+}
+
+.motion .icon-btn:active,
+.motion .segmented button:active,
+.motion .swatch:active {
+  transform: scale(0.94);
+}
+
+.motion .theme-btn svg {
+  transition: transform 500ms var(--easing);
+}
+
+.motion .theme-btn:hover svg {
+  transform: rotate(-25deg);
+}
+
+/* ---------- Cards ---------- */
+
+.motion .component,
+.motion .reason,
+.motion .integration {
+  transition:
+    border-color var(--duration) var(--easing),
+    box-shadow 320ms var(--easing),
+    transform 320ms var(--easing),
+    opacity 520ms var(--easing);
+}
+
+.motion .component:hover {
+  border-color: color-mix(in srgb, var(--site-accent) 55%, var(--site-border));
+  box-shadow: 0 14px 36px rgba(17, 21, 28, 0.08);
+  transform: translateY(-3px);
+}
+
+.motion .component::after {
+  transition: box-shadow 320ms var(--easing);
+}
+
+.motion .component:hover::after {
+  box-shadow: 0 0 0 4px var(--site-accent-soft);
+}
+
+.motion .reason svg {
+  transition: transform 420ms var(--easing);
+}
+
+.motion .reason:hover svg {
+  transform: translateY(-2px) scale(1.06);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.motion .hero::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10% auto auto;
+  z-index: -1;
+  width: min(720px, 80vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(20, 184, 166, 0.16), transparent 70%);
+  filter: blur(8px);
+  animation: hero-drift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-12%, 10%) scale(1.15);
+  }
+}
+
+/* ---------- Section menus: the section being read ---------- */
+
+.jump a {
+  transition:
+    color var(--duration-fast) var(--easing),
+    background-color var(--duration) var(--easing),
+    border-color var(--duration) var(--easing);
+}
+
+.jump a[aria-current='location'] {
+  border-color: var(--site-accent);
+  background: var(--site-accent-soft);
+  color: var(--site-accent-fg);
+}
+
+/* ---------- Docs page changes ---------- */
+
+.motion vt-markdown.switching {
+  animation: docs-in 360ms var(--easing);
+}
+
+@keyframes docs-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+
+  .motion [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
