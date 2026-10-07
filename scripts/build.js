@@ -3,9 +3,10 @@
  * highlight.js languages. Maintainers only — consumers use the files in dist/.
  */
 import { build, context } from 'esbuild';
-import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { BUNDLED_LANGUAGES, listLanguages } from './languages.js';
+import { syntaxThemes } from './syntax-themes.js';
 import { thirdParty } from './third-party.js';
 
 const require = createRequire(import.meta.url);
@@ -91,6 +92,19 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
 
 await copyFile('src/styles/light-dom.css', 'dist/vitrine.css');
+
+// Syntax themes: one small stylesheet each, loaded on demand, plus an index for docs.
+const themes = await syntaxThemes();
+await mkdir('dist/syntax-themes', { recursive: true });
+await Promise.all(
+  themes.map((theme) => writeFile(`dist/syntax-themes/${theme.name}.css`, theme.css)),
+);
+await writeFile(
+  'dist/syntax-themes/index.json',
+  JSON.stringify(
+    themes.map(({ name, title, dark, contrast }) => ({ name, title, dark, contrast })),
+  ),
+);
 
 if (watch) {
   for (const options of builds) await (await context(options)).watch();

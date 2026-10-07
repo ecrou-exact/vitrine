@@ -23,6 +23,11 @@
 }
 
 .vt {
+  /* Code areas: interface colors by default, replaced by a syntax theme when one is set. */
+  --_code-bg: var(--_surface-sunken);
+  --_code-bg-solid: var(--_surface-sunken);
+  --_code-fg: var(--_fg);
+  --_code-gutter: color-mix(in srgb, var(--_fg-muted) 70%, transparent);
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -354,7 +359,7 @@ mark.match.current {
   min-width: 0;
   max-height: var(--_max-height, none);
   overflow: auto;
-  background: var(--_surface-sunken);
+  background: var(--_code-bg);
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--_border-strong) transparent;
