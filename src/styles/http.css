@@ -1,0 +1,241 @@
+/*
+ * HTTP exchange: request and response sections, each with a start line (method and URL,
+ * or status), small section tabs, and a headers table or a formatted body.
+ */
+.http-body {
+  background: var(--_surface);
+}
+
+.http.stacked,
+.http.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.vt {
+  container-type: inline-size;
+}
+
+@container (min-width: 760px) {
+  .http.columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .http.columns > .response {
+    border-top: 0;
+    border-left: 1px solid var(--_border);
+  }
+}
+
+.http-message {
+  min-width: 0;
+}
+
+.http-message + .http-message {
+  border-top: 1px solid var(--_border);
+}
+
+/* ---------- Start lines ---------- */
+
+.start-line {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 44px;
+  padding: var(--_space-2) var(--_space-2) var(--_space-2) var(--_space-3);
+}
+
+.method,
+.status {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--_radius-sm);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  --_tone: var(--_fg-muted);
+  background: color-mix(in srgb, var(--_tone) 16%, transparent);
+  color: var(--_tone);
+}
+
+.method-get,
+.method-head,
+.method-options {
+  --_tone: var(--_info);
+}
+
+.method-post {
+  --_tone: var(--_success);
+}
+
+.method-put,
+.method-patch {
+  --_tone: var(--_warning);
+}
+
+.method-delete {
+  --_tone: var(--_danger);
+}
+
+.status-1xx,
+.status-3xx {
+  --_tone: var(--_info);
+}
+
+.status-2xx {
+  --_tone: var(--_success);
+}
+
+.status-4xx {
+  --_tone: var(--_warning);
+}
+
+.status-5xx {
+  --_tone: var(--_danger);
+}
+
+.url {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--_fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  overflow-wrap: anywhere;
+}
+
+.url .origin {
+  color: var(--_fg-muted);
+}
+
+.url .origin.implied::after {
+  content: ' ';
+}
+
+.url .param {
+  border-radius: 3px;
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+}
+
+.url .query {
+  color: var(--_syntax-string);
+}
+
+.meta {
+  margin-left: auto;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.line-copy {
+  flex: none;
+  margin-left: auto;
+}
+
+/* ---------- Section tabs ---------- */
+
+.section-tabs {
+  min-height: 32px;
+  padding: 0 var(--_space-2);
+  border-bottom: 1px solid var(--_border);
+  font-size: var(--_font-size-small);
+}
+
+.section-panel {
+  min-width: 0;
+}
+
+/* ---------- Tables and bodies ---------- */
+
+.pairs {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.pairs th,
+.pairs td {
+  padding: 5px var(--_space-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--_border) 70%, transparent);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.pairs th {
+  width: 32%;
+  max-width: 260px;
+  color: var(--_fg-muted);
+  font-weight: 600;
+}
+
+.pairs tr:last-child > * {
+  border-bottom: 0;
+}
+
+.none {
+  margin: 0;
+  padding: var(--_space-3);
+  color: var(--_fg-muted);
+  font-style: italic;
+}
+
+.message-body,
+.snippet {
+  background: var(--_code-bg);
+}
+
+.message-body .code,
+.snippet .code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Code view ---------- */
+
+.code-head {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  border-bottom: 1px solid var(--_border);
+}
+
+.code-head .section-tabs {
+  flex: 1 1 auto;
+  border-bottom: 0;
+}
+
+.snippet-copy {
+  flex: none;
+  margin-right: var(--_space-2);
+}
+
+.code-panel .note {
+  margin: 0;
+  padding: var(--_space-2) var(--_space-3);
+  border-top: 1px solid var(--_border);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+/* ---------- Edit mode: editor above, live preview below ---------- */
+
+.http-edit > .editor-body {
+  max-height: min(40vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}
+
+.vt[data-fullscreen] .http-edit {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.vt[data-fullscreen] .http-edit > .editor-body {
+  max-height: none;
+}

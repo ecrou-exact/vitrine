@@ -11,6 +11,7 @@ import { VtCode } from './components/code/vt-code.js';
 import { VtCsv } from './components/csv/vt-csv.js';
 import { VtDiff } from './components/diff/vt-diff.js';
 import { VtTags } from './components/tags/vt-tags.js';
+import { VtHttp } from './components/http/vt-http.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
@@ -30,6 +31,7 @@ export {
   VtJson,
   VtTerminal,
   VtTree,
+  VtHttp,
   configure,
   getConfig,
   EVENTS,
@@ -66,6 +68,7 @@ export const registry = new Map(
     ['vt-diff', VtDiff],
     ['vt-terminal', VtTerminal],
     ['vt-tree', VtTree],
+    ['vt-http', VtHttp],
   ]),
 );
 
@@ -79,6 +82,7 @@ const TYPES = /** @type {const} */ ({
   diff: 'vt-diff',
   terminal: 'vt-terminal',
   tree: 'vt-tree',
+  http: 'vt-http',
 });
 
 /**
