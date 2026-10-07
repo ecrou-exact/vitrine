@@ -1,0 +1,376 @@
+/*
+ * Rendered Markdown. The content inherits the host page font (it is the host's content);
+ * only the chrome uses the UI font. Spec: docs/DESIGN_SYSTEM.md §3.3.
+ */
+.vt.md {
+  font-family: var(--vt-font-body, inherit);
+  font-size: var(--vt-font-size-body, inherit);
+}
+
+.vt {
+  container-type: inline-size;
+}
+
+.panel {
+  min-width: 0;
+}
+
+.panel.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.panel.split > .body + .body {
+  border-left: 1px solid var(--_border);
+}
+
+@container (max-width: 640px) {
+  .panel.split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel.split > .body + .body {
+    border-top: 1px solid var(--_border);
+    border-left: 0;
+  }
+}
+
+.md-body {
+  padding: var(--_space-5);
+  background: var(--_surface);
+}
+
+/* ---------- Table of contents ---------- */
+
+.toc {
+  margin: 0 0 var(--_space-5);
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.toc summary {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.toc-list {
+  margin: var(--_space-2) 0 var(--_space-1);
+  padding: 0;
+  list-style: none;
+}
+
+.toc-list li {
+  padding: 2px 0;
+}
+
+.toc-list a {
+  color: var(--_accent-fg);
+  text-decoration: none;
+}
+
+.toc-list a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.toc-level-1 {
+  padding-left: var(--_space-4) !important;
+}
+
+.toc-level-2 {
+  padding-left: var(--_space-6, 32px) !important;
+}
+
+.toc-level-3 {
+  padding-left: 48px !important;
+}
+
+/* ---------- Typography ---------- */
+
+.markdown {
+  color: var(--_fg);
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown :is(h1, h2, h3, h4, h5, h6) {
+  position: relative;
+  margin: 1.6em 0 0.6em;
+  color: var(--_fg);
+  font-weight: 650;
+  line-height: 1.25;
+  scroll-margin-top: var(--_space-4);
+}
+
+.markdown h1 {
+  font-size: 1.75em;
+  letter-spacing: -0.02em;
+}
+
+.markdown h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--_border);
+  font-size: 1.4em;
+  letter-spacing: -0.01em;
+}
+
+.markdown h3 {
+  font-size: 1.2em;
+}
+
+.markdown h4 {
+  font-size: 1.05em;
+}
+
+.markdown :is(h5, h6) {
+  color: var(--_fg-muted);
+  font-size: 0.95em;
+}
+
+.markdown :is(h1, h2, h3, h4, h5, h6):focus {
+  outline: none;
+}
+
+.anchor {
+  display: inline-grid;
+  place-items: center;
+  width: 1.4em;
+  height: 1.4em;
+  margin-left: 0.25em;
+  border-radius: var(--_radius-sm);
+  color: var(--_fg-muted);
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity var(--_duration-fast) var(--_easing);
+}
+
+.anchor .icon {
+  width: 0.8em;
+  height: 0.8em;
+}
+
+:is(h1, h2, h3, h4, h5, h6):hover .anchor,
+.anchor:focus-visible {
+  opacity: 1;
+}
+
+.anchor:hover {
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+}
+
+@media (hover: none) {
+  .anchor {
+    opacity: 0.6;
+  }
+}
+
+.markdown :is(p, ul, ol, dl, blockquote, .table-wrap, .code-block, details, figure) {
+  margin: 0 0 1em;
+}
+
+.markdown a {
+  color: var(--_accent-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.markdown a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.markdown :is(ul, ol) {
+  padding-left: 1.6em;
+}
+
+.markdown li + li {
+  margin-top: 0.25em;
+}
+
+.markdown li > :is(ul, ol) {
+  margin: 0.25em 0 0;
+}
+
+.markdown li:has(> input[type='checkbox']) {
+  list-style: none;
+}
+
+.markdown li > input[type='checkbox'] {
+  margin: 0 0.5em 0 -1.4em;
+  vertical-align: -0.1em;
+  accent-color: var(--_accent);
+}
+
+.markdown blockquote {
+  padding: 0 0 0 1em;
+  border-left: 3px solid var(--_border-strong);
+  color: var(--_fg-muted);
+}
+
+.markdown hr {
+  height: 0;
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--_border);
+}
+
+.markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--_radius-sm);
+}
+
+.vt-blocked-image {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  padding: 2px 8px;
+  border: 1px dashed var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  color: var(--_fg-muted);
+  font-size: 0.875em;
+}
+
+.vt-blocked-image:empty::before {
+  content: '\25A1';
+}
+
+.markdown :is(code, kbd, samp) {
+  font-family: var(--_font-mono);
+  font-size: 0.875em;
+}
+
+.markdown :not(pre) > code {
+  padding: 0.12em 0.35em;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.markdown kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-raised);
+  box-shadow: inset 0 -1px 0 var(--_border-strong);
+}
+
+.markdown mark {
+  background: var(--_highlight);
+  color: inherit;
+}
+
+/* ---------- Code blocks ---------- */
+
+.code-block {
+  position: relative;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--_space-3) var(--_space-4);
+  overflow: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  line-height: var(--_line-height);
+  tab-size: var(--_tab-size);
+}
+
+.code-block pre code {
+  font-size: inherit;
+}
+
+.code-block > .btn {
+  position: absolute;
+  top: var(--_space-1);
+  right: var(--_space-1);
+  border: 1px solid var(--_border);
+  background: var(--_surface);
+  opacity: 0;
+}
+
+.code-block:hover > .btn,
+.code-block > .btn:focus-visible,
+.code-block > .btn.done {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .code-block > .btn {
+    opacity: 1;
+  }
+}
+
+/* ---------- Tables ---------- */
+
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925em;
+  font-variant-numeric: tabular-nums;
+}
+
+.markdown :is(th, td) {
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.markdown tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdown th {
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  font-size: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.markdown :is(th, td)[align='center'] {
+  text-align: center;
+}
+
+.markdown :is(th, td)[align='right'] {
+  text-align: end;
+}
+
+.markdown details {
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.markdown summary {
+  cursor: pointer;
+  font-weight: 600;
+}
