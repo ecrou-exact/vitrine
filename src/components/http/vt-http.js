@@ -483,23 +483,15 @@ export class VtHttp extends VtBase {
    * @returns {HTMLElement}
    */
   urlNode(request) {
-    const url = request.url;
     const node = h('code', { class: 'url', part: 'url' });
-    const match = /^([a-z][a-z0-9+.-]*:\/\/[^/?#]*)?([^?#]*)(\?[^#]*)?(#.*)?$/i.exec(url);
-    if (!match) {
-      node.textContent = url;
-      return node;
-    }
+    const { origin, path, rest } = splitUrl(request.url);
     const host = getHeader(request.headers, 'host');
-    if (match[1]) node.append(h('span', { class: 'origin', text: match[1] }));
+    if (origin) node.append(h('span', { class: 'origin', text: origin }));
     else if (host) node.append(h('span', { class: 'origin implied', text: host }));
-    // Path parameters written as {id} or :id stand out.
-    for (const part of (match[2] || '').split(/(\{[^}/]+\}|(?<=\/):[A-Za-z_]\w*)/)) {
-      if (!part) continue;
-      node.append(/^\{|^:/.test(part) ? h('span', { class: 'param', text: part }) : part);
+    for (const part of pathParts(path)) {
+      node.append(part.param ? h('span', { class: 'param', text: part.text }) : part.text);
     }
-    if (match[3]) node.append(h('span', { class: 'query', text: match[3] }));
-    if (match[4]) node.append(h('span', { class: 'query', text: match[4] }));
+    if (rest) node.append(h('span', { class: 'query', text: rest }));
     return node;
   }
 
@@ -651,6 +643,73 @@ export class VtHttp extends VtBase {
     host.scrollTop = scroll;
     if (this.searchOpen && this.searchQuery) this.searchBar?.run();
   }
+}
+
+/**
+ * Splits a URL into its origin (`https://host`, if any), path, and the rest (query and
+ * fragment), with linear scans only.
+ *
+ * @param {string} url
+ * @returns {{ origin: string, path: string, rest: string }}
+ */
+export function splitUrl(url) {
+  let start = 0;
+  const scheme = url.indexOf('://');
+  if (scheme > 0 && /^[a-z][a-z0-9+.-]*$/i.test(url.slice(0, scheme))) {
+    let end = scheme + 3;
+    while (end < url.length && !'/?#'.includes(url[end])) end += 1;
+    start = end;
+  }
+  let pathEnd = start;
+  while (pathEnd < url.length && url[pathEnd] !== '?' && url[pathEnd] !== '#') pathEnd += 1;
+  return { origin: url.slice(0, start), path: url.slice(start, pathEnd), rest: url.slice(pathEnd) };
+}
+
+/**
+ * Splits a path into text and parameters written as `{id}` or `:id` (after a `/`), in one
+ * pass.
+ *
+ * @param {string} path
+ * @returns {{ text: string, param: boolean }[]}
+ */
+export function pathParts(path) {
+  /** @type {{ text: string, param: boolean }[]} */
+  const parts = [];
+  // nextStop[k]: index of the first "}" or "/" at or after k (-1 if none), in one pass.
+  /** @type {number[]} */
+  const nextStop = new Array(path.length + 1).fill(-1);
+  for (let k = path.length - 1; k >= 0; k -= 1)
+    nextStop[k] = path[k] === '}' || path[k] === '/' ? k : nextStop[k + 1];
+  let text = '';
+  let i = 0;
+  const flush = () => {
+    if (text) parts.push({ text, param: false });
+    text = '';
+  };
+  while (i < path.length) {
+    const char = path[i];
+    if (char === '{') {
+      // The next "}" or "/" after this brace, found once for the whole path.
+      const close = nextStop[i + 1] ?? -1;
+      if (close > i + 1 && path[close] === '}') {
+        flush();
+        parts.push({ text: path.slice(i, close + 1), param: true });
+        i = close + 1;
+        continue;
+      }
+    } else if (char === ':' && path[i - 1] === '/' && /[A-Za-z_]/.test(path[i + 1] ?? '')) {
+      let end = i + 2;
+      while (end < path.length && /\w/.test(path[end])) end += 1;
+      flush();
+      parts.push({ text: path.slice(i, end), param: true });
+      i = end;
+      continue;
+    }
+    text += char;
+    i += 1;
+  }
+  flush();
+  return parts;
 }
 
 /**
