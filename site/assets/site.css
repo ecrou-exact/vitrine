@@ -1165,3 +1165,12 @@ kbd {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
 }
+
+/* Used by the "custom look" tags example. */
+.square-tags {
+  --vt-tag-radius: 4px;
+}
+
+.square-tags::part(tag-kind-danger) {
+  font-weight: 700;
+}

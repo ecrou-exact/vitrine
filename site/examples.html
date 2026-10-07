@@ -19,6 +19,17 @@
           Each example shows the live component next to the exact markup that renders it. Copy the
           markup, change one attribute, and you get the same result on your site.
         </p>
+        <nav class="jump" aria-label="Example sections">
+          <a href="#code">Code</a>
+          <a href="#markdown">Markdown</a>
+          <a href="#json">JSON</a>
+          <a href="#editing">Editing</a>
+          <a href="#layout">Layout and themes</a>
+          <a href="#csv">CSV</a>
+          <a href="#tags">Tags</a>
+          <a href="#diff">Diff</a>
+          <a href="#api">JavaScript</a>
+        </nav>
       </header>
 
       <section class="example-group" id="code" aria-labelledby="code-title">
@@ -373,6 +384,315 @@
             <vt-json variant="full" label="config.json">
               <template> { "port": 8080, "hosts": ["a", "b",], } </template>
             </vt-json>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="editing" aria-labelledby="editing-title">
+        <h2 id="editing-title">Editing</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Edit code with highlighting</h3>
+            <p>
+              <code>mode="edit"</code> turns any element into an editor. Tab indents, Enter keeps
+              the indentation, Ctrl+Z and Ctrl+Y undo and redo, Escape then Tab leaves the field.
+            </p>
+          </div>
+          <template>
+            <vt-code variant="full" mode="edit" language="js" label="edit-me.js" download="false">
+              <template>function greet(name) { return `Hello ${name}`; }</template>
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>View and edit with a toggle</h3>
+            <p><code>edit-toggle</code> adds a button that switches between reading and editing.</p>
+          </div>
+          <template>
+            <vt-code
+              variant="full"
+              edit-toggle
+              language="python"
+              label="toggle.py"
+              search="false"
+              download="false"
+            >
+              <template>print("Click the pencil to edit me")</template>
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Markdown editor with live preview</h3>
+            <p>
+              Source and preview side by side, scrolled together. The preview updates as you type.
+            </p>
+          </div>
+          <template>
+            <vt-markdown variant="full" mode="edit" label="notes.md" max-height="360px" toc="false">
+              <template
+                >## Meeting notes Type on the left, the **preview** follows. - [x] Edit mode - [ ]
+                Ship it</template
+              >
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>JSON with live validation</h3>
+            <p>
+              Errors show their line and column as you type; the Tree tab shows the document once it
+              is valid.
+            </p>
+          </div>
+          <template>
+            <vt-json variant="full" mode="edit" label="config.json">
+              <template>{ "port": 8080, "debug": false }</template>
+            </vt-json>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="layout" aria-labelledby="layout-title">
+        <h2 id="layout-title">Layout and themes</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Preview on top, source below</h3>
+            <p>
+              <code>split-preview</code> puts the preview on the right, left, bottom or top. The
+              full variant adds buttons to swap and stack the panes.
+            </p>
+          </div>
+          <template>
+            <vt-markdown
+              variant="full"
+              default-tab="split"
+              split-preview="top"
+              max-height="420px"
+              toc="false"
+            >
+              <template
+                >## Stacked panes The preview is on top. Long documents stay **in sync** while
+                scrolling.</template
+              >
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Syntax themes</h3>
+            <p>
+              258 themes from highlight.js, loaded on demand. <code>syntax-theme-dark</code> is used
+              when the interface theme is dark. See them all on the
+              <a href="themes.html#syntax">themes page</a>.
+            </p>
+          </div>
+          <template>
+            <vt-code
+              variant="full"
+              language="rust"
+              syntax-theme="atom-one-light"
+              syntax-theme-dark="tokyo-night-dark"
+              label="main.rs"
+            >
+              <template
+                >fn main() { let langs = ["Rust", "Go", "Zig"]; for (i, lang) in
+                langs.iter().enumerate() { println!("{i}: {lang}"); } }</template
+              >
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Only the features you want</h3>
+            <p>
+              Variants are shortcuts. Here: no variant, but a header, full screen and copy, and no
+              language badge.
+            </p>
+          </div>
+          <template>
+            <vt-json header fullscreen copy badge="false" label="Custom toolbar">
+              <template>{ "features": ["header", "fullscreen", "copy"] }</template>
+            </vt-json>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="csv" aria-labelledby="csv-title">
+        <h2 id="csv-title">&lt;vt-csv&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Sortable table</h3>
+            <p>
+              Click a column to sort it. Numbers and dates sort by value; empty cells always go
+              last.
+            </p>
+          </div>
+          <template>
+            <vt-csv variant="full" label="scores.csv">
+              <template
+                >name,score,joined Ada Lovelace,98.5,1842-10-01 Alan Turing,95,1936-05-28 "Hopper,
+                Grace",91,1944-01-01 Margaret Hamilton,99,1969-07-20</template
+              >
+            </vt-csv>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Semicolons, no header, small pages</h3>
+            <p>
+              The delimiter is detected; <code>header-row="false"</code> names the columns,
+              <code>page-size</code> paginates.
+            </p>
+          </div>
+          <template>
+            <vt-csv header-row="false" page-size="10" line-numbers>
+              <template
+                >Paris;2148000;FR Berlin;3645000;DE Madrid;3223000;ES Rome;2873000;IT
+                Lisbon;545000;PT Vienna;1897000;AT Warsaw;1793000;PL Prague;1309000;CZ
+                Brussels;1209000;BE Dublin;554000;IE Oslo;697000;NO Helsinki;656000;FI</template
+              >
+            </vt-csv>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="tags" aria-labelledby="tags-title">
+        <h2 id="tags-title">&lt;vt-tags&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Display tags from JSON</h3>
+            <p>
+              Colors, counts and links come from the data. <code>clickable</code> makes them buttons
+              firing <code>vt-tag-click</code>.
+            </p>
+          </div>
+          <template>
+            <vt-tags counts>
+              <template
+                >[ { "value": "urgent", "color": "#e5484d", "count": 12, "kind": "danger" }, {
+                "value": "design", "color": "#14b8a6", "count": 8 }, { "value": "docs", "href":
+                "docs.html", "count": 3 }, "plain" ]</template
+              >
+            </vt-tags>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Hashtag field with suggestions</h3>
+            <p>
+              Type <code>#</code> and a word: suggestions appear, Enter picks one, a space or a
+              comma creates a new tag. Backspace twice removes the last tag.
+            </p>
+          </div>
+          <template>
+            <vt-tags mode="edit" prefix="#" label="Topics" max-tags="8">
+              <template
+                >{ "value": ["design"], "options": ["design", "research", "accessibility",
+                "performance", "security", "documentation"] }</template
+              >
+            </vt-tags>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Pick from a long, grouped list</h3>
+            <p>
+              The full variant adds a browse panel with a filter and checkboxes, and a button to
+              clear the selection.
+            </p>
+          </div>
+          <template>
+            <vt-tags variant="full" mode="edit" allow-create="false" label="Languages">
+              <template
+                >{ "value": ["rust"], "options": [ { "value": "js", "label": "JavaScript", "group":
+                "Web", "count": 120 }, { "value": "ts", "label": "TypeScript", "group": "Web",
+                "count": 96 }, { "value": "css", "label": "CSS", "group": "Web", "count": 80 }, {
+                "value": "rust", "label": "Rust", "group": "Systems", "count": 41, "color":
+                "#ce422b" }, { "value": "go", "label": "Go", "group": "Systems", "count": 38 }, {
+                "value": "zig", "label": "Zig", "group": "Systems", "count": 7, "description":
+                "Small, simple, fast" }, { "value": "py", "label": "Python", "group": "Data",
+                "count": 150 }, { "value": "r", "label": "R", "group": "Data", "count": 22 }, {
+                "value": "julia", "label": "Julia", "group": "Data", "count": 9, "disabled": true }
+                ] }</template
+              >
+            </vt-tags>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Custom look with CSS</h3>
+            <p>
+              Tokens restyle every tag; per-tag parts target single tags. This page sets
+              <code>.square-tags { --vt-tag-radius: 4px; }</code> and
+              <code>.square-tags::part(tag-kind-danger) { font-weight: 700; }</code>.
+            </p>
+          </div>
+          <template>
+            <vt-tags class="square-tags" appearance="outline">
+              <template
+                >[{ "value": "blocker", "kind": "danger", "color": "#e5484d" }, "triage",
+                "frontend"]</template
+              >
+            </vt-tags>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="diff" aria-labelledby="diff-title">
+        <h2 id="diff-title">&lt;vt-diff&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Compare two texts</h3>
+            <p>
+              Side by side, with changed words marked and unchanged lines folded. Copy gives a
+              standard patch.
+            </p>
+          </div>
+          <template>
+            <vt-diff variant="full" language="js" label="area.js" context="1">
+              <template data-original
+                >export function area(r) { return 3.14 * r * r; } const unit = "cm"; const precision
+                = 2; export default area;</template
+              >
+              <template data-modified
+                >export function area(radius) { return Math.PI * radius ** 2; } const unit = "cm";
+                const precision = 2; export default area; export { unit };</template
+              >
+            </vt-diff>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Show a patch, unified</h3>
+            <p>
+              Give it the output of <code>git diff</code>: hunks are read, gaps between them are
+              marked.
+            </p>
+          </div>
+          <template>
+            <vt-diff view="unified" language="python" label="app.py">
+              <template
+                >--- a/app.py +++ b/app.py @@ -1,3 +1,3 @@ import os -DEBUG = True +DEBUG =
+                os.getenv("DEBUG") == "1" @@ -20,2 +20,3 @@ run() + log("done")</template
+              >
+            </vt-diff>
           </template>
         </article>
       </section>
