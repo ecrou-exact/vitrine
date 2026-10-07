@@ -37,11 +37,8 @@ test.describe('<vt-code>', () => {
     await expect(el.locator('.line.highlighted')).toHaveCount(3);
     await expect(el.locator('.hljs-keyword').first()).toHaveText('def');
     await expect(el.locator('[part~="line-number"]')).toHaveCount(5);
-    // Line numbers are CSS counters starting at start-line.
-    const start = await el
-      .locator('pre.code')
-      .evaluate((pre) => pre.style.getPropertyValue('--_line-start'));
-    expect(start).toBe('9');
+    // Line numbers are drawn from data-n and start at start-line.
+    await expect(el.locator('.gutter').first()).toHaveAttribute('data-n', '10');
     await expect(el.locator('.line').first()).toHaveAttribute('data-line', '10');
   });
 
@@ -244,6 +241,22 @@ test.describe('<vt-code>', () => {
     await mount(page, 'vt-code', { variant: 'full', 'lang-ui': 'fr' }, 'x');
     await expect(page.locator('#el').getByRole('button', { name: 'Copier le code' })).toBeVisible();
     await expect(page.locator('#el').getByRole('button', { name: 'Rechercher' })).toBeVisible();
+  });
+
+  test('long code is split in blocks and keeps correct line numbers', async ({ page }) => {
+    const code = Array.from({ length: 2500 }, (_, i) => `line ${i + 1}`).join('\n');
+    await mount(
+      page,
+      'vt-code',
+      { 'line-numbers': '', 'max-height': '200px', search: '', header: '' },
+      code,
+    );
+    const el = page.locator('#el');
+    await expect(el.locator('.chunk')).toHaveCount(13);
+    await expect(el.locator('.line[data-line="1201"] .gutter')).toHaveAttribute('data-n', '1201');
+    await el.getByRole('button', { name: 'Search' }).click();
+    await el.getByRole('searchbox').fill('line 2499');
+    await expect(el.locator('mark.current')).toBeInViewport();
   });
 
   test('large content skips highlighting but stays responsive', async ({ page }) => {
