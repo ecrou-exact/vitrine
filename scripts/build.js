@@ -13,7 +13,8 @@ const require = createRequire(import.meta.url);
 const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 const watch = process.argv.includes('--watch');
 
-const bundled = (await thirdParty()).filter((c) => c.where.startsWith('Library'));
+const parties = await thirdParty();
+const bundled = parties.filter((c) => c.where.startsWith('Library'));
 const banner = {
   js: [
     `/*! Vitrine v${pkg.version} | MIT License | https://github.com/ecrou-exact/vitrine`,
@@ -68,7 +69,9 @@ const builds = [
 ];
 
 // Per-component ES modules with shared chunks: load only the elements you use.
-const components = ['code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log'];
+const components = [
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart',
+]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {
   ...shared,
@@ -105,6 +108,45 @@ const languages = {
   logLevel: 'warning',
 };
 
+// Apache ECharts, loaded on demand by <vt-chart> only (never part of the main bundles).
+const charting = parties.filter((c) => c.where.startsWith('dist/vendor/echarts'));
+/**
+ * ECharts and ZRender empty their container with `el.innerHTML = ''`. Under Trusted Types
+ * (which Vitrine recommends and its website enforces) even an empty string is refused, so
+ * these clearing assignments become `textContent = ''`, which removes the same children
+ * without any HTML parsing. No other `innerHTML` use is reachable: tooltips are drawn on
+ * the canvas (renderMode "richText").
+ */
+const trustedTypesSafe = {
+  name: 'trusted-types-safe',
+  /** @param {import('esbuild').PluginBuild} b */
+  setup(b) {
+    b.onLoad({ filter: /node_modules[\\/](?:echarts|zrender)[\\/].*\.js$/ }, async (args) => {
+      const source = await readFile(args.path, 'utf8');
+      return {
+        contents: source.replace(/\.innerHTML\s*=\s*(?:''|""|null)\s*;/g, ".textContent = '';"),
+        loader: 'js',
+      };
+    });
+  },
+};
+
+/** @type {import('esbuild').BuildOptions} */
+const vendor = {
+  entryPoints: { echarts: 'src/vendor/echarts.js' },
+  outdir: 'dist/vendor',
+  plugins: [trustedTypesSafe],
+  bundle: true,
+  format: 'esm',
+  minify: true,
+  target: ['es2022'],
+  legalComments: 'none',
+  banner: {
+    js: `/*! ${charting.map((c) => `${c.name} ${c.version} (${c.license}) ${c.url}`).join(' | ')} | Full texts: THIRD_PARTY_NOTICES.md */`,
+  },
+  logLevel: 'warning',
+};
+
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
 
@@ -126,7 +168,8 @@ await writeFile(
 if (watch) {
   for (const options of builds) await (await context(options)).watch();
   await build(languages);
+  await build(vendor);
 } else {
-  await Promise.all([...builds.map((options) => build(options)), build(languages)]);
+  await Promise.all([...builds.map((options) => build(options)), build(languages), build(vendor)]);
   console.log(`languages: ${lazy.length} lazy-loaded, ${BUNDLED_LANGUAGES.length} bundled`);
 }
