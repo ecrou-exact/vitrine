@@ -1,8 +1,14 @@
 name: Release
 
+# Manual release. Before running it, merge a PR that sets the new version in
+# package.json and moves the CHANGELOG entries under that version.
+#
+# The workflow builds dist/, commits it in a release commit that only the vX.Y.Z tag
+# points to (main never contains build output), and publishes a GitHub release with
+# SRI hashes. jsDelivr (`@1`, `@1.2.3`) and git submodule users get prebuilt files.
+
 on:
-  push:
-    tags: ['v*.*.*']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: main
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -19,26 +27,52 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-      - name: Verify committed dist/ matches the build
-        run: git diff --exit-code -- dist/
-      - name: Compute SRI hashes
+      - run: npm run size
+      - name: Read version
+        id: version
         run: |
+          version=$(node -p "require('./package.json').version")
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" >/dev/null; then
+            echo "Tag v$version already exists." && exit 1
+          fi
+          grep -q "## \[$version\]" CHANGELOG.md || (echo "CHANGELOG.md has no [$version] section." && exit 1)
+      - name: Commit dist/ and tag
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f dist
+          git commit -m "chore(release): $TAG"
+          git tag -a "$TAG" -m "$TAG"
+          git push origin "refs/tags/$TAG"
+      - name: Release notes with SRI hashes
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          version="${TAG#v}"
           {
+            awk -v v="$version" '$0 ~ "^## \\[" v "\\]" {p=1; next} /^## \[/ {p=0} p' CHANGELOG.md
+            echo
             echo "## Files and SRI hashes"
             echo
             echo "| File | Integrity |"
             echo "|---|---|"
-            for f in dist/*.js dist/*.css; do
-              [ -f "$f" ] || continue
+            for f in dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css; do
               hash=$(openssl dgst -sha384 -binary "$f" | openssl base64 -A)
               echo "| \`$f\` | \`sha384-$hash\` |"
             done
+            echo
+            echo "\`\`\`html"
+            echo "<script src=\"https://cdn.jsdelivr.net/gh/${GITHUB_REPOSITORY}@$version/dist/vitrine.min.js\""
+            echo "        integrity=\"sha384-$(openssl dgst -sha384 -binary dist/vitrine.min.js | openssl base64 -A)\" crossorigin=\"anonymous\"></script>"
+            echo "\`\`\`"
           } > release-notes.md
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
-            --notes-file release-notes.md \
-            dist/*.js dist/*.json
+          gh release create "$TAG" --title "$TAG" --notes-file release-notes.md \
+            dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css dist/custom-elements.json
