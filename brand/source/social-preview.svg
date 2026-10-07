@@ -1,0 +1,13 @@
+<svg width="1280" height="640" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-label="Vitrine">
+  <rect width="1280" height="640" fill="#11151C"/>
+  <g transform="translate(342.78 238.6) scale(1.2294)">
+  <g>
+    <rect x="12" y="16" width="96" height="88" rx="18" fill="none" stroke="#F3F4F1" stroke-width="9"/>
+    <path d="M12 42 L108 42" fill="none" stroke="#F3F4F1" stroke-width="9"/>
+    <circle cx="29" cy="29" r="5" fill="#14B8A6"/>
+    <path d="M42 60 L60 86 L78 60" fill="none" stroke="#14B8A6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="146" y="83" font-family="JetBrains Mono" font-weight="700" font-size="74" letter-spacing="-2.96" fill="#F3F4F1">vitrine<tspan fill="#14B8A6">_</tspan></text>
+  <text x="147.23" y="118" font-family="JetBrains Mono" font-weight="400" font-size="16.28" letter-spacing="0.326" fill="#9AA3B2">code · markdown · json</text>
+  </g>
+</svg>
