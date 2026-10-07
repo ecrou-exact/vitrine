@@ -225,14 +225,14 @@ All three components share the same frame — it mirrors the logo: **a window wi
 
 ### States
 
-| State               | Treatment                                                                                     |
-| ------------------- | --------------------------------------------------------------------------------------------- |
-| Hover (icon button) | Background `--vt-accent-soft`, icon `--vt-fg`                                                 |
-| Active tab          | Underline `--vt-accent` 2 px                                                                  |
-| Copied              | Icon swaps to check in `--vt-success` for 1.5 s + live region "Copied"                        |
-| Loading (`src`)     | Body shows 3 skeleton lines, `--vt-surface-sunken` pulse (disabled under reduced motion)      |
-| Error               | Inline message: alert icon + text in `--vt-danger`, details in `--vt-fg-muted`, never a modal |
-| Empty               | `--vt-fg-muted` "Nothing to display" centered                                                 |
+| State               | Treatment                                                                                                                                                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hover (icon button) | Background `--vt-accent-soft`, icon `--vt-fg`                                                                                                                                                                                                              |
+| Active tab          | Underline `--vt-accent` 2 px                                                                                                                                                                                                                               |
+| Copied              | Icon swaps to check in `--vt-success` for 1.5 s + live region "Copied"                                                                                                                                                                                     |
+| Loading (`src`)     | After 300 ms, the Vitrine mark: frame and title bar in `--vt-fg-muted`, the V drawing itself and the dot pulsing in `--vt-accent`, with a "Loading…" label. Before the script loads, `dist/vitrine.css` shows a CSS-only mark. Static under reduced motion |
+| Error               | Inline message: alert icon + text in `--vt-danger`, details in `--vt-fg-muted`, never a modal                                                                                                                                                              |
+| Empty               | `--vt-fg-muted` "Nothing to display" centered                                                                                                                                                                                                              |
 
 ---
 
