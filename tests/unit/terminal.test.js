@@ -75,6 +75,8 @@ describe('parseAnsi', () => {
     );
     expect(line[0]).toMatchObject({ text: 'site', style: { link: 'https://example.com' } });
     expect(line.find((s) => s.text.includes('bad'))?.style.link).toBeNull();
+    const [relative] = parseAnsi(`${ESC}]8;;/admin${ESC}\\x${ESC}]8;;${ESC}\\`);
+    expect(relative[0].style.link).toBeNull();
   });
 
   it('bounds runaway sequences and very long lines', () => {
