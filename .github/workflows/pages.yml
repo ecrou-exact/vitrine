@@ -24,14 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
-      - name: Assemble site
-        run: |
-          mkdir -p _site/demo _site/dist
-          cp -r site/. _site/
-          cp -r demo/. _site/demo/
-          cp -r dist/. _site/dist/
-          cp dist/custom-elements.json _site/
+      - name: Build the library and the website
+        run: npm run site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
