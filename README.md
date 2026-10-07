@@ -5,6 +5,8 @@
 [![CI](https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml/badge.svg)](https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+**Website:** https://ecrou-exact.github.io/vitrine/
+
 > **Status:** early development. The components below are being built; APIs may change before v1.0.
 
 ## Features

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vitrine — web components for code, Markdown and JSON</title>
+    <meta
+      name="description"
+      content="Drop-in web components to display code, Markdown and JSON beautifully — on any website, with zero framework."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Open source · MIT · No framework</p>
+        <h1>Vitrine</h1>
+        <p class="tagline">
+          Drop-in web components to display code, Markdown and JSON beautifully — on any website,
+          with zero framework.
+        </p>
+        <p class="status">
+          Early development — components are being built. APIs may change before v1.0.
+        </p>
+        <nav class="actions">
+          <a class="button primary" href="https://github.com/ecrou-exact/vitrine">View on GitHub</a>
+          <a class="button" href="demo/">Open the demo</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section>
+        <h2>One script tag</h2>
+        <pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"&gt;&lt;/script&gt;
+
+&lt;vt-code language="python" line-numbers&gt;
+def hello(name):
+    return f"Hello {name}"
+&lt;/vt-code&gt;</code></pre>
+      </section>
+
+      <section class="grid">
+        <article>
+          <h3><code>&lt;vt-code&gt;</code></h3>
+          <p>
+            Syntax highlighting, line numbers, highlighted lines, search, copy, download and diff.
+          </p>
+        </article>
+        <article>
+          <h3><code>&lt;vt-markdown&gt;</code></h3>
+          <p>
+            Sanitized GFM rendering with Preview / Source / Split tabs, table of contents and
+            anchors.
+          </p>
+        </article>
+        <article>
+          <h3><code>&lt;vt-json&gt;</code></h3>
+          <p>Pretty-printed or collapsible tree view, search, copy value and JSON path.</p>
+        </article>
+      </section>
+
+      <section class="grid">
+        <article>
+          <h3>Works everywhere</h3>
+          <p>
+            Plain HTML, PHP, WordPress, Django, Vue, React, Svelte, Angular. No Node.js for
+            consumers.
+          </p>
+        </article>
+        <article>
+          <h3>Secure by default</h3>
+          <p>Sanitized output, no <code>eval</code>, CSP-friendly, Trusted Types support.</p>
+        </article>
+        <article>
+          <h3>Themable</h3>
+          <p>
+            Shadow DOM isolation, CSS custom properties and <code>::part()</code>, light and dark
+            themes.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <p>
+        MIT License ·
+        <a href="https://github.com/ecrou-exact/vitrine/blob/main/THIRD_PARTY_NOTICES.md"
+          >Third-party notices</a
+        >
+        · <a href="custom-elements.json">custom-elements.json</a>
+      </p>
+    </footer>
+  </body>
+</html>

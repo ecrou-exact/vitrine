@@ -9,5 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Project website deployed to GitHub Pages.
+
 - Project setup: repository structure, dev tooling (esbuild, Vitest, Playwright, ESLint, Prettier,
   TypeScript JSDoc checking, Custom Elements Manifest), CI, release and CodeQL workflows.
