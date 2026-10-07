@@ -8,6 +8,7 @@
  *
  * @module core/search
  */
+import { fillChunks } from './chunks.js';
 
 /** Maximum number of matches highlighted. Further matches are counted as "capped". */
 export const MAX_MATCHES = 5000;
@@ -79,6 +80,8 @@ export class TextSearch {
     this.clear();
     const q = query.slice(0, MAX_QUERY_LENGTH);
     if (!q) return { total: 0, capped: false };
+    // Blocks of long code not built yet must have their text before it is searched.
+    fillChunks(this.root);
     const { nodes, starts: nodeStarts, text } = this.collectText();
     const { starts, capped } = findMatches(text, q);
     /** @type {HTMLElement[][]} */
