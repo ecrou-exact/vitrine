@@ -87,11 +87,13 @@ const rawHtmlParser = new Marked({ gfm: true, breaks: false, async: false });
  */
 export function renderMarkdown(markdown, options) {
   const parser = options.allowHtml ? rawHtmlParser : textHtmlParser;
-  const html = /** @type {string} */ (parser.parse(markdown));
+  const token = randomToken();
+  const html = withLineMarkers(parser, markdown, token);
   const fragment = sanitizeHtml(html, {
     images: options.images,
     externalLinks: options.externalLinks,
     baseUrl: options.baseUrl,
+    lineMarkers: token,
   });
   const headings = processHeadings(fragment, options);
   const codeBlocks = processCodeBlocks(fragment, options);
@@ -110,6 +112,39 @@ export function renderMarkdown(markdown, options) {
     wrapper.append(table);
   }
   return { fragment, headings, codeBlocks };
+}
+
+/**
+ * Renders Markdown block by block and puts an empty marker before each block with the
+ * line where it starts in the source. The split view uses the markers to keep source
+ * and preview scrolled to the same place. The concatenated output is identical to a
+ * whole-document parse: marked renders top-level tokens one after the other.
+ *
+ * @param {Marked} parser
+ * @param {string} markdown
+ * @param {string} token - Signs the markers (see sanitizeHtml `lineMarkers`).
+ * @returns {string}
+ */
+function withLineMarkers(parser, markdown, token) {
+  const tokens = parser.lexer(markdown);
+  let line = 1;
+  let html = '';
+  for (const block of tokens) {
+    if (block.type !== 'space' && block.type !== 'def') {
+      html += `<span data-vt-line="${line}:${token}"></span>`;
+    }
+    // Reference links are stored on the token list: keep them for each block.
+    html += parser.parser(Object.assign([block], { links: tokens.links }));
+    line += (block.raw.match(/\n/g) ?? []).length;
+  }
+  return html;
+}
+
+/** @returns {string} A random token for this render. */
+function randomToken() {
+  const bytes = new Uint8Array(12);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**

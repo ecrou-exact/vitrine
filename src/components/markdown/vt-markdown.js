@@ -10,11 +10,27 @@ import { getConfig } from '../../core/config.js';
 import { h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
 import { TextSearch, combineSearches } from '../../core/search.js';
-import { createTabs } from '../../core/ui.js';
+import { createTabs, iconButton } from '../../core/ui.js';
 import { renderMarkdown } from './render.js';
+import { ScrollSync } from './scroll-sync.js';
 
 const TABS = /** @type {const} */ (['preview', 'source', 'split']);
 const TAB_ICONS = { preview: 'eye', source: 'code', split: 'columns' };
+const POSITIONS = /** @type {const} */ (['right', 'left', 'bottom', 'top']);
+const SWAPPED = /** @type {const} */ ({
+  right: 'left',
+  left: 'right',
+  bottom: 'top',
+  top: 'bottom',
+});
+const ROTATED = /** @type {const} */ ({
+  right: 'bottom',
+  bottom: 'right',
+  left: 'top',
+  top: 'left',
+});
+
+/** @typedef {typeof POSITIONS[number]} Position */
 
 /** @typedef {typeof TABS[number]} Tab */
 /** @typedef {import('./render.js').RenderedMarkdown} RenderedMarkdown */
@@ -38,11 +54,18 @@ const TAB_ICONS = { preview: 'eye', source: 'code', split: 'columns' };
  *   which applies to http(s) links only). External links always get `rel="noopener noreferrer nofollow"`.
  * @attr {"allow"|"block"|"same-origin"} images - Image policy (default `allow`).
  * @attr {boolean} line-numbers - Line numbers in the source tab (default on).
+ * @attr {"right"|"left"|"bottom"|"top"} split-preview - Where the preview goes in the split
+ *   view, next to the source (default `right`). Below 640px wide, panes are always stacked.
+ * @attr {boolean} sync-scroll - Keeps source and preview scrolled to the same block in the
+ *   split view (default on).
+ * @attr {boolean} split-controls - Buttons to swap and stack the panes and to toggle scroll
+ *   sync in the split view. Full variant: on.
  *
  * @prop {string} content - The Markdown source.
  *
  * @fires vt-ready - Markdown rendered. Detail: `{ type: "markdown" }`.
  * @fires vt-tab-change - Active tab changed. Detail: `{ tab }`.
+ * @fires vt-layout-change - Split layout changed from its buttons. Detail: `{ preview, sync }`.
  * @fires vt-copy - Source or code block copied. Detail: `{ text }`.
  * @fires vt-search - Search updated. Detail: `{ query, matches }`.
  * @fires vt-error - Loading or rendering failed. Detail: `{ message, cause }`.
@@ -70,10 +93,11 @@ export class VtMarkdown extends VtBase {
 
   static componentAttributes = Object.freeze([
     'tabs', 'default-tab', 'toc', 'anchors', 'allow-html', 'external-links', 'images', 'line-numbers',
+    'split-preview', 'sync-scroll', 'split-controls',
   ]); // prettier-ignore
 
   static presets = {
-    simple: { 'line-numbers': true },
+    simple: { 'line-numbers': true, 'sync-scroll': true },
     full: {
       header: true,
       dot: true,
@@ -83,6 +107,8 @@ export class VtMarkdown extends VtBase {
       toc: true,
       anchors: true,
       'line-numbers': true,
+      'sync-scroll': true,
+      'split-controls': true,
     },
   };
 
@@ -95,6 +121,28 @@ export class VtMarkdown extends VtBase {
     this.panelId = uid('panel');
     /** @type {{ key: string, result: RenderedMarkdown | null, error: unknown } | null} */
     this.cache = null;
+    /** @type {Position | null} Layout chosen with the buttons; `null` follows `split-preview`. */
+    this.position = null;
+    /** @type {boolean | null} Sync chosen with the button; `null` follows `sync-scroll`. */
+    this.sync = null;
+    /** @type {ScrollSync | null} */
+    this.scrollSync = null;
+  }
+
+  disconnectedCallback() {
+    this.scrollSync?.stop();
+    this.scrollSync = null;
+    super.disconnectedCallback();
+  }
+
+  /** @returns {Position} Where the preview goes in the split view. */
+  get previewPosition() {
+    return this.position ?? parseEnum(this.getAttribute('split-preview'), POSITIONS, 'right');
+  }
+
+  /** @returns {boolean} */
+  get syncScroll() {
+    return this.sync ?? this.feature('sync-scroll');
   }
 
   /**
@@ -104,6 +152,8 @@ export class VtMarkdown extends VtBase {
    */
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'default-tab' || name === 'tabs') this.tab = null;
+    if (name === 'split-preview') this.position = null;
+    if (name === 'sync-scroll') this.sync = null;
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
@@ -196,6 +246,8 @@ export class VtMarkdown extends VtBase {
     const t = this.t;
     const tab = this.activeTab;
     frame.classList.add('md');
+    this.scrollSync?.stop();
+    this.scrollSync = null;
 
     /** @type {HTMLElement | null} */
     let preview = null;
@@ -251,6 +303,7 @@ export class VtMarkdown extends VtBase {
         : null;
     const actions = [
       this.searchButton(target),
+      ...(tab === 'split' && this.feature('split-controls') ? this.splitButtons() : []),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -261,13 +314,71 @@ export class VtMarkdown extends VtBase {
       this.feature('copy') ? this.copyButton(() => this.text ?? '', t('copySource')) : null,
     ];
 
+    const position = this.previewPosition;
     const panel = h('div', {
       class: tab === 'split' ? 'panel split' : 'panel',
-      attrs: { id: this.panelId, role: tabList ? 'tabpanel' : null },
+      attrs: {
+        id: this.panelId,
+        role: tabList ? 'tabpanel' : null,
+        'data-preview': tab === 'split' ? position : null,
+      },
     });
-    if (preview) panel.append(preview);
-    if (source) panel.append(source);
+    // Panes are in reading order: the first one is on the left (or on top).
+    const previewFirst = position === 'left' || position === 'top';
+    for (const pane of previewFirst ? [preview, source] : [source, preview]) {
+      if (pane) panel.append(pane);
+    }
     frame.append(...this.chrome({ tabs: tabList, actions }), panel);
+    if (tab === 'split' && source && preview && this.syncScroll) {
+      this.scrollSync = new ScrollSync(source, preview).start();
+    }
+  }
+
+  /**
+   * Swap, stack and sync buttons of the split view.
+   *
+   * @returns {HTMLButtonElement[]}
+   */
+  splitButtons() {
+    const t = this.t;
+    const position = this.previewPosition;
+    const stacked = position === 'top' || position === 'bottom';
+    return [
+      iconButton({
+        icon: 'swap',
+        label: t('swapPanes'),
+        key: 'swap-panes',
+        part: 'swap-button',
+        onClick: () => this.changeLayout(SWAPPED[position], this.syncScroll),
+      }),
+      iconButton({
+        icon: 'rows',
+        label: t('stackPanes'),
+        key: 'stack-panes',
+        part: 'stack-button',
+        pressed: stacked,
+        onClick: () => this.changeLayout(ROTATED[position], this.syncScroll),
+      }),
+      iconButton({
+        icon: 'sync-scroll',
+        label: t('syncScroll'),
+        key: 'sync-scroll',
+        part: 'sync-button',
+        pressed: this.syncScroll,
+        onClick: () => this.changeLayout(position, !this.syncScroll),
+      }),
+    ];
+  }
+
+  /**
+   * @param {Position} position
+   * @param {boolean} sync
+   */
+  changeLayout(position, sync) {
+    this.position = position;
+    this.sync = sync;
+    this.render();
+    emit(this, EVENTS.LAYOUT_CHANGE, { preview: position, sync });
   }
 
   /**
