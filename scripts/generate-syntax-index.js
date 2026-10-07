@@ -3,6 +3,8 @@
  * Run with `npm run syntax-themes` after upgrading highlight.js.
  */
 import { writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import * as prettier from 'prettier';
 import { syntaxThemes } from './syntax-themes.js';
 
 const themes = await syntaxThemes();
@@ -21,5 +23,8 @@ export const SYNTAX_THEME_INDEX = Object.freeze({
 ${body}
 });
 `;
-await writeFile(new URL('../src/core/syntax-theme-index.js', import.meta.url), source);
+const file = fileURLToPath(new URL('../src/core/syntax-theme-index.js', import.meta.url));
+// Formatted like the rest of the code base, so CI can compare it with the committed file.
+const options = { ...(await prettier.resolveConfig(file)), filepath: file };
+await writeFile(file, await prettier.format(source, options));
 console.log(`syntax-theme-index.js: ${themes.length} themes`);
