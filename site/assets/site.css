@@ -1174,3 +1174,50 @@ kbd {
 .square-tags::part(tag-kind-danger) {
   font-weight: 700;
 }
+
+/* Section shortcuts at the top of long pages. */
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.jump a {
+  padding: 4px var(--space-3);
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius-full);
+  color: var(--site-fg);
+  font-size: var(--vt-text-small);
+  text-decoration: none;
+}
+
+.jump a:hover {
+  border-color: var(--site-accent);
+  background: var(--site-accent-soft);
+}
+
+/* Integrations: framework snippets and the live binding demo. */
+.integration {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-7) 0 0;
+}
+
+.integration > p {
+  max-width: 72ch;
+  color: var(--site-fg-muted);
+}
+
+.binding {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .binding {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

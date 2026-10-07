@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @head -->
+    <title>Integrations — Vitrine</title>
+    <meta
+      name="description"
+      content="Use Vitrine with plain HTML, ES modules, Vue, React, Svelte, Angular, PHP, Django, forms and backends."
+    />
+    <script src="assets/integrations.js" defer></script>
+  </head>
+  <body data-page="integrations">
+    <!-- @header -->
+
+    <main id="main" class="wrap">
+      <header class="page-head">
+        <h1>Integrations</h1>
+        <p>
+          Vitrine elements are standard custom elements: every framework can render them. Pass data
+          you did not write through properties, listen to <code>vt-*</code> events, and submit tags
+          with your forms.
+        </p>
+        <nav class="jump" aria-label="Integrations">
+          <a href="#live">Live binding</a>
+          <a href="#html">Plain HTML</a>
+          <a href="#modules">ES modules</a>
+          <a href="#vue">Vue</a>
+          <a href="#react">React</a>
+          <a href="#svelte">Svelte</a>
+          <a href="#angular">Angular</a>
+          <a href="#forms">Forms</a>
+          <a href="#backend">Backend suggestions</a>
+          <a href="#server">PHP and Django</a>
+        </nav>
+      </header>
+
+      <section class="integration" id="live" aria-labelledby="live-title">
+        <h2 id="live-title">Live binding</h2>
+        <p>
+          The field below is a <code>&lt;vt-tags&gt;</code> inside a form. Every change fires
+          <code>vt-change</code>; the panel on the right shows the event and the value the form
+          would submit.
+        </p>
+        <div class="binding">
+          <form id="demo-form">
+            <vt-tags
+              id="demo-tags"
+              name="topics"
+              mode="edit"
+              prefix="#"
+              variant="full"
+              label="Topics"
+              max-tags="8"
+            ></vt-tags>
+          </form>
+          <vt-json id="demo-output" label="vt-change and form value" depth="3"></vt-json>
+        </div>
+      </section>
+
+      <section class="integration" id="html" aria-labelledby="html-title">
+        <h2 id="html-title">Plain HTML and JavaScript</h2>
+        <p>
+          One script tag defines every element. Inline content is fine for your own text; use the
+          content property for anything else.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="html"
+          language="html"
+          variant="full"
+          label="index.html"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="modules" aria-labelledby="modules-title">
+        <h2 id="modules-title">ES modules, one per component</h2>
+        <p>
+          Load only the elements a page uses. Shared code is split into chunks and downloaded once;
+          the configuration stays shared.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="modules"
+          language="html"
+          variant="full"
+          label="index.html"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="vue" aria-labelledby="vue-title">
+        <h2 id="vue-title">Vue 3</h2>
+        <p>
+          Tell the compiler that <code>vt-*</code> tags are custom elements, then bind properties
+          with <code>.prop</code> and listen with <code>@vt-…</code>.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="vueConfig"
+          language="js"
+          variant="full"
+          label="vite.config.js"
+        ></vt-code>
+        <vt-code
+          class="snippet"
+          data-snippet="vue"
+          language="html"
+          variant="full"
+          label="TopicsField.vue"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="react" aria-labelledby="react-title">
+        <h2 id="react-title">React 19</h2>
+        <p>
+          React 19 sets properties on custom elements and attaches listeners for their events.
+          Earlier versions need a ref.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="react"
+          language="js"
+          variant="full"
+          label="TopicsField.jsx"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="svelte" aria-labelledby="svelte-title">
+        <h2 id="svelte-title">Svelte 5</h2>
+        <vt-code
+          class="snippet"
+          data-snippet="svelte"
+          language="html"
+          variant="full"
+          label="Topics.svelte"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="angular" aria-labelledby="angular-title">
+        <h2 id="angular-title">Angular</h2>
+        <p>
+          Add <code>CUSTOM_ELEMENTS_SCHEMA</code> to the component, then bind properties with
+          <code>[…]</code> and events with <code>(…)</code>.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="angular"
+          language="ts"
+          variant="full"
+          label="topics.component.ts"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="forms" aria-labelledby="forms-title">
+        <h2 id="forms-title">Forms</h2>
+        <p>
+          <code>&lt;vt-tags name="…"&gt;</code> is a real form field: it is submitted, validated
+          with <code>required</code>, reset with the form, and disabled with a
+          <code>&lt;fieldset disabled&gt;</code>.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="forms"
+          language="html"
+          variant="full"
+          label="form.html"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="backend" aria-labelledby="backend-title">
+        <h2 id="backend-title">Backend suggestions</h2>
+        <p>
+          Point <code>suggest-src</code> at an endpoint returning a JSON array, or set the
+          <code>suggest</code> property to your own function. Typing is debounced and stale requests
+          are cancelled.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="backendHtml"
+          language="html"
+          variant="full"
+          label="tags.html"
+        ></vt-code>
+        <vt-code
+          class="snippet"
+          data-snippet="backendServer"
+          language="python"
+          variant="full"
+          label="app.py"
+        ></vt-code>
+        <vt-code
+          class="snippet"
+          data-snippet="backendFunction"
+          language="js"
+          variant="full"
+          label="suggest.js"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="server" aria-labelledby="server-title">
+        <h2 id="server-title">PHP and Django</h2>
+        <p>
+          Never print user data inside the element: the browser would parse it as page HTML. Put it
+          in a JSON script and hand it over with JavaScript.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="php"
+          language="php"
+          variant="full"
+          label="post.php"
+        ></vt-code>
+        <vt-code
+          class="snippet"
+          data-snippet="django"
+          language="html"
+          variant="full"
+          label="post.html (Django)"
+        ></vt-code>
+      </section>
+    </main>
+
+    <!-- @footer -->
+  </body>
+</html>
