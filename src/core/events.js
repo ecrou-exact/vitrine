@@ -17,6 +17,12 @@ export const EVENTS = Object.freeze({
   SEARCH: 'vt-search',
   /** Active tab changed. Detail: `{ tab }`. */
   TAB_CHANGE: 'vt-tab-change',
+  /** Content edited. Detail: `{ value }`. */
+  INPUT: 'vt-input',
+  /** Editor left after edits. Detail: `{ value }`. */
+  CHANGE: 'vt-change',
+  /** Mode switched with the edit toggle. Detail: `{ mode }`. */
+  MODE_CHANGE: 'vt-mode-change',
   /** Split layout changed. Detail: `{ preview, sync }`. */
   LAYOUT_CHANGE: 'vt-layout-change',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */

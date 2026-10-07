@@ -6,11 +6,12 @@ import { parseBoolean, parseEnum, parseList } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
 import { VitrineError } from '../../core/content.js';
 import { buildCodeView, revealMatch } from '../../core/code-view.js';
+import { CodeEditor } from '../../core/editor.js';
 import { getConfig } from '../../core/config.js';
 import { h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
 import { TextSearch, combineSearches } from '../../core/search.js';
-import { createTabs, iconButton } from '../../core/ui.js';
+import { createTabs, errorView, iconButton } from '../../core/ui.js';
 import { renderMarkdown } from './render.js';
 import { ScrollSync } from './scroll-sync.js';
 
@@ -127,9 +128,15 @@ export class VtMarkdown extends VtBase {
     this.sync = null;
     /** @type {ScrollSync | null} */
     this.scrollSync = null;
+    /** @type {CodeEditor | null} */
+    this.editor = null;
+    /** @type {ReturnType<typeof setTimeout> | undefined} */
+    this.previewTimer = undefined;
   }
 
   disconnectedCallback() {
+    clearTimeout(this.previewTimer);
+    this.editor?.destroy();
     this.scrollSync?.stop();
     this.scrollSync = null;
     super.disconnectedCallback();
@@ -171,7 +178,9 @@ export class VtMarkdown extends VtBase {
   get activeTab() {
     const tabs = this.visibleTabs;
     const allowed = tabs.length ? tabs : [...TABS];
-    const fallback = allowed.includes('preview') ? 'preview' : allowed[0];
+    // Editing: source and preview side by side, unless told otherwise.
+    const preferred = this.editing && allowed.includes('split') ? 'split' : 'preview';
+    const fallback = allowed.includes(preferred) ? preferred : allowed[0];
     const requested = this.tab ?? parseEnum(this.getAttribute('default-tab'), TABS, fallback);
     return allowed.includes(requested) ? requested : fallback;
   }
@@ -268,7 +277,9 @@ export class VtMarkdown extends VtBase {
       this.setError(error);
       return;
     }
-    if (tab === 'source' || tab === 'split') {
+    if ((tab === 'source' || tab === 'split') && this.editing) {
+      source = this.editorPane();
+    } else if (tab === 'source' || tab === 'split') {
       const view = buildCodeView(this.text ?? '', {
         language: 'markdown',
         lineNumbers: this.feature('line-numbers'),
@@ -304,6 +315,7 @@ export class VtMarkdown extends VtBase {
     const actions = [
       this.searchButton(target),
       ...(tab === 'split' && this.feature('split-controls') ? this.splitButtons() : []),
+      this.editToggleButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -329,9 +341,72 @@ export class VtMarkdown extends VtBase {
       if (pane) panel.append(pane);
     }
     frame.append(...this.chrome({ tabs: tabList, actions }), panel);
-    if (tab === 'split' && source && preview && this.syncScroll) {
+    this.editor?.align();
+    this.startSync();
+  }
+
+  /** Starts scroll sync between the panes of the split view, when enabled. */
+  startSync() {
+    this.scrollSync?.stop();
+    this.scrollSync = null;
+    const source = /** @type {HTMLElement | null} */ (
+      this.root.querySelector('.split > [part~="source"]')
+    );
+    const preview = /** @type {HTMLElement | null} */ (
+      this.root.querySelector('.split > [part~="preview"]')
+    );
+    if (source && preview && this.syncScroll)
       this.scrollSync = new ScrollSync(source, preview).start();
+  }
+
+  /**
+   * Source pane in edit mode: a Markdown editor.
+   *
+   * @returns {HTMLElement}
+   */
+  editorPane() {
+    this.editor?.destroy();
+    this.editor = new CodeEditor({
+      text: this.text ?? '',
+      language: 'markdown',
+      lineNumbers: this.feature('line-numbers'),
+      wrap: true,
+      highlightLimit: getConfig().highlightLimit,
+      label: this.heading || this.t('editor'),
+      placeholder: this.getAttribute('placeholder') ?? undefined,
+      onInput: (text) => this.edited(text),
+      onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+    });
+    return h('div', { class: 'body editor-body', part: 'body source' }, this.editor.element);
+  }
+
+  /**
+   * The source was edited: refresh the preview shortly after typing stops.
+   */
+  contentEdited() {
+    this.cache = null;
+    clearTimeout(this.previewTimer);
+    this.previewTimer = setTimeout(() => this.refreshPreview(), 120);
+  }
+
+  /** Replaces the preview pane, keeping its scroll position. */
+  refreshPreview() {
+    const old = /** @type {HTMLElement | null} */ (this.root.querySelector('[part~="preview"]'));
+    if (!old) return;
+    /** @type {HTMLElement} */
+    let fresh;
+    try {
+      fresh = this.previewPane();
+    } catch (error) {
+      const { title, detail } = this.describeError(error);
+      fresh = h('div', { class: 'body md-body', part: 'body preview' }, errorView(title, detail));
     }
+    old.replaceWith(fresh);
+    fresh.scrollTop = old.scrollTop;
+    this.startSync();
+    // The new preview may have a different height: align it on the source again.
+    this.scrollSync?.follow(this.scrollSync.source, this.scrollSync.preview);
+    if (this.searchOpen && this.searchQuery) this.searchBar?.run();
   }
 
   /**

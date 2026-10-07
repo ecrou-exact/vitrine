@@ -88,10 +88,18 @@ export class ScrollSync {
     const rows = this.source.querySelectorAll('.line');
     const first = /** @type {HTMLElement | undefined} */ (rows[0]);
     if (!first) return [];
-    // Source lines never wrap: line N is at a fixed distance from the first line. This
-    // also works for lines inside blocks the browser has not laid out yet.
+    // Long read-only sources are split in blocks the browser may not have laid out yet;
+    // they never wrap, so line N is at a fixed distance from the first line. Otherwise
+    // (editor, possibly wrapped lines) measure the line itself.
+    const chunked = this.source.querySelector('.chunk') !== null;
     const base = offsetIn(this.source, first);
     const lineHeight = first.getBoundingClientRect().height || 1;
+    /** @param {number} line */
+    const sourceTop = (line) => {
+      if (chunked) return base + (line - 1) * lineHeight;
+      const row = rows[line - 1];
+      return row ? offsetIn(this.source, row) : base + (line - 1) * lineHeight;
+    };
     const maxSource = Math.max(0, this.source.scrollHeight - this.source.clientHeight);
     const maxPreview = Math.max(0, this.preview.scrollHeight - this.preview.clientHeight);
 
@@ -102,7 +110,7 @@ export class ScrollSync {
       // Empty markers have no box of their own: measure the block that follows.
       const block = marker.nextElementSibling ?? marker;
       const anchor = {
-        source: base + (line - 1) * lineHeight,
+        source: sourceTop(line),
         preview: offsetIn(this.preview, block),
       };
       const last = anchors[anchors.length - 1];
