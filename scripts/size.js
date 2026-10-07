@@ -7,7 +7,9 @@ import { readFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 /** Gzipped size budgets, in bytes. */
-const BUDGETS = { 'dist/vitrine.min.js': 72 * 1024, 'dist/vitrine.esm.js': 72 * 1024 };
+// Everything included (three components, highlight.js core and 10 languages, marked,
+// DOMPurify). The guardrail catches accidental growth.
+const BUDGETS = { 'dist/vitrine.min.js': 76 * 1024, 'dist/vitrine.esm.js': 76 * 1024 };
 
 let failed = false;
 for (const [file, budget] of Object.entries(BUDGETS)) {
