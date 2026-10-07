@@ -4,6 +4,9 @@
  */
 
 const SAMPLES = {
+  csv: 'name,score,joined\nAda Lovelace,98.5,1842-10-01\nAlan Turing,95,1936-05-28\n"Hopper, Grace",91,1944-01-01\n',
+  tags: '{\n  "value": ["design"],\n  "options": ["design", "research", "accessibility", "performance", "security"]\n}\n',
+  diff: '--- a/app.py\n+++ b/app.py\n@@ -1,3 +1,3 @@\n import os\n-DEBUG = True\n+DEBUG = os.getenv("DEBUG") == "1"\n \n',
   code: 'def fibonacci(n: int) -> list[int]:\n    """Returns the first n Fibonacci numbers."""\n    seq = [0, 1]\n    while len(seq) < n:\n        seq.append(seq[-1] + seq[-2])\n    return seq[:n]\n\nprint(fibonacci(10))\n',
   markdown:
     '# Release 1.2\n\nThis release adds **search** to every component.\n\n## Changes\n\n- [x] Search in code, Markdown and JSON\n- [ ] Side-by-side diffs\n\n| Area | Status |\n|:--|:--|\n| Code | done |\n\n```js\nel.content = untrustedText;\n```\n\n<b>Raw HTML</b> is shown as text unless allow-html is set.\n',
@@ -11,7 +14,17 @@ const SAMPLES = {
 };
 
 /** Boolean features shared by every component. */
-const COMMON_FLAGS = ['header', 'dot', 'copy', 'search', 'download'];
+const COMMON_FLAGS = [
+  'header',
+  'dot',
+  'copy',
+  'search',
+  'download',
+  'fullscreen',
+  'edit-toggle',
+  'badge',
+  'history',
+];
 
 /**
  * @typedef {{ name: string, type: 'flag' } | { name: string, type: 'text' | 'number', placeholder?: string }
@@ -51,8 +64,9 @@ const SCHEMA = {
   },
   markdown: {
     tag: 'vt-markdown',
-    flags: ['toc', 'anchors', 'allow-html', 'line-numbers'],
+    flags: ['toc', 'anchors', 'allow-html', 'line-numbers', 'sync-scroll', 'split-controls'],
     fields: [
+      { name: 'split-preview', type: 'select', options: ['', 'right', 'left', 'bottom', 'top'] },
       { name: 'tabs', type: 'text', placeholder: 'preview,source,split' },
       { name: 'default-tab', type: 'select', options: ['', 'preview', 'source', 'split'] },
       { name: 'images', type: 'select', options: ['', 'allow', 'block', 'same-origin'] },
@@ -67,6 +81,36 @@ const SCHEMA = {
       { name: 'depth', type: 'number', placeholder: '2' },
       { name: 'indent', type: 'number', placeholder: '2' },
       { name: 'on-invalid', type: 'select', options: ['', 'error', 'raw'] },
+    ],
+  },
+  csv: {
+    tag: 'vt-csv',
+    flags: ['header-row', 'sortable', 'line-numbers', 'tabs'],
+    fields: [
+      { name: 'delimiter', type: 'select', options: ['', ',', ';', 'tab', '|'] },
+      { name: 'page-size', type: 'number', placeholder: '100' },
+      { name: 'view', type: 'select', options: ['', 'table', 'raw'] },
+    ],
+  },
+  tags: {
+    tag: 'vt-tags',
+    flags: ['allow-create', 'browse', 'counts', 'clickable', 'clear', 'case-sensitive'],
+    fields: [
+      { name: 'prefix', type: 'text', placeholder: '#' },
+      { name: 'max-tags', type: 'number', placeholder: 'no limit' },
+      { name: 'maxlength', type: 'number', placeholder: '50' },
+      { name: 'pattern', type: 'text', placeholder: '[a-z0-9-]+' },
+      { name: 'appearance', type: 'select', options: ['', 'chip', 'outline', 'text'] },
+      { name: 'value-format', type: 'select', options: ['', 'json', 'csv', 'lines'] },
+    ],
+  },
+  diff: {
+    tag: 'vt-diff',
+    flags: ['line-numbers', 'tabs', 'wrap'],
+    fields: [
+      { name: 'language', type: 'select', options: ['python', 'js', 'json', 'plaintext'] },
+      { name: 'view', type: 'select', options: ['', 'split', 'unified'] },
+      { name: 'context', type: 'text', placeholder: '3 or all' },
     ],
   },
 };
@@ -118,6 +162,9 @@ function buildControls() {
         code: '<vt-code>',
         markdown: '<vt-markdown>',
         json: '<vt-json>',
+        csv: '<vt-csv>',
+        tags: '<vt-tags>',
+        diff: '<vt-diff>',
       }),
     ),
     field(
@@ -136,6 +183,21 @@ function buildControls() {
       'lang-ui',
       select('lang-ui', ['', 'en', 'fr'], state.attrs['lang-ui'], (value) =>
         update(() => (state.attrs['lang-ui'] = value)),
+      ),
+    ),
+    field(
+      'mode',
+      select('mode', ['', 'view', 'edit'], state.attrs.mode ?? '', (value) =>
+        update(() => (state.attrs.mode = value)),
+      ),
+    ),
+    field(
+      'syntax-theme',
+      select(
+        'syntax-theme',
+        ['', ...window.Vitrine.listSyntaxThemes()],
+        state.attrs['syntax-theme'] ?? '',
+        (value) => update(() => (state.attrs['syntax-theme'] = value)),
       ),
     ),
   );
@@ -210,9 +272,16 @@ function buildControls() {
 function switchType(type) {
   state.type = type;
   state.flags = {};
-  state.fields = type === 'code' ? { language: 'python' } : {};
+  state.fields = type === 'code' || type === 'diff' ? { language: 'python' } : {};
   state.content = SAMPLES[type];
-  state.attrs.label = { code: 'fibonacci.py', markdown: 'release.md', json: 'user.json' }[type];
+  state.attrs.label = {
+    code: 'fibonacci.py',
+    markdown: 'release.md',
+    json: 'user.json',
+    csv: 'scores.csv',
+    tags: 'Topics',
+    diff: 'app.py',
+  }[type];
   buildControls();
   render();
 }
