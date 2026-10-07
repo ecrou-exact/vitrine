@@ -70,6 +70,10 @@ const en = Object.freeze({
   added: 'Added',
   removed: 'Removed',
   code: 'Code',
+  edit: 'Edit',
+  stopEditing: 'Stop editing',
+  editor: 'Editor',
+  validJson: 'Valid JSON',
 });
 
 const fr = Object.freeze({
@@ -133,6 +137,10 @@ const fr = Object.freeze({
   added: 'Ajouté',
   removed: 'Supprimé',
   code: 'Code',
+  edit: 'Modifier',
+  stopEditing: 'Terminer la modification',
+  editor: 'Éditeur',
+  validJson: 'JSON valide',
 });
 
 /** @type {Map<string, Partial<Strings>>} */

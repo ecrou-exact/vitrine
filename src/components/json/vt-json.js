@@ -5,6 +5,8 @@ import jsonCss from '../../styles/json.css?raw';
 import { parseEnum, parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
 import { buildCodeView, revealMatch } from '../../core/code-view.js';
+import { CodeEditor } from '../../core/editor.js';
+import { icon } from '../../core/icons.js';
 import { getConfig } from '../../core/config.js';
 import { h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
@@ -97,6 +99,13 @@ export class VtJson extends VtBase {
     this.invalidReported = false;
     /** @type {HTMLElement | null} */
     this.pathText = null;
+    /** @type {CodeEditor | null} */
+    this.editor = null;
+    /** @type {HTMLElement | null} */
+    this.status = null;
+    this.errorLine = 0;
+    /** @type {ReturnType<typeof setTimeout> | undefined} */
+    this.validateTimer = undefined;
   }
 
   /**
@@ -156,7 +165,7 @@ export class VtJson extends VtBase {
 
   /** @returns {View} */
   get view() {
-    const fallback = this.variant === 'full' ? 'tree' : 'raw';
+    const fallback = this.editing || this.variant !== 'full' ? 'raw' : 'tree';
     return this.viewState ?? parseEnum(this.getAttribute('view'), VIEWS, fallback);
   }
 
@@ -187,6 +196,10 @@ export class VtJson extends VtBase {
   renderContent(frame) {
     const result = this.parse();
     if (!result) return;
+    if (this.editing && this.view === 'raw') {
+      this.renderEditor(frame, result);
+      return;
+    }
     if (!result.ok) {
       this.renderInvalid(frame, result.error);
       return;
@@ -245,6 +258,7 @@ export class VtJson extends VtBase {
     const actions = [
       this.searchButton(target),
       tree && this.feature('expand-controls') ? this.expandButtons(tree) : null,
+      this.editToggleButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.prettyText(root),
@@ -254,7 +268,23 @@ export class VtJson extends VtBase {
         : null,
       this.feature('copy') ? this.copyButton(() => this.prettyText(root), this.t('copy')) : null,
     ].flat();
-    const tabs = this.feature('tabs')
+    const tabs = this.viewTabs(view);
+    const panel = h(
+      'div',
+      { class: 'panel', attrs: { id: this.panelId, role: tabs ? 'tabpanel' : null } },
+      ...content,
+    );
+    frame.append(...this.chrome({ badge: tabs ? '' : 'JSON', tabs, actions }), panel);
+  }
+
+  /**
+   * Tree / Raw tab list.
+   *
+   * @param {View} view
+   * @returns {HTMLElement | null}
+   */
+  viewTabs(view) {
+    return this.feature('tabs')
       ? createTabs({
           tabs: [
             { id: 'tree', label: this.t('tree'), icon: 'list' },
@@ -266,12 +296,107 @@ export class VtJson extends VtBase {
           onSelect: (id) => this.selectView(/** @type {View} */ (id)),
         })
       : null;
+  }
+
+  /**
+   * Edit mode, raw view: a JSON editor with live validation.
+   *
+   * @param {HTMLElement} frame
+   * @param {ParseResult} result
+   */
+  renderEditor(frame, result) {
+    const t = this.t;
+    const error = result.ok ? null : result.error;
+    this.editor?.destroy();
+    const editor = new CodeEditor({
+      text: this.text ?? '',
+      language: 'json',
+      lineNumbers: this.feature('line-numbers'),
+      wrap: false,
+      highlightRanges: error ? [[error.line, error.line]] : [],
+      highlightLimit: getConfig().highlightLimit,
+      label: this.heading || `JSON ${t('editor').toLowerCase()}`,
+      placeholder: this.getAttribute('placeholder') ?? undefined,
+      onInput: (text) => this.edited(text),
+      onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+    });
+    this.editor = editor;
+    this.errorLine = error?.line ?? 0;
+    this.status = h('div', { class: 'edit-status', part: 'status', attrs: { role: 'status' } });
+    this.showStatus(result);
+    /** @type {TextSearch | null} */
+    let search = null;
+    const target = {
+      /** @param {string} query */
+      run: (query) => {
+        search = new TextSearch(/** @type {Element} */ (editor.layer.querySelector('pre.code')));
+        return search.run(query);
+      },
+      /** @param {number} index */
+      go: (index) => revealMatch(search?.go(index) ?? null),
+      clear: () => search?.clear(),
+    };
+    const tabs = this.viewTabs('raw');
+    const actions = [
+      this.searchButton(target),
+      this.editToggleButton(),
+      this.feature('download')
+        ? this.downloadButton(
+            () => this.text ?? '',
+            this.downloadName('data.json'),
+            'application/json',
+          )
+        : null,
+      this.feature('copy') ? this.copyButton(() => this.text ?? '', t('copy')) : null,
+    ];
     const panel = h(
       'div',
       { class: 'panel', attrs: { id: this.panelId, role: tabs ? 'tabpanel' : null } },
-      ...content,
+      h('div', { class: 'body editor-body', part: 'body' }, editor.element),
+      this.status,
     );
     frame.append(...this.chrome({ badge: tabs ? '' : 'JSON', tabs, actions }), panel);
+    editor.align();
+  }
+
+  /**
+   * Shows whether the edited text is valid JSON.
+   *
+   * @param {ParseResult} result
+   */
+  showStatus(result) {
+    if (!this.status) return;
+    const t = this.t;
+    let message = t('validJson');
+    if (!result.ok) {
+      const { error } = result;
+      message = error.tooDeep
+        ? t('tooDeep', { limit: getConfig().maxDepth })
+        : t('invalidJson', { line: error.line, column: error.column, message: error.message });
+    }
+    this.status.className = `edit-status ${result.ok ? 'ok' : 'bad'}`;
+    this.status.replaceChildren(icon(result.ok ? 'check' : 'alert'), h('span', { text: message }));
+  }
+
+  /**
+   * The text was edited: validate shortly after typing stops.
+   */
+  contentEdited() {
+    this.treeCache = null;
+    this.rawCache = null;
+    this.invalidReported = false;
+    clearTimeout(this.validateTimer);
+    this.validateTimer = setTimeout(() => {
+      const result = this.parse();
+      if (!result) return;
+      this.showStatus(result);
+      const line = result.ok ? 0 : result.error.line;
+      if (line !== this.errorLine) {
+        this.errorLine = line;
+        this.editor?.setHighlightRanges(line ? [[line, line]] : []);
+      }
+      if (this.searchOpen && this.searchQuery) this.searchBar?.run();
+    }, 150);
   }
 
   /**
@@ -392,7 +517,10 @@ export class VtJson extends VtBase {
     frame.append(
       ...this.chrome({
         badge: 'JSON',
-        actions: [this.feature('copy') ? this.copyButton(() => this.text ?? '') : null],
+        actions: [
+          this.editToggleButton(),
+          this.feature('copy') ? this.copyButton(() => this.text ?? '') : null,
+        ],
       }),
       mode === 'raw'
         ? noticeView(t('invalidJsonRaw', { line: error.line, column: error.column }))

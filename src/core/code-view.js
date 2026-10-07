@@ -21,6 +21,10 @@ import { plainLines, splitLines } from './lines.js';
  * @property {boolean} diff - Treat `+` / `-` prefixed lines as a diff.
  * @property {number} highlightLimit - Above this length, syntax highlighting is skipped.
  * @property {{ added: string, removed: string }} [diffLabels] - Words read by screen readers on diff lines.
+ * @property {boolean} [chunk] - Allow splitting long code in blocks (default true). The
+ *   editor turns it off: its text field must match the exact height of every line.
+ * @property {boolean} [trailingNewline] - Show a trailing newline as an empty last line
+ *   (the editor needs it so the caret line exists).
  */
 
 /**
@@ -78,8 +82,8 @@ export function parseDiff(lines) {
  * @returns {CodeView}
  */
 export function buildCodeView(text, options) {
-  // A single trailing newline is not displayed as an empty last line.
-  const display = text.endsWith('\n') ? text.slice(0, -1) : text;
+  // A single trailing newline is not displayed as an empty last line (except in the editor).
+  const display = text.endsWith('\n') && !options.trailingNewline ? text.slice(0, -1) : text;
   let sourceLines = display.split('\n');
   /** @type {DiffKind[] | null} */
   let kinds = null;
@@ -103,7 +107,7 @@ export function buildCodeView(text, options) {
   const rows = document.createDocumentFragment();
   // Long code is grouped in blocks the browser can skip while they are off-screen
   // (content-visibility), which keeps tens of thousands of lines fast to lay out.
-  const chunked = lines.length > CHUNK_THRESHOLD;
+  const chunked = options.chunk !== false && lines.length > CHUNK_THRESHOLD;
   /** @type {Node} */
   let target = rows;
   lines.forEach((fragment, index) => {

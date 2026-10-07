@@ -311,8 +311,8 @@
   overflow: auto;
   border: 1px solid var(--_border);
   border-radius: var(--_radius-sm);
-  background: var(--_surface-sunken);
-  color: var(--_fg);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
   font-family: var(--_font-mono);
   font-size: var(--_font-size);
   line-height: var(--_line-height);

@@ -4,6 +4,8 @@ import codeCss from '../../styles/code.css?raw';
 import { parseInteger, parseRanges } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
 import { buildCodeView, revealMatch } from '../../core/code-view.js';
+import { CodeEditor } from '../../core/editor.js';
+import { EVENTS, emit } from '../../core/events.js';
 import { getConfig } from '../../core/config.js';
 import { h } from '../../core/dom.js';
 import {
@@ -93,6 +95,8 @@ export class VtCode extends VtBase {
     /** @type {boolean | null} Wrap state chosen with the toggle; `null` follows the attribute. */
     this.wrapState = null;
     this.expanded = false;
+    /** @type {CodeEditor | null} */
+    this.editor = null;
     /** @type {string | undefined} Language detected for `language="auto"`. */
     this._detected = undefined;
   }
@@ -148,6 +152,11 @@ export class VtCode extends VtBase {
     const text = this.text ?? '';
     const t = this.t;
     const lang = this.language();
+    this.applyTabSize(frame);
+    if (this.editing) {
+      this.renderEditor(frame, lang);
+      return;
+    }
     const view = buildCodeView(text, {
       language: lang.name,
       lineNumbers: this.feature('line-numbers'),
@@ -161,10 +170,6 @@ export class VtCode extends VtBase {
       highlightLimit: getConfig().highlightLimit,
       diffLabels: { added: t('added'), removed: t('removed') },
     });
-
-    const tabSize = parseInteger(this.getAttribute('tab-size'), { min: 1, max: 16, fallback: 0 });
-    if (tabSize) frame.style.setProperty('--_tab-size', String(tabSize));
-    else frame.style.removeProperty('--_tab-size');
 
     const collapseAfter = parseInteger(this.getAttribute('collapsible'), {
       min: 1,
@@ -200,6 +205,7 @@ export class VtCode extends VtBase {
             },
           })
         : null,
+      this.editToggleButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -253,6 +259,90 @@ export class VtCode extends VtBase {
       );
       frame.append(more);
     }
+  }
+
+  /**
+   * @param {HTMLElement} frame
+   */
+  applyTabSize(frame) {
+    const tabSize = parseInteger(this.getAttribute('tab-size'), { min: 1, max: 16, fallback: 0 });
+    if (tabSize) frame.style.setProperty('--_tab-size', String(tabSize));
+    else frame.style.removeProperty('--_tab-size');
+  }
+
+  /**
+   * Edit mode: a highlighted editor instead of the read-only view.
+   *
+   * @param {HTMLElement} frame
+   * @param {{ name: string, label: string }} lang
+   */
+  renderEditor(frame, lang) {
+    const t = this.t;
+    const diff = this.feature('diff') && lang.name === 'plaintext';
+    const editor = new CodeEditor({
+      text: this.text ?? '',
+      language: diff ? 'diff' : lang.name,
+      lineNumbers: this.feature('line-numbers'),
+      wrap: this.wrapped,
+      highlightRanges: parseRanges(this.getAttribute('highlight-lines')),
+      highlightLimit: getConfig().highlightLimit,
+      label: this.heading || `${t('editor')}${lang.label ? ` (${lang.label})` : ''}`,
+      placeholder: this.getAttribute('placeholder') ?? undefined,
+      onInput: (text) => this.edited(text),
+      onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+    });
+    this.editor?.destroy();
+    this.editor = editor;
+    /** @type {TextSearch | null} */
+    let search = null;
+    const target = {
+      /** @param {string} query */
+      run: (query) => {
+        // The highlighted layer is rebuilt on every edit: search the current one.
+        search = new TextSearch(/** @type {Element} */ (editor.layer.querySelector('pre.code')));
+        return search.run(query);
+      },
+      /** @param {number} index */
+      go: (index) => revealMatch(search?.go(index) ?? null),
+      clear: () => search?.clear(),
+    };
+    const actions = [
+      this.searchButton(target),
+      this.feature('wrap-toggle')
+        ? iconButton({
+            icon: 'wrap',
+            label: t('wrap'),
+            key: 'wrap',
+            part: 'wrap-button',
+            pressed: this.wrapped,
+            onClick: () => {
+              this.wrapState = !this.wrapped;
+              this.render();
+            },
+          })
+        : null,
+      this.editToggleButton(),
+      this.feature('download')
+        ? this.downloadButton(
+            () => this.text ?? '',
+            this.downloadName(`code.${EXTENSIONS[lang.name] ?? 'txt'}`),
+            'text/plain',
+          )
+        : null,
+      this.feature('copy') ? this.copyButton(() => this.text ?? '', t('copyCode')) : null,
+    ];
+    const body = h('div', { class: 'body editor-body', part: 'body' }, editor.element);
+    frame.classList.toggle('wrap', this.wrapped);
+    frame.classList.remove('collapsed');
+    frame.append(...this.chrome({ badge: lang.label, actions }), body);
+    editor.align();
+  }
+
+  /**
+   * Keeps an open search up to date while typing.
+   */
+  contentEdited() {
+    if (this.searchOpen && this.searchQuery) this.searchBar?.run();
   }
 
   /**
