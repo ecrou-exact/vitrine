@@ -8,7 +8,7 @@
  *
  * @module components/tags/model
  */
-import { isSafeUrl } from '../../core/security.js';
+import { isSafeUrl } from '../../core/urls.js';
 
 /** Most options kept (larger lists are cut). */
 export const MAX_OPTIONS = 100_000;
