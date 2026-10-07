@@ -10,3 +10,6 @@ THIRD_PARTY_NOTICES.md
 CODE_OF_CONDUCT.md
 src/core/language-index.js
 brand/
+site/**/*.html
+demo/**/*.html
+tests/e2e/fixtures/*.html

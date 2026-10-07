@@ -3,10 +3,7 @@
   <head>
     <!-- @head -->
     <title>Examples — Vitrine</title>
-    <meta
-      name="description"
-      content="Every Vitrine attribute in action: live components next to the HTML that renders them."
-    />
+    <meta name="description" content="Every Vitrine attribute in action: live components next to the HTML that renders them." />
     <script src="assets/examples.js" defer></script>
   </head>
   <body data-page="examples">
@@ -16,8 +13,8 @@
       <header class="page-head">
         <h1>Examples</h1>
         <p>
-          Each example shows the live component next to the exact markup that renders it. Copy the
-          markup, change one attribute, and you get the same result on your site.
+          Each example shows the live component next to the exact markup that renders it. Copy the markup, change one
+          attribute, and you get the same result on your site.
         </p>
         <nav class="jump" aria-label="Example sections">
           <a href="#code">Code</a>
@@ -38,14 +35,12 @@
         <article class="example">
           <div class="example-text">
             <h3>Simple block</h3>
-            <p>
-              The default variant: highlighted code, nothing else. Indentation inside the element is
-              removed.
-            </p>
+            <p>The default variant: highlighted code, nothing else. Indentation inside the element is removed.</p>
           </div>
           <template>
             <vt-code language="python">
-              def greet(name: str) -> str: return f"Hello {name}"
+              def greet(name: str) -> str:
+                  return f"Hello {name}"
             </vt-code>
           </template>
         </article>
@@ -53,15 +48,15 @@
         <article class="example">
           <div class="example-text">
             <h3>Line numbers, first line and emphasized lines</h3>
-            <p>
-              <code>highlight-lines</code> uses the displayed numbers, so it follows
-              <code>start-line</code>.
-            </p>
+            <p><code>highlight-lines</code> uses the displayed numbers, so it follows <code>start-line</code>.</p>
           </div>
           <template>
             <vt-code language="js" line-numbers start-line="40" highlight-lines="42-43">
-              export function total(items) { let sum = 0; for (const item of items) sum +=
-              item.price * item.qty; return Math.round(sum * 100) / 100; }
+              export function total(items) {
+                let sum = 0;
+                for (const item of items) sum += item.price * item.qty;
+                return Math.round(sum * 100) / 100;
+              }
             </vt-code>
           </template>
         </article>
@@ -69,16 +64,20 @@
         <article class="example">
           <div class="example-text">
             <h3>Full variant</h3>
-            <p>
-              Header with title and language, search, wrap toggle, download and copy. Open the
-              search and press Enter to move between matches.
-            </p>
+            <p>Header with title and language, search, wrap toggle, download, full screen and copy. Open the search and press Enter to move between matches.</p>
           </div>
           <template>
             <vt-code variant="full" language="go" label="server.go" download="server.go">
-              package main import "net/http" func main() { http.HandleFunc("/", func(w
-              http.ResponseWriter, r *http.Request) { w.Write([]byte("hello")) })
-              http.ListenAndServe(":8080", nil) }
+              package main
+
+              import "net/http"
+
+              func main() {
+                http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+                  w.Write([]byte("hello"))
+                })
+                http.ListenAndServe(":8080", nil)
+              }
             </vt-code>
           </template>
         </article>
@@ -89,15 +88,9 @@
             <p>Individual attributes always win over the variant preset.</p>
           </div>
           <template>
-            <vt-code
-              variant="full"
-              language="bash"
-              label="deploy.sh"
-              search="false"
-              download="false"
-              dot="false"
-            >
-              npm ci && npm run build rsync -av dist/ server:/var/www/app
+            <vt-code variant="full" language="bash" label="deploy.sh" search="false" download="false" dot="false">
+              npm ci && npm run build
+              rsync -av dist/ server:/var/www/app
             </vt-code>
           </template>
         </article>
@@ -117,14 +110,15 @@
         <article class="example">
           <div class="example-text">
             <h3>Diff</h3>
-            <p>
-              Lines starting with <code>+</code> and <code>-</code> are marked as added and removed.
-              The copy button copies the diff as written.
-            </p>
+            <p>Lines starting with <code>+</code> and <code>-</code> are marked as added and removed. The copy button copies the diff as written.</p>
           </div>
           <template>
             <vt-code diff line-numbers language="js">
-              @@ -1,4 +1,4 @@ function area(r) { - return 3.14 * r * r; + return Math.PI * r ** 2; }
+              @@ -1,4 +1,4 @@
+               function area(r) {
+              -  return 3.14 * r * r;
+              +  return Math.PI * r ** 2;
+               }
             </vt-code>
           </template>
         </article>
@@ -132,16 +126,18 @@
         <article class="example">
           <div class="example-text">
             <h3>Collapsible and wrapped</h3>
-            <p>
-              <code>collapsible="4"</code> shows four lines and a button;
-              <code>wrap</code> soft-wraps long lines.
-            </p>
+            <p><code>collapsible="4"</code> shows four lines and a button; <code>wrap</code> soft-wraps long lines.</p>
           </div>
           <template>
             <vt-code language="yaml" collapsible="4" wrap>
-              name: CI on: [push, pull_request] jobs: test: runs-on: ubuntu-latest steps: - uses:
-              actions/checkout@v7 - run: npm ci && npm test -- --reporter=verbose --coverage
-              --run-in-band-because-this-line-is-long
+              name: CI
+              on: [push, pull_request]
+              jobs:
+                test:
+                  runs-on: ubuntu-latest
+                  steps:
+                    - uses: actions/checkout@v7
+                    - run: npm ci && npm test -- --reporter=verbose --coverage --run-in-band-because-this-line-is-long
             </vt-code>
           </template>
         </article>
@@ -149,15 +145,14 @@
         <article class="example">
           <div class="example-text">
             <h3>Any language, loaded on demand</h3>
-            <p>
-              Common languages are bundled; the other 180 are fetched only when used.
-              <code>language="auto"</code> detects the language.
-            </p>
+            <p>Common languages are bundled; the other 180 are fetched only when used. <code>language="auto"</code> detects the language.</p>
           </div>
           <template>
             <vt-code variant="full" language="rust" search="false" download="false">
-              fn main() { let names = vec!["Ada", "Alan"]; for name in &names { println!("Hello
-              {name}"); } }
+              fn main() {
+                  let names = vec!["Ada", "Alan"];
+                  for name in &names { println!("Hello {name}"); }
+              }
             </vt-code>
           </template>
         </article>
@@ -166,24 +161,17 @@
           <div class="example-text">
             <h3>Theme and custom properties</h3>
             <p>
-              <code>theme</code> picks a built-in theme; CSS variables override any token. This page
-              sets
-              <code
-                >.brand-example { --vt-accent: #7c9cff; --vt-accent-fg: #7c9cff; --vt-radius: 4px;
-                }</code
-              >.
+              <code>theme</code> picks a built-in theme; CSS variables override any token. This page sets
+              <code>.brand-example { --vt-accent: #7c9cff; --vt-accent-fg: #7c9cff; --vt-radius: 4px; }</code>.
             </p>
           </div>
           <template>
-            <vt-code
-              class="brand-example"
-              variant="full"
-              theme="dim"
-              language="sql"
-              label="report.sql"
-            >
-              SELECT country, count(*) AS orders FROM orders WHERE created_at > now() - interval '30
-              days' GROUP BY country ORDER BY orders DESC;
+            <vt-code class="brand-example" variant="full" theme="dim" language="sql" label="report.sql">
+              SELECT country, count(*) AS orders
+              FROM orders
+              WHERE created_at > now() - interval '30 days'
+              GROUP BY country
+              ORDER BY orders DESC;
             </vt-code>
           </template>
         </article>
@@ -191,10 +179,7 @@
         <article class="example">
           <div class="example-text">
             <h3>Interface language</h3>
-            <p>
-              English and French ship with the library; register other languages with
-              <code>Vitrine.registerLocale()</code>.
-            </p>
+            <p>English and French ship with the library; register other languages with <code>Vitrine.registerLocale()</code>.</p>
           </div>
           <template>
             <vt-code variant="full" lang-ui="fr" language="css" label="theme.css">
@@ -210,15 +195,23 @@
         <article class="example">
           <div class="example-text">
             <h3>Simple rendering</h3>
-            <p>
-              GitHub Flavored Markdown with highlighted code blocks. The text uses the page font.
-            </p>
+            <p>GitHub Flavored Markdown with highlighted code blocks. The text uses the page font.</p>
           </div>
           <template>
             <vt-markdown>
               <template>
-                ### Shopping list - [x] Coffee - [ ] **Fresh** bread | Item | Price | |:--|--:| |
-                Coffee | 4.50 | ```js const total = 4.5 + 2.1; ```
+                ### Shopping list
+
+                - [x] Coffee
+                - [ ] **Fresh** bread
+
+                | Item | Price |
+                |:--|--:|
+                | Coffee | 4.50 |
+
+                ```js
+                const total = 4.5 + 2.1;
+                ```
               </template>
             </vt-markdown>
           </template>
@@ -227,16 +220,24 @@
         <article class="example">
           <div class="example-text">
             <h3>Full variant</h3>
-            <p>
-              Preview, source and split tabs (use the arrow keys), table of contents, heading
-              anchors, search and copy.
-            </p>
+            <p>Preview, source and split tabs (use the arrow keys), table of contents, heading anchors, search and copy.</p>
           </div>
           <template>
             <vt-markdown variant="full" label="guide.md" max-height="360px">
               <template>
-                # Guide ## Install Add one script tag. ## Use Write `&lt;vt-code&gt;` where you need
-                code. ## Style Set `--vt-accent` on any ancestor.
+                # Guide
+
+                ## Install
+
+                Add one script tag.
+
+                ## Use
+
+                Write `&lt;vt-code&gt;` where you need code.
+
+                ## Style
+
+                Set `--vt-accent` on any ancestor.
               </template>
             </vt-markdown>
           </template>
@@ -245,20 +246,13 @@
         <article class="example">
           <div class="example-text">
             <h3>Chosen tabs, source first</h3>
-            <p>
-              <code>tabs</code> picks which tabs exist and in which order;
-              <code>default-tab</code> picks the first one shown.
-            </p>
+            <p><code>tabs</code> picks which tabs exist and in which order; <code>default-tab</code> picks the first one shown.</p>
           </div>
           <template>
-            <vt-markdown
-              variant="full"
-              tabs="source,preview"
-              default-tab="source"
-              toc="false"
-              label="note.md"
-            >
-              <template> **Tip:** the source tab has line numbers and search. </template>
+            <vt-markdown variant="full" tabs="source,preview" default-tab="source" toc="false" label="note.md">
+              <template>
+                **Tip:** the source tab has line numbers and search.
+              </template>
             </vt-markdown>
           </template>
         </article>
@@ -266,21 +260,14 @@
         <article class="example">
           <div class="example-text">
             <h3>Raw HTML</h3>
-            <p>
-              By default raw HTML is shown as text. With <code>allow-html</code> it is rendered, but
-              sanitized: the script and the event handler below are removed.
-            </p>
+            <p>By default raw HTML is shown as text. With <code>allow-html</code> it is rendered, but sanitized: the event handler below is removed.</p>
           </div>
           <template>
             <vt-markdown allow-html>
               <template>
-                Press <kbd>Ctrl</kbd> + <kbd>K</kbd>.
-                <span onclick="steal()">Handlers are removed.</span>
+                Press <kbd>Ctrl</kbd> + <kbd>K</kbd>. <span onclick="steal()">Handlers are removed.</span>
 
-                <details>
-                  <summary>More</summary>
-                  Native details elements are allowed.
-                </details>
+                <details><summary>More</summary>Native details elements are allowed.</details>
               </template>
             </vt-markdown>
           </template>
@@ -289,16 +276,12 @@
         <article class="example">
           <div class="example-text">
             <h3>Image policy</h3>
-            <p>
-              <code>images="block"</code> replaces images with their alt text, so content cannot
-              track readers with remote pixels.
-            </p>
+            <p><code>images="block"</code> replaces images with their alt text, so content cannot track readers with remote pixels.</p>
           </div>
           <template>
             <vt-markdown images="block">
               <template>
-                ![Tracking pixel](https://tracker.example/pixel.png) and ![a
-                logo](brand/logo-mark.svg)
+                ![Tracking pixel](https://tracker.example/pixel.png) and ![a logo](brand/logo-mark.svg)
               </template>
             </vt-markdown>
           </template>
@@ -307,18 +290,10 @@
         <article class="example">
           <div class="example-text">
             <h3>Loaded from a file</h3>
-            <p>
-              <code>src</code> loads same-origin files by default. Relative links and images resolve
-              against the file.
-            </p>
+            <p><code>src</code> loads same-origin files by default. Relative links and images resolve against the file.</p>
           </div>
           <template>
-            <vt-markdown
-              src="docs/accessibility.md"
-              variant="full"
-              max-height="320px"
-              label="accessibility.md"
-            ></vt-markdown>
+            <vt-markdown src="docs/accessibility.md" variant="full" max-height="320px" label="accessibility.md"></vt-markdown>
           </template>
         </article>
       </section>
@@ -329,9 +304,7 @@
         <article class="example">
           <div class="example-text">
             <h3>Pretty printed</h3>
-            <p>
-              The simple variant formats and highlights JSON. Numbers are shown exactly as written.
-            </p>
+            <p>The simple variant formats and highlights JSON. Numbers are shown exactly as written.</p>
           </div>
           <template>
             <vt-json>
@@ -343,16 +316,18 @@
         <article class="example">
           <div class="example-text">
             <h3>Tree view</h3>
-            <p>
-              Click a row to see its JSONPath and copy it. Arrow keys move through the tree; Right
-              and Left open and close nodes.
-            </p>
+            <p>Click a row to see its JSONPath and copy it. Arrow keys move through the tree; Right and Left open and close nodes.</p>
           </div>
           <template>
             <vt-json variant="full" label="user.json" depth="1">
               <template>
-                { "id": 42, "name": "Ada Lovelace", "roles": ["admin", "editor"], "address": {
-                "city": "London", "zip": null }, "weird key": "is quoted in the path" }
+                {
+                  "id": 42,
+                  "name": "Ada Lovelace",
+                  "roles": ["admin", "editor"],
+                  "address": { "city": "London", "zip": null },
+                  "weird key": "is quoted in the path"
+                }
               </template>
             </vt-json>
           </template>
@@ -361,9 +336,7 @@
         <article class="example">
           <div class="example-text">
             <h3>Raw view, sorted, indented by 4</h3>
-            <p>
-              <code>view</code>, <code>sort-keys</code> and <code>indent</code> shape the raw view.
-            </p>
+            <p><code>view</code>, <code>sort-keys</code> and <code>indent</code> shape the raw view.</p>
           </div>
           <template>
             <vt-json variant="full" view="raw" sort-keys indent="4" show-types="false">
@@ -375,14 +348,16 @@
         <article class="example">
           <div class="example-text">
             <h3>Invalid JSON</h3>
-            <p>
-              The error says what is wrong and where, and the line is highlighted.
-              <code>on-invalid="raw"</code> shows the text with a notice instead.
-            </p>
+            <p>The error says what is wrong and where, and the line is highlighted. <code>on-invalid="raw"</code> shows the text with a notice instead.</p>
           </div>
           <template>
             <vt-json variant="full" label="config.json">
-              <template> { "port": 8080, "hosts": ["a", "b",], } </template>
+              <template>
+                {
+                  "port": 8080,
+                  "hosts": ["a", "b",],
+                }
+              </template>
             </vt-json>
           </template>
         </article>
@@ -395,13 +370,15 @@
           <div class="example-text">
             <h3>Edit code with highlighting</h3>
             <p>
-              <code>mode="edit"</code> turns any element into an editor. Tab indents, Enter keeps
-              the indentation, Ctrl+Z and Ctrl+Y undo and redo, Escape then Tab leaves the field.
+              <code>mode="edit"</code> turns any element into an editor. Tab indents, Enter keeps the indentation,
+              Ctrl+Z and Ctrl+Y undo and redo, Escape then Tab leaves the field.
             </p>
           </div>
           <template>
             <vt-code variant="full" mode="edit" language="js" label="edit-me.js" download="false">
-              <template>function greet(name) { return `Hello ${name}`; }</template>
+              <template>function greet(name) {
+  return `Hello ${name}`;
+}</template>
             </vt-code>
           </template>
         </article>
@@ -412,14 +389,7 @@
             <p><code>edit-toggle</code> adds a button that switches between reading and editing.</p>
           </div>
           <template>
-            <vt-code
-              variant="full"
-              edit-toggle
-              language="python"
-              label="toggle.py"
-              search="false"
-              download="false"
-            >
+            <vt-code variant="full" edit-toggle language="python" label="toggle.py" search="false" download="false">
               <template>print("Click the pencil to edit me")</template>
             </vt-code>
           </template>
@@ -428,16 +398,16 @@
         <article class="example">
           <div class="example-text">
             <h3>Markdown editor with live preview</h3>
-            <p>
-              Source and preview side by side, scrolled together. The preview updates as you type.
-            </p>
+            <p>Source and preview side by side, scrolled together. The preview updates as you type.</p>
           </div>
           <template>
             <vt-markdown variant="full" mode="edit" label="notes.md" max-height="360px" toc="false">
-              <template
-                >## Meeting notes Type on the left, the **preview** follows. - [x] Edit mode - [ ]
-                Ship it</template
-              >
+              <template>## Meeting notes
+
+Type on the left, the **preview** follows.
+
+- [x] Edit mode
+- [ ] Ship it</template>
             </vt-markdown>
           </template>
         </article>
@@ -445,10 +415,7 @@
         <article class="example">
           <div class="example-text">
             <h3>JSON with live validation</h3>
-            <p>
-              Errors show their line and column as you type; the Tree tab shows the document once it
-              is valid.
-            </p>
+            <p>Errors show their line and column as you type; the Tree tab shows the document once it is valid.</p>
           </div>
           <template>
             <vt-json variant="full" mode="edit" label="config.json">
@@ -465,22 +432,17 @@
           <div class="example-text">
             <h3>Preview on top, source below</h3>
             <p>
-              <code>split-preview</code> puts the preview on the right, left, bottom or top. The
-              full variant adds buttons to swap and stack the panes.
+              <code>split-preview</code> puts the preview on the right, left, bottom or top. The full variant adds buttons
+              to swap and stack the panes.
             </p>
           </div>
           <template>
-            <vt-markdown
-              variant="full"
-              default-tab="split"
-              split-preview="top"
-              max-height="420px"
-              toc="false"
-            >
-              <template
-                >## Stacked panes The preview is on top. Long documents stay **in sync** while
-                scrolling.</template
-              >
+            <vt-markdown variant="full" default-tab="split" split-preview="top" max-height="420px" toc="false">
+              <template>## Stacked panes
+
+The preview is on top.
+
+Long documents stay **in sync** while scrolling.</template>
             </vt-markdown>
           </template>
         </article>
@@ -489,23 +451,18 @@
           <div class="example-text">
             <h3>Syntax themes</h3>
             <p>
-              258 themes from highlight.js, loaded on demand. <code>syntax-theme-dark</code> is used
-              when the interface theme is dark. See them all on the
-              <a href="themes.html#syntax">themes page</a>.
+              258 themes from highlight.js, loaded on demand. <code>syntax-theme-dark</code> is used when the interface
+              theme is dark. See them all on the <a href="themes.html#syntax">themes page</a>.
             </p>
           </div>
           <template>
-            <vt-code
-              variant="full"
-              language="rust"
-              syntax-theme="atom-one-light"
-              syntax-theme-dark="tokyo-night-dark"
-              label="main.rs"
-            >
-              <template
-                >fn main() { let langs = ["Rust", "Go", "Zig"]; for (i, lang) in
-                langs.iter().enumerate() { println!("{i}: {lang}"); } }</template
-              >
+            <vt-code variant="full" language="rust" syntax-theme="atom-one-light" syntax-theme-dark="tokyo-night-dark" label="main.rs">
+              <template>fn main() {
+    let langs = ["Rust", "Go", "Zig"];
+    for (i, lang) in langs.iter().enumerate() {
+        println!("{i}: {lang}");
+    }
+}</template>
             </vt-code>
           </template>
         </article>
@@ -513,10 +470,7 @@
         <article class="example">
           <div class="example-text">
             <h3>Only the features you want</h3>
-            <p>
-              Variants are shortcuts. Here: no variant, but a header, full screen and copy, and no
-              language badge.
-            </p>
+            <p>Variants are shortcuts. Here: no variant, but a header, full screen and copy, and no language badge.</p>
           </div>
           <template>
             <vt-json header fullscreen copy badge="false" label="Custom toolbar">
@@ -532,17 +486,15 @@
         <article class="example">
           <div class="example-text">
             <h3>Sortable table</h3>
-            <p>
-              Click a column to sort it. Numbers and dates sort by value; empty cells always go
-              last.
-            </p>
+            <p>Click a column to sort it. Numbers and dates sort by value; empty cells always go last.</p>
           </div>
           <template>
             <vt-csv variant="full" label="scores.csv">
-              <template
-                >name,score,joined Ada Lovelace,98.5,1842-10-01 Alan Turing,95,1936-05-28 "Hopper,
-                Grace",91,1944-01-01 Margaret Hamilton,99,1969-07-20</template
-              >
+              <template>name,score,joined
+Ada Lovelace,98.5,1842-10-01
+Alan Turing,95,1936-05-28
+"Hopper, Grace",91,1944-01-01
+Margaret Hamilton,99,1969-07-20</template>
             </vt-csv>
           </template>
         </article>
@@ -550,18 +502,22 @@
         <article class="example">
           <div class="example-text">
             <h3>Semicolons, no header, small pages</h3>
-            <p>
-              The delimiter is detected; <code>header-row="false"</code> names the columns,
-              <code>page-size</code> paginates.
-            </p>
+            <p>The delimiter is detected; <code>header-row="false"</code> names the columns, <code>page-size</code> paginates.</p>
           </div>
           <template>
             <vt-csv header-row="false" page-size="10" line-numbers>
-              <template
-                >Paris;2148000;FR Berlin;3645000;DE Madrid;3223000;ES Rome;2873000;IT
-                Lisbon;545000;PT Vienna;1897000;AT Warsaw;1793000;PL Prague;1309000;CZ
-                Brussels;1209000;BE Dublin;554000;IE Oslo;697000;NO Helsinki;656000;FI</template
-              >
+              <template>Paris;2148000;FR
+Berlin;3645000;DE
+Madrid;3223000;ES
+Rome;2873000;IT
+Lisbon;545000;PT
+Vienna;1897000;AT
+Warsaw;1793000;PL
+Prague;1309000;CZ
+Brussels;1209000;BE
+Dublin;554000;IE
+Oslo;697000;NO
+Helsinki;656000;FI</template>
             </vt-csv>
           </template>
         </article>
@@ -573,18 +529,16 @@
         <article class="example">
           <div class="example-text">
             <h3>Display tags from JSON</h3>
-            <p>
-              Colors, counts and links come from the data. <code>clickable</code> makes them buttons
-              firing <code>vt-tag-click</code>.
-            </p>
+            <p>Colors, counts and links come from the data. <code>clickable</code> makes them buttons firing <code>vt-tag-click</code>.</p>
           </div>
           <template>
             <vt-tags counts>
-              <template
-                >[ { "value": "urgent", "color": "#e5484d", "count": 12, "kind": "danger" }, {
-                "value": "design", "color": "#14b8a6", "count": 8 }, { "value": "docs", "href":
-                "docs.html", "count": 3 }, "plain" ]</template
-              >
+              <template>[
+  { "value": "urgent", "color": "#e5484d", "count": 12, "kind": "danger" },
+  { "value": "design", "color": "#14b8a6", "count": 8 },
+  { "value": "docs", "href": "docs.html", "count": 3 },
+  "plain"
+]</template>
             </vt-tags>
           </template>
         </article>
@@ -593,16 +547,16 @@
           <div class="example-text">
             <h3>Hashtag field with suggestions</h3>
             <p>
-              Type <code>#</code> and a word: suggestions appear, Enter picks one, a space or a
-              comma creates a new tag. Backspace twice removes the last tag.
+              Type <code>#</code> and a word: suggestions appear, Enter picks one, a space or a comma creates a new tag.
+              Backspace twice removes the last tag.
             </p>
           </div>
           <template>
             <vt-tags mode="edit" prefix="#" label="Topics" max-tags="8">
-              <template
-                >{ "value": ["design"], "options": ["design", "research", "accessibility",
-                "performance", "security", "documentation"] }</template
-              >
+              <template>{
+  "value": ["design"],
+  "options": ["design", "research", "accessibility", "performance", "security", "documentation"]
+}</template>
             </vt-tags>
           </template>
         </article>
@@ -610,25 +564,24 @@
         <article class="example">
           <div class="example-text">
             <h3>Pick from a long, grouped list</h3>
-            <p>
-              The full variant adds a browse panel with a filter and checkboxes, and a button to
-              clear the selection.
-            </p>
+            <p>The full variant adds a browse panel with a filter and checkboxes, and a button to clear the selection.</p>
           </div>
           <template>
             <vt-tags variant="full" mode="edit" allow-create="false" label="Languages">
-              <template
-                >{ "value": ["rust"], "options": [ { "value": "js", "label": "JavaScript", "group":
-                "Web", "count": 120 }, { "value": "ts", "label": "TypeScript", "group": "Web",
-                "count": 96 }, { "value": "css", "label": "CSS", "group": "Web", "count": 80 }, {
-                "value": "rust", "label": "Rust", "group": "Systems", "count": 41, "color":
-                "#ce422b" }, { "value": "go", "label": "Go", "group": "Systems", "count": 38 }, {
-                "value": "zig", "label": "Zig", "group": "Systems", "count": 7, "description":
-                "Small, simple, fast" }, { "value": "py", "label": "Python", "group": "Data",
-                "count": 150 }, { "value": "r", "label": "R", "group": "Data", "count": 22 }, {
-                "value": "julia", "label": "Julia", "group": "Data", "count": 9, "disabled": true }
-                ] }</template
-              >
+              <template>{
+  "value": ["rust"],
+  "options": [
+    { "value": "js", "label": "JavaScript", "group": "Web", "count": 120 },
+    { "value": "ts", "label": "TypeScript", "group": "Web", "count": 96 },
+    { "value": "css", "label": "CSS", "group": "Web", "count": 80 },
+    { "value": "rust", "label": "Rust", "group": "Systems", "count": 41, "color": "#ce422b" },
+    { "value": "go", "label": "Go", "group": "Systems", "count": 38 },
+    { "value": "zig", "label": "Zig", "group": "Systems", "count": 7, "description": "Small, simple, fast" },
+    { "value": "py", "label": "Python", "group": "Data", "count": 150 },
+    { "value": "r", "label": "R", "group": "Data", "count": 22 },
+    { "value": "julia", "label": "Julia", "group": "Data", "count": 9, "disabled": true }
+  ]
+}</template>
             </vt-tags>
           </template>
         </article>
@@ -644,10 +597,7 @@
           </div>
           <template>
             <vt-tags class="square-tags" appearance="outline">
-              <template
-                >[{ "value": "blocker", "kind": "danger", "color": "#e5484d" }, "triage",
-                "frontend"]</template
-              >
+              <template>[{ "value": "blocker", "kind": "danger", "color": "#e5484d" }, "triage", "frontend"]</template>
             </vt-tags>
           </template>
         </article>
@@ -659,21 +609,25 @@
         <article class="example">
           <div class="example-text">
             <h3>Compare two texts</h3>
-            <p>
-              Side by side, with changed words marked and unchanged lines folded. Copy gives a
-              standard patch.
-            </p>
+            <p>Side by side, with changed words marked and unchanged lines folded. Copy gives a standard patch.</p>
           </div>
           <template>
             <vt-diff variant="full" language="js" label="area.js" context="1">
-              <template data-original
-                >export function area(r) { return 3.14 * r * r; } const unit = "cm"; const precision
-                = 2; export default area;</template
-              >
-              <template data-modified
-                >export function area(radius) { return Math.PI * radius ** 2; } const unit = "cm";
-                const precision = 2; export default area; export { unit };</template
-              >
+              <template data-original>export function area(r) {
+  return 3.14 * r * r;
+}
+
+const unit = "cm";
+const precision = 2;
+export default area;</template>
+              <template data-modified>export function area(radius) {
+  return Math.PI * radius ** 2;
+}
+
+const unit = "cm";
+const precision = 2;
+export default area;
+export { unit };</template>
             </vt-diff>
           </template>
         </article>
@@ -681,17 +635,20 @@
         <article class="example">
           <div class="example-text">
             <h3>Show a patch, unified</h3>
-            <p>
-              Give it the output of <code>git diff</code>: hunks are read, gaps between them are
-              marked.
-            </p>
+            <p>Give it the output of <code>git diff</code>: hunks are read, gaps between them are marked.</p>
           </div>
           <template>
             <vt-diff view="unified" language="python" label="app.py">
-              <template
-                >--- a/app.py +++ b/app.py @@ -1,3 +1,3 @@ import os -DEBUG = True +DEBUG =
-                os.getenv("DEBUG") == "1" @@ -20,2 +20,3 @@ run() + log("done")</template
-              >
+              <template>--- a/app.py
++++ b/app.py
+@@ -1,3 +1,3 @@
+ import os
+-DEBUG = True
++DEBUG = os.getenv("DEBUG") == "1"
+ 
+@@ -20,2 +20,3 @@
+     run()
++    log("done")</template>
             </vt-diff>
           </template>
         </article>
@@ -712,10 +669,7 @@
         <article class="example" data-script="data">
           <div class="example-text">
             <h3>A JavaScript value, with events</h3>
-            <p>
-              The <code>data</code> property serializes any value. Every component dispatches
-              <code>vt-*</code> events.
-            </p>
+            <p>The <code>data</code> property serializes any value. Every component dispatches <code>vt-*</code> events.</p>
           </div>
         </article>
       </section>
