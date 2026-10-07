@@ -57,6 +57,7 @@ const en = Object.freeze({
   empty: 'Nothing to display',
   tooLarge: 'Content is too large ({size} characters, limit {limit}).',
   tooDeep: 'Nesting is too deep (limit {limit}).',
+  tooComplex: 'This document is nested too deeply to display.',
   unserializable: 'This value cannot be converted to JSON (circular reference or BigInt).',
   highlightSkipped: 'Content is large: syntax highlighting is disabled.',
   loadFailed: 'Could not load "{url}": {reason}',
@@ -114,6 +115,7 @@ const fr = Object.freeze({
   empty: 'Rien à afficher',
   tooLarge: 'Contenu trop volumineux ({size} caractères, limite {limit}).',
   tooDeep: 'Imbrication trop profonde (limite {limit}).',
+  tooComplex: 'Ce document est trop imbriqué pour être affiché.',
   unserializable:
     'Cette valeur ne peut pas être convertie en JSON (référence circulaire ou BigInt).',
   highlightSkipped: 'Contenu volumineux : coloration syntaxique désactivée.',
