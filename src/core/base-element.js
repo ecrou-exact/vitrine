@@ -14,6 +14,7 @@
  */
 import tokensCss from '../styles/tokens.css?raw';
 import baseCss from '../styles/base.css?raw';
+import syntaxCss from '../styles/syntax.css?raw';
 import {
   cleanFileName,
   cleanLabel,
@@ -33,7 +34,8 @@ import {
 import { h } from './dom.js';
 import { EVENTS, emit } from './events.js';
 import { formatNumber, onLocaleChange, translator } from './i18n.js';
-import { onThemeChange, resolveTheme, themeSheet } from './themes.js';
+import { getTheme, onThemeChange, resolveTheme, themeSheet } from './themes.js';
+import { loadSyntaxTheme, loadedSyntaxTheme, resolveSyntaxTheme } from './syntax-themes.js';
 import { SearchBar, emptyView, errorView, flashButton, iconButton, loadingView } from './ui.js';
 
 /** @type {Map<string, CSSStyleSheet>} */
@@ -59,7 +61,8 @@ export function sheet(css) {
 /** Attributes shared by every component. */
 export const COMMON_ATTRIBUTES = Object.freeze([
   'variant', 'theme', 'src', 'allow-remote', 'max-height', 'copy', 'search', 'download',
-  'header', 'dot', 'title', 'label', 'lang-ui',
+  'header', 'dot', 'title', 'label', 'lang-ui', 'mode', 'edit-toggle', 'placeholder',
+  'syntax-theme', 'syntax-theme-dark',
 ]); // prettier-ignore
 
 /** @typedef {Record<string, boolean>} Preset */
@@ -81,11 +84,21 @@ export const COMMON_ATTRIBUTES = Object.freeze([
  * @attr {string} label - Header title (e.g. a file name). Preferred over `title`.
  * @attr {string} title - Header title. Note: browsers also show it as a tooltip.
  * @attr {string} lang-ui - UI locale (`en`, `fr`, or a registered locale).
+ * @attr {"view"|"edit"} mode - `edit` turns the content into an editable, highlighted field
+ *   (default `view`).
+ * @attr {boolean} edit-toggle - Shows a button that switches between view and edit.
+ * @attr {string} placeholder - Text shown in the empty editor.
+ * @attr {string} syntax-theme - Syntax highlighting theme from the highlight.js collection
+ *   (e.g. `github`, `monokai`, `base16-dracula`), loaded on demand.
+ * @attr {string} syntax-theme-dark - Syntax theme used instead when the interface theme is dark.
  *
  * @fires vt-ready - Content rendered. Detail: `{ type }`.
  * @fires vt-copy - Text copied. Detail: `{ text }`.
  * @fires vt-search - Search updated. Detail: `{ query, matches }`.
  * @fires vt-error - Content could not be loaded or displayed. Detail: `{ message, cause }`.
+ * @fires vt-input - The content was edited. Detail: `{ value }`.
+ * @fires vt-change - The editor lost focus after edits. Detail: `{ value }`.
+ * @fires vt-mode-change - The edit toggle switched the mode. Detail: `{ mode }`.
  *
  * @cssprop --vt-bg - Page background (used by the website and fallbacks).
  * @cssprop --vt-surface - Container and header background.
@@ -168,15 +181,11 @@ export class VtBase extends HTMLElement {
 
   constructor() {
     super();
-    const ctor = /** @type {typeof VtBase} */ (this.constructor);
     this.root = this.attachShadow({ mode: 'open' });
-    this.root.adoptedStyleSheets = [
-      sheet(tokensCss),
-      themeSheet,
-      sheet(baseCss),
-      ...ctor.styles.map(sheet),
-    ];
     this.frame = h('div', { class: 'vt', part: 'container' });
+    /** @type {string | null} Resolved syntax theme name. */
+    this.syntaxTheme = null;
+    this.updateSheets(null);
     this.live = h('div', {
       class: 'sr-only',
       attrs: { 'aria-live': 'polite', 'aria-atomic': 'true' },
@@ -207,6 +216,8 @@ export class VtBase extends HTMLElement {
     this._observer = null;
     /** `true` between connectedCallback and disconnectedCallback. */
     this._connected = false;
+    /** @type {"view" | "edit" | null} Mode chosen with the toggle; `null` follows `mode`. */
+    this.modeState = null;
   }
 
   /**
@@ -270,6 +281,7 @@ export class VtBase extends HTMLElement {
    */
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue || !this.isConnected) return;
+    if (name === 'mode') this.modeState = null;
     if (name === 'src' || name === 'allow-remote') this.reload();
     else if (name === 'theme') this.applyTheme();
     else this.requestRender();
@@ -363,6 +375,58 @@ export class VtBase extends HTMLElement {
     };
   }
 
+  /** @returns {boolean} Whether the content is shown in an editor. */
+  get editing() {
+    const mode =
+      this.modeState ??
+      parseEnum(this.getAttribute('mode'), /** @type {const} */ (['view', 'edit']), 'view');
+    return mode === 'edit';
+  }
+
+  /**
+   * Text typed in an editor: updates `content` without re-rendering (the caret stays put)
+   * and dispatches `vt-input`.
+   *
+   * @param {string} text
+   */
+  edited(text) {
+    this.text = text;
+    this._content = text;
+    this.contentEdited(text);
+    emit(this, EVENTS.INPUT, { value: text });
+  }
+
+  /**
+   * Hook: the user edited the text (refresh dependent views, e.g. a preview).
+   *
+   * @param {string} text
+   */
+  // eslint-disable-next-line no-unused-vars
+  contentEdited(text) {}
+
+  /**
+   * Button switching between view and edit (with the `edit-toggle` attribute).
+   *
+   * @returns {HTMLButtonElement | null}
+   */
+  editToggleButton() {
+    if (!this.feature('edit-toggle')) return null;
+    return iconButton({
+      icon: this.editing ? 'eye' : 'pencil',
+      label: this.t(this.editing ? 'stopEditing' : 'edit'),
+      key: 'edit-toggle',
+      part: 'edit-button',
+      pressed: this.editing,
+      onClick: () => {
+        this.modeState = this.editing ? 'view' : 'edit';
+        this.render();
+        emit(this, EVENTS.MODE_CHANGE, { mode: this.modeState });
+        if (this.modeState === 'edit')
+          /** @type {HTMLElement | null} */ (this.root.querySelector('.editor-input'))?.focus();
+      },
+    });
+  }
+
   /** Hook: the text changed (clear caches). */
   contentChanged() {}
 
@@ -413,14 +477,61 @@ export class VtBase extends HTMLElement {
     });
   }
 
-  /** Applies the resolved theme without re-rendering. */
+  /** Applies the resolved theme (and syntax theme) without re-rendering. */
   applyTheme() {
-    this.frame.dataset.theme = resolveTheme(this.getAttribute('theme'));
+    const theme = resolveTheme(this.getAttribute('theme'));
+    this.frame.dataset.theme = theme;
+    this.applySyntaxTheme(getTheme(theme)?.colorScheme === 'dark');
+  }
+
+  /**
+   * Picks the syntax theme for the current color scheme and loads it if needed.
+   *
+   * @param {boolean} dark - Whether the interface theme is dark.
+   */
+  applySyntaxTheme(dark) {
+    const config = getConfig();
+    const requested =
+      (dark && (this.getAttribute('syntax-theme-dark') || config.syntaxThemeDark)) ||
+      this.getAttribute('syntax-theme') ||
+      config.syntaxTheme;
+    const name = resolveSyntaxTheme(requested);
+    this.syntaxTheme = name;
+    if (!name) {
+      this.updateSheets(null);
+      return;
+    }
+    const ready = loadedSyntaxTheme(name);
+    if (ready) {
+      this.updateSheets(ready);
+      return;
+    }
+    loadSyntaxTheme(name).then((loadedSheet) => {
+      if (loadedSheet && this.syntaxTheme === name) this.updateSheets(loadedSheet);
+    });
+  }
+
+  /**
+   * Sets the shadow root stylesheets. A syntax theme replaces the built-in syntax colors.
+   *
+   * @param {CSSStyleSheet | null} syntaxTheme
+   */
+  updateSheets(syntaxTheme) {
+    const ctor = /** @type {typeof VtBase} */ (this.constructor);
+    const own = ctor.styles.map(sheet);
+    const sheets = [sheet(tokensCss), themeSheet, sheet(baseCss), ...own];
+    this.frame.toggleAttribute('data-syntax-theme', Boolean(syntaxTheme));
+    this.root.adoptedStyleSheets = syntaxTheme
+      ? [...sheets.filter((s) => s !== sheet(syntaxCss)), syntaxTheme]
+      : sheets;
   }
 
   /** Renders the whole component. */
   render() {
     const focusKey = this.activeFocusKey();
+    const active = this.root.activeElement;
+    const selection =
+      active instanceof HTMLTextAreaElement ? [active.selectionStart, active.selectionEnd] : null;
     this.t = translator(this.locale);
     this.applyTheme();
     const maxHeight = parseCssLength(this.getAttribute('max-height'));
@@ -452,6 +563,9 @@ export class VtBase extends HTMLElement {
       if (this.searchOpen && this.searchQuery) bar?.run();
     }
     this.restoreFocus(focusKey);
+    const field = this.root.activeElement;
+    if (selection && field instanceof HTMLTextAreaElement)
+      field.setSelectionRange(selection[0], selection[1]);
     if (this._readyPending) {
       this._readyPending = false;
       emit(this, EVENTS.READY, { type: /** @type {typeof VtBase} */ (this.constructor).type });
