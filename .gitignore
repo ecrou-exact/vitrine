@@ -23,5 +23,7 @@ Thumbs.db
 .env
 .env.*
 
-# Build output is committed on release tags only (see CONTRIBUTING.md).
-# Keep dist/ tracked so git submodule consumers get prebuilt files.
+# Build output: never committed on main. The release workflow commits dist/ in the
+# release commit that the vX.Y.Z tag points to (see CONTRIBUTING.md).
+dist/
+_site/

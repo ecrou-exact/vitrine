@@ -4,3 +4,9 @@ node_modules/
 package-lock.json
 test-results/
 playwright-report/
+_site/
+design-tokens.json
+THIRD_PARTY_NOTICES.md
+CODE_OF_CONDUCT.md
+src/core/language-index.js
+brand/
