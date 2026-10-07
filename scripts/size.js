@@ -21,6 +21,7 @@ const COMPONENTS = {
   'vt-diff': 64 * KB,
   'vt-terminal': 60 * KB,
   'vt-tree': 40 * KB,
+  'vt-http': 66 * KB,
 };
 
 const rawCss = {
