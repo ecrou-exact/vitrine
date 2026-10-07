@@ -173,6 +173,9 @@ export class VtBase extends HTMLElement {
   /** @type {{ simple: Preset, full: Preset }} */
   static presets = { simple: {}, full: {} };
 
+  /** Render the component even without content (e.g. an empty field to type into). */
+  static allowEmpty = false;
+
   /** Properties that may be set before the element is defined. */
   /** @type {readonly string[]} */
   static upgradeProperties = ['content'];
@@ -649,7 +652,9 @@ export class VtBase extends HTMLElement {
     const focusKey = this.activeFocusKey();
     const active = this.root.activeElement;
     const selection =
-      active instanceof HTMLTextAreaElement ? [active.selectionStart, active.selectionEnd] : null;
+      active instanceof HTMLTextAreaElement || active instanceof HTMLInputElement
+        ? [active.selectionStart, active.selectionEnd]
+        : null;
     this.t = translator(this.locale);
     this.applyTheme();
     const maxHeight = parseCssLength(this.getAttribute('max-height'));
@@ -672,7 +677,7 @@ export class VtBase extends HTMLElement {
       this.frame.append(...this.chrome(null), errorView(title, detail));
       return;
     }
-    if (!this.text) {
+    if (!this.text && !(/** @type {typeof VtBase} */ (this.constructor).allowEmpty)) {
       this.frame.append(...this.chrome(null), emptyView(this.t));
     } else {
       this.renderContent(this.frame);
@@ -682,8 +687,17 @@ export class VtBase extends HTMLElement {
     }
     this.restoreFocus(focusKey);
     const field = this.root.activeElement;
-    if (selection && field instanceof HTMLTextAreaElement)
-      field.setSelectionRange(selection[0], selection[1]);
+    if (
+      selection &&
+      (field instanceof HTMLTextAreaElement || field instanceof HTMLInputElement) &&
+      selection[0] !== null
+    ) {
+      try {
+        field.setSelectionRange(selection[0], selection[1]);
+      } catch {
+        // Inputs without selection support (e.g. type="checkbox").
+      }
+    }
     if (this._readyPending) {
       this._readyPending = false;
       emit(this, EVENTS.READY, { type: /** @type {typeof VtBase} */ (this.constructor).type });
