@@ -461,25 +461,20 @@ export class VtDiff extends VtBase {
       attrs: { role: 'table', 'aria-label': this.heading || this.t('changes') },
     });
     grid.style.setProperty('--_digits', String(digits));
-    let previous = /** @type {Line | null} */ (null);
+    /** Last original line shown, to mark lines skipped between hunks of a patch. */
+    let lastOld = 0;
     /** @type {HTMLElement[]} */
     const open = [];
     for (const row of rows) {
       if (row.type === 'fold') {
         grid.append(this.foldRow(row));
-        previous = null;
+        lastOld = 0;
         open.length = 0;
         continue;
       }
       // Patches skip unchanged regions between hunks: show where lines are missing.
-      if (
-        previous &&
-        row.line.oldNo &&
-        previous.oldNo &&
-        row.line.oldNo > previous.oldNo + 1 &&
-        row.line.type !== 'insert' &&
-        previous.type !== 'insert'
-      ) {
+      const oldNo = row.line.oldNo;
+      if (oldNo !== null && lastOld && oldNo > lastOld + 1) {
         grid.append(
           h('div', {
             class: 'gap',
@@ -489,7 +484,7 @@ export class VtDiff extends VtBase {
           }),
         );
       }
-      previous = row.line;
+      if (oldNo !== null) lastOld = oldNo;
       if (view === 'unified') grid.append(this.unifiedRow(row.line, fragments));
       else this.splitRows(row.line, fragments, grid, open);
     }
@@ -554,14 +549,15 @@ export class VtDiff extends VtBase {
 
   /**
    * @param {Line} line
+   * @param {boolean} [nested] - Inside the code cell (split view): not a cell itself.
    * @returns {HTMLElement}
    */
-  signCell(line) {
+  signCell(line, nested = false) {
     const label =
       line.type === 'insert' ? this.t('added') : line.type === 'delete' ? this.t('removed') : '';
     return h(
       'span',
-      { class: 'sign', attrs: { role: 'cell' } },
+      { class: 'sign', attrs: { role: nested ? null : 'cell' } },
       label ? h('span', { class: 'sr-only', text: `${label}: ` }) : null,
     );
   }
@@ -643,7 +639,7 @@ export class VtDiff extends VtBase {
       cells.push(this.numberCell(line ? (side === 'left' ? line.oldNo : line.newNo) : null));
     if (line) {
       const code = this.codeCell(line, fragments);
-      code.prepend(this.signCell(line));
+      code.prepend(this.signCell(line, true));
       cells.push(code);
     } else cells.push(h('span', { class: 'code-cell filler', attrs: { role: 'cell' } }));
     for (const cell of cells) cell.classList.add(side);

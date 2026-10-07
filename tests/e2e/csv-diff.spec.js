@@ -83,7 +83,7 @@ test.describe('<vt-diff>', () => {
       },
       { attrs, original, modified },
     );
-    await page.locator('#el .diff').waitFor();
+    await page.locator('#el .diff-host > *').waitFor();
   }
 
   const A =
@@ -103,7 +103,8 @@ test.describe('<vt-diff>', () => {
   test('folds unchanged lines and expands them', async ({ page }) => {
     await mountDiff(page, { view: 'unified', context: '1' }, A, B);
     const fold = page.locator('#el [part="fold"]');
-    await expect(fold).toHaveText('Show 5 unchanged lines');
+    // 8 unchanged lines between the changes, minus 1 line of context on each side.
+    await expect(fold).toHaveText('Show 6 unchanged lines');
     await fold.click();
     await expect(page.locator('#el [part="fold"]')).toHaveCount(0);
   });

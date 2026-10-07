@@ -120,7 +120,7 @@
 
 .count {
   margin-left: var(--_space-2);
-  color: var(--_code-gutter);
+  color: var(--_fg-muted);
   font-family: var(--_font-ui);
   font-size: var(--_font-size-small);
 }
@@ -187,6 +187,10 @@
 }
 
 /* With a syntax theme, badges and counts take the colors of the code area. */
+.vt[data-syntax-theme] .count {
+  color: color-mix(in srgb, var(--_code-fg) 80%, var(--_code-bg-solid));
+}
+
 .vt[data-syntax-theme] .type {
   border-color: color-mix(in srgb, var(--_code-fg) 30%, transparent);
   background: transparent;
