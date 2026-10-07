@@ -30,6 +30,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   content type; status colored by class; credentials masked everywhere until revealed; Code tab
   writing the request for curl, `fetch`, Python `requests` and HTTPie with values quoted for each
   language; `exchange` property.
+- `<vt-log>`: application logs in plain text, JSON lines (pino, bunyan, winston, Logstash) and
+  logfmt, read line by line; timestamps in the usual formats, levels by name, alias, pino number
+  or logcat letter, structured fields, and stack traces kept with their entry; ANSI colors shared
+  with `<vt-terminal>`; level buttons with counts; search that filters entries; `write()` for live
+  streaming with `follow` and a `max-entries` cap; `vt-filter-change` event.
+- `<vt-chart>`: line, area, bar and donut charts from CSV, TSV or JSON, drawn with Apache ECharts
+  6.1, loaded on demand from `dist/vendor/echarts.js`; series colors from the theme
+  (`--vt-chart-1` … `--vt-chart-8`); keyboard reading of values with announcements; legend
+  buttons; Chart / Table tabs; copy and download as CSV; `vt-select` event; `vendorUrl` option.
+- `<vt-openapi>`: API references from OpenAPI 3.0 and 3.1 and Swagger 2.0 descriptions, in JSON or
+  YAML (js-yaml loaded on demand from `dist/vendor/yaml.js`); endpoints grouped by tag,
+  parameters, request bodies, responses, schema trees and generated examples; example requests
+  with `<vt-http>`; sanitized Markdown descriptions; endpoint search; only local `$ref` followed.
+- Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
+  redesigned typography and demo windows.
 - `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,
   `previousChange()`, `goToChange()` and `vt-change-navigate`; the two editors of edit mode
   scroll to matching lines.

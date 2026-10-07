@@ -164,7 +164,11 @@ Vitrine never loads fonts. The stacks use fonts already installed or already loa
 
 ### Terminal tokens
 
-`<vt-terminal>` maps the 16 ANSI colors to theme colors, and exposes them as custom properties (`--vt-ansi-black` … `--vt-ansi-white`, `--vt-ansi-bright-black` … `--vt-ansi-bright-white`), with `--vt-terminal-prompt` for the prompt. See [Theme colors](components/terminal.md#theme-colors).
+`<vt-terminal>` maps the 16 ANSI colors to theme colors, and exposes them as custom properties (`--vt-ansi-black` … `--vt-ansi-white`, `--vt-ansi-bright-black` … `--vt-ansi-bright-white`), with `--vt-terminal-prompt` for the prompt. See [Theme colors](components/terminal.md#theme-colors). The `--vt-ansi-*` tokens also apply to the ANSI colors of `<vt-log>`.
+
+### Chart tokens
+
+`<vt-chart>` takes its series colors from the theme (accent, info, warning, keyword, danger, string, number and muted, in that order). Override them with `--vt-chart-1` … `--vt-chart-8`. See [Colors](components/chart.md#colors).
 
 ### Examples
 
@@ -312,7 +316,7 @@ In the current build, 14 of the 258 themes reach 4.5:1 for every color: `a11y-da
 
 ## Styling parts
 
-Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts), [csv](components/csv.md#css-parts), [tags](components/tags.md#css-parts), [diff](components/diff.md#css-parts), [terminal](components/terminal.md#css-parts), [tree](components/tree.md#css-parts), [http](components/http.md#css-parts).
+Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts), [csv](components/csv.md#css-parts), [tags](components/tags.md#css-parts), [diff](components/diff.md#css-parts), [terminal](components/terminal.md#css-parts), [tree](components/tree.md#css-parts), [http](components/http.md#css-parts), [log](components/log.md#css-parts), [chart](components/chart.md#css-parts), [openapi](components/openapi.md#css-parts).
 
 ```css
 /* Uppercase, accent-colored title */
@@ -351,7 +355,8 @@ When the user has enabled the reduced motion preference (`prefers-reduced-motion
 
 - `--vt-duration-fast` and `--vt-duration` become `0ms`, whatever value you set;
 - the loading placeholder stops pulsing;
-- in-document links in `<vt-markdown>` jump instead of scrolling smoothly.
+- in-document links in `<vt-markdown>` jump instead of scrolling smoothly;
+- charts of `<vt-chart>` appear without animation.
 
 ## Contrast
 

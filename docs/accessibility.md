@@ -21,7 +21,7 @@ Vitrine elements are designed to be usable with a keyboard, a screen reader, tou
 
 The match counter (`2 / 14`) is visual; results are announced through the live region (see below). Navigation wraps around from the last match to the first.
 
-### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw, `<vt-csv>` Table / Raw, `<vt-diff>` Side by side / Unified, `<vt-http>` Exchange / Code and its section and language tabs)
+### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw, `<vt-csv>` Table / Raw, `<vt-diff>` Side by side / Unified, `<vt-http>` Exchange / Code and its section and language tabs, `<vt-chart>` Chart / Table)
 
 Tabs follow the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) with automatic activation: moving to a tab selects it.
 
@@ -98,6 +98,18 @@ The transcript of `<vt-terminal>` is a focusable region named after the `label`,
 
 In `<vt-http>`, the request and the response are labeled sections. Headers, query parameters and form fields are tables with row headers. The method and the status are text, so color only adds to them. Showing or hiding secrets is announced ("Secrets shown", "Secrets hidden").
 
+### Log
+
+The entries of `<vt-log>` form a list named after the `label`. Levels are written as words (`ERROR`, `WARN`), so their color and tint only add to them. The level buttons of the header are toggle buttons (`aria-pressed`) that show the level and its count, with a description such as "Show or hide ERROR entries"; the Follow button also exposes its state with `aria-pressed`. Line numbers are hidden from assistive technologies. See [Accessibility](components/log.md#accessibility).
+
+### Chart
+
+The plot of `<vt-chart>` is one Tab stop with a text description: the chart type, the number of series and points, and the range of each series ("desktop from 73 to 305"). Arrow keys move between labels, Home and End jump to the first and last, and each move announces the values ("Apr: desktop 73, mobile 190"); Escape hides the tooltip. The legend buttons are toggle buttons (`aria-pressed`) that show or hide a series. The Table tab shows the same data as a table with row and column headers. See [Reading values](components/chart.md#reading-values).
+
+### OpenAPI
+
+In `<vt-openapi>`, each endpoint is a button that opens its details (`aria-expanded`, `aria-controls`), and tag groups are labeled sections. Parameters are tables with row headers, and nested schemas use native disclosure elements (`<details>`). Methods, statuses and flags such as "deprecated" are words, never colors alone.
+
 ### Full screen
 
 The full screen button has `aria-pressed` and changes its name to "Exit full screen". Escape leaves full screen: through the browser with the Fullscreen API, or through Vitrine when the element fills the window instead (focus must be inside the element). Focus returns to the button when entering and leaving.
@@ -155,7 +167,7 @@ On devices with a coarse pointer (touch screens), icon buttons grow to 44 by 44 
 
 ## Reduced motion
 
-When the user prefers reduced motion (`prefers-reduced-motion: reduce`), transitions take 0 ms, the loading placeholder stops pulsing, in-document Markdown links jump to their target instead of scrolling smoothly, and the typing replay of `<vt-terminal>` is skipped: the session is shown at once (the Replay button still plays it). See [Theming](theming.md#reduced-motion).
+When the user prefers reduced motion (`prefers-reduced-motion: reduce`), transitions take 0 ms, the loading placeholder stops pulsing, in-document Markdown links jump to their target instead of scrolling smoothly, the typing replay of `<vt-terminal>` is skipped: the session is shown at once (the Replay button still plays it), and charts of `<vt-chart>` appear without animation. See [Theming](theming.md#reduced-motion).
 
 ## Contrast
 

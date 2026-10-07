@@ -10,22 +10,22 @@ import { configure, render, defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-
 
 ## API overview
 
-| Name                                                                                            | Description                                                                                        |
-| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `configure(options)`                                                                            | Changes the global configuration.                                                                  |
-| `getConfig()`                                                                                   | Returns the current configuration.                                                                 |
-| `registerTheme(name, options)`                                                                  | Adds or replaces a theme. See [Theming](theming.md#registering-a-theme).                           |
-| `listThemes()`                                                                                  | Returns the registered theme names.                                                                |
-| `getTheme(name)`                                                                                | Returns a copy of a theme definition, or `undefined`. See [Theming](theming.md#inspecting-themes). |
-| `BUILT_IN_THEMES`                                                                               | The built-in theme names.                                                                          |
-| `listSyntaxThemes()`                                                                            | Returns the available syntax theme names. See [Syntax themes](theming.md#syntax-themes).           |
-| `registerLocale(code, strings)`                                                                 | Adds or extends a locale for interface strings.                                                    |
-| `render(target, options)`                                                                       | Creates and configures an element in a container.                                                  |
-| `defineAll()`                                                                                   | Defines the custom elements.                                                                       |
-| `registry`                                                                                      | Map of tag names to element classes.                                                               |
-| `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree`, `VtHttp` | The element classes.                                                                               |
-| `EVENTS`                                                                                        | Event names.                                                                                       |
-| `version`                                                                                       | Library version.                                                                                   |
+| Name                                                                                                                             | Description                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `configure(options)`                                                                                                             | Changes the global configuration.                                                                  |
+| `getConfig()`                                                                                                                    | Returns the current configuration.                                                                 |
+| `registerTheme(name, options)`                                                                                                   | Adds or replaces a theme. See [Theming](theming.md#registering-a-theme).                           |
+| `listThemes()`                                                                                                                   | Returns the registered theme names.                                                                |
+| `getTheme(name)`                                                                                                                 | Returns a copy of a theme definition, or `undefined`. See [Theming](theming.md#inspecting-themes). |
+| `BUILT_IN_THEMES`                                                                                                                | The built-in theme names.                                                                          |
+| `listSyntaxThemes()`                                                                                                             | Returns the available syntax theme names. See [Syntax themes](theming.md#syntax-themes).           |
+| `registerLocale(code, strings)`                                                                                                  | Adds or extends a locale for interface strings.                                                    |
+| `render(target, options)`                                                                                                        | Creates and configures an element in a container.                                                  |
+| `defineAll()`                                                                                                                    | Defines the custom elements.                                                                       |
+| `registry`                                                                                                                       | Map of tag names to element classes.                                                               |
+| `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree`, `VtHttp`, `VtLog`, `VtChart`, `VtOpenapi` | The element classes.                                                                               |
+| `EVENTS`                                                                                                                         | Event names.                                                                                       |
+| `version`                                                                                                                        | Library version.                                                                                   |
 
 ## `configure(options)`
 
@@ -41,20 +41,21 @@ Vitrine.configure({
 });
 ```
 
-| Option            | Type   | Default           | Ceiling             | Description                                                                                                                                |
-| ----------------- | ------ | ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `theme`           | string | `"auto"`          |                     | Default theme name, or `auto` to follow the system color scheme.                                                                           |
-| `lightTheme`      | string | `"light"`         |                     | Theme used by `auto` when the user prefers a light scheme.                                                                                 |
-| `darkTheme`       | string | `"dark"`          |                     | Theme used by `auto` when the user prefers a dark scheme.                                                                                  |
-| `lang`            | string | `"en"`            |                     | Default interface locale, used when an element has no valid `lang-ui`.                                                                     |
-| `maxSize`         | number | `2097152` (2 MiB) | `52428800` (50 MiB) | Maximum content length, in characters. Larger content is refused with an error.                                                            |
-| `highlightLimit`  | number | `300000`          | `5242880` (5 MiB)   | Content longer than this, in characters, is shown without syntax highlighting.                                                             |
-| `maxDepth`        | number | `512`             | `10000`             | Maximum nesting depth accepted by the JSON parser.                                                                                         |
-| `fetchTimeout`    | number | `15000`           | `120000`            | Timeout of `src` requests, in milliseconds.                                                                                                |
-| `languagesUrl`    | string | `""`              |                     | Base URL of the lazy-loaded language files. Empty means "the `languages/` folder next to the Vitrine script".                              |
-| `syntaxTheme`     | string | `""`              |                     | Default syntax theme, for example `"github"`. Empty uses the colors of the interface theme. See [Syntax themes](theming.md#syntax-themes). |
-| `syntaxThemeDark` | string | `""`              |                     | Syntax theme used when the interface theme is dark.                                                                                        |
-| `syntaxThemesUrl` | string | `""`              |                     | Base URL of the syntax theme files. Empty means "the `syntax-themes/` folder next to the Vitrine script".                                  |
+| Option            | Type   | Default           | Ceiling             | Description                                                                                                                                                          |
+| ----------------- | ------ | ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `theme`           | string | `"auto"`          |                     | Default theme name, or `auto` to follow the system color scheme.                                                                                                     |
+| `lightTheme`      | string | `"light"`         |                     | Theme used by `auto` when the user prefers a light scheme.                                                                                                           |
+| `darkTheme`       | string | `"dark"`          |                     | Theme used by `auto` when the user prefers a dark scheme.                                                                                                            |
+| `lang`            | string | `"en"`            |                     | Default interface locale, used when an element has no valid `lang-ui`.                                                                                               |
+| `maxSize`         | number | `2097152` (2 MiB) | `52428800` (50 MiB) | Maximum content length, in characters. Larger content is refused with an error.                                                                                      |
+| `highlightLimit`  | number | `300000`          | `5242880` (5 MiB)   | Content longer than this, in characters, is shown without syntax highlighting.                                                                                       |
+| `maxDepth`        | number | `512`             | `10000`             | Maximum nesting depth accepted by the JSON parser.                                                                                                                   |
+| `fetchTimeout`    | number | `15000`           | `120000`            | Timeout of `src` requests, in milliseconds.                                                                                                                          |
+| `languagesUrl`    | string | `""`              |                     | Base URL of the lazy-loaded language files. Empty means "the `languages/` folder next to the Vitrine script".                                                        |
+| `syntaxTheme`     | string | `""`              |                     | Default syntax theme, for example `"github"`. Empty uses the colors of the interface theme. See [Syntax themes](theming.md#syntax-themes).                           |
+| `syntaxThemeDark` | string | `""`              |                     | Syntax theme used when the interface theme is dark.                                                                                                                  |
+| `syntaxThemesUrl` | string | `""`              |                     | Base URL of the syntax theme files. Empty means "the `syntax-themes/` folder next to the Vitrine script".                                                            |
+| `vendorUrl`       | string | `""`              |                     | Base URL of the files of `dist/vendor/`: `echarts.js` for `<vt-chart>`, `yaml.js` for `<vt-openapi>`. Empty means "the `vendor/` folder next to the Vitrine script". |
 
 Validation rules:
 
@@ -124,160 +125,197 @@ So a partial locale is fine: missing strings are shown in English.
 
 Placeholders in braces are replaced by values. Keep them in your translations.
 
-| Key                  | English text                                                            |
-| -------------------- | ----------------------------------------------------------------------- |
-| `copy`               | Copy                                                                    |
-| `copyCode`           | Copy code                                                               |
-| `copied`             | Copied                                                                  |
-| `copyFailed`         | Copy failed                                                             |
-| `copySource`         | Copy source                                                             |
-| `download`           | Download                                                                |
-| `search`             | Search                                                                  |
-| `searchPlaceholder`  | Search…                                                                 |
-| `searchNext`         | Next match                                                              |
-| `searchPrevious`     | Previous match                                                          |
-| `searchClose`        | Close search                                                            |
-| `searchCount`        | {current} / {total}                                                     |
-| `searchCountCapped`  | {current} / {total}+                                                    |
-| `searchNone`         | No matches                                                              |
-| `searchResults`      | {total} matches                                                         |
-| `wrap`               | Toggle line wrap                                                        |
-| `showMore`           | Show all {count} lines                                                  |
-| `preview`            | Preview                                                                 |
-| `source`             | Source                                                                  |
-| `split`              | Split                                                                   |
-| `swapPanes`          | Swap panes                                                              |
-| `stackPanes`         | Stack panes                                                             |
-| `syncScroll`         | Sync scrolling                                                          |
-| `tabs`               | View                                                                    |
-| `actions`            | Actions                                                                 |
-| `toc`                | Table of contents                                                       |
-| `anchor`             | Link to this section                                                    |
-| `table`              | Table                                                                   |
-| `tree`               | Tree                                                                    |
-| `raw`                | Raw                                                                     |
-| `expandAll`          | Expand all                                                              |
-| `collapseAll`        | Collapse all                                                            |
-| `copyPath`           | Copy path                                                               |
-| `copyValue`          | Copy value                                                              |
-| `items`              | {count} items                                                           |
-| `item`               | 1 item                                                                  |
-| `keys`               | {count} keys                                                            |
-| `key`                | 1 key                                                                   |
-| `showMoreItems`      | Show {count} more                                                       |
-| `showFullString`     | Show full string ({count} characters)                                   |
-| `truncated`          | Partially expanded: too many nodes.                                     |
-| `loading`            | Loading…                                                                |
-| `errorTitle`         | Unable to display content                                               |
-| `invalidJson`        | Invalid JSON at line {line}, column {column}: {message}.                |
-| `invalidJsonRaw`     | Invalid JSON at line {line}, column {column} — showing raw text.        |
-| `empty`              | Nothing to display                                                      |
-| `tooLarge`           | Content is too large ({size} characters, limit {limit}).                |
-| `tooDeep`            | Nesting is too deep (limit {limit}).                                    |
-| `tooComplex`         | This document is nested too deeply to display.                          |
-| `unserializable`     | This value cannot be converted to JSON (circular reference or BigInt).  |
-| `highlightSkipped`   | Content is large: syntax highlighting is disabled.                      |
-| `loadFailed`         | Could not load "{url}": {reason}                                        |
-| `remoteBlocked`      | Cross-origin URL blocked. Add the "allow-remote" attribute to allow it. |
-| `unsafeUrl`          | URL blocked: only http(s) URLs can be loaded.                           |
-| `timeout`            | Request timed out.                                                      |
-| `added`              | Added                                                                   |
-| `removed`            | Removed                                                                 |
-| `code`               | Code                                                                    |
-| `edit`               | Edit                                                                    |
-| `splitView`          | Side by side                                                            |
-| `unifiedView`        | Unified                                                                 |
-| `diffStats`          | +{added} −{removed}                                                     |
-| `diffSimplified`     | Many changes: the comparison is simplified to removed and added blocks. |
-| `noDifferences`      | No differences                                                          |
-| `previousChange`     | Previous change                                                         |
-| `nextChange`         | Next change                                                             |
-| `changePosition`     | {current} of {total}                                                    |
-| `changeTotal`        | {count} changes                                                         |
-| `terminal`           | Terminal                                                                |
-| `command`            | Command                                                                 |
-| `copyCommand`        | Copy command                                                            |
-| `copyCommands`       | Copy commands                                                           |
-| `replay`             | Replay                                                                  |
-| `showMoreLines`      | Show {count} more lines                                                 |
-| `files`              | Files                                                                   |
-| `copyTree`           | Copy tree                                                               |
-| `treeStats`          | {folders} folders, {files} files                                        |
-| `invalidTree`        | This tree could not be read: {message}                                  |
-| `treeTruncated`      | Only the first {limit} entries are shown.                               |
-| `status_added`       | added                                                                   |
-| `status_removed`     | removed                                                                 |
-| `status_modified`    | modified                                                                |
-| `status_highlighted` | highlighted                                                             |
-| `httpExchange`       | Exchange                                                                |
-| `httpRequest`        | Request                                                                 |
-| `httpResponse`       | Response                                                                |
-| `httpBody`           | Body                                                                    |
-| `httpHeaders`        | Headers                                                                 |
-| `httpQuery`          | Query                                                                   |
-| `httpNone`           | None                                                                    |
-| `httpNoBody`         | No body                                                                 |
-| `copyUrl`            | Copy URL                                                                |
-| `codeLanguage`       | Language                                                                |
-| `showSecrets`        | Show secrets                                                            |
-| `hideSecrets`        | Hide secrets                                                            |
-| `secretsShown`       | Secrets shown                                                           |
-| `secretsHidden`      | Secrets hidden                                                          |
-| `secretsInCode`      | Credentials are masked in this code. Replace them with your own.        |
-| `invalidHttp`        | This HTTP message could not be read: {message}                          |
-| `unchangedLines`     | Show {count} unchanged lines                                            |
-| `copyPatch`          | Copy patch                                                              |
-| `changes`            | Changes                                                                 |
-| `original`           | Original                                                                |
-| `modified`           | Modified                                                                |
-| `patch`              | Patch                                                                   |
-| `tags`               | Tags                                                                    |
-| `noTags`             | No tags                                                                 |
-| `addTag`             | Add a tag                                                               |
-| `tagPlaceholder`     | tag                                                                     |
-| `suggestions`        | Suggestions                                                             |
-| `createTag`          | Create "{tag}"                                                          |
-| `removeTag`          | Remove {tag}                                                            |
-| `tagAdded`           | {tag} added                                                             |
-| `tagRemoved`         | {tag} removed                                                           |
-| `pressAgainToRemove` | Press Backspace again to remove {tag}                                   |
-| `tagDuplicate`       | {tag} is already selected.                                              |
-| `tagDisabled`        | {tag} cannot be selected.                                               |
-| `tagLimit`           | You can select up to {max} tags.                                        |
-| `tagNotAllowed`      | {tag} is not in the list.                                               |
-| `tagTooLong`         | {tag} is too long.                                                      |
-| `tagInvalid`         | {tag} is not a valid tag.                                               |
-| `tagRefused`         | {tag} was refused.                                                      |
-| `tagsRequired`       | Select at least one tag.                                                |
-| `tagCount`           | {count} tags                                                            |
-| `tagCountOne`        | 1 tag                                                                   |
-| `tagCountMax`        | {count} / {max} tags                                                    |
-| `browseTags`         | Browse all tags                                                         |
-| `otherTags`          | Other                                                                   |
-| `clearTags`          | Remove all tags                                                         |
-| `filterTags`         | Filter tags                                                             |
-| `tagsFound`          | {count} tags                                                            |
-| `invalidTags`        | The tags must be a JSON array, or an object with "value" and "options". |
-| `rowsRange`          | Rows {from}–{to} of {total}                                             |
-| `noRows`             | No rows                                                                 |
-| `firstPage`          | First page                                                              |
-| `previousPage`       | Previous page                                                           |
-| `nextPage`           | Next page                                                               |
-| `lastPage`           | Last page                                                               |
-| `sortBy`             | Sort by {name}                                                          |
-| `column`             | Column {n}                                                              |
-| `rowNumber`          | Row                                                                     |
-| `csvStatus`          | {rows} rows × {columns} columns                                         |
-| `csvUnclosed`        | Unclosed quote starting at line {line}.                                 |
-| `tooManyColumns`     | Only the first {limit} columns are shown.                               |
-| `matchingRows`       | {count} matching rows                                                   |
-| `undo`               | Undo                                                                    |
-| `redo`               | Redo                                                                    |
-| `fullscreen`         | Full screen                                                             |
-| `exitFullscreen`     | Exit full screen                                                        |
-| `stopEditing`        | Stop editing                                                            |
-| `editor`             | Editor                                                                  |
-| `validJson`          | Valid JSON                                                              |
+| Key                   | English text                                                            |
+| --------------------- | ----------------------------------------------------------------------- |
+| `copy`                | Copy                                                                    |
+| `copyCode`            | Copy code                                                               |
+| `copied`              | Copied                                                                  |
+| `copyFailed`          | Copy failed                                                             |
+| `copySource`          | Copy source                                                             |
+| `download`            | Download                                                                |
+| `search`              | Search                                                                  |
+| `searchPlaceholder`   | Search…                                                                 |
+| `searchNext`          | Next match                                                              |
+| `searchPrevious`      | Previous match                                                          |
+| `searchClose`         | Close search                                                            |
+| `searchCount`         | {current} / {total}                                                     |
+| `searchCountCapped`   | {current} / {total}+                                                    |
+| `searchNone`          | No matches                                                              |
+| `searchResults`       | {total} matches                                                         |
+| `wrap`                | Toggle line wrap                                                        |
+| `showMore`            | Show all {count} lines                                                  |
+| `preview`             | Preview                                                                 |
+| `source`              | Source                                                                  |
+| `split`               | Split                                                                   |
+| `swapPanes`           | Swap panes                                                              |
+| `stackPanes`          | Stack panes                                                             |
+| `syncScroll`          | Sync scrolling                                                          |
+| `tabs`                | View                                                                    |
+| `actions`             | Actions                                                                 |
+| `toc`                 | Table of contents                                                       |
+| `anchor`              | Link to this section                                                    |
+| `table`               | Table                                                                   |
+| `tree`                | Tree                                                                    |
+| `raw`                 | Raw                                                                     |
+| `expandAll`           | Expand all                                                              |
+| `collapseAll`         | Collapse all                                                            |
+| `copyPath`            | Copy path                                                               |
+| `copyValue`           | Copy value                                                              |
+| `items`               | {count} items                                                           |
+| `item`                | 1 item                                                                  |
+| `keys`                | {count} keys                                                            |
+| `key`                 | 1 key                                                                   |
+| `showMoreItems`       | Show {count} more                                                       |
+| `showFullString`      | Show full string ({count} characters)                                   |
+| `truncated`           | Partially expanded: too many nodes.                                     |
+| `loading`             | Loading…                                                                |
+| `errorTitle`          | Unable to display content                                               |
+| `invalidJson`         | Invalid JSON at line {line}, column {column}: {message}.                |
+| `invalidJsonRaw`      | Invalid JSON at line {line}, column {column} — showing raw text.        |
+| `empty`               | Nothing to display                                                      |
+| `tooLarge`            | Content is too large ({size} characters, limit {limit}).                |
+| `tooDeep`             | Nesting is too deep (limit {limit}).                                    |
+| `tooComplex`          | This document is nested too deeply to display.                          |
+| `unserializable`      | This value cannot be converted to JSON (circular reference or BigInt).  |
+| `highlightSkipped`    | Content is large: syntax highlighting is disabled.                      |
+| `loadFailed`          | Could not load "{url}": {reason}                                        |
+| `remoteBlocked`       | Cross-origin URL blocked. Add the "allow-remote" attribute to allow it. |
+| `unsafeUrl`           | URL blocked: only http(s) URLs can be loaded.                           |
+| `timeout`             | Request timed out.                                                      |
+| `added`               | Added                                                                   |
+| `removed`             | Removed                                                                 |
+| `code`                | Code                                                                    |
+| `edit`                | Edit                                                                    |
+| `splitView`           | Side by side                                                            |
+| `unifiedView`         | Unified                                                                 |
+| `diffStats`           | +{added} −{removed}                                                     |
+| `diffSimplified`      | Many changes: the comparison is simplified to removed and added blocks. |
+| `noDifferences`       | No differences                                                          |
+| `previousChange`      | Previous change                                                         |
+| `nextChange`          | Next change                                                             |
+| `changePosition`      | {current} of {total}                                                    |
+| `changeTotal`         | {count} changes                                                         |
+| `terminal`            | Terminal                                                                |
+| `command`             | Command                                                                 |
+| `copyCommand`         | Copy command                                                            |
+| `copyCommands`        | Copy commands                                                           |
+| `replay`              | Replay                                                                  |
+| `showMoreLines`       | Show {count} more lines                                                 |
+| `files`               | Files                                                                   |
+| `copyTree`            | Copy tree                                                               |
+| `treeStats`           | {folders} folders, {files} files                                        |
+| `invalidTree`         | This tree could not be read: {message}                                  |
+| `treeTruncated`       | Only the first {limit} entries are shown.                               |
+| `status_added`        | added                                                                   |
+| `status_removed`      | removed                                                                 |
+| `status_modified`     | modified                                                                |
+| `status_highlighted`  | highlighted                                                             |
+| `httpExchange`        | Exchange                                                                |
+| `httpRequest`         | Request                                                                 |
+| `httpResponse`        | Response                                                                |
+| `httpBody`            | Body                                                                    |
+| `httpHeaders`         | Headers                                                                 |
+| `httpQuery`           | Query                                                                   |
+| `httpNone`            | None                                                                    |
+| `httpNoBody`          | No body                                                                 |
+| `copyUrl`             | Copy URL                                                                |
+| `codeLanguage`        | Language                                                                |
+| `showSecrets`         | Show secrets                                                            |
+| `hideSecrets`         | Hide secrets                                                            |
+| `secretsShown`        | Secrets shown                                                           |
+| `secretsHidden`       | Secrets hidden                                                          |
+| `secretsInCode`       | Credentials are masked in this code. Replace them with your own.        |
+| `invalidHttp`         | This HTTP message could not be read: {message}                          |
+| `log`                 | Log                                                                     |
+| `followLog`           | Follow new lines                                                        |
+| `levelToggle`         | Show or hide {level} entries                                            |
+| `logNoMatch`          | No entry matches the filters.                                           |
+| `chartView`           | Chart                                                                   |
+| `legend`              | Legend                                                                  |
+| `seriesToggle`        | Show or hide {name}                                                     |
+| `copyData`            | Copy data                                                               |
+| `chartSummary`        | {type} with {series} series and {points} points.                        |
+| `chartRange`          | {name} from {min} to {max}                                              |
+| `chart_line`          | Line chart                                                              |
+| `chart_area`          | Area chart                                                              |
+| `chart_bar`           | Bar chart                                                               |
+| `chart_pie`           | Donut chart                                                             |
+| `chartError`          | This data could not be charted: {message}                               |
+| `chartTruncated`      | Only the first 5,000 points of each series are shown.                   |
+| `chartLoadFailed`     | The chart library could not be loaded: {message}                        |
+| `openapiInvalid`      | This API description could not be read: {message}                       |
+| `openapiYamlFailed`   | The YAML reader could not be loaded: {message}                          |
+| `openapiTruncated`    | Only the first 2,000 endpoints are shown.                               |
+| `openapiServers`      | Servers                                                                 |
+| `openapiAuth`         | Authentication                                                          |
+| `openapiEndpoints`    | Endpoints                                                               |
+| `openapiTags`         | Tags                                                                    |
+| `openapiAllTags`      | All                                                                     |
+| `openapiNoMatch`      | No endpoint matches.                                                    |
+| `openapiDeprecated`   | deprecated                                                              |
+| `openapiParameters`   | Parameters                                                              |
+| `openapiName`         | Name                                                                    |
+| `openapiIn`           | In                                                                      |
+| `openapiType`         | Type                                                                    |
+| `openapiDescription`  | Description                                                             |
+| `openapiRequired`     | required                                                                |
+| `openapiRequestBody`  | Request body                                                            |
+| `openapiResponses`    | Responses                                                               |
+| `openapiExample`      | Example                                                                 |
+| `openapiExampleValue` | Example                                                                 |
+| `unchangedLines`      | Show {count} unchanged lines                                            |
+| `copyPatch`           | Copy patch                                                              |
+| `changes`             | Changes                                                                 |
+| `original`            | Original                                                                |
+| `modified`            | Modified                                                                |
+| `patch`               | Patch                                                                   |
+| `tags`                | Tags                                                                    |
+| `noTags`              | No tags                                                                 |
+| `addTag`              | Add a tag                                                               |
+| `tagPlaceholder`      | tag                                                                     |
+| `suggestions`         | Suggestions                                                             |
+| `createTag`           | Create "{tag}"                                                          |
+| `removeTag`           | Remove {tag}                                                            |
+| `tagAdded`            | {tag} added                                                             |
+| `tagRemoved`          | {tag} removed                                                           |
+| `pressAgainToRemove`  | Press Backspace again to remove {tag}                                   |
+| `tagDuplicate`        | {tag} is already selected.                                              |
+| `tagDisabled`         | {tag} cannot be selected.                                               |
+| `tagLimit`            | You can select up to {max} tags.                                        |
+| `tagNotAllowed`       | {tag} is not in the list.                                               |
+| `tagTooLong`          | {tag} is too long.                                                      |
+| `tagInvalid`          | {tag} is not a valid tag.                                               |
+| `tagRefused`          | {tag} was refused.                                                      |
+| `tagsRequired`        | Select at least one tag.                                                |
+| `tagCount`            | {count} tags                                                            |
+| `tagCountOne`         | 1 tag                                                                   |
+| `tagCountMax`         | {count} / {max} tags                                                    |
+| `browseTags`          | Browse all tags                                                         |
+| `otherTags`           | Other                                                                   |
+| `clearTags`           | Remove all tags                                                         |
+| `filterTags`          | Filter tags                                                             |
+| `tagsFound`           | {count} tags                                                            |
+| `invalidTags`         | The tags must be a JSON array, or an object with "value" and "options". |
+| `rowsRange`           | Rows {from}–{to} of {total}                                             |
+| `noRows`              | No rows                                                                 |
+| `firstPage`           | First page                                                              |
+| `previousPage`        | Previous page                                                           |
+| `nextPage`            | Next page                                                               |
+| `lastPage`            | Last page                                                               |
+| `sortBy`              | Sort by {name}                                                          |
+| `column`              | Column {n}                                                              |
+| `rowNumber`           | Row                                                                     |
+| `csvStatus`           | {rows} rows × {columns} columns                                         |
+| `csvUnclosed`         | Unclosed quote starting at line {line}.                                 |
+| `tooManyColumns`      | Only the first {limit} columns are shown.                               |
+| `matchingRows`        | {count} matching rows                                                   |
+| `undo`                | Undo                                                                    |
+| `redo`                | Redo                                                                    |
+| `fullscreen`          | Full screen                                                             |
+| `exitFullscreen`      | Exit full screen                                                        |
+| `stopEditing`         | Stop editing                                                            |
+| `editor`              | Editor                                                                  |
+| `validJson`           | Valid JSON                                                              |
 
 The `{message}` part of `invalidJson` comes from the JSON parser and is always in English. In `diffStats`, `−` is the minus sign (U+2212).
 
@@ -294,12 +332,12 @@ const element = Vitrine.render(document.querySelector('#target'), {
 });
 ```
 
-| Option    | Type                                                                                              | Description                                                         |
-| --------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `type`    | `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"`, `"diff"`, `"terminal"`, `"tree"` or `"http"` | Component to create (`vt-<type>`). Required.                        |
-| `content` | string                                                                                            | Content, set through the `content` property (never parsed as HTML). |
-| `variant` | `"simple"` or `"full"`                                                                            | Feature preset.                                                     |
-| `options` | object                                                                                            | Attributes to set.                                                  |
+| Option    | Type                                                                                                                               | Description                                                         |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `type`    | `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"`, `"diff"`, `"terminal"`, `"tree"`, `"http"`, `"log"`, `"chart"` or `"openapi"` | Component to create (`vt-<type>`). Required.                        |
+| `content` | string                                                                                                                             | Content, set through the `content` property (never parsed as HTML). |
+| `variant` | `"simple"` or `"full"`                                                                                                             | Feature preset.                                                     |
+| `options` | object                                                                                                                             | Attributes to set.                                                  |
 
 How `options` become attributes:
 
@@ -307,7 +345,7 @@ How `options` become attributes:
 - `true` sets an empty attribute (feature on); `false` sets the value `"false"` (feature off); `null` and `undefined` are skipped. Other values are converted to strings.
 - Names that match `/^on[a-z]*$/` after conversion are ignored, so event handler attributes such as `onclick` can never be set. Vitrine attributes that start with `on` contain a hyphen, so `onInvalid` (or `'on-invalid'`) still sets `on-invalid` on `<vt-json>`. Names that are not made of a lowercase letter followed by lowercase letters, digits and hyphens after conversion are ignored too.
 
-A non-element `target` or an unknown `type` throws a `TypeError`. `type` is one of `code`, `markdown`, `json`, `csv`, `tags`, `diff`, `terminal`, `tree` and `http`; for `<vt-tags>`, `<vt-diff>`, `<vt-tree>` and `<vt-http>`, set their other properties (`options`, `original`, `modified`, `data`, `exchange`) on the returned element.
+A non-element `target` or an unknown `type` throws a `TypeError`. `type` is one of `code`, `markdown`, `json`, `csv`, `tags`, `diff`, `terminal`, `tree`, `http`, `log`, `chart` and `openapi`; for `<vt-tags>`, `<vt-diff>`, `<vt-tree>` and `<vt-http>`, set their other properties (`options`, `original`, `modified`, `data`, `exchange`) on the returned element.
 
 ```js
 Vitrine.render(container, {
@@ -338,7 +376,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree` and `vt-http` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart` and `vt-openapi` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 
@@ -358,7 +396,7 @@ for (const [tag, ElementClass] of Vitrine.registry) {
 }
 ```
 
-The classes are also exported directly as `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree` and `VtHttp`, for example to check an element with `instanceof`:
+The classes are also exported directly as `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree`, `VtHttp`, `VtLog`, `VtChart` and `VtOpenapi`, for example to check an element with `instanceof`:
 
 ```js
 const element = document.querySelector('#viewer');
@@ -387,6 +425,7 @@ The event names, as a frozen object:
 | `LAYOUT_CHANGE`     | `vt-layout-change`     |
 | `SELECT`            | `vt-select`            |
 | `TOGGLE`            | `vt-toggle`            |
+| `FILTER_CHANGE`     | `vt-filter-change`     |
 | `TYPING_END`        | `vt-typing-end`        |
 | `CHANGE_NAVIGATE`   | `vt-change-navigate`   |
 | `ERROR`             | `vt-error`             |
