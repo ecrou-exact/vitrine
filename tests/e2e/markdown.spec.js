@@ -112,6 +112,140 @@ test.describe('<vt-markdown>', () => {
     expect((await events(page)).map((e) => e.detail.tab)).toEqual(['source', 'split', 'preview']);
   });
 
+  test('split-preview places the preview on any side', async ({ page }) => {
+    for (const [position, first, stacked] of [
+      ['right', 'source', false],
+      ['left', 'preview', false],
+      ['bottom', 'source', true],
+      ['top', 'preview', true],
+    ]) {
+      await mount(
+        page,
+        'vt-markdown',
+        { 'default-tab': 'split', 'split-preview': position, tabs: 'preview,split' },
+        DOC,
+      );
+      const panel = page.locator('#el .panel.split');
+      await expect(panel).toHaveAttribute('data-preview', position);
+      await expect(panel.locator('> .body').first()).toHaveAttribute(
+        'part',
+        new RegExp(`body ${first}`),
+      );
+      const [a, b] = await panel
+        .locator('> .body')
+        .evaluateAll((panes) => panes.map((p) => p.getBoundingClientRect()));
+      if (stacked) expect(b.top).toBeGreaterThanOrEqual(a.bottom - 1);
+      else expect(b.left).toBeGreaterThanOrEqual(a.right - 1);
+    }
+  });
+
+  test('split buttons swap, stack and toggle sync', async ({ page }) => {
+    await mount(page, 'vt-markdown', { variant: 'full', 'default-tab': 'split' }, DOC);
+    await recordEvents(page, ['vt-layout-change']);
+    const el = page.locator('#el');
+    await el.getByRole('button', { name: 'Swap panes' }).click();
+    await expect(el.locator('.panel')).toHaveAttribute('data-preview', 'left');
+    await el.getByRole('button', { name: 'Stack panes' }).click();
+    await expect(el.locator('.panel')).toHaveAttribute('data-preview', 'top');
+    await expect(el.getByRole('button', { name: 'Stack panes' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await el.getByRole('button', { name: 'Sync scrolling' }).click();
+    await expect(el.getByRole('button', { name: 'Sync scrolling' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    expect(await events(page)).toEqual([
+      { type: 'vt-layout-change', detail: { preview: 'left', sync: true } },
+      { type: 'vt-layout-change', detail: { preview: 'top', sync: true } },
+      { type: 'vt-layout-change', detail: { preview: 'top', sync: false } },
+    ]);
+  });
+
+  test('scroll sync keeps the same block at the top of both panes', async ({ page }) => {
+    // Sections of very different heights, so a proportional mapping would drift.
+    const doc = Array.from({ length: 40 }, (_, i) =>
+      [
+        `## Section ${i + 1}`,
+        '',
+        i % 3 === 0 ? '```js\n' + 'x();\n'.repeat(12) + '```' : 'Short paragraph.',
+        '',
+      ].join('\n'),
+    ).join('\n');
+    await mount(
+      page,
+      'vt-markdown',
+      { 'default-tab': 'split', tabs: 'split,preview', 'max-height': '400px' },
+      doc,
+    );
+    const source = page.locator('#el [part~="source"]');
+    const preview = page.locator('#el [part~="preview"]');
+    const line30 = doc.split('\n').indexOf('## Section 30') + 1;
+
+    await source.evaluate((pane, line) => {
+      const row = pane.querySelector(`.line[data-line="${line}"]`);
+      pane.scrollTop =
+        row.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop;
+    }, line30);
+    await expect
+      .poll(() =>
+        preview.evaluate((pane) => {
+          const heading = Array.from(pane.querySelectorAll('h2')).find((h) =>
+            h.textContent.startsWith('Section 30'),
+          );
+          return Math.abs(heading.getBoundingClientRect().top - pane.getBoundingClientRect().top);
+        }),
+      )
+      .toBeLessThan(40);
+
+    await page.waitForTimeout(250);
+    await preview.evaluate((pane) => {
+      const heading = Array.from(pane.querySelectorAll('h2')).find((h) =>
+        h.textContent.startsWith('Section 10'),
+      );
+      pane.scrollTop =
+        heading.getBoundingClientRect().top - pane.getBoundingClientRect().top + pane.scrollTop;
+    });
+    const line10 = doc.split('\n').indexOf('## Section 10') + 1;
+    await expect
+      .poll(() =>
+        source.evaluate((pane, line) => {
+          const row = pane.querySelector(`.line[data-line="${line}"]`);
+          return Math.abs(row.getBoundingClientRect().top - pane.getBoundingClientRect().top);
+        }, line10),
+      )
+      .toBeLessThan(40);
+  });
+
+  test('sync-scroll="false" leaves the panes independent', async ({ page }) => {
+    const doc = Array.from({ length: 80 }, (_, i) => `Paragraph ${i}\n`).join('\n');
+    await mount(
+      page,
+      'vt-markdown',
+      { 'default-tab': 'split', tabs: 'split', 'sync-scroll': 'false', 'max-height': '300px' },
+      doc,
+    );
+    await page.locator('#el [part~="source"]').evaluate((pane) => (pane.scrollTop = 800));
+    await page.waitForTimeout(300);
+    expect(await page.locator('#el [part~="preview"]').evaluate((pane) => pane.scrollTop)).toBe(0);
+  });
+
+  test('content cannot forge source line markers', async ({ page }) => {
+    await mount(
+      page,
+      'vt-markdown',
+      { 'allow-html': '' },
+      '<span data-vt-line="1:forged">x</span>\n\n<span data-vt-line="3"></span>',
+    );
+    const values = await page
+      .locator('#el [data-vt-line]')
+      .evaluateAll((els) => els.map((e) => e.getAttribute('data-vt-line')));
+    // Only the genuine markers (one per block, plain line numbers) remain.
+    expect(values.every((v) => /^\d+$/.test(v))).toBe(true);
+    expect(await page.locator('#el span:not([data-vt-line])', { hasText: 'x' }).count()).toBe(1);
+  });
+
   test('tabs and default-tab attributes', async ({ page }) => {
     await mount(
       page,

@@ -195,6 +195,9 @@ export function sanitizerWorks() {
  * @property {"allow"|"block"|"same-origin"} [images="allow"] - Image policy.
  * @property {"new-tab"|"same"} [externalLinks="new-tab"] - How external links open.
  * @property {string} [baseUrl] - Base for relative URLs (e.g. the Markdown file URL).
+ * @property {string} [lineMarkers] - Token signing source line markers
+ *   (`<span data-vt-line="12:token">`). Markers without this exact token are stripped,
+ *   so content cannot forge them.
  */
 
 /**
@@ -215,7 +218,7 @@ export function sanitizeHtml(html, options = {}) {
   /** @type {import('dompurify').Config & { RETURN_DOM_FRAGMENT: true }} */
   const config = {
     ALLOWED_TAGS: [...ALLOWED_TAGS],
-    ALLOWED_ATTR: [...ALLOWED_ATTR],
+    ALLOWED_ATTR: options.lineMarkers ? [...ALLOWED_ATTR, 'data-vt-line'] : [...ALLOWED_ATTR],
     ALLOW_DATA_ATTR: false,
     ALLOW_ARIA_ATTR: false,
     ALLOW_UNKNOWN_PROTOCOLS: false,
@@ -275,6 +278,16 @@ function postProcess(root, options) {
   const newTab = (options.externalLinks ?? 'new-tab') === 'new-tab';
   const base = options.baseUrl;
 
+  for (const marker of Array.from(root.querySelectorAll('[data-vt-line]'))) {
+    const match = /^(\d{1,9}):(.+)$/.exec(marker.getAttribute('data-vt-line') ?? '');
+    const genuine =
+      match &&
+      options.lineMarkers &&
+      match[2] === options.lineMarkers &&
+      marker.localName === 'span';
+    if (genuine && !marker.hasChildNodes()) marker.setAttribute('data-vt-line', match[1]);
+    else marker.removeAttribute('data-vt-line');
+  }
   for (const el of Array.from(root.querySelectorAll('[class]'))) {
     const kept = Array.from(el.classList).filter(
       (name) => el.localName === 'code' && SAFE_CLASS.test(name),
