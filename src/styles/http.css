@@ -57,7 +57,9 @@
   line-height: 1.5;
   --_tone: var(--_fg-muted);
   background: color-mix(in srgb, var(--_tone) 16%, transparent);
-  color: var(--_tone);
+  /* Mixed toward the text color: the tone stays recognizable and the label keeps AA
+     contrast on its tinted background, in light and dark themes. */
+  color: color-mix(in srgb, var(--_tone) 62%, var(--_fg));
 }
 
 .method-get,

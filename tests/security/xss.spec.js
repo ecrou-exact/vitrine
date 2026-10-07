@@ -125,6 +125,39 @@ const MODES = [
     attrs: { variant: 'full' },
     wrap: (p) => `--- a\n+++ b\n@@ -1 +1 @@\n-${p.replace(/\n/g, ' ')}\n+${p.replace(/\n/g, ' ')}!`,
   },
+  {
+    tag: 'vt-terminal',
+    attrs: { variant: 'full', escapes: '' },
+    // As a command, as colored output, and as the URL and text of an OSC 8 link.
+    wrap: (p) =>
+      `$ ${p.replace(/\n/g, ' ')}\n\\e[31m${p}\\e[0m\n\\e]8;;${p.replace(/\s/g, '')}\\e\\\\${p}\\e]8;;\\e\\\\`,
+  },
+  {
+    tag: 'vt-tree',
+    attrs: { variant: 'full', 'href-template': 'https://example.com/{path}' },
+    wrap: (p) => JSON.stringify([{ name: p, children: [{ name: p, note: p, status: 'added' }] }]),
+  },
+  {
+    tag: 'vt-tree',
+    attrs: { 'href-template': 'javascript:alert(1)//{name}' },
+    wrap: (p) =>
+      `${p.replace(/\n/g, ' ')}/\n  ${p.replace(/\n/g, ' ')}  # ${p.replace(/\n/g, ' ')}`,
+  },
+  {
+    tag: 'vt-http',
+    attrs: { variant: 'full', layout: 'columns' },
+    wrap: (p) =>
+      JSON.stringify({
+        request: { method: 'POST', url: `/a?q=${p}`, headers: { 'X-Test': p }, body: p },
+        response: { status: 200, headers: { 'Content-Type': 'text/html' }, body: p },
+      }),
+  },
+  {
+    tag: 'vt-http',
+    attrs: { variant: 'full', view: 'code' },
+    wrap: (p) =>
+      JSON.stringify({ request: { method: 'POST', url: `https://x.dev/${p}`, body: p } }),
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */
