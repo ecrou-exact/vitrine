@@ -62,14 +62,22 @@ console.log(`Website assembled in ${out}/`);
 async function searchIndex() {
   /** @type {{ t: string, p: string, u: string }[]} */
   const entries = [];
-  const text = (/** @type {string} */ html) =>
-    html
-      .replace(/<[^>]+>/g, '')
+  // Titles become plain text. Tags are removed until none is left (a single pass would
+  // turn "<scr<b>ipt>" into "<script>"); the index is only ever shown with textContent.
+  const text = (/** @type {string} */ html) => {
+    let plain = html;
+    let previous;
+    do {
+      previous = plain;
+      plain = plain.replace(/<[^<>]*>/g, '');
+    } while (plain !== previous);
+    return plain
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&amp;/g, '&')
       .replace(/\s+/g, ' ')
       .trim();
+  };
 
   const PAGES = {
     'index.html': 'Home',
