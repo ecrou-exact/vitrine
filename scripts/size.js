@@ -37,13 +37,20 @@ const rawCss = {
 };
 
 let failed = false;
-const report = (/** @type {string} */ name, /** @type {number} */ size, /** @type {number} */ budget) => {
+const report = (
+  /** @type {string} */ name,
+  /** @type {number} */ size,
+  /** @type {number} */ budget,
+) => {
   const ok = size <= budget;
   failed ||= !ok;
-  console.log(`${ok ? 'ok  ' : 'FAIL'} ${name.padEnd(22)} ${(size / KB).toFixed(1).padStart(6)} KB gzip (budget ${budget / KB} KB)`);
+  console.log(
+    `${ok ? 'ok  ' : 'FAIL'} ${name.padEnd(22)} ${(size / KB).toFixed(1).padStart(6)} KB gzip (budget ${budget / KB} KB)`,
+  );
 };
 
-for (const [file, budget] of Object.entries(BUNDLES)) report(file, gzipSync(await readFile(file)).length, budget);
+for (const [file, budget] of Object.entries(BUNDLES))
+  report(file, gzipSync(await readFile(file)).length, budget);
 
 for (const [name, budget] of Object.entries(COMPONENTS)) {
   const result = await build({
