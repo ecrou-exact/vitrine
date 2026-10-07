@@ -1,0 +1,324 @@
+/*
+ * Terminal: commands and ANSI-colored output on the code background.
+ * The 16 ANSI colors map to theme colors, so every theme keeps its contrast;
+ * each can be overridden with a public token (--vt-ansi-red…).
+ */
+.vt {
+  --_ansi-0: var(--vt-ansi-black, color-mix(in srgb, var(--_code-fg) 50%, var(--_code-bg-solid)));
+  --_ansi-1: var(--vt-ansi-red, var(--_danger));
+  --_ansi-2: var(--vt-ansi-green, var(--_success));
+  --_ansi-3: var(--vt-ansi-yellow, var(--_warning));
+  --_ansi-4: var(--vt-ansi-blue, var(--_info));
+  --_ansi-5: var(--vt-ansi-magenta, var(--_syntax-keyword));
+  --_ansi-6: var(--vt-ansi-cyan, var(--_syntax-string));
+  --_ansi-7: var(--vt-ansi-white, color-mix(in srgb, var(--_code-fg) 85%, var(--_code-bg-solid)));
+  --_ansi-8: var(--vt-ansi-bright-black, var(--_fg-muted));
+  --_ansi-9: var(--vt-ansi-bright-red, color-mix(in srgb, var(--_ansi-1) 75%, var(--_code-fg)));
+  --_ansi-10: var(--vt-ansi-bright-green, color-mix(in srgb, var(--_ansi-2) 75%, var(--_code-fg)));
+  --_ansi-11: var(--vt-ansi-bright-yellow, color-mix(in srgb, var(--_ansi-3) 75%, var(--_code-fg)));
+  --_ansi-12: var(--vt-ansi-bright-blue, color-mix(in srgb, var(--_ansi-4) 75%, var(--_code-fg)));
+  --_ansi-13: var(
+    --vt-ansi-bright-magenta,
+    color-mix(in srgb, var(--_ansi-5) 75%, var(--_code-fg))
+  );
+  --_ansi-14: var(--vt-ansi-bright-cyan, color-mix(in srgb, var(--_ansi-6) 75%, var(--_code-fg)));
+  --_ansi-15: var(--vt-ansi-bright-white, var(--_code-fg));
+  --_prompt: var(--vt-terminal-prompt, var(--_accent-fg));
+}
+
+.term-body {
+  background: var(--_code-bg);
+}
+
+.terminal {
+  width: max-content;
+  min-width: 100%;
+  padding: var(--_space-3) var(--_space-4);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  font-variant-ligatures: none;
+  line-height: var(--_line-height);
+  tab-size: 8;
+  white-space: pre;
+}
+
+.terminal.wrapped {
+  width: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.terminal .line {
+  display: block;
+}
+
+/* ---------- Commands ---------- */
+
+.entry.command {
+  position: relative;
+  padding-right: calc(var(--_space-5) + 8px);
+}
+
+.entry.command + .entry.command,
+.entry.output + .entry.command {
+  margin-top: var(--_space-1);
+}
+
+.prompt {
+  color: var(--_prompt);
+  font-weight: 600;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cmd {
+  color: var(--_code-fg);
+}
+
+.cmd-copy {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  opacity: 0;
+  transition: opacity var(--_duration-fast) var(--_easing);
+}
+
+.entry.command:hover .cmd-copy,
+.cmd-copy:focus-visible,
+.cmd-copy.done {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .cmd-copy {
+    opacity: 0.7;
+  }
+}
+
+/* ---------- Output ---------- */
+
+.entry.output {
+  color: color-mix(in srgb, var(--_code-fg) 88%, var(--_code-bg-solid));
+}
+
+.collapsed-lines {
+  display: none;
+}
+
+.output-more {
+  display: block;
+  margin: var(--_space-1) 0 var(--_space-2);
+  padding: 2px var(--_space-2);
+  border: 1px dashed color-mix(in srgb, var(--_code-gutter) 60%, transparent);
+  border-radius: var(--_radius-sm);
+  background: none;
+  color: var(--_accent-fg);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+  white-space: normal;
+  cursor: pointer;
+}
+
+.output-more:hover {
+  border-style: solid;
+}
+
+/* ---------- ANSI styles ---------- */
+
+.fg-0 {
+  color: var(--_ansi-0);
+}
+.fg-1 {
+  color: var(--_ansi-1);
+}
+.fg-2 {
+  color: var(--_ansi-2);
+}
+.fg-3 {
+  color: var(--_ansi-3);
+}
+.fg-4 {
+  color: var(--_ansi-4);
+}
+.fg-5 {
+  color: var(--_ansi-5);
+}
+.fg-6 {
+  color: var(--_ansi-6);
+}
+.fg-7 {
+  color: var(--_ansi-7);
+}
+.fg-8 {
+  color: var(--_ansi-8);
+}
+.fg-9 {
+  color: var(--_ansi-9);
+}
+.fg-10 {
+  color: var(--_ansi-10);
+}
+.fg-11 {
+  color: var(--_ansi-11);
+}
+.fg-12 {
+  color: var(--_ansi-12);
+}
+.fg-13 {
+  color: var(--_ansi-13);
+}
+.fg-14 {
+  color: var(--_ansi-14);
+}
+.fg-15 {
+  color: var(--_ansi-15);
+}
+.bg-0 {
+  background: var(--_ansi-0);
+}
+.bg-1 {
+  background: var(--_ansi-1);
+}
+.bg-2 {
+  background: var(--_ansi-2);
+}
+.bg-3 {
+  background: var(--_ansi-3);
+}
+.bg-4 {
+  background: var(--_ansi-4);
+}
+.bg-5 {
+  background: var(--_ansi-5);
+}
+.bg-6 {
+  background: var(--_ansi-6);
+}
+.bg-7 {
+  background: var(--_ansi-7);
+}
+.bg-8 {
+  background: var(--_ansi-8);
+}
+.bg-9 {
+  background: var(--_ansi-9);
+}
+.bg-10 {
+  background: var(--_ansi-10);
+}
+.bg-11 {
+  background: var(--_ansi-11);
+}
+.bg-12 {
+  background: var(--_ansi-12);
+}
+.bg-13 {
+  background: var(--_ansi-13);
+}
+.bg-14 {
+  background: var(--_ansi-14);
+}
+.bg-15 {
+  background: var(--_ansi-15);
+}
+
+/* Text on a colored background without its own color: the background color of the
+   terminal, so it reads like a label. */
+.on-bg,
+.fg-inverse {
+  color: var(--_code-bg-solid);
+}
+
+.bg-inverse {
+  background: var(--_code-fg);
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.dim {
+  opacity: 0.7;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.underline.strike {
+  text-decoration: underline line-through;
+}
+
+.terminal a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.terminal a:hover {
+  text-decoration-style: solid;
+}
+
+/* ---------- Typing replay ---------- */
+
+.entry.typing-hidden {
+  visibility: hidden;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.15em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--_accent);
+  animation: vt-caret 1s steps(1) infinite;
+}
+
+@keyframes vt-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typing-cursor {
+    animation: none;
+  }
+}
+
+/* ---------- Edit mode: editor above, live preview below ---------- */
+
+.term-edit {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.term-edit > .editor-body {
+  max-height: min(40vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}
+
+.vt[data-fullscreen] .term-edit {
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.vt[data-fullscreen] .term-edit > .editor-body {
+  max-height: none;
+}
