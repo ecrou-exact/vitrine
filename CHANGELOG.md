@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-csv>`: RFC 4180 parser with delimiter detection, typed columns, sorting, pagination,
+  search that filters rows, Table / Raw views and an editor.
+- `<vt-tags>`: tags as chips from JSON, and a form-associated tag field with suggestions,
+  prefixes, a browse panel, creation rules, backend suggestions and JSON, CSV or line output.
+- `<vt-diff>`: comparison of two texts or a unified patch, side by side or unified, with word
+  changes, folded context, patch copy and download, and editors for both sides.
+- Edit mode for every component, with undo and redo, full screen, 258 syntax themes, a loader
+  shown while content loads, and one ES module per component.
+- `<vt-terminal>`: shell sessions split into commands (configurable prompts, context such as
+  `user@host:~$`, continued lines) and output; ANSI parser for 16, 256 and 24-bit colors, text
+  styles, carriage returns and line erasing, OSC 8 links limited to http(s), every other sequence
+  removed; colors mapped to theme tokens (`--vt-ansi-*`); copy button per command and copy of all
+  commands; collapsible output; typing replay; `escapes` for transcripts written by hand.
+- `<vt-tree>`: file trees from `tree` output, indented text, paths, JSON (paths, entry objects or
+  nested objects); notes and added, removed, modified and highlighted markers; icons by file kind;
+  WAI-ARIA tree keyboard support with type-ahead; folders built when opened; search that filters
+  the tree; `href-template` links; `vt-select` and `vt-toggle` events; `data` property.
+- `<vt-http>`: HTTP exchanges from raw HTTP, curl commands, JSON and HAR; bodies formatted by
+  content type; status colored by class; credentials masked everywhere until revealed; Code tab
+  writing the request for curl, `fetch`, Python `requests` and HTTPie with values quoted for each
+  language; `exchange` property.
+- `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,
+  `previousChange()`, `goToChange()` and `vt-change-navigate`; the two editors of edit mode
+  scroll to matching lines.
+- Long code views (raw JSON, CSV, Markdown source, terminal output) build their lines in blocks
+  as they scroll into view.
 - `<vt-code>`: syntax highlighting (12 bundled languages, 181 more loaded on demand from a
   validated list), language detection, line numbers, start line, highlighted lines, diff mode,
   wrap toggle, collapsible code, tab size, search, copy and download.

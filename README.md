@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown and JSON beautifully — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees and HTTP exchanges — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -27,13 +27,19 @@
   <img src="docs/assets/preview-light.png" alt="A vt-code element in its full variant: title bar, TypeScript code with line numbers and highlighted lines, next to theme and content type switches.">
 </picture>
 
-> **Status:** pre-release. The three components are implemented and tested; the API may still change before 1.0.
+> **Status:** pre-release. The components are implemented and tested; the API may still change before 1.0.
 
 ## Features
 
 - **`<vt-code>`** — syntax highlighting for 190+ languages (common ones bundled, the rest loaded on demand), line numbers, highlighted lines, diffs, wrap, collapse, search, copy and download.
 - **`<vt-markdown>`** — sanitized GitHub Flavored Markdown, Preview / Source / Split tabs, table of contents, heading anchors, image and link policies.
 - **`<vt-json>`** — pretty printing or a collapsible tree, JSONPath copy, search inside collapsed nodes, exact big numbers, precise syntax errors.
+- **`<vt-csv>`** — CSV and TSV as an accessible table with typed sorting, pagination and search.
+- **`<vt-tags>`** — tags as chips, or a form field with suggestions, #hashtags, a browse panel and backend suggestions.
+- **`<vt-diff>`** — two texts or a unified patch, side by side or unified, with changed words marked and arrows between changes.
+- **`<vt-terminal>`** — terminal sessions with prompts, ANSI colors and styles, a copy button per command, collapsible output and a typing replay.
+- **`<vt-tree>`** — file trees from `tree` output, indented text, paths or JSON, with icons, notes, change markers, links to files and keyboard navigation.
+- **`<vt-http>`** — HTTP requests and responses from raw HTTP, curl commands, JSON or HAR, with code for curl, `fetch`, Python `requests` and HTTPie, and masked credentials.
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
 - **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.
@@ -78,7 +84,7 @@ cd vendor/vitrine && git checkout v1.0.0   # release tags contain the built dist
 
 ### Untrusted content
 
-Content written inside the element is parsed by the browser as part of your page, before Vitrine runs. **For data you did not write, always use the `content` property** (or `data` on `<vt-json>`):
+Content written inside the element is parsed by the browser as part of your page, before Vitrine runs. **For data you did not write, always use the `content` property** (or `data` on `<vt-json>` and `<vt-tree>`, `exchange` on `<vt-http>`):
 
 ```js
 document.querySelector('vt-markdown').content = commentFromUser;
@@ -86,11 +92,17 @@ document.querySelector('vt-markdown').content = commentFromUser;
 
 ## Components
 
-| Element         | Simple variant               | Full variant adds                                                   | Reference                                                  |
-| --------------- | ---------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------- |
-| `<vt-code>`     | Highlighted block            | Title bar, line numbers, search, wrap toggle, download, copy        | [docs/components/code.md](docs/components/code.md)         |
-| `<vt-markdown>` | Rendered, sanitized Markdown | Preview / Source / Split tabs, TOC, anchors, search, copy           | [docs/components/markdown.md](docs/components/markdown.md) |
-| `<vt-json>`     | Pretty-printed JSON          | Tree / Raw tabs, types, expand / collapse all, JSONPath bar, search | [docs/components/json.md](docs/components/json.md)         |
+| Element         | Simple variant                                    | Full variant adds                                                                                       | Reference                                                  |
+| --------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `<vt-code>`     | Highlighted block                                 | Title bar, line numbers, search, wrap toggle, download, copy                                            | [docs/components/code.md](docs/components/code.md)         |
+| `<vt-markdown>` | Rendered, sanitized Markdown                      | Preview / Source / Split tabs, TOC, anchors, search, copy                                               | [docs/components/markdown.md](docs/components/markdown.md) |
+| `<vt-json>`     | Pretty-printed JSON                               | Tree / Raw tabs, types, expand / collapse all, JSONPath bar, search                                     | [docs/components/json.md](docs/components/json.md)         |
+| `<vt-csv>`      | Table with typed columns                          | Table / Raw tabs, sorting, row numbers, search, download, copy                                          | [docs/components/csv.md](docs/components/csv.md)           |
+| `<vt-tags>`     | Tags as chips                                     | Tag field, suggestions, browse panel, form value                                                        | [docs/components/tags.md](docs/components/tags.md)         |
+| `<vt-diff>`     | Unified comparison                                | Side by side / Unified tabs, change arrows, search, copy patch                                          | [docs/components/diff.md](docs/components/diff.md)         |
+| `<vt-terminal>` | Session with colors and a copy button per command | Title bar, copy all commands, search, download, full screen                                             | [docs/components/terminal.md](docs/components/terminal.md) |
+| `<vt-tree>`     | File tree with icons and indentation guides       | Title bar with folder and file counts, expand / collapse all, selected path bar, search, copy, download | [docs/components/tree.md](docs/components/tree.md)         |
+| `<vt-http>`     | Request and response, credentials masked          | Exchange / Code tabs, search, copy, download as `.http`                                                 | [docs/components/http.md](docs/components/http.md)         |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 

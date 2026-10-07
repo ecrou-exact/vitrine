@@ -4,14 +4,14 @@ Vitrine elements are standard custom elements, so they work in any framework tha
 
 ## General rules
 
-1. **Load Vitrine before your application code sets properties on the elements.** If a property such as `content` is set on a `<vt-code>` before the element is defined, Vitrine applies it when the element upgrades (this works for `content`, the `data` property of `<vt-json>`, the `original` and `modified` properties of `<vt-diff>`, and the `value`, `options` and `suggest` properties of `<vt-tags>`). Loading Vitrine first is still the simplest: load the classic script in the page `<head>` before your application bundle, import the modules before your application mounts, or wait for the definition:
+1. **Load Vitrine before your application code sets properties on the elements.** If a property such as `content` is set on a `<vt-code>` before the element is defined, Vitrine applies it when the element upgrades (this works for `content`, the `data` property of `<vt-json>` and `<vt-tree>`, the `exchange` property of `<vt-http>`, the `original` and `modified` properties of `<vt-diff>`, and the `value`, `options` and `suggest` properties of `<vt-tags>`). Loading Vitrine first is still the simplest: load the classic script in the page `<head>` before your application bundle, import the modules before your application mounts, or wait for the definition:
 
    ```js
    await customElements.whenDefined('vt-code');
    element.content = source;
    ```
 
-2. **Pass dynamic content as a property, not as children.** Bind the `content` property (or `data` on `<vt-json>`, `value` and `options` on `<vt-tags>`). Do not render untrusted text as children of the element. See [Getting started](getting-started.md#content-sources).
+2. **Pass dynamic content as a property, not as children.** Bind the `content` property (or `data` on `<vt-json>` and `<vt-tree>`, `exchange` on `<vt-http>`, `value` and `options` on `<vt-tags>`). Do not render untrusted text as children of the element. See [Getting started](getting-started.md#content-sources).
 3. **Attributes are strings.** Boolean features accept `""` or `"true"` to turn them on and `"false"` to turn them off.
 4. **Events** are DOM `CustomEvent`s that bubble and are composed: `vt-ready`, `vt-copy`, `vt-search`, `vt-tab-change`, `vt-error`, and for editing `vt-input`, `vt-change` and `vt-mode-change`. See [Events](common-attributes.md#events).
 5. **Editors: property in, event out.** Set `content` to load a document, and read the edits from `vt-input` or `vt-change` (`event.detail.value`). Writing each edit back into `content` is safe: setting the text the editor already shows does nothing, so the caret and the undo history are kept. See [Editing](editing.md#reading-the-edited-value).
@@ -545,7 +545,10 @@ vt-markdown:not(:defined),
 vt-json:not(:defined),
 vt-csv:not(:defined),
 vt-tags:not(:defined),
-vt-diff:not(:defined) {
+vt-diff:not(:defined),
+vt-terminal:not(:defined),
+vt-tree:not(:defined),
+vt-http:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

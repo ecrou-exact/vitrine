@@ -10,22 +10,22 @@ import { configure, render, defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-
 
 ## API overview
 
-| Name                                                          | Description                                                                                        |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `configure(options)`                                          | Changes the global configuration.                                                                  |
-| `getConfig()`                                                 | Returns the current configuration.                                                                 |
-| `registerTheme(name, options)`                                | Adds or replaces a theme. See [Theming](theming.md#registering-a-theme).                           |
-| `listThemes()`                                                | Returns the registered theme names.                                                                |
-| `getTheme(name)`                                              | Returns a copy of a theme definition, or `undefined`. See [Theming](theming.md#inspecting-themes). |
-| `BUILT_IN_THEMES`                                             | The built-in theme names.                                                                          |
-| `listSyntaxThemes()`                                          | Returns the available syntax theme names. See [Syntax themes](theming.md#syntax-themes).           |
-| `registerLocale(code, strings)`                               | Adds or extends a locale for interface strings.                                                    |
-| `render(target, options)`                                     | Creates and configures an element in a container.                                                  |
-| `defineAll()`                                                 | Defines the custom elements.                                                                       |
-| `registry`                                                    | Map of tag names to element classes.                                                               |
-| `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff` | The element classes.                                                                               |
-| `EVENTS`                                                      | Event names.                                                                                       |
-| `version`                                                     | Library version.                                                                                   |
+| Name                                                                                            | Description                                                                                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `configure(options)`                                                                            | Changes the global configuration.                                                                  |
+| `getConfig()`                                                                                   | Returns the current configuration.                                                                 |
+| `registerTheme(name, options)`                                                                  | Adds or replaces a theme. See [Theming](theming.md#registering-a-theme).                           |
+| `listThemes()`                                                                                  | Returns the registered theme names.                                                                |
+| `getTheme(name)`                                                                                | Returns a copy of a theme definition, or `undefined`. See [Theming](theming.md#inspecting-themes). |
+| `BUILT_IN_THEMES`                                                                               | The built-in theme names.                                                                          |
+| `listSyntaxThemes()`                                                                            | Returns the available syntax theme names. See [Syntax themes](theming.md#syntax-themes).           |
+| `registerLocale(code, strings)`                                                                 | Adds or extends a locale for interface strings.                                                    |
+| `render(target, options)`                                                                       | Creates and configures an element in a container.                                                  |
+| `defineAll()`                                                                                   | Defines the custom elements.                                                                       |
+| `registry`                                                                                      | Map of tag names to element classes.                                                               |
+| `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree`, `VtHttp` | The element classes.                                                                               |
+| `EVENTS`                                                                                        | Event names.                                                                                       |
+| `version`                                                                                       | Library version.                                                                                   |
 
 ## `configure(options)`
 
@@ -190,6 +190,41 @@ Placeholders in braces are replaced by values. Keep them in your translations.
 | `diffStats`          | +{added} −{removed}                                                     |
 | `diffSimplified`     | Many changes: the comparison is simplified to removed and added blocks. |
 | `noDifferences`      | No differences                                                          |
+| `previousChange`     | Previous change                                                         |
+| `nextChange`         | Next change                                                             |
+| `changePosition`     | {current} of {total}                                                    |
+| `changeTotal`        | {count} changes                                                         |
+| `terminal`           | Terminal                                                                |
+| `command`            | Command                                                                 |
+| `copyCommand`        | Copy command                                                            |
+| `copyCommands`       | Copy commands                                                           |
+| `replay`             | Replay                                                                  |
+| `showMoreLines`      | Show {count} more lines                                                 |
+| `files`              | Files                                                                   |
+| `copyTree`           | Copy tree                                                               |
+| `treeStats`          | {folders} folders, {files} files                                        |
+| `invalidTree`        | This tree could not be read: {message}                                  |
+| `treeTruncated`      | Only the first {limit} entries are shown.                               |
+| `status_added`       | added                                                                   |
+| `status_removed`     | removed                                                                 |
+| `status_modified`    | modified                                                                |
+| `status_highlighted` | highlighted                                                             |
+| `httpExchange`       | Exchange                                                                |
+| `httpRequest`        | Request                                                                 |
+| `httpResponse`       | Response                                                                |
+| `httpBody`           | Body                                                                    |
+| `httpHeaders`        | Headers                                                                 |
+| `httpQuery`          | Query                                                                   |
+| `httpNone`           | None                                                                    |
+| `httpNoBody`         | No body                                                                 |
+| `copyUrl`            | Copy URL                                                                |
+| `codeLanguage`       | Language                                                                |
+| `showSecrets`        | Show secrets                                                            |
+| `hideSecrets`        | Hide secrets                                                            |
+| `secretsShown`       | Secrets shown                                                           |
+| `secretsHidden`      | Secrets hidden                                                          |
+| `secretsInCode`      | Credentials are masked in this code. Replace them with your own.        |
+| `invalidHttp`        | This HTTP message could not be read: {message}                          |
 | `unchangedLines`     | Show {count} unchanged lines                                            |
 | `copyPatch`          | Copy patch                                                              |
 | `changes`            | Changes                                                                 |
@@ -259,12 +294,12 @@ const element = Vitrine.render(document.querySelector('#target'), {
 });
 ```
 
-| Option    | Type                                                            | Description                                                         |
-| --------- | --------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `type`    | `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"` or `"diff"` | Component to create (`vt-<type>`). Required.                        |
-| `content` | string                                                          | Content, set through the `content` property (never parsed as HTML). |
-| `variant` | `"simple"` or `"full"`                                          | Feature preset.                                                     |
-| `options` | object                                                          | Attributes to set.                                                  |
+| Option    | Type                                                                                              | Description                                                         |
+| --------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `type`    | `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"`, `"diff"`, `"terminal"`, `"tree"` or `"http"` | Component to create (`vt-<type>`). Required.                        |
+| `content` | string                                                                                            | Content, set through the `content` property (never parsed as HTML). |
+| `variant` | `"simple"` or `"full"`                                                                            | Feature preset.                                                     |
+| `options` | object                                                                                            | Attributes to set.                                                  |
 
 How `options` become attributes:
 
@@ -272,7 +307,7 @@ How `options` become attributes:
 - `true` sets an empty attribute (feature on); `false` sets the value `"false"` (feature off); `null` and `undefined` are skipped. Other values are converted to strings.
 - Names that match `/^on[a-z]*$/` after conversion are ignored, so event handler attributes such as `onclick` can never be set. Vitrine attributes that start with `on` contain a hyphen, so `onInvalid` (or `'on-invalid'`) still sets `on-invalid` on `<vt-json>`. Names that are not made of a lowercase letter followed by lowercase letters, digits and hyphens after conversion are ignored too.
 
-A non-element `target` or an unknown `type` throws a `TypeError`. `type` is one of `code`, `markdown`, `json`, `csv`, `tags` and `diff`; for `<vt-tags>` and `<vt-diff>`, set their other properties (`options`, `original`, `modified`) on the returned element.
+A non-element `target` or an unknown `type` throws a `TypeError`. `type` is one of `code`, `markdown`, `json`, `csv`, `tags`, `diff`, `terminal`, `tree` and `http`; for `<vt-tags>`, `<vt-diff>`, `<vt-tree>` and `<vt-http>`, set their other properties (`options`, `original`, `modified`, `data`, `exchange`) on the returned element.
 
 ```js
 Vitrine.render(container, {
@@ -303,7 +338,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags` and `vt-diff` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree` and `vt-http` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 
@@ -323,7 +358,7 @@ for (const [tag, ElementClass] of Vitrine.registry) {
 }
 ```
 
-The classes are also exported directly as `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags` and `VtDiff`, for example to check an element with `instanceof`:
+The classes are also exported directly as `VtCode`, `VtMarkdown`, `VtJson`, `VtCsv`, `VtTags`, `VtDiff`, `VtTerminal`, `VtTree` and `VtHttp`, for example to check an element with `instanceof`:
 
 ```js
 const element = document.querySelector('#viewer');
@@ -350,9 +385,13 @@ The event names, as a frozen object:
 | `SORT`              | `vt-sort`              |
 | `FULLSCREEN_CHANGE` | `vt-fullscreen-change` |
 | `LAYOUT_CHANGE`     | `vt-layout-change`     |
+| `SELECT`            | `vt-select`            |
+| `TOGGLE`            | `vt-toggle`            |
+| `TYPING_END`        | `vt-typing-end`        |
+| `CHANGE_NAVIGATE`   | `vt-change-navigate`   |
 | `ERROR`             | `vt-error`             |
 
-The `<vt-tags>` events `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click` are not in `EVENTS`.
+The `<vt-tags>` events `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click` are `EVENTS.TAG_ADD`, `TAG_REMOVE`, `TAG_CREATE` and `TAG_CLICK`.
 
 ```js
 element.addEventListener(Vitrine.EVENTS.COPY, (event) => {
