@@ -45,6 +45,18 @@
       "$type": "dimension",
       "$value": "24px"
     },
+    "space-6": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "space-7": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "space-8": {
+      "$type": "dimension",
+      "$value": "64px"
+    },
     "radius-sm": {
       "$type": "dimension",
       "$value": "6px"
@@ -52,6 +64,10 @@
     "radius": {
       "$type": "dimension",
       "$value": "10px"
+    },
+    "radius-lg": {
+      "$type": "dimension",
+      "$value": "16px"
     },
     "radius-full": {
       "$type": "dimension",
