@@ -7,25 +7,16 @@
  *
  * @module core/syntax-themes
  */
+import { defaultSyntaxThemesUrl, setDefaultSyntaxThemesUrl } from './asset-urls.js';
 import { getConfig } from './config.js';
-import { SYNTAX_THEME_INDEX } from './syntax-theme-index.js';
 
-/** Base URL of the theme files, set by the entry point. */
-let defaultBaseUrl = '';
+export { setDefaultSyntaxThemesUrl };
+import { SYNTAX_THEME_INDEX } from './syntax-theme-index.js';
 
 /** @type {Map<string, Promise<CSSStyleSheet | null>>} */
 const loading = new Map();
 /** @type {Map<string, CSSStyleSheet>} */
 const loaded = new Map();
-
-/**
- * Sets the default base URL of `syntax-themes/*.css` (called by the entry points).
- *
- * @param {string} url
- */
-export function setDefaultSyntaxThemesUrl(url) {
-  defaultBaseUrl = url;
-}
 
 /**
  * Normalizes and validates a syntax theme name.
@@ -78,7 +69,7 @@ export function loadSyntaxTheme(name) {
  * @returns {Promise<CSSStyleSheet | null>}
  */
 async function fetchTheme(name) {
-  const base = getConfig().syntaxThemesUrl || defaultBaseUrl;
+  const base = getConfig().syntaxThemesUrl || defaultSyntaxThemesUrl();
   if (!base) return null;
   try {
     const url = new URL(
