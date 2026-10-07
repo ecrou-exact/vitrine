@@ -3,7 +3,7 @@
  * Usage: node scripts/serve.js [root=.] [port=4173]
  */
 import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 
 const root = resolve(process.argv[2] ?? '.');
@@ -33,8 +33,19 @@ createServer(async (request, response) => {
       response.writeHead(403).end('Forbidden');
       return;
     }
-    if ((await stat(path)).isDirectory()) path = join(path, 'index.html');
-    const body = await readFile(path);
+    // Open once and read through the same handle: no check-then-use race.
+    let file = await open(path, 'r');
+    if ((await file.stat()).isDirectory()) {
+      await file.close();
+      path = join(path, 'index.html');
+      file = await open(path, 'r');
+    }
+    let body;
+    try {
+      body = await file.readFile();
+    } finally {
+      await file.close();
+    }
     response.writeHead(200, {
       'Content-Type': TYPES[extname(path)] ?? 'application/octet-stream',
       'Cache-Control': 'no-store',
