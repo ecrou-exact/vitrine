@@ -314,7 +314,7 @@ export function parseAnsi(text) {
         }
       } else if (seq?.kind === 'osc') {
         const link = /^8;[^;]*;(.*)$/s.exec(seq.params);
-        if (link) style = { ...style, link: link[1] && isSafeUrl(link[1]) ? link[1] : null };
+        if (link) style = { ...style, link: isWebUrl(link[1]) ? link[1] : null };
       }
     } else if (code < 0x20 || code === 0x7f || (code >= 0x80 && code < 0xa0)) {
       // Other control characters (bell, NUL…) are not displayed.
@@ -328,6 +328,17 @@ export function parseAnsi(text) {
   // A trailing newline does not make an extra empty line.
   if (lines.length > 1 && lines[lines.length - 1].length === 0 && /\r?\n$/.test(text)) lines.pop();
   return lines;
+}
+
+/**
+ * Links in output must be absolute http(s) URLs: relative URLs would resolve against the
+ * page, which the program that printed them knows nothing about.
+ *
+ * @param {string} url
+ * @returns {boolean}
+ */
+function isWebUrl(url) {
+  return /^https?:\/\/[^\s]+$/i.test(url) && isSafeUrl(url);
 }
 
 /**

@@ -37,6 +37,10 @@ export const EVENTS = Object.freeze({
   FULLSCREEN_CHANGE: 'vt-fullscreen-change',
   /** Split layout or scroll sync changed. Detail: `{ preview, sync }` (diff: `{ sync }`). */
   LAYOUT_CHANGE: 'vt-layout-change',
+  /** Tree: an entry was activated. Detail: `{ path, name, type, note, status }`. */
+  SELECT: 'vt-select',
+  /** Tree: a folder was opened or closed. Detail: `{ path, expanded }`. */
+  TOGGLE: 'vt-toggle',
   /** Terminal: the typing replay finished or was stopped. Detail: `{}`. */
   TYPING_END: 'vt-typing-end',
   /** Diff: moved to a change. Detail: `{ index, total, original, modified }`. */

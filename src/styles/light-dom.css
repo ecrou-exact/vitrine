@@ -42,7 +42,8 @@ vt-markdown:not(:defined),
 vt-csv:not(:defined),
 vt-tags:not(:defined),
 vt-diff:not(:defined),
-vt-terminal:not(:defined) {
+vt-terminal:not(:defined),
+vt-tree:not(:defined) {
   position: relative;
   min-height: 96px;
   max-height: 160px;
@@ -50,7 +51,9 @@ vt-terminal:not(:defined) {
   color: transparent;
 }
 
-:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal):not(:defined)::before {
+:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal, vt-tree):not(
+    :defined
+  )::before {
   content: '';
   position: absolute;
   top: calc(50% - 18px);
@@ -65,7 +68,9 @@ vt-terminal:not(:defined) {
   animation: vt-pending 300ms 300ms forwards;
 }
 
-:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal):not(:defined)::after {
+:is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal, vt-tree):not(
+    :defined
+  )::after {
   content: '';
   position: absolute;
   top: calc(50% - 4px);
@@ -95,7 +100,9 @@ vt-terminal:not(:defined) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal):not(:defined)::after {
+  :is(vt-code, vt-json, vt-markdown, vt-csv, vt-tags, vt-diff, vt-terminal, vt-tree):not(
+      :defined
+    )::after {
     animation: vt-pending 0ms 300ms forwards;
   }
 }
