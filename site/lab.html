@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @head -->
+    <title>Stress lab — Vitrine</title>
+    <meta
+      name="description"
+      content="Throw huge, deep and hostile content at Vitrine and watch it hold."
+    />
+    <script src="assets/lab.js" defer></script>
+  </head>
+  <body data-page="lab">
+    <!-- @header -->
+
+    <main id="main" class="wrap">
+      <header class="page-head">
+        <h1>Stress lab</h1>
+        <p>
+          Vitrine displays content written by other people, so it has to survive anything. Run a
+          test: the content is generated in your browser and set through the
+          <code>content</code> property, the way your site would.
+        </p>
+      </header>
+
+      <div class="lab">
+        <div class="trials" id="trials" role="group" aria-label="Tests"></div>
+        <div class="verdict" id="verdict" aria-live="polite">
+          <span class="muted">Pick a test to run it.</span>
+        </div>
+        <div id="arena"></div>
+      </div>
+    </main>
+
+    <!-- @footer -->
+  </body>
+</html>

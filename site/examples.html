@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @head -->
+    <title>Examples — Vitrine</title>
+    <meta
+      name="description"
+      content="Every Vitrine attribute in action: live components next to the HTML that renders them."
+    />
+    <script src="assets/examples.js" defer></script>
+  </head>
+  <body data-page="examples">
+    <!-- @header -->
+
+    <main id="main" class="wrap">
+      <header class="page-head">
+        <h1>Examples</h1>
+        <p>
+          Each example shows the live component next to the exact markup that renders it. Copy the
+          markup, change one attribute, and you get the same result on your site.
+        </p>
+      </header>
+
+      <section class="example-group" id="code" aria-labelledby="code-title">
+        <h2 id="code-title">&lt;vt-code&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Simple block</h3>
+            <p>
+              The default variant: highlighted code, nothing else. Indentation inside the element is
+              removed.
+            </p>
+          </div>
+          <template>
+            <vt-code language="python">
+              def greet(name: str) -> str: return f"Hello {name}"
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Line numbers, first line and emphasized lines</h3>
+            <p>
+              <code>highlight-lines</code> uses the displayed numbers, so it follows
+              <code>start-line</code>.
+            </p>
+          </div>
+          <template>
+            <vt-code language="js" line-numbers start-line="40" highlight-lines="42-43">
+              export function total(items) { let sum = 0; for (const item of items) sum +=
+              item.price * item.qty; return Math.round(sum * 100) / 100; }
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Full variant</h3>
+            <p>
+              Header with title and language, search, wrap toggle, download and copy. Open the
+              search and press Enter to move between matches.
+            </p>
+          </div>
+          <template>
+            <vt-code variant="full" language="go" label="server.go" download="server.go">
+              package main import "net/http" func main() { http.HandleFunc("/", func(w
+              http.ResponseWriter, r *http.Request) { w.Write([]byte("hello")) })
+              http.ListenAndServe(":8080", nil) }
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Full variant, minus some features</h3>
+            <p>Individual attributes always win over the variant preset.</p>
+          </div>
+          <template>
+            <vt-code
+              variant="full"
+              language="bash"
+              label="deploy.sh"
+              search="false"
+              download="false"
+              dot="false"
+            >
+              npm ci && npm run build rsync -av dist/ server:/var/www/app
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Simple variant with a copy button</h3>
+            <p>Without a header, actions float in the corner and appear on hover or focus.</p>
+          </div>
+          <template>
+            <vt-code language="bash" copy>
+              git submodule add https://github.com/ecrou-exact/vitrine.git vendor/vitrine
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Diff</h3>
+            <p>
+              Lines starting with <code>+</code> and <code>-</code> are marked as added and removed.
+              The copy button copies the diff as written.
+            </p>
+          </div>
+          <template>
+            <vt-code diff line-numbers language="js">
+              @@ -1,4 +1,4 @@ function area(r) { - return 3.14 * r * r; + return Math.PI * r ** 2; }
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Collapsible and wrapped</h3>
+            <p>
+              <code>collapsible="4"</code> shows four lines and a button;
+              <code>wrap</code> soft-wraps long lines.
+            </p>
+          </div>
+          <template>
+            <vt-code language="yaml" collapsible="4" wrap>
+              name: CI on: [push, pull_request] jobs: test: runs-on: ubuntu-latest steps: - uses:
+              actions/checkout@v7 - run: npm ci && npm test -- --reporter=verbose --coverage
+              --run-in-band-because-this-line-is-long
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Any language, loaded on demand</h3>
+            <p>
+              Common languages are bundled; the other 180 are fetched only when used.
+              <code>language="auto"</code> detects the language.
+            </p>
+          </div>
+          <template>
+            <vt-code variant="full" language="rust" search="false" download="false">
+              fn main() { let names = vec!["Ada", "Alan"]; for name in &names { println!("Hello
+              {name}"); } }
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Theme and custom properties</h3>
+            <p>
+              <code>theme</code> picks a built-in theme; CSS variables override any token. This page
+              sets
+              <code
+                >.brand-example { --vt-accent: #7c9cff; --vt-accent-fg: #7c9cff; --vt-radius: 4px;
+                }</code
+              >.
+            </p>
+          </div>
+          <template>
+            <vt-code
+              class="brand-example"
+              variant="full"
+              theme="dim"
+              language="sql"
+              label="report.sql"
+            >
+              SELECT country, count(*) AS orders FROM orders WHERE created_at > now() - interval '30
+              days' GROUP BY country ORDER BY orders DESC;
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Interface language</h3>
+            <p>
+              English and French ship with the library; register other languages with
+              <code>Vitrine.registerLocale()</code>.
+            </p>
+          </div>
+          <template>
+            <vt-code variant="full" lang-ui="fr" language="css" label="theme.css">
+              :root { --vt-radius: 6px; }
+            </vt-code>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="markdown" aria-labelledby="markdown-title">
+        <h2 id="markdown-title">&lt;vt-markdown&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Simple rendering</h3>
+            <p>
+              GitHub Flavored Markdown with highlighted code blocks. The text uses the page font.
+            </p>
+          </div>
+          <template>
+            <vt-markdown>
+              <template>
+                ### Shopping list - [x] Coffee - [ ] **Fresh** bread | Item | Price | |:--|--:| |
+                Coffee | 4.50 | ```js const total = 4.5 + 2.1; ```
+              </template>
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Full variant</h3>
+            <p>
+              Preview, source and split tabs (use the arrow keys), table of contents, heading
+              anchors, search and copy.
+            </p>
+          </div>
+          <template>
+            <vt-markdown variant="full" label="guide.md" max-height="360px">
+              <template>
+                # Guide ## Install Add one script tag. ## Use Write `&lt;vt-code&gt;` where you need
+                code. ## Style Set `--vt-accent` on any ancestor.
+              </template>
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Chosen tabs, source first</h3>
+            <p>
+              <code>tabs</code> picks which tabs exist and in which order;
+              <code>default-tab</code> picks the first one shown.
+            </p>
+          </div>
+          <template>
+            <vt-markdown
+              variant="full"
+              tabs="source,preview"
+              default-tab="source"
+              toc="false"
+              label="note.md"
+            >
+              <template> **Tip:** the source tab has line numbers and search. </template>
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Raw HTML</h3>
+            <p>
+              By default raw HTML is shown as text. With <code>allow-html</code> it is rendered, but
+              sanitized: the script and the event handler below are removed.
+            </p>
+          </div>
+          <template>
+            <vt-markdown allow-html>
+              <template>
+                Press <kbd>Ctrl</kbd> + <kbd>K</kbd>.
+                <span onclick="steal()">Handlers are removed.</span>
+
+                <details>
+                  <summary>More</summary>
+                  Native details elements are allowed.
+                </details>
+              </template>
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Image policy</h3>
+            <p>
+              <code>images="block"</code> replaces images with their alt text, so content cannot
+              track readers with remote pixels.
+            </p>
+          </div>
+          <template>
+            <vt-markdown images="block">
+              <template>
+                ![Tracking pixel](https://tracker.example/pixel.png) and ![a
+                logo](brand/logo-mark.svg)
+              </template>
+            </vt-markdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Loaded from a file</h3>
+            <p>
+              <code>src</code> loads same-origin files by default. Relative links and images resolve
+              against the file.
+            </p>
+          </div>
+          <template>
+            <vt-markdown
+              src="docs/accessibility.md"
+              variant="full"
+              max-height="320px"
+              label="accessibility.md"
+            ></vt-markdown>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="json" aria-labelledby="json-title">
+        <h2 id="json-title">&lt;vt-json&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Pretty printed</h3>
+            <p>
+              The simple variant formats and highlights JSON. Numbers are shown exactly as written.
+            </p>
+          </div>
+          <template>
+            <vt-json>
+              <template>{"id":9007199254740993,"price":19.90,"tags":["a","b"],"ok":true}</template>
+            </vt-json>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Tree view</h3>
+            <p>
+              Click a row to see its JSONPath and copy it. Arrow keys move through the tree; Right
+              and Left open and close nodes.
+            </p>
+          </div>
+          <template>
+            <vt-json variant="full" label="user.json" depth="1">
+              <template>
+                { "id": 42, "name": "Ada Lovelace", "roles": ["admin", "editor"], "address": {
+                "city": "London", "zip": null }, "weird key": "is quoted in the path" }
+              </template>
+            </vt-json>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Raw view, sorted, indented by 4</h3>
+            <p>
+              <code>view</code>, <code>sort-keys</code> and <code>indent</code> shape the raw view.
+            </p>
+          </div>
+          <template>
+            <vt-json variant="full" view="raw" sort-keys indent="4" show-types="false">
+              <template>{"zebra":1,"apple":{"b":2,"a":1}}</template>
+            </vt-json>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Invalid JSON</h3>
+            <p>
+              The error says what is wrong and where, and the line is highlighted.
+              <code>on-invalid="raw"</code> shows the text with a notice instead.
+            </p>
+          </div>
+          <template>
+            <vt-json variant="full" label="config.json">
+              <template> { "port": 8080, "hosts": ["a", "b",], } </template>
+            </vt-json>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="api" aria-labelledby="api-title">
+        <h2 id="api-title">From JavaScript</h2>
+        <p class="muted prose">
+          For data you did not write, set the <code>content</code> property (or <code>data</code> on
+          <code>&lt;vt-json&gt;</code>). It is never parsed as HTML.
+        </p>
+        <article class="example" data-script="render">
+          <div class="example-text">
+            <h3>Vitrine.render()</h3>
+            <p>Creates the element, sets its attributes and content, and puts it in the target.</p>
+          </div>
+        </article>
+        <article class="example" data-script="data">
+          <div class="example-text">
+            <h3>A JavaScript value, with events</h3>
+            <p>
+              The <code>data</code> property serializes any value. Every component dispatches
+              <code>vt-*</code> events.
+            </p>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- @footer -->
+  </body>
+</html>
