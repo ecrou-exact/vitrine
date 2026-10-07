@@ -146,6 +146,7 @@ export class VtMarkdown extends VtBase {
       baseUrl: this.baseUrl(),
       anchors: this.feature('anchors'),
       anchorLabel: this.t('anchor'),
+      tableLabel: this.t('table'),
       highlightLimit: getConfig().highlightLimit,
       onLanguageLoaded: () => {
         this.cache = null;
