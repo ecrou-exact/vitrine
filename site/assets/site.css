@@ -1632,8 +1632,8 @@ kbd {
   width: min(720px, 80vw);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(20, 184, 166, 0.16), transparent 70%);
-  filter: blur(8px);
+  /* A soft gradient on its own: a blur filter here overloads WebKit with the backdrop. */
+  background: radial-gradient(closest-side, rgba(20, 184, 166, 0.16), transparent 72%);
   animation: hero-drift 18s ease-in-out infinite alternate;
   pointer-events: none;
 }
@@ -2364,17 +2364,15 @@ h3 {
 /* ---------- Cards and blocks: a clearer entrance ---------- */
 
 .motion [data-reveal] {
+  /* No blur filter: with the animated backdrop it overloads WebKit's compositor. */
   transform: translateY(28px) scale(0.985);
-  filter: blur(4px);
 }
 
 .motion [data-reveal].is-visible {
   transform: none;
-  filter: none;
   transition:
     opacity 700ms var(--easing) var(--reveal-delay, 0ms),
-    transform 800ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
-    filter 700ms var(--easing) var(--reveal-delay, 0ms);
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
 }
 
 /* ---------- Home ---------- */
@@ -2915,4 +2913,32 @@ h3 {
   .footer-cols {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* ---------- Theme button: the moon switches to dark, the sun back to light ---------- */
+
+.theme-btn .sun {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-btn .sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .theme-btn .moon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-btn .sun {
+    display: block;
+  }
+
+  :root:not([data-theme='light']) .theme-btn .moon {
+    display: none;
+  }
+}
+
+.motion .theme-btn:hover .sun {
+  transform: rotate(45deg);
 }
