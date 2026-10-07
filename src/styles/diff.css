@@ -1,0 +1,212 @@
+/*
+ * Diff: one grid per row so long files stay light; colors come from the theme's diff
+ * tokens and the syntax theme of the code area.
+ */
+.diff-body {
+  padding: var(--_space-2) 0;
+}
+
+.diff {
+  --_num-width: calc(var(--_digits, 2) * 1ch + 2 * var(--_space-2));
+  width: max-content;
+  min-width: 100%;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  line-height: var(--_line-height);
+  tab-size: var(--_tab-size);
+  color: var(--_code-fg);
+}
+
+.diff.wrapped {
+  width: auto;
+}
+
+.diff .row {
+  display: grid;
+  grid-template-columns: var(--_num-width) var(--_num-width) 2ch minmax(0, 1fr);
+}
+
+.diff.no-numbers .row {
+  grid-template-columns: 2ch minmax(0, 1fr);
+}
+
+.diff.split .row {
+  grid-template-columns: var(--_num-width) minmax(0, 1fr) var(--_num-width) minmax(0, 1fr);
+}
+
+.diff.split.no-numbers .row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.num {
+  padding: 0 var(--_space-2);
+  background: var(--_code-bg-solid);
+  color: var(--_code-gutter);
+  font-size: var(--_font-size-small);
+  line-height: calc(var(--_font-size) * var(--_line-height));
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.num::before {
+  content: attr(data-n);
+}
+
+.diff.split .num.right {
+  border-left: 1px solid color-mix(in srgb, var(--_code-gutter) 35%, transparent);
+}
+
+.code-cell {
+  min-width: 0;
+  padding: 0 var(--_space-3) 0 var(--_space-1);
+  white-space: pre;
+}
+
+.diff.wrapped .code-cell {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diff .sign {
+  display: inline-block;
+  width: 2ch;
+  color: var(--_code-gutter);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.diff.split .sign {
+  margin-left: calc(-1 * var(--_space-1));
+}
+
+.unified .row.delete,
+.split .row.delete .left {
+  background: var(--_diff-removed);
+}
+
+.unified .row.insert,
+.split .row.insert .right {
+  background: var(--_diff-added);
+}
+
+.row.delete > .sign::before,
+.row.delete .left .sign::before {
+  content: '\2212';
+  color: var(--_danger);
+}
+
+.unified .row.insert > .sign::before,
+.row.insert .right .sign::before {
+  content: '+';
+  color: var(--_success);
+}
+
+/* The removed side of a paired row keeps its color; the added side gets its own. */
+.split .row.delete.insert .left .sign::before {
+  content: '\2212';
+}
+
+.code-cell.filler {
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    color-mix(in srgb, var(--_code-fg) 5%, transparent) 6px 7px
+  );
+}
+
+mark.word-change {
+  border-radius: 2px;
+  color: inherit;
+}
+
+.row.delete .left mark.word-change,
+.unified .row.delete mark.word-change {
+  background: color-mix(in srgb, var(--_danger) 32%, transparent);
+}
+
+.row.insert .right mark.word-change,
+.unified .row.insert mark.word-change {
+  background: color-mix(in srgb, var(--_success) 32%, transparent);
+}
+
+.fold-row,
+.gap {
+  border-block: 1px dashed color-mix(in srgb, var(--_code-gutter) 45%, transparent);
+  background: color-mix(in srgb, var(--_accent-soft) 50%, transparent);
+}
+
+.fold {
+  display: block;
+  width: 100%;
+  padding: 4px var(--_space-3);
+  border: 0;
+  background: none;
+  color: var(--_accent-fg);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+  text-align: left;
+  cursor: pointer;
+}
+
+.fold:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gap {
+  color: var(--_code-gutter);
+  text-align: center;
+}
+
+/* ---------- Edit mode ---------- */
+
+.diff-editors {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border-bottom: 1px solid var(--_border);
+}
+
+.diff-editors.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.diff-editor + .diff-editor {
+  border-left: 1px solid var(--_border);
+}
+
+.diff-editor-label {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.diff-editor .editor-body {
+  max-height: min(40vh, 360px);
+}
+
+.vt {
+  container-type: inline-size;
+}
+
+@container (max-width: 640px) {
+  .diff-editors {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .diff-editor + .diff-editor {
+    border-top: 1px solid var(--_border);
+    border-left: 0;
+  }
+}
+
+.vt[data-fullscreen] .diff-host {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}

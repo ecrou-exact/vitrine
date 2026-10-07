@@ -9,6 +9,7 @@
  */
 import { VtCode } from './components/code/vt-code.js';
 import { VtCsv } from './components/csv/vt-csv.js';
+import { VtDiff } from './components/diff/vt-diff.js';
 import { VtTags } from './components/tags/vt-tags.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
@@ -20,6 +21,7 @@ import { BUILT_IN_THEMES, getTheme, listThemes, registerTheme } from './core/the
 export {
   VtCode,
   VtCsv,
+  VtDiff,
   VtTags,
   VtMarkdown,
   VtJson,
@@ -55,6 +57,7 @@ export const registry = new Map(
     ['vt-json', VtJson],
     ['vt-csv', VtCsv],
     ['vt-tags', VtTags],
+    ['vt-diff', VtDiff],
   ]),
 );
 
