@@ -4,7 +4,14 @@ import prettier from 'eslint-config-prettier';
 
 export default [
   {
-    ignores: ['dist/', 'coverage/', 'node_modules/', 'test-results/', 'playwright-report/'],
+    ignores: [
+      'dist/',
+      '_site/',
+      'coverage/',
+      'node_modules/',
+      'test-results/',
+      'playwright-report/',
+    ],
   },
   js.configs.recommended,
   {
@@ -45,11 +52,19 @@ export default [
     },
   },
   {
+    files: ['site/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'script',
+      globals: { ...globals.browser, Vitrine: 'readonly' },
+    },
+  },
+  {
     files: ['src/core/security.js'],
     rules: { 'no-restricted-syntax': 'off' },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'tests/**/*.js'],
+    files: ['scripts/**/*.js', '*.config.js', 'tests/**/*.js', 'tests/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
