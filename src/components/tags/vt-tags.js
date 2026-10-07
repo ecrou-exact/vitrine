@@ -886,11 +886,19 @@ export class VtTags extends VtBase {
    * @typedef {{ type: "option", tag: Tag } | { type: "create", text: string }} ListItem
    */
 
+  /**
+   * What the user typed, without the typing prefix ("#"): the prefix is never part of a tag.
+   *
+   * @returns {string}
+   */
+  typedQuery() {
+    const query = this.query.trim();
+    return this.prefix && query.startsWith(this.prefix) ? query.slice(this.prefix.length) : query;
+  }
+
   /** @returns {ListItem[]} Items of the suggestions list, in order. */
   listItems() {
-    const query = this.query
-      .trim()
-      .replace(this.prefix ? new RegExp(`^${escapeRegExp(this.prefix)}`) : /^$/, '');
+    const query = this.typedQuery();
     const local = filterOptions(this.allOptions(), query, SUGGESTION_LIMIT).tags;
     const seen = new Set(local.map((tag) => tagKey(tag.value, this.caseSensitive)));
     const remote = this.suggestions.filter(
@@ -1043,9 +1051,7 @@ export class VtTags extends VtBase {
     clearTimeout(this.suggestTimer);
     this.suggestAbort?.abort();
     // The prefix ("#") is typing syntax, not part of the tag: never send it.
-    const query = this.query
-      .trim()
-      .replace(this.prefix ? new RegExp(`^${escapeRegExp(this.prefix)}`) : /^$/, '');
+    const query = this.typedQuery();
     const src = this.getAttribute('suggest-src');
     if (!query || (!this._suggest && !src)) {
       if (this.suggestions.length) {
@@ -1204,12 +1210,4 @@ function safeJson(text) {
   } catch {
     return [];
   }
-}
-
-/**
- * @param {string} text
- * @returns {string}
- */
-function escapeRegExp(text) {
-  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

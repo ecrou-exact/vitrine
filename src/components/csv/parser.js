@@ -215,13 +215,13 @@ export function sortKey(value, type) {
  * @returns {string}
  */
 export function toCsv(rows, delimiter) {
-  const needsQuotes = new RegExp(
-    `["\\r\\n${delimiter === '\t' ? '\\t' : delimiter.replace(/[|]/g, '\\|')}]`,
-  );
+  /** @param {string} cell */
+  const needsQuotes = (cell) =>
+    cell.includes('"') || cell.includes('\r') || cell.includes('\n') || cell.includes(delimiter);
   return rows
     .map((row) =>
       row
-        .map((cell) => (needsQuotes.test(cell) ? `"${cell.replace(/"/g, '""')}"` : cell))
+        .map((cell) => (needsQuotes(cell) ? `"${cell.replace(/"/g, '""')}"` : cell))
         .join(delimiter),
     )
     .join('\n');
