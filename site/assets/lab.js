@@ -60,7 +60,8 @@ const TRIALS = [
   },
   {
     title: 'Expand all on 20,000 objects',
-    detail: 'Click "Expand all": it stops after 5,000 visible rows and says so.',
+    detail:
+      'Click "Expand all": it stops after 5,000 visible rows and says so. Raw opens at once: its 220,000 lines are built as you scroll.',
     run: () =>
       mount(
         'vt-json',

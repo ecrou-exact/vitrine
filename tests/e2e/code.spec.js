@@ -253,10 +253,14 @@ test.describe('<vt-code>', () => {
     );
     const el = page.locator('#el');
     await expect(el.locator('.chunk')).toHaveCount(13);
-    await expect(el.locator('.line[data-line="1201"] .gutter')).toHaveAttribute('data-n', '1201');
+    // Only the first block is built up front; the others wait until they are needed.
+    await expect(el.locator('.chunk[data-pending]')).toHaveCount(12);
+    await expect(el.locator('.line')).toHaveCount(200);
     await el.getByRole('button', { name: 'Search' }).click();
     await el.getByRole('searchbox').fill('line 2499');
     await expect(el.locator('mark.current')).toBeInViewport();
+    await expect(el.locator('.chunk[data-pending]')).toHaveCount(0);
+    await expect(el.locator('.line[data-line="1201"] .gutter')).toHaveAttribute('data-n', '1201');
   });
 
   test('large content skips highlighting but stays responsive', async ({ page }) => {

@@ -8,7 +8,8 @@
 import { inRanges } from './attributes.js';
 import { h } from './dom.js';
 import { highlight } from './highlighter.js';
-import { plainLines, splitLines } from './lines.js';
+import { deferChunk } from './chunks.js';
+import { splitLines } from './lines.js';
 
 /** @typedef {import('./attributes.js').Range} Range */
 
@@ -94,29 +95,23 @@ export function buildCodeView(text, options) {
   }
   const code = sourceLines.join('\n');
   const highlightSkipped = code.length > options.highlightLimit;
-  const lines =
-    highlightSkipped || options.language === 'plaintext'
-      ? plainLines(code)
-      : splitLines(highlight(code, options.language));
+  const plain = highlightSkipped || options.language === 'plaintext';
+  // Plain lines are created when their row is built: a huge document never holds a
+  // DOM fragment per line it does not show.
+  const fragments = plain ? null : splitLines(highlight(code, options.language));
+  const textLines = plain ? code.split('\n') : null;
+  const count = fragments ? fragments.length : /** @type {string[]} */ (textLines).length;
 
-  const lastNumber = options.startLine + lines.length - 1;
+  const lastNumber = options.startLine + count - 1;
   const digits = Math.max(String(options.startLine).length, String(lastNumber).length);
   const pre = h('pre', { class: 'code', part: 'code' });
   pre.style.setProperty('--_digits', String(digits));
 
-  const rows = document.createDocumentFragment();
-  // Long code is grouped in blocks the browser can skip while they are off-screen
-  // (content-visibility), which keeps tens of thousands of lines fast to lay out.
-  const chunked = options.chunk !== false && lines.length > CHUNK_THRESHOLD;
-  /** @type {Node} */
-  let target = rows;
-  lines.forEach((fragment, index) => {
-    if (chunked && index % CHUNK_LINES === 0) {
-      target = h('span', { class: 'chunk' });
-      const size = Math.min(CHUNK_LINES, lines.length - index);
-      /** @type {HTMLElement} */ (target).style.setProperty('--_chunk-lines', String(size));
-      rows.append(target);
-    }
+  /**
+   * @param {number} index
+   * @returns {HTMLElement}
+   */
+  const buildRow = (index) => {
     const number = options.startLine + index;
     const kind = kinds?.[index];
     const row = h('span', { class: 'line', part: 'line', attrs: { 'data-line': number } });
@@ -152,14 +147,54 @@ export function buildCodeView(text, options) {
       );
     }
     const content = h('span', { class: 'content' });
-    content.append(fragment);
-    if (index < lines.length - 1) content.append('\n');
+    if (fragments) content.append(fragments[index]);
+    else if (textLines?.[index]) content.append(textLines[index]);
+    if (index < count - 1) content.append('\n');
     row.append(content);
-    target.appendChild(row);
-  });
+    return row;
+  };
+
+  /**
+   * @param {Node} target
+   * @param {number} from
+   * @param {number} to
+   */
+  const buildRows = (target, from, to) => {
+    const rows = document.createDocumentFragment();
+    for (let index = from; index < to; index += 1) rows.appendChild(buildRow(index));
+    target.appendChild(rows);
+  };
+
+  const rows = document.createDocumentFragment();
+  // Long code is grouped in blocks the browser can skip while they are off-screen
+  // (content-visibility). Blocks after the first get their lines only when they come
+  // near the screen or when their text is needed (see core/chunks.js), so even
+  // hundreds of thousands of lines open at once.
+  if (options.chunk !== false && count > CHUNK_THRESHOLD) {
+    for (let from = 0; from < count; from += CHUNK_LINES) {
+      const to = Math.min(count, from + CHUNK_LINES);
+      const chunk = h('span', {
+        class: 'chunk',
+        attrs: { 'data-first': options.startLine + from, 'data-count': to - from },
+      });
+      chunk.style.setProperty('--_chunk-lines', String(to - from));
+      rows.append(chunk);
+      if (from === 0) {
+        buildRows(chunk, from, to);
+      } else {
+        chunk.setAttribute('data-pending', '');
+        deferChunk(chunk, () => {
+          chunk.removeAttribute('data-pending');
+          buildRows(chunk, from, to);
+        });
+      }
+    }
+  } else {
+    buildRows(rows, 0, count);
+  }
   pre.append(rows);
   const element = h('div', { class: 'code-view' }, pre);
-  return { element, code: pre, lineCount: lines.length, highlightSkipped };
+  return { element, code: pre, lineCount: count, highlightSkipped };
 }
 
 /**
