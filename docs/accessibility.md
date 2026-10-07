@@ -6,10 +6,10 @@ Vitrine elements are designed to be usable with a keyboard, a screen reader, tou
 
 ### Common controls
 
-| Element                                                                                                | Keys                                                                     |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| Icon buttons (copy, search, download, wrap, expand all…)                                               | Tab to reach, Enter or Space to activate                                 |
-| Scrollable content areas (code, source view, Markdown preview, raw JSON, tables, Markdown code blocks) | Tab to focus, then arrow keys, Page Up / Page Down, Home / End to scroll |
+| Element                                                                                                                    | Keys                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Icon buttons (copy, search, download, wrap, expand all, full screen, edit, undo…)                                          | Tab to reach, Enter or Space to activate                                 |
+| Scrollable content areas (code, source view, Markdown preview, raw JSON, CSV table, diff, Markdown tables and code blocks) | Tab to focus, then arrow keys, Page Up / Page Down, Home / End to scroll |
 
 ### Search bar
 
@@ -21,7 +21,7 @@ Vitrine elements are designed to be usable with a keyboard, a screen reader, tou
 
 The match counter (`2 / 14`) is visual; results are announced through the live region (see below). Navigation wraps around from the last match to the first.
 
-### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw)
+### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw, `<vt-csv>` Table / Raw, `<vt-diff>` Side by side / Unified)
 
 Tabs follow the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) with automatic activation: moving to a tab selects it.
 
@@ -51,6 +51,45 @@ The tree follows the [WAI-ARIA tree view pattern](https://www.w3.org/WAI/ARIA/ap
 
 Each item has `role="treeitem"`, `aria-level`, `aria-setsize`, `aria-posinset`, `aria-selected`, and `aria-expanded` for containers. Child lists have `role="group"`. The tree is named after the element's `label` (or `title`), or "JSON".
 
+### Editors
+
+In edit mode, the editor is a native `<textarea>` named after the `label` (or "Editor"), so screen readers, input methods and the browser's own text editing work as usual. See [Editing](editing.md#keyboard).
+
+| Key                                      | Action                           |
+| ---------------------------------------- | -------------------------------- |
+| Tab / Shift+Tab                          | Indent / outdent                 |
+| Escape, then Tab or Shift+Tab            | Move focus out of the editor     |
+| Enter                                    | New line keeping the indentation |
+| Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z, Ctrl/Cmd+Y | Undo, redo                       |
+
+Because Tab indents, the editor would otherwise trap keyboard focus: pressing Escape first releases Tab until another key is pressed. The highlighted layer behind the textarea is hidden from assistive technologies. The JSON and CSV status bars have `role="status"`, so validation results are announced politely.
+
+### Tags combobox
+
+The text field of `<vt-tags>` in edit mode follows the [WAI-ARIA combobox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/) with a list popup: `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` pointing to the `role="listbox"` (`aria-multiselectable="true"`), and `aria-activedescendant` for the highlighted option, so focus stays in the field.
+
+| Key             | Action                                                                    |
+| --------------- | ------------------------------------------------------------------------- |
+| Down / Up arrow | Open the list, move the highlight (wraps around)                          |
+| Home / End      | First / last option, when the list is open and the field is empty         |
+| Enter           | Choose the highlighted option, or add the typed text                      |
+| Escape          | Close the list; when closed, clear the field                              |
+| Backspace       | In an empty field: first press highlights the last tag, second removes it |
+
+Options have `role="option"` and `aria-selected`; disabled options have `aria-disabled="true"`. The field is described by the status line ("3 tags", "3 / 5 tags"). Remove buttons are named "Remove design". The selected tags are a list (`role="list"`) named after the `label`, or "Tags". The browse panel uses native checkboxes grouped with `role="group"`. Requiring two presses of Backspace prevents removing a tag by accident when deleting text.
+
+### Sortable table headers
+
+In `<vt-csv>` with `sortable`, each column header contains a button ("Sort by name"). Enter or Space sorts, and focus stays on the button. The header cell has `aria-sort` (`ascending`, `descending` or `none`), and the sort icon is decorative. Column headers have `scope="col"`, row numbers are row headers (`scope="row"`), and the table has a caption (visually hidden) with the `label`, or "CSV". The pager text ("Rows 1–100 of 2,345") is a polite live region.
+
+### Diff
+
+`<vt-diff>` is exposed as a table (`role="table"`, named after the `label`, or "Changes") of rows and cells. Line numbers are hidden from assistive technologies, and the sign of each changed line is read as "Added: " or "Removed: ". "Show N unchanged lines" buttons expand folded regions.
+
+### Full screen
+
+The full screen button has `aria-pressed` and changes its name to "Exit full screen". Escape leaves full screen: through the browser with the Fullscreen API, or through Vitrine when the element fills the window instead (focus must be inside the element). Focus returns to the button when entering and leaving.
+
 ### Markdown links and headings
 
 Links in rendered Markdown are regular links. In-document links (`#section`), including the table of contents and heading anchors, scroll to the heading inside the element and move keyboard focus to it, so the next Tab continues from there.
@@ -68,13 +107,16 @@ Links in rendered Markdown are regular links. In-document links (`#section`), in
 
 Each element contains a polite, atomic live region (`aria-live="polite"`). It announces:
 
-| Situation                                           | Announcement                               |
-| --------------------------------------------------- | ------------------------------------------ |
-| Copy succeeded                                      | "Copied"                                   |
-| Copy failed                                         | "Copy failed"                              |
-| Search with results                                 | "14 matches" ("5000+ matches" when capped) |
-| Search without results                              | "No matches"                               |
-| "Expand all" stopped early on a large JSON document | "Partially expanded: too many nodes."      |
+| Situation                                           | Announcement                                                              |
+| --------------------------------------------------- | ------------------------------------------------------------------------- |
+| Copy succeeded                                      | "Copied"                                                                  |
+| Copy failed                                         | "Copy failed"                                                             |
+| Search with results                                 | "14 matches" ("5000+ matches" when capped)                                |
+| Search without results                              | "No matches"                                                              |
+| "Expand all" stopped early on a large JSON document | "Partially expanded: too many nodes."                                     |
+| A tag was added or removed                          | "design added", "design removed"                                          |
+| First Backspace in an empty tag field               | "Press Backspace again to remove design"                                  |
+| A tag was refused                                   | For example "design is already selected.", "You can select up to 5 tags." |
 
 Other states use roles:
 
@@ -92,11 +134,12 @@ Announcements are translated with the element's interface locale (`lang-ui`).
 - Scrollable areas are focusable regions (`role="region"`) with a name: the element's `label` (or `title`) when set, otherwise a default such as "Code (Python)", "Preview", "Source" or "JSON". Set `label` to give each element a meaningful name, especially when several are on the same page.
 - Markdown heading anchors are named "Link to this section: " followed by the heading text.
 - Markdown task list checkboxes are disabled and named after their item text.
-- Line numbers, diff signs, the status dot and decorative icons are hidden from assistive technologies.
+- Line numbers, diff signs, the status dot and decorative icons are hidden from assistive technologies (the sign of a `<vt-diff>` line is announced as text instead).
+- Split view buttons of `<vt-markdown>` are named "Swap panes", "Stack panes" and "Sync scrolling"; the last two expose their state with `aria-pressed`.
 
 ## Touch
 
-On devices with a coarse pointer (touch screens), icon buttons grow to 44 by 44 CSS pixels, and text buttons and tabs to a minimum height of 44 pixels. The floating toolbar (shown when the header is off) is always visible on devices without hover.
+On devices with a coarse pointer (touch screens), icon buttons grow to 44 by 44 CSS pixels, and text buttons and tabs to a minimum height of 44 pixels. The remove buttons of tags keep their size but get a larger invisible hit area. The floating toolbar (shown when the header is off) is always visible on devices without hover.
 
 ## Reduced motion
 
@@ -106,7 +149,9 @@ When the user prefers reduced motion (`prefers-reduced-motion: reduce`), transit
 
 Every built-in theme is tested for text contrast of at least 4.5:1 (WCAG AA), and the `high-contrast` theme reaches 7:1 (WCAG AAA) for text and syntax colors on the code background. See [Theming](theming.md#contrast). If you override color tokens, check the contrast of your own values.
 
-Status is never conveyed by color alone: copy feedback swaps the icon and is announced, errors include an icon and a message, and diff lines have a sign column.
+Status is never conveyed by color alone: copy feedback swaps the icon and is announced, errors include an icon and a message, diff lines have a sign column, the JSON and CSV status bars use an icon and a message, and colored tags keep their label in the regular text color, with a colored dot.
+
+Syntax themes from the highlight.js collection are not tested by Vitrine, and most of them do not reach 4.5:1 for every token color. See [Contrast of syntax themes](theming.md#contrast-of-syntax-themes).
 
 ## How accessibility is tested
 

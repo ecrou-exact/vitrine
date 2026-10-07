@@ -42,8 +42,8 @@ export default defineConfig({
 
   vue: `<script setup>
 import { ref } from 'vue';
-import 'vitrine/dist/esm/vt-tags.js';
-import 'vitrine/dist/esm/vt-markdown.js';
+import '${CDN}/esm/vt-tags.js';
+import '${CDN}/esm/vt-markdown.js';
 
 const topics = ref(['design']);
 const options = ['design', 'research', 'accessibility', 'performance'];
@@ -69,7 +69,7 @@ const notes = ref('# Notes');
 </template>`,
 
   react: `import { useEffect, useRef, useState } from 'react';
-import 'vitrine/dist/esm/vt-tags.js';
+import '${CDN}/esm/vt-tags.js';
 
 export function TopicsField({ options }) {
   const [topics, setTopics] = useState(['design']);
@@ -94,8 +94,8 @@ export function TopicsField({ options }) {
 }`,
 
   svelte: `<script>
-  import 'vitrine/dist/esm/vt-json.js';
-  import 'vitrine/dist/esm/vt-tags.js';
+  import '${CDN}/esm/vt-json.js';
+  import '${CDN}/esm/vt-tags.js';
 
   let { order } = $props();
   let topics = $state(['design']);
@@ -110,7 +110,7 @@ export function TopicsField({ options }) {
 ></vt-tags>`,
 
   angular: `import { Component, CUSTOM_ELEMENTS_SCHEMA, signal } from '@angular/core';
-import 'vitrine/dist/esm/vt-tags.js';
+import '${CDN}/esm/vt-tags.js';
 
 @Component({
   selector: 'app-topics',
