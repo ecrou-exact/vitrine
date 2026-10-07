@@ -4,6 +4,7 @@ import codeCss from '../../styles/code.css?raw';
 import jsonCss from '../../styles/json.css?raw';
 import { parseBoolean, parseEnum, parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
+import { lineElement } from '../../core/chunks.js';
 import { buildCodeView, revealMatch } from '../../core/code-view.js';
 import { CodeEditor } from '../../core/editor.js';
 import { icon } from '../../core/icons.js';
@@ -533,7 +534,7 @@ export class VtJson extends VtBase {
       body,
     );
     requestAnimationFrame(() => {
-      const line = body.querySelector(`[data-line="${error.line}"]`);
+      const line = lineElement(body, error.line);
       if (line instanceof HTMLElement)
         body.scrollTop = Math.max(0, line.offsetTop - body.clientHeight / 2);
     });

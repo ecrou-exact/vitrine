@@ -40,6 +40,11 @@
     calc(var(--_chunk-lines) * var(--_font-size) * var(--_line-height));
 }
 
+/* A block whose lines are not built yet keeps the height they will take. */
+.chunk[data-pending] {
+  block-size: calc(var(--_chunk-lines) * var(--_font-size) * var(--_line-height));
+}
+
 .gutter {
   position: sticky;
   left: 0;
