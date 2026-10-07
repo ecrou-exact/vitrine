@@ -1,6 +1,7 @@
 // @ts-check
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
+import ansiCss from '../../styles/ansi.css?raw';
 import terminalCss from '../../styles/terminal.css?raw';
 import { parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
@@ -15,6 +16,7 @@ import { formatNumber } from '../../core/i18n.js';
 import { TextSearch } from '../../core/search.js';
 import { iconButton } from '../../core/ui.js';
 import { decodeLiteralEscapes, lineText, parseAnsi } from './ansi.js';
+import { segmentNode } from './ansi-dom.js';
 import { commandsText, parsePrompts, parseTranscript } from './transcript.js';
 import { TypingPlayer } from './typing.js';
 
@@ -83,7 +85,7 @@ export class VtTerminal extends VtBase {
     },
   }; // prettier-ignore
 
-  static styles = [syntaxCss, codeCss, terminalCss];
+  static styles = [syntaxCss, codeCss, ansiCss, terminalCss];
 
   static keepCarriageReturns = true;
 
@@ -476,62 +478,4 @@ function lineNode(segments, colors) {
   }
   line.append('\n');
   return line;
-}
-
-/**
- * A styled segment. Colors from the 16-color palette use classes (themed); 256-color
- * and 24-bit colors are set with CSSOM from validated numbers.
- *
- * @param {Segment} segment
- * @returns {Node}
- */
-export function segmentNode(segment) {
-  const style = segment.style;
-  let fg = style.fg;
-  let bg = style.bg;
-  const plain =
-    !fg && !bg && !style.bold && !style.dim && !style.italic && !style.underline &&
-    !style.inverse && !style.strike && !style.link; // prettier-ignore
-  if (plain) return document.createTextNode(segment.text);
-
-  /** @type {string[]} */
-  const classes = [];
-  if (style.inverse) {
-    [fg, bg] = [bg, fg];
-    if (!fg) classes.push('fg-inverse');
-    if (!bg) classes.push('bg-inverse');
-  }
-  // Bold text in one of the 8 base colors uses the bright variant, like most terminals.
-  if (fg && 'index' in fg && style.bold && fg.index < 8) fg = { index: fg.index + 8 };
-  if (style.bold) classes.push('bold');
-  if (style.dim) classes.push('dim');
-  if (style.italic) classes.push('italic');
-  if (style.underline) classes.push('underline');
-  if (style.strike) classes.push('strike');
-  if (bg && !fg && !style.inverse) classes.push('on-bg');
-
-  const node = style.link
-    ? h('a', {
-        attrs: { href: style.link, rel: 'noopener noreferrer nofollow', target: '_blank' },
-      })
-    : h('span');
-  if (fg) {
-    if ('index' in fg) classes.push(`fg-${fg.index}`);
-    else node.style.color = rgb(fg.rgb);
-  }
-  if (bg) {
-    if ('index' in bg) classes.push(`bg-${bg.index}`);
-    else node.style.backgroundColor = rgb(bg.rgb);
-  }
-  node.className = classes.join(' ');
-  node.textContent = segment.text;
-  return node;
-}
-
-/**
- * @param {[number, number, number]} color
- * @returns {string}
- */
-function rgb([r, g, b]) {
-  return `rgb(${r | 0}, ${g | 0}, ${b | 0})`;
 }
