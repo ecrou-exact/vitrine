@@ -23,6 +23,8 @@ export const EVENTS = Object.freeze({
   CHANGE: 'vt-change',
   /** Mode switched with the edit toggle. Detail: `{ mode }`. */
   MODE_CHANGE: 'vt-mode-change',
+  /** A table was sorted. Detail: `{ column, name, direction }`. */
+  SORT: 'vt-sort',
   /** Full screen entered or left. Detail: `{ fullscreen }`. */
   FULLSCREEN_CHANGE: 'vt-fullscreen-change',
   /** Split layout changed. Detail: `{ preview, sync }`. */

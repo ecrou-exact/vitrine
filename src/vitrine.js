@@ -8,6 +8,8 @@
  * @since 0.1.0
  */
 import { VtCode } from './components/code/vt-code.js';
+import { VtCsv } from './components/csv/vt-csv.js';
+import { VtTags } from './components/tags/vt-tags.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { configure, getConfig } from './core/config.js';
@@ -17,6 +19,8 @@ import { BUILT_IN_THEMES, getTheme, listThemes, registerTheme } from './core/the
 
 export {
   VtCode,
+  VtCsv,
+  VtTags,
   VtMarkdown,
   VtJson,
   configure,
@@ -49,11 +53,18 @@ export const registry = new Map(
     ['vt-code', VtCode],
     ['vt-markdown', VtMarkdown],
     ['vt-json', VtJson],
+    ['vt-csv', VtCsv],
+    ['vt-tags', VtTags],
   ]),
 );
 
 /** Maps `render()` types to tag names. */
-const TYPES = /** @type {const} */ ({ code: 'vt-code', markdown: 'vt-markdown', json: 'vt-json' });
+const TYPES = /** @type {const} */ ({
+  code: 'vt-code',
+  markdown: 'vt-markdown',
+  json: 'vt-json',
+  csv: 'vt-csv',
+});
 
 /**
  * Defines every Vitrine custom element that is not already defined.
