@@ -223,6 +223,10 @@ test.describe('XSS payloads', () => {
     const el = page.locator('vt-code');
     expect(await el.getAttribute('onclick')).toBe(null);
     expect(await el.getAttribute('onmouseover')).toBe(null);
+    await el.click();
+    await el.hover();
+    expect(await page.evaluate(() => window.__xss)).toBeUndefined();
+    // Vitrine's own attributes starting with "on" still work (they contain a dash).
     await page.evaluate(() =>
       window.Vitrine.render(document.getElementById('root'), {
         type: 'json',
@@ -231,9 +235,6 @@ test.describe('XSS payloads', () => {
       }),
     );
     expect(await page.locator('vt-json').getAttribute('on-invalid')).toBe('raw');
-    await el.click();
-    await el.hover();
-    expect(await page.evaluate(() => window.__xss)).toBeUndefined();
   });
 });
 
