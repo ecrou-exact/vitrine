@@ -4,7 +4,8 @@ import codeCss from '../../styles/code.css?raw';
 import markdownCss from '../../styles/markdown.css?raw';
 import { parseBoolean, parseEnum, parseList } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
-import { buildCodeView } from '../../core/code-view.js';
+import { VitrineError } from '../../core/content.js';
+import { buildCodeView, revealMatch } from '../../core/code-view.js';
 import { getConfig } from '../../core/config.js';
 import { h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
@@ -159,7 +160,12 @@ export class VtMarkdown extends VtBase {
         this.cache = { key, result: renderMarkdown(this.text ?? '', options), error: null };
       } catch (error) {
         // e.g. pathological nesting exhausting the parser stack.
-        this.cache = { key, result: null, error };
+        // A stack overflow means the document is nested too deeply to render.
+        this.cache = {
+          key,
+          result: null,
+          error: error instanceof RangeError ? new VitrineError('tooComplex', {}, error) : error,
+        };
       }
     }
     if (this.cache.error || !this.cache.result) throw this.cache.error;
@@ -231,9 +237,7 @@ export class VtMarkdown extends VtBase {
       searches.push(new TextSearch(view.code));
     }
 
-    const target = combineSearches(searches, (mark) =>
-      mark.scrollIntoView({ block: 'nearest', inline: 'nearest' }),
-    );
+    const target = combineSearches(searches, revealMatch);
     const tabs = this.visibleTabs;
     const tabList =
       tabs.length > 1
