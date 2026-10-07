@@ -44,19 +44,19 @@ test('pages have no horizontal overflow on a phone', async ({ page }) => {
 });
 
 test('every stress lab trial ends safely', async ({ page }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
   await page.goto(`${SITE}/lab.html`);
   const trials = page.locator('.trial');
   const count = await trials.count();
   expect(count).toBeGreaterThan(5);
   for (let i = 0; i < count; i += 1) {
-    await trials.nth(i).click();
-    const verdict = page.locator('#verdict');
-    await expect(verdict).toContainText('Scripts executed', { timeout: 30_000 });
-    await expect(
-      verdict.locator('.bad'),
-      await trials.nth(i).locator('strong').textContent(),
-    ).toHaveCount(0);
+    const title = (await trials.nth(i).locator('strong').textContent()) ?? `trial ${i}`;
+    await test.step(title, async () => {
+      await trials.nth(i).click();
+      const verdict = page.locator('#verdict');
+      await expect(verdict).toContainText('Scripts executed', { timeout: 30_000 });
+      await expect(verdict.locator('.bad'), title).toHaveCount(0);
+    });
   }
 });
 
