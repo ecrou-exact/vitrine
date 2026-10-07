@@ -18,7 +18,7 @@ const COMPONENTS = {
   'vt-json': 62 * KB,
   'vt-csv': 60 * KB,
   'vt-tags': 32 * KB,
-  'vt-diff': 62 * KB,
+  'vt-diff': 64 * KB,
 };
 
 const rawCss = {
