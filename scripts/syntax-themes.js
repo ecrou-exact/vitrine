@@ -83,7 +83,11 @@ function convert(name, source) {
       continue;
     }
     if (!declarations.length) continue;
-    for (const [property, value] of declarations) if (property === 'color') tokenColors.push(value);
+    // A token drawn on its own background is not read against the theme background.
+    const ownBackground = declarations.some(([property]) => property.startsWith('background'));
+    if (!ownBackground)
+      for (const [property, value] of declarations)
+        if (property === 'color') tokenColors.push(value);
     rules.push(
       `${selectors
         .split(',')
