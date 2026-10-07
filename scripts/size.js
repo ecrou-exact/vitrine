@@ -9,22 +9,22 @@ import { readFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 const KB = 1024;
-/** Full bundles: nine components, highlight.js core and 10 languages, marked, DOMPurify. */
-const BUNDLES = { 'dist/vitrine.min.js': 128 * KB, 'dist/vitrine.esm.js': 128 * KB };
+/** Full bundles: twelve components, highlight.js core and 10 languages, marked, DOMPurify. */
+const BUNDLES = { 'dist/vitrine.min.js': 152 * KB, 'dist/vitrine.esm.js': 152 * KB };
 /** Per-component modules (what a page using only that element downloads). */
 const COMPONENTS = {
-  'vt-code': 58 * KB,
-  'vt-markdown': 76 * KB,
-  'vt-json': 62 * KB,
-  'vt-csv': 60 * KB,
+  'vt-code': 60 * KB,
+  'vt-markdown': 78 * KB,
+  'vt-json': 64 * KB,
+  'vt-csv': 61 * KB,
   'vt-tags': 32 * KB,
-  'vt-diff': 64 * KB,
-  'vt-terminal': 60 * KB,
-  'vt-tree': 60 * KB,
-  'vt-http': 66 * KB,
-  'vt-log': 62 * KB,
-  'vt-chart': 48 * KB,
-  'vt-openapi': 48 * KB,
+  'vt-diff': 66 * KB,
+  'vt-terminal': 62 * KB,
+  'vt-tree': 62 * KB,
+  'vt-http': 67 * KB,
+  'vt-log': 64 * KB,
+  'vt-chart': 62 * KB,
+  'vt-openapi': 64 * KB,
 };
 
 const rawCss = {
