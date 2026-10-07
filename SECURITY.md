@@ -30,6 +30,13 @@ Please include:
    (unless you prefer to stay anonymous).
 4. Details are made public once a fix is available, ideally within 90 days of the report.
 
+## What Vitrine guarantees
+
+The threat model, the sanitization pipeline, the recommended Content Security Policy and the
+limits are documented in [docs/security.md](docs/security.md). Every release passes an XSS
+payload suite in Chromium, Firefox and WebKit, run on a page without CSP so that a sanitizer
+failure would really execute.
+
 ## Scope
 
 In scope: XSS or script execution through any component input, sanitizer bypasses, CSP or Trusted
