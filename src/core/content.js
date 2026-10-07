@@ -48,18 +48,8 @@ const DATA_SCRIPT_TYPES = new Set([
  */
 export function readInlineContent(host) {
   for (const child of Array.from(host.children)) {
-    if (child instanceof HTMLTemplateElement) {
-      // A template holding markup is HTML source: serialize it (reading innerHTML is not a sink).
-      // Otherwise it holds plain text, read as text so "a < b" is not turned into "a &lt; b".
-      const hasElements = child.content.children.length > 0;
-      return dedent(hasElements ? child.innerHTML : (child.content.textContent ?? ''));
-    }
-    if (
-      child instanceof HTMLScriptElement &&
-      DATA_SCRIPT_TYPES.has(child.type.trim().toLowerCase())
-    ) {
-      return dedent(child.textContent ?? '');
-    }
+    const text = readContainer(child);
+    if (text !== null) return text;
   }
   let text = '';
   for (const node of Array.from(host.childNodes)) {
@@ -71,6 +61,28 @@ export function readInlineContent(host) {
   }
   const result = dedent(text);
   return result === '' ? null : result;
+}
+
+/**
+ * Reads a content container: a `<template>` or a data `<script>`.
+ *
+ * @param {Element} child
+ * @returns {string | null} `null` when the element is not a container.
+ */
+export function readContainer(child) {
+  if (child instanceof HTMLTemplateElement) {
+    // A template holding markup is HTML source: serialize it (reading innerHTML is not a sink).
+    // Otherwise it holds plain text, read as text so "a < b" is not turned into "a &lt; b".
+    const hasElements = child.content.children.length > 0;
+    return dedent(hasElements ? child.innerHTML : (child.content.textContent ?? ''));
+  }
+  if (
+    child instanceof HTMLScriptElement &&
+    DATA_SCRIPT_TYPES.has(child.type.trim().toLowerCase())
+  ) {
+    return dedent(child.textContent ?? '');
+  }
+  return null;
 }
 
 /**

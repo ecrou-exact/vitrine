@@ -335,7 +335,7 @@ export class VtBase extends HTMLElement {
         (error) => token === this._loadToken && !isAbortError(error) && this.setError(error),
       );
     } else {
-      this.setText(readInlineContent(this) ?? '');
+      this.setText(this.readInline() ?? '');
     }
   }
 
@@ -546,6 +546,16 @@ export class VtBase extends HTMLElement {
           /** @type {HTMLElement | null} */ (this.root.querySelector('.editor-input'))?.focus();
       },
     });
+  }
+
+  /**
+   * Reads the content written inside the element. Components with several inline
+   * contents (e.g. vt-diff) override it.
+   *
+   * @returns {string | null}
+   */
+  readInline() {
+    return readInlineContent(this);
   }
 
   /** Hook: the text changed (clear caches). */
