@@ -33,8 +33,12 @@
   --_space-3: var(--vt-space-3, 12px);
   --_space-4: var(--vt-space-4, 16px);
   --_space-5: var(--vt-space-5, 24px);
+  --_space-6: var(--vt-space-6, 32px);
+  --_space-7: var(--vt-space-7, 48px);
+  --_space-8: var(--vt-space-8, 64px);
   --_radius-sm: var(--vt-radius-sm, 6px);
   --_radius: var(--vt-radius, 10px);
+  --_radius-lg: var(--vt-radius-lg, 16px);
   --_radius-full: var(--vt-radius-full, 999px);
   --_header-height: var(--vt-header-height, 40px);
   --_tab-size: var(--vt-tab-size, 4);
