@@ -24,6 +24,55 @@
 
       <div class="theme-grid" id="gallery"></div>
 
+      <section class="section" id="syntax" aria-labelledby="syntax-title">
+        <div class="section-head">
+          <h2 id="syntax-title">Syntax themes</h2>
+          <p>
+            258 code color schemes from highlight.js, loaded only when used. The interface keeps its
+            theme; the code area takes the syntax theme. Each theme shows the lowest contrast of its
+            colors: aim for 4.5:1 or more.
+          </p>
+        </div>
+        <div class="syntax-explorer">
+          <div class="syntax-controls">
+            <label class="field"
+              ><span>Search</span
+              ><input
+                id="syntax-search"
+                type="search"
+                placeholder="github, dracula, nord…"
+                autocomplete="off"
+            /></label>
+            <label class="field">
+              <span>Background</span>
+              <select id="syntax-scheme">
+                <option value="">All</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+              </select>
+            </label>
+            <label class="check"
+              ><input id="syntax-aa" type="checkbox" /> Only WCAG AA (4.5:1)</label
+            >
+            <p class="muted" id="syntax-count" aria-live="polite"></p>
+            <ul class="syntax-list" id="syntax-list" aria-label="Syntax themes"></ul>
+          </div>
+          <div class="stage">
+            <vt-code
+              id="syntax-code"
+              variant="full"
+              language="ts"
+              label="preview.ts"
+              highlight-lines="4"
+              search="false"
+              download="false"
+            ></vt-code>
+            <vt-json id="syntax-json" variant="full" depth="2" path="false"></vt-json>
+            <vt-code id="syntax-snippet" language="html" copy></vt-code>
+          </div>
+        </div>
+      </section>
+
       <section class="section" aria-labelledby="builder-title">
         <div class="section-head">
           <h2 id="builder-title">Make your own</h2>

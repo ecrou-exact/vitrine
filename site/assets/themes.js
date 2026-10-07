@@ -155,3 +155,101 @@ function renderReport() {
 }
 
 loadBase('dark');
+
+// ---------------------------------------------------------------- syntax themes
+
+const SAMPLE_TS = [
+  '// Fetch a user and greet them',
+  'interface User { id: number; name: string; admin?: boolean }',
+  '',
+  'export async function greet(id: number): Promise<string> {',
+  '  const user: User = await fetch(`/api/users/${id}`).then((r) => r.json());',
+  "  return user.admin ? `Welcome back, ${user.name}` : 'Hello';",
+  '}',
+].join('\n');
+
+const syntaxList = document.getElementById('syntax-list');
+const syntaxSearch = document.getElementById('syntax-search');
+const syntaxScheme = document.getElementById('syntax-scheme');
+const syntaxAA = document.getElementById('syntax-aa');
+const syntaxCount = document.getElementById('syntax-count');
+const previewCode = document.getElementById('syntax-code');
+const previewJson = document.getElementById('syntax-json');
+const snippet = document.getElementById('syntax-snippet');
+/** @type {{ name: string, title: string, dark: boolean, contrast: number | null }[]} */
+let syntaxThemes = [];
+let current = 'github-dark';
+
+previewCode.content = SAMPLE_TS;
+previewJson.data = {
+  theme: current,
+  contrast: 4.5,
+  tags: ['code', 'json'],
+  dark: true,
+  owner: null,
+};
+
+function choose(name) {
+  current = name;
+  const theme = syntaxThemes.find((t) => t.name === name);
+  for (const element of [previewCode, previewJson]) {
+    element.setAttribute('syntax-theme', name);
+    element.setAttribute('theme', theme?.dark ? 'dark' : 'light');
+  }
+  previewCode.setAttribute('label', `syntax-theme="${name}"`);
+  previewJson.data = {
+    theme: name,
+    contrast: theme?.contrast ?? null,
+    dark: Boolean(theme?.dark),
+    tags: ['code', 'json'],
+    owner: null,
+  };
+  snippet.content = `<vt-code language="ts" syntax-theme="${name}"></vt-code>\n\n<!-- Or for every element, with a different theme in dark mode: -->\n<script>\n  Vitrine.configure({ syntaxTheme: '${name}', syntaxThemeDark: 'github-dark' });\n</script>`;
+  for (const button of syntaxList.querySelectorAll('button'))
+    button.setAttribute('aria-pressed', String(button.dataset.name === name));
+}
+
+function renderList() {
+  const query = syntaxSearch.value.trim().toLowerCase();
+  const scheme = syntaxScheme.value;
+  const visible = syntaxThemes.filter(
+    (t) =>
+      (!query || t.name.includes(query) || t.title.toLowerCase().includes(query)) &&
+      (!scheme || (scheme === 'dark') === t.dark) &&
+      (!syntaxAA.checked || (t.contrast ?? 0) >= 4.5),
+  );
+  syntaxCount.textContent = `${visible.length} of ${syntaxThemes.length} themes`;
+  syntaxList.replaceChildren(
+    ...visible.map((t) => {
+      const item = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.name = t.name;
+      button.setAttribute('aria-pressed', String(t.name === current));
+      const name = document.createElement('span');
+      name.textContent = t.name;
+      const ratio = document.createElement('span');
+      ratio.className = (t.contrast ?? 0) >= 4.5 ? 'ratio ok' : 'ratio';
+      ratio.textContent = t.contrast === null ? '—' : `${t.contrast.toFixed(1)}:1`;
+      ratio.title = 'Lowest contrast of the theme colors against its background';
+      button.append(name, ratio);
+      button.addEventListener('click', () => choose(t.name));
+      item.append(button);
+      return item;
+    }),
+  );
+}
+
+for (const control of [syntaxSearch, syntaxScheme, syntaxAA])
+  control.addEventListener('input', renderList);
+
+fetch('dist/syntax-themes/index.json')
+  .then((response) => response.json())
+  .then((themes) => {
+    syntaxThemes = themes;
+    renderList();
+    choose(current);
+  })
+  .catch(() => {
+    syntaxCount.textContent = 'The theme list could not be loaded.';
+  });
