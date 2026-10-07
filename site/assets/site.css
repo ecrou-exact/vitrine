@@ -1297,3 +1297,124 @@ kbd {
     position: static;
   }
 }
+
+/* ---------------------------------------------------------------- brand effects */
+
+/* The hero types itself once, in the brand's mono face, ending on the blinking cursor. */
+.type-line {
+  display: inline-block;
+  clip-path: inset(0 100% 0 0);
+  animation: type-in 900ms steps(16, end) 150ms forwards;
+}
+
+.type-line.second {
+  animation-duration: 600ms;
+  animation-timing-function: steps(9, end);
+  animation-delay: 1100ms;
+}
+
+@keyframes type-in {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* The logo redraws its V when pointed at, like the component loader. */
+.lockup .mark-v {
+  stroke-dasharray: 100;
+}
+
+.lockup:hover .mark-v,
+.lockup:focus-visible .mark-v {
+  animation: mark-draw 700ms var(--easing);
+}
+
+.lockup:hover .mark-dot,
+.lockup:focus-visible .mark-dot {
+  animation: mark-pulse 700ms var(--easing);
+  transform-origin: 29px 29px;
+}
+
+@keyframes mark-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes mark-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
+/* Section titles end with the brand cursor. */
+.section-head h2::after {
+  content: '_';
+  color: var(--teal);
+}
+
+/* Component cards are drawn as windows: title bar and status dot, like the mark. */
+.component {
+  position: relative;
+  padding-top: calc(var(--space-5) + 18px);
+  transition: border-color var(--duration) var(--easing);
+}
+
+.component::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 18px;
+  border-bottom: 1px solid var(--site-border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.component::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--teal);
+}
+
+.component:hover {
+  border-color: var(--teal);
+}
+
+.component:hover::before {
+  border-bottom-color: var(--teal);
+}
+
+/* Switching the showcase content. */
+.showcase-stage > .entering {
+  animation: window-in var(--duration) var(--easing);
+}
+
+@keyframes window-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-line {
+    clip-path: none;
+    animation: none;
+  }
+
+  .lockup .mark-v,
+  .lockup .mark-dot,
+  .showcase-stage > .entering {
+    animation: none !important;
+  }
+}

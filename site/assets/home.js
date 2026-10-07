@@ -76,6 +76,9 @@ function renderShowcase() {
   if (theme) el.setAttribute('theme', theme);
   el.content = sample.content;
   stage.replaceChildren(el);
+  // Brief entrance so the switch reads as one window changing content.
+  el.classList.add('entering');
+  el.addEventListener('animationend', () => el.classList.remove('entering'), { once: true });
   const attrs = Object.entries({ ...sample.attrs, ...(theme ? { theme } : {}) })
     .map(([name, value]) => ` ${name}="${value}"`)
     .join('');
