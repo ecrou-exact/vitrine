@@ -175,8 +175,12 @@ export class JsonTree {
       const isIndex = typeof label === 'number';
       const text = isIndex ? String(label) : truncate(displayKey(label), KEY_PREVIEW);
       row.append(
-        h('span', { class: isIndex ? 'index' : 'key', part: isIndex ? 'index' : 'key', text }),
-        h('span', { class: 'punct', text: ': ' }),
+        h('span', {
+          class: isIndex ? 'index hljs-number' : 'key hljs-attr',
+          part: isIndex ? 'index' : 'key',
+          text,
+        }),
+        h('span', { class: 'punct hljs-punctuation', text: ': ' }),
       );
     }
     if (container) {
@@ -186,7 +190,7 @@ export class JsonTree {
       const [open, close] = node.type === 'object' ? ['{', '}'] : ['[', ']'];
       row.append(
         h('span', {
-          class: 'punct',
+          class: 'punct hljs-punctuation',
           text: expanded || count === 0 ? `${open}${count ? '' : close}` : `${open}…${close}`,
         }),
       );
@@ -218,7 +222,7 @@ export class JsonTree {
       const text = full
         ? JSON.stringify(node.value)
         : `${JSON.stringify(node.value.slice(0, STRING_PREVIEW)).slice(0, -1)}…"`;
-      const span = h('span', { class: 'value string', part: 'value', text });
+      const span = h('span', { class: 'value string hljs-string', part: 'value', text });
       if (!full) {
         const more = h('button', {
           class: 'inline-more',
@@ -234,7 +238,11 @@ export class JsonTree {
     const text =
       node.type === 'number' ? node.raw : node.type === 'boolean' ? String(node.value) : 'null';
     const kind = node.type === 'number' ? 'number' : 'literal';
-    return h('span', { class: `value ${kind}`, part: 'value', text });
+    return h('span', {
+      class: `value ${kind} ${kind === 'number' ? 'hljs-number' : 'hljs-literal'}`,
+      part: 'value',
+      text,
+    });
   }
 
   /**

@@ -30,7 +30,8 @@ jobs:
         run: |
           npm run tokens -- --check
           npm run languages
-          git diff --exit-code -- src/core/language-index.js
+          npm run syntax-themes
+          git diff --exit-code -- src/core/language-index.js src/core/syntax-theme-index.js
       - run: npm run build
       - name: Bundle size budget
         run: npm run size

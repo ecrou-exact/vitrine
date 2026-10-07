@@ -15,6 +15,7 @@
 
 .tree {
   min-width: 100%;
+  color: var(--_code-fg);
   font-family: var(--_font-mono);
   font-size: var(--_font-size);
   line-height: var(--_line-height);
@@ -85,15 +86,15 @@
   cursor: default;
 }
 
-.key {
+.vt:not([data-syntax-theme]) .key {
   color: var(--_syntax-attr);
 }
 
-.index {
+.vt:not([data-syntax-theme]) .index {
   color: var(--_syntax-meta);
 }
 
-.punct {
+.vt:not([data-syntax-theme]) .punct {
   color: var(--_syntax-meta);
 }
 
@@ -105,21 +106,21 @@
   overflow-wrap: anywhere;
 }
 
-.value.string {
+.vt:not([data-syntax-theme]) .value.string {
   color: var(--_syntax-string);
 }
 
-.value.number {
+.vt:not([data-syntax-theme]) .value.number {
   color: var(--_syntax-number);
 }
 
-.value.literal {
+.vt:not([data-syntax-theme]) .value.literal {
   color: var(--_syntax-keyword);
 }
 
 .count {
   margin-left: var(--_space-2);
-  color: var(--_fg-muted);
+  color: var(--_code-gutter);
   font-family: var(--_font-ui);
   font-size: var(--_font-size-small);
 }
@@ -183,4 +184,11 @@
   font-size: var(--_font-size-small);
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+/* With a syntax theme, badges and counts take the colors of the code area. */
+.vt[data-syntax-theme] .type {
+  border-color: color-mix(in srgb, var(--_code-fg) 30%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, var(--_code-fg) 80%, var(--_code-bg-solid));
 }
