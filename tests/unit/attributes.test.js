@@ -121,7 +121,8 @@ describe('parseCssLength', () => {
 
 describe('cleanLabel / cleanFileName', () => {
   it('removes control characters, collapses spaces and caps length', () => {
-    expect(cleanLabel(' a\u0000b \n\t c\u202e ')).toBe('ab c\u202e'.replace('\u202e', '\u202e'));
+    // Control characters are removed; other invisible characters (U+202E) are kept as text.
+    expect(cleanLabel(' a\u0000b \n\t c\u202e ')).toBe('ab c\u202e');
     expect(cleanLabel('x'.repeat(1_000_000)).length).toBe(200);
     expect(cleanLabel(null)).toBe('');
   });
