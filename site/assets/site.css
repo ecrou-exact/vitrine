@@ -1685,3 +1685,33 @@ kbd {
     transform: none;
   }
 }
+
+/* ---------- Backdrop: a quiet living graph behind every page (backdrop.js) ---------- */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* A faint dot grid, like graph paper, under the drawing. */
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--site-fg) 14%, transparent) 1px,
+    transparent 1.2px
+  );
+  background-size: 28px 28px;
+  /* Strongest at the top and edges, lighter where text sits. */
+  -webkit-mask-image: radial-gradient(
+    ellipse 120% 100% at 50% 0%,
+    #000 35%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  mask-image: radial-gradient(ellipse 120% 100% at 50% 0%, #000 35%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+@media print {
+  .backdrop {
+    display: none;
+  }
+}
