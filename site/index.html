@@ -28,9 +28,7 @@
               <a class="btn btn-secondary" href="playground.html">Open the playground</a>
             </div>
             <vt-code class="install" language="html" copy label="Install">
-              <template
-                ><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script
-              ></template>
+              <template><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script></template>
             </vt-code>
           </div>
 
@@ -149,7 +147,10 @@
               <h3>&lt;vt-csv&gt;</h3>
               <p>CSV and TSV as an accessible table: sorting by type, pagination and search.</p>
               <vt-csv class="preview" page-size="10">
-                <template>city,people Paris,2148000 Berlin,3645000 Madrid,3223000</template>
+                <template>city,people
+Paris,2148000
+Berlin,3645000
+Madrid,3223000</template>
               </vt-csv>
               <a href="examples.html#csv">CSV examples</a>
             </article>
@@ -319,7 +320,10 @@
                 <template>
                   <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
 
-                  <vt-code language="python"> def hello(name): return f"Hello {name}" </vt-code>
+                  <vt-code language="python">
+                  def hello(name):
+                      return f"Hello {name}"
+                  </vt-code>
                 </template>
               </vt-code>
             </div>
