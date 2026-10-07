@@ -1,0 +1,254 @@
+/*
+ * File tree: folders and files with icons by kind, indentation guides, notes and
+ * change markers. Uses the UI font: names are labels, not code.
+ */
+.tree-body {
+  padding: var(--_space-2) 0;
+  background: var(--_surface);
+}
+
+.tree,
+.group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tree {
+  --_indent: 1.15rem;
+  min-width: 100%;
+  width: max-content;
+  color: var(--_fg);
+  font-size: var(--_font-size-ui);
+  line-height: 1.5;
+}
+
+.item {
+  outline: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 2px var(--_space-4) 2px calc(var(--_space-2) + var(--_level, 0) * var(--_indent));
+  border-radius: var(--_radius-sm);
+  margin: 0 var(--_space-1);
+  cursor: default;
+}
+
+.folder > .row {
+  cursor: pointer;
+}
+
+.row:hover {
+  background: color-mix(in srgb, var(--_accent-soft) 60%, transparent);
+}
+
+.item[aria-selected='true'] > .row {
+  background: var(--_accent-soft);
+}
+
+.item:focus-visible > .row {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+/* Indentation guides: one line per level, drawn on the rows themselves. */
+.tree.guides .group {
+  position: relative;
+}
+
+.tree.guides .group::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 6px;
+  left: calc(var(--_space-1) + var(--_space-2) + var(--_level-guide, 0) * var(--_indent) + 7px);
+  border-left: 1px solid color-mix(in srgb, var(--_border-strong) 70%, transparent);
+  pointer-events: none;
+}
+
+.twisty {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--_fg-muted);
+}
+
+.twisty .icon {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--_duration) var(--_easing);
+}
+
+.item[aria-expanded='true'] > .row .twisty .icon {
+  transform: rotate(90deg);
+}
+
+.glyph {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--_fg-muted);
+}
+
+.folder > .row > .glyph {
+  color: var(--_accent-fg);
+}
+
+.kind-code > .glyph {
+  color: var(--_info);
+}
+
+.kind-data > .glyph {
+  color: var(--_warning);
+}
+
+.kind-doc > .glyph {
+  color: var(--_syntax-string);
+}
+
+.kind-image > .glyph {
+  color: var(--_syntax-keyword);
+}
+
+.name {
+  color: inherit;
+  white-space: pre;
+}
+
+.folder > .row > .name {
+  font-weight: 600;
+}
+
+a.name {
+  text-decoration: none;
+}
+
+a.name:hover {
+  color: var(--_accent-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.note {
+  min-width: 0;
+  margin-left: var(--_space-2);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: pre;
+}
+
+.note::before {
+  content: '# ';
+  opacity: 0.6;
+}
+
+mark.match {
+  border-radius: 2px;
+  background: var(--_highlight);
+  color: inherit;
+}
+
+mark.match.current {
+  background: var(--_highlight-current);
+}
+
+/* ---------- Change markers ---------- */
+
+.status-mark {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--_radius-full);
+  font-family: var(--_font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.status-added > .row > .name {
+  color: var(--_success);
+}
+
+.status-added > .row > .status-mark {
+  background: color-mix(in srgb, var(--_success) 18%, transparent);
+  color: var(--_success);
+}
+
+.status-removed > .row > .name {
+  color: var(--_danger);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.status-removed > .row > .status-mark {
+  background: color-mix(in srgb, var(--_danger) 18%, transparent);
+  color: var(--_danger);
+}
+
+.status-modified > .row > .name {
+  color: var(--_warning);
+}
+
+.status-modified > .row > .status-mark {
+  background: color-mix(in srgb, var(--_warning) 20%, transparent);
+  color: var(--_warning);
+}
+
+.status-highlighted > .row {
+  background: color-mix(in srgb, var(--_accent-soft) 80%, transparent);
+  box-shadow: inset 3px 0 0 var(--_accent);
+}
+
+/* ---------- Path bar ---------- */
+
+.pathbar {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 36px;
+  padding: 0 var(--_space-2) 0 var(--_space-3);
+  border-top: 1px solid var(--_border);
+  background: var(--_surface);
+}
+
+.path-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.path-text:empty::before {
+  content: '\200b';
+}
+
+/* ---------- Edit mode: editor above, live tree below ---------- */
+
+.tree-edit > .editor-body {
+  max-height: min(40vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}
+
+.vt[data-fullscreen] .tree-edit {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.vt[data-fullscreen] .tree-edit > .editor-body {
+  max-height: none;
+}

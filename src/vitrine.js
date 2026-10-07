@@ -14,6 +14,7 @@ import { VtTags } from './components/tags/vt-tags.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
+import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
 import { EVENTS } from './core/events.js';
 import { registerLocale } from './core/i18n.js';
@@ -28,6 +29,7 @@ export {
   VtMarkdown,
   VtJson,
   VtTerminal,
+  VtTree,
   configure,
   getConfig,
   EVENTS,
@@ -63,6 +65,7 @@ export const registry = new Map(
     ['vt-tags', VtTags],
     ['vt-diff', VtDiff],
     ['vt-terminal', VtTerminal],
+    ['vt-tree', VtTree],
   ]),
 );
 
@@ -75,6 +78,7 @@ const TYPES = /** @type {const} */ ({
   tags: 'vt-tags',
   diff: 'vt-diff',
   terminal: 'vt-terminal',
+  tree: 'vt-tree',
 });
 
 /**
