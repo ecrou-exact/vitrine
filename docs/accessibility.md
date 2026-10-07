@@ -53,7 +53,7 @@ Each item has `role="treeitem"`, `aria-level`, `aria-setsize`, `aria-posinset`, 
 
 ### Markdown links and headings
 
-Links in rendered Markdown are regular links. In-document links (`#h-…`), including the table of contents and heading anchors, scroll to the heading inside the element and move keyboard focus to it, so the next Tab continues from there.
+Links in rendered Markdown are regular links. In-document links (`#section`), including the table of contents and heading anchors, scroll to the heading inside the element and move keyboard focus to it, so the next Tab continues from there.
 
 ## Focus management
 

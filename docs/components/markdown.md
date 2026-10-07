@@ -83,20 +83,21 @@ Adds a link icon at the end of each heading, pointing to the heading's id. Its a
 
 ### Heading ids
 
-Every heading gets an id, whether or not `anchors` or `toc` are on. Ids are built from the heading text: lowercased, accents removed, every run of characters other than letters and digits replaced by `-`, cut to 64 characters, and prefixed with `h-`. Duplicates get a numeric suffix:
+Every heading gets an id, whether or not `anchors` or `toc` are on. Ids follow the same rules as GitHub, so a link such as `guide.md#install` works both on GitHub and in `<vt-markdown>`: the heading text is lowercased, characters other than letters, digits, spaces, `-` and `_` are removed, and spaces become `-`. Ids are cut to 100 characters. Duplicates get a numeric suffix:
 
-| Heading                  | Id                  |
-| ------------------------ | ------------------- |
-| `# Getting started`      | `h-getting-started` |
-| `## Usage`               | `h-usage`           |
-| `## Usage` (second time) | `h-usage-1`         |
-| `## Équipe`              | `h-equipe`          |
-| `## !!!`                 | `h-section`         |
+| Heading                  | Id                |
+| ------------------------ | ----------------- |
+| `# Getting started`      | `getting-started` |
+| `## Usage`               | `usage`           |
+| `## Usage` (second time) | `usage-1`         |
+| `## Équipe`              | `équipe`          |
+| `## C++ & Rust`          | `c--rust`         |
+| `## !!!`                 | `section`         |
 
 Write in-document links with these ids:
 
 ```markdown
-See [Usage](#h-usage).
+See [Usage](#usage).
 ```
 
 Headings live inside the element's shadow root. Vitrine handles clicks on `#…` links itself: it scrolls to the heading inside the element and moves focus to it, without changing the page URL. Smooth scrolling is used unless the user prefers reduced motion. Clicks with a modifier key (Ctrl, Cmd, Shift) or a non-primary button are left to the browser.
