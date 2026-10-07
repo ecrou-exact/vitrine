@@ -1,6 +1,6 @@
 # Editing
 
-Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>` and `<vt-http>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
+Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>` and `<vt-openapi>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
 
 ```html
 <vt-code mode="edit" language="python" line-numbers label="script.py">
@@ -106,6 +106,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-terminal>` | `content`                                                                                |
 | `<vt-tree>`     | `content`                                                                                |
 | `<vt-http>`     | `content`                                                                                |
+| `<vt-log>`      | `content`                                                                                |
+| `<vt-chart>`    | `content`                                                                                |
+| `<vt-openapi>`  | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 
@@ -173,6 +176,18 @@ In edit mode, an editor holds the source (any of the [formats](components/tree.m
 ### `<vt-http>`
 
 In edit mode, an editor holds the source (raw HTTP, a curl command or JSON), and the exchange under it is updated 150 ms after typing stops. See [`<vt-http>`](components/http.md#editing).
+
+### `<vt-log>`
+
+In edit mode, an editor holds the log text, and the entries under it are updated 150 ms after typing stops. The level buttons and the Follow button are hidden while editing. See [`<vt-log>`](components/log.md#editing).
+
+### `<vt-chart>`
+
+In edit mode, an editor holds the data (CSV or JSON) above the chart. The chart is updated 250 ms after typing stops, and animates in place to the new values. See [`<vt-chart>`](components/chart.md#editing).
+
+### `<vt-openapi>`
+
+In edit mode, an editor holds the description, highlighted as JSON or YAML, and the reference under it is updated 400 ms after typing stops. See [`<vt-openapi>`](components/openapi.md#editing).
 
 ### `<vt-tags>`
 

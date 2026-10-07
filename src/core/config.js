@@ -25,7 +25,7 @@
  * @property {string} syntaxThemeDark - Syntax theme used when the interface theme is dark.
  * @property {string} syntaxThemesUrl - Base URL of the syntax theme files. Empty means
  *   "next to the Vitrine script".
- * @property {string} vendorUrl - Base URL of `echarts.js`, loaded by <vt-chart>. Empty means
+ * @property {string} vendorUrl - Base URL of `echarts.js` (<vt-chart>) and `yaml.js` (<vt-openapi>). Empty means
  *   "next to the Vitrine script".
  */
 

@@ -1,6 +1,6 @@
 # Vitrine documentation
 
-Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees and HTTP exchanges on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>` and `<vt-http>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
+Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts and OpenAPI descriptions on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>` and `<vt-openapi>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
 
 ## Guides
 
@@ -28,6 +28,9 @@ Vitrine is a library of framework-free web components to display and edit source
 | `<vt-terminal>` | Terminal session with prompts, ANSI colors, a copy button per command, collapsible output and typing replay                    | [components/terminal.md](components/terminal.md) |
 | `<vt-tree>`     | File tree from `tree` output, indented text, paths or JSON, with icons, notes, change markers and links                        | [components/tree.md](components/tree.md)         |
 | `<vt-http>`     | HTTP request and response from raw HTTP, curl, JSON or HAR, with code for curl, `fetch`, Python and HTTPie, and masked secrets | [components/http.md](components/http.md)         |
+| `<vt-log>`      | Application logs in plain text, JSON lines or logfmt, with levels, fields, stack traces, level filters and live streaming      | [components/log.md](components/log.md)           |
+| `<vt-chart>`    | Line, area, bar and donut charts from CSV or JSON, drawn with Apache ECharts in the theme colors, with a Table view            | [components/chart.md](components/chart.md)       |
+| `<vt-openapi>`  | API reference from an OpenAPI 3.0 or 3.1 (or Swagger 2.0) description in JSON or YAML, with schema trees and examples          | [components/openapi.md](components/openapi.md)   |
 
 ## Quick example
 
