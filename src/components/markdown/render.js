@@ -59,6 +59,7 @@ const rawHtmlParser = new Marked({ gfm: true, breaks: false, async: false });
  * @property {string} [baseUrl] - Base for relative links and images.
  * @property {boolean} anchors - Add permalink anchors to headings.
  * @property {string} anchorLabel - Accessible label of anchors.
+ * @property {string} tableLabel - Accessible label of scrollable tables without a caption.
  * @property {number} highlightLimit - Code blocks longer than this are not highlighted.
  * @property {() => void} onLanguageLoaded - Called when a lazy language finished loading.
  */
@@ -100,7 +101,11 @@ export function renderMarkdown(markdown, options) {
     if (label) box.setAttribute('aria-label', label);
   }
   for (const table of Array.from(fragment.querySelectorAll('table'))) {
-    const wrapper = h('div', { class: 'table-wrap', attrs: { tabindex: '0', role: 'region' } });
+    const caption = table.querySelector('caption')?.textContent?.trim();
+    const wrapper = h('div', {
+      class: 'table-wrap',
+      attrs: { tabindex: '0', role: 'region', 'aria-label': caption || options.tableLabel },
+    });
     table.replaceWith(wrapper);
     wrapper.append(table);
   }
@@ -141,24 +146,28 @@ function processHeadings(root, options) {
 }
 
 /**
- * Builds a URL-friendly, unique slug.
+ * Builds a unique heading id (GitHub-compatible slug).
  *
  * @param {string} text
  * @param {Map<string, number>} used
  * @returns {string}
  */
 export function uniqueSlug(text, used) {
+  // Same rules as GitHub, so `page.md#section` links work on GitHub and in Vitrine.
   const base =
     text
+      .trim()
       .toLowerCase()
-      .normalize('NFKD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^\p{L}\p{N}]+/gu, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 64) || 'section';
-  const count = used.get(base) ?? 0;
-  used.set(base, count + 1);
-  return count === 0 ? `h-${base}` : `h-${base}-${count}`;
+      .replace(/[^\p{L}\p{M}\p{N}\p{Pc} -]/gu, '')
+      .replace(/ /g, '-')
+      .slice(0, 100) || 'section';
+  let slug = base;
+  for (let n = used.get(base) ?? 0; used.has(slug); n += 1) {
+    slug = `${base}-${n + 1}`;
+    used.set(base, n + 1);
+  }
+  used.set(slug, used.get(slug) ?? 0);
+  return slug;
 }
 
 /**
