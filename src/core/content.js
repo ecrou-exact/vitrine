@@ -5,7 +5,7 @@
  * @module core/content
  */
 import { dedent } from './dom.js';
-import { isSameOrigin } from './security.js';
+import { isSameOrigin } from './urls.js';
 
 /**
  * Error with a stable code and parameters, so the UI can display a translated message.
