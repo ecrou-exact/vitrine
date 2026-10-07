@@ -3,7 +3,7 @@ import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import { parseInteger, parseRanges } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
-import { buildCodeView } from '../../core/code-view.js';
+import { buildCodeView, revealMatch } from '../../core/code-view.js';
 import { getConfig } from '../../core/config.js';
 import { h } from '../../core/dom.js';
 import {
@@ -181,7 +181,7 @@ export class VtCode extends VtBase {
         return search.run(query);
       },
       /** @param {number} index */
-      go: (index) => search.go(index)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }),
+      go: (index) => revealMatch(search.go(index)),
       clear: () => search.clear(),
     };
 
