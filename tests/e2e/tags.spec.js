@@ -79,7 +79,16 @@ test.describe('<vt-tags>', () => {
     await expect(options.last()).toContainText('Create "brand-new"');
   });
 
-  test('separators, prefix and pasted lists create tags', async ({ page }) => {
+  test('separators and a prefix create tags', async ({ page }) => {
+    await mountTags(page, { mode: 'edit', name: 'topics', prefix: '#' }, '[]');
+    await page.locator('#el').getByRole('combobox').click();
+    await page.keyboard.type('#alpha #beta,gamma;');
+    expect(await formValue(page)).toBe('["alpha","beta","gamma"]');
+  });
+
+  test('pasted lists create tags', async ({ page, browserName }) => {
+    // Firefox does not let scripts build a ClipboardEvent with clipboard data.
+    test.skip(browserName === 'firefox', 'Synthetic paste events carry no data in Firefox.');
     await mountTags(page, { mode: 'edit', name: 'topics', prefix: '#' }, '[]');
     const input = page.locator('#el').getByRole('combobox');
     await input.click();
@@ -120,7 +129,9 @@ test.describe('<vt-tags>', () => {
     await expect(page.locator('#el .tags-message')).toHaveText('a1 is not a valid tag.');
     await page.keyboard.type('one,two,three,');
     expect(await formValue(page)).toBe('["one","two"]');
-    await expect(page.locator('#el .tags-message')).toHaveText('You can select up to 2 tags.');
+    // Once full, the field is read-only and says why.
+    await expect(input).toHaveAttribute('readonly', '');
+    await expect(page.locator('#el [part="tags-status"]')).toContainText('2 / 2 tags');
 
     await mountTags(page, { mode: 'edit', name: 'topics', 'allow-create': 'false' });
     await page.locator('#el').getByRole('combobox').click();
