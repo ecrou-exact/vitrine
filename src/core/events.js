@@ -23,6 +23,8 @@ export const EVENTS = Object.freeze({
   CHANGE: 'vt-change',
   /** Mode switched with the edit toggle. Detail: `{ mode }`. */
   MODE_CHANGE: 'vt-mode-change',
+  /** Full screen entered or left. Detail: `{ fullscreen }`. */
+  FULLSCREEN_CHANGE: 'vt-fullscreen-change',
   /** Split layout changed. Detail: `{ preview, sync }`. */
   LAYOUT_CHANGE: 'vt-layout-change',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */

@@ -85,6 +85,7 @@ export class VtCode extends VtBase {
       download: true,
       'line-numbers': true,
       'wrap-toggle': true,
+      fullscreen: true,
     },
   };
 
@@ -206,6 +207,7 @@ export class VtCode extends VtBase {
           })
         : null,
       this.editToggleButton(),
+      this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
@@ -290,6 +292,7 @@ export class VtCode extends VtBase {
       placeholder: this.getAttribute('placeholder') ?? undefined,
       onInput: (text) => this.edited(text),
       onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
+      history: this.editHistory ?? undefined,
     });
     this.editor?.destroy();
     this.editor = editor;
@@ -321,7 +324,9 @@ export class VtCode extends VtBase {
             },
           })
         : null,
+      ...this.historyButtons(editor),
       this.editToggleButton(),
+      this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
