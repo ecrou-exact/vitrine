@@ -16,29 +16,28 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="wrap">
           <div>
-            <h1 class="display" id="hero-title" aria-label="Display anything, anywhere.">
-              <span class="type-line first" aria-hidden="true">Display anything</span
-              ><span class="cursor" aria-hidden="true">_</span><br /><span
-                class="type-line second"
-                aria-hidden="true"
-                >anywhere.</span
+            <h1 class="display" id="hero-title">
+              <span class="line"><span>Display</span></span>
+              <span class="line"><span>anything,</span></span>
+              <span class="line"
+                ><span>anywhere<span class="cursor" aria-hidden="true">_</span></span></span
               >
             </h1>
-            <p class="lede">
+            <p class="lede intro">
               Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees
               and HTTP calls on any site. One script tag, no framework, safe with content you did
               not write.
             </p>
-            <div class="hero-actions">
+            <div class="hero-actions intro">
               <a class="btn btn-primary" href="docs.html?page=getting-started">Get started</a>
               <a class="btn btn-secondary" href="playground.html">Open the playground</a>
             </div>
-            <vt-code class="install" language="html" copy label="Install">
+            <vt-code class="install intro" language="html" copy label="Install">
               <template><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script></template>
             </vt-code>
           </div>
 
-          <div class="showcase">
+          <div class="showcase intro">
             <div class="showcase-controls">
               <div class="segmented" role="group" aria-label="Content type">
                 <button type="button" data-type="code" aria-pressed="true">Code</button>
@@ -95,6 +94,9 @@
             <p class="call"><span>Made with</span><code id="showcase-call"></code></p>
           </div>
         </div>
+        <a class="scroll-cue" href="#components-title" aria-label="Scroll to the components"
+          ><span aria-hidden="true"></span
+        ></a>
       </section>
 
       <section class="section" aria-labelledby="components-title">
@@ -433,6 +435,19 @@ Content-Type: application/json
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      <section class="cta" aria-labelledby="cta-title">
+        <div class="wrap">
+          <h2 id="cta-title">Ship it in one line</h2>
+          <p>
+            Add the script, write the element, and your content is displayed safely, with themes,
+            search and copy. No build step, no framework.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="docs.html?page=getting-started">Read the guide</a>
+            <a class="btn btn-secondary" href="examples.html">Browse the examples</a>
           </div>
         </div>
       </section>

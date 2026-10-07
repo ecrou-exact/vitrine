@@ -201,3 +201,294 @@ syncComponents();
     }
   }
 }
+
+// ---------------------------------------------------------------- titles
+// Section and page titles rise in word by word as they are reached.
+{
+  const titles = document.querySelectorAll(
+    '.page-head h1, .section-head h2, .example-group > h2, .cta h2',
+  );
+  if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          entry.target.classList.add('words-in');
+        }
+      },
+      { threshold: 0.4 },
+    );
+    for (const title of titles) {
+      let index = 0;
+      // Only text nodes are split: inline elements (code) move as one word.
+      for (const node of Array.from(title.childNodes)) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const parts = (node.nodeValue ?? '').split(/(\s+)/);
+          const fragment = document.createDocumentFragment();
+          for (const part of parts) {
+            if (!part) continue;
+            if (/^\s+$/.test(part)) {
+              fragment.append(part);
+              continue;
+            }
+            const word = document.createElement('span');
+            word.className = 'word';
+            const inner = document.createElement('span');
+            inner.textContent = part;
+            inner.style.setProperty('--i', String(index++));
+            word.append(inner);
+            fragment.append(word);
+          }
+          node.replaceWith(fragment);
+        } else if (node instanceof HTMLElement) {
+          const word = document.createElement('span');
+          word.className = 'word';
+          node.style.setProperty('--i', String(index++));
+          node.replaceWith(word);
+          word.append(node);
+        }
+      }
+      title.classList.add('words');
+      observer.observe(title);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- back to top
+{
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'to-top';
+  button.setAttribute('aria-label', 'Back to top');
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 48 48');
+  svg.setAttribute('aria-hidden', 'true');
+  const track = document.createElementNS(NS, 'circle');
+  track.setAttribute('class', 'to-top-track');
+  const ring = document.createElementNS(NS, 'circle');
+  ring.setAttribute('class', 'to-top-ring');
+  for (const circle of [track, ring]) {
+    circle.setAttribute('cx', '24');
+    circle.setAttribute('cy', '24');
+    circle.setAttribute('r', '21');
+    circle.setAttribute('pathLength', '100');
+  }
+  const arrow = document.createElementNS(NS, 'path');
+  arrow.setAttribute('d', 'M24 31V17M17 23l7-7 7 7');
+  svg.append(track, ring, arrow);
+  button.append(svg);
+  document.body.append(button);
+  button.addEventListener('click', () =>
+    scrollTo({ top: 0, behavior: root.classList.contains('motion') ? 'smooth' : 'auto' }),
+  );
+  let pending = 0;
+  const update = () => {
+    pending = 0;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const progress = max > 0 ? Math.min(1, scrollY / max) : 0;
+    button.classList.toggle('shown', scrollY > 600);
+    ring.style.strokeDashoffset = String(100 - progress * 100);
+  };
+  addEventListener(
+    'scroll',
+    () => {
+      if (!pending) pending = requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+  update();
+}
+
+// ---------------------------------------------------------------- search
+// Site-wide search over every page and docs section: Ctrl+K, ⌘K or "/".
+{
+  const header = document.querySelector('.site-header .wrap');
+  const themeButton = document.querySelector('.theme-btn');
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform);
+
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'search-btn';
+  trigger.setAttribute('aria-label', 'Search the site');
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  const NS = 'http://www.w3.org/2000/svg';
+  const icon = document.createElementNS(NS, 'svg');
+  icon.setAttribute('viewBox', '0 0 24 24');
+  icon.setAttribute('aria-hidden', 'true');
+  const glass = document.createElementNS(NS, 'path');
+  glass.setAttribute('d', 'M21 21l-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z');
+  icon.append(glass);
+  const label = document.createElement('span');
+  label.className = 'search-label';
+  label.textContent = 'Search';
+  const keys = document.createElement('kbd');
+  keys.textContent = mac ? '⌘K' : 'Ctrl K';
+  trigger.append(icon, label, keys);
+  if (header && themeButton) header.insertBefore(trigger, themeButton);
+
+  const dialog = document.createElement('dialog');
+  dialog.className = 'search-dialog';
+  dialog.setAttribute('aria-label', 'Search the site');
+  const box = document.createElement('div');
+  box.className = 'search-box';
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.placeholder = 'Search docs, examples and pages';
+  input.setAttribute('aria-label', 'Search');
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-expanded', 'true');
+  input.setAttribute('aria-controls', 'search-results');
+  input.autocomplete = 'off';
+  input.spellcheck = false;
+  const list = document.createElement('ul');
+  list.id = 'search-results';
+  list.className = 'search-results';
+  list.setAttribute('role', 'listbox');
+  list.setAttribute('aria-label', 'Results');
+  const hint = document.createElement('p');
+  hint.className = 'search-hint';
+  hint.textContent = '↑ ↓ to move, Enter to open, Esc to close';
+  box.append(input, list, hint);
+  dialog.append(box);
+  document.body.append(dialog);
+
+  /** @type {{ t: string, p: string, u: string }[] | null} */
+  let index = null;
+  let active = 0;
+  /** @type {{ t: string, p: string, u: string }[]} */
+  let results = [];
+
+  async function load() {
+    if (index) return;
+    try {
+      const response = await fetch('assets/search-index.json');
+      index = await response.json();
+    } catch {
+      index = [];
+    }
+  }
+
+  const SUGGESTED = ['Getting started', '<vt-code>', '<vt-http>', 'Theming', 'Security'];
+
+  function score(entry, words) {
+    const title = entry.t.toLowerCase();
+    const page = entry.p.toLowerCase();
+    let total = 0;
+    for (const word of words) {
+      if (title.startsWith(word)) total += 6;
+      else if (title.includes(` ${word}`) || title.includes(`<${word}`)) total += 4;
+      else if (title.includes(word)) total += 2;
+      else if (page.includes(word)) total += 1;
+      else return 0;
+    }
+    // Shorter titles and page entries first when scores tie.
+    return total + (entry.p === 'Docs' || entry.p === 'Page' ? 1 : 0) - title.length / 200;
+  }
+
+  function search() {
+    const query = input.value.trim().toLowerCase();
+    if (!index) return;
+    if (!query) {
+      results = SUGGESTED.map((title) => index?.find((e) => e.t === title && /Docs|Page/.test(e.p)))
+        .filter(Boolean)
+        .map((e) => /** @type {{ t: string, p: string, u: string }} */ (e));
+    } else {
+      const words = query.split(/\s+/).slice(0, 6);
+      results = index
+        .map((entry) => ({ entry, value: score(entry, words) }))
+        .filter((r) => r.value > 0)
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 12)
+        .map((r) => r.entry);
+    }
+    active = 0;
+    render();
+  }
+
+  function render() {
+    list.replaceChildren(
+      ...results.map((entry, i) => {
+        const item = document.createElement('li');
+        item.id = `search-result-${i}`;
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', String(i === active));
+        const link = document.createElement('a');
+        link.href = entry.u;
+        link.tabIndex = -1;
+        const title = document.createElement('span');
+        title.className = 'search-title';
+        title.textContent = entry.t;
+        const where = document.createElement('span');
+        where.className = 'search-where';
+        where.textContent = entry.p;
+        link.append(title, where);
+        item.append(link);
+        item.addEventListener('mousemove', () => {
+          if (active !== i) {
+            active = i;
+            highlight();
+          }
+        });
+        return item;
+      }),
+    );
+    if (!results.length && input.value.trim()) {
+      const empty = document.createElement('li');
+      empty.className = 'search-empty';
+      empty.textContent = `No results for "${input.value.trim()}". Try a component name or a word like "theme".`;
+      list.append(empty);
+    }
+    highlight();
+  }
+
+  function highlight() {
+    for (const [i, item] of Array.from(list.querySelectorAll('[role="option"]')).entries()) {
+      item.setAttribute('aria-selected', String(i === active));
+      if (i === active) item.scrollIntoView({ block: 'nearest' });
+    }
+    input.setAttribute('aria-activedescendant', results.length ? `search-result-${active}` : '');
+  }
+
+  async function open() {
+    if (dialog.open) return;
+    dialog.showModal();
+    input.value = '';
+    await load();
+    search();
+    input.focus();
+  }
+
+  trigger.addEventListener('click', open);
+  addEventListener('keydown', (event) => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(
+      /** @type {HTMLElement} */ (event.composedPath()[0] ?? event.target)?.tagName ?? '',
+    );
+    if ((event.key === 'k' || event.key === 'K') && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      if (dialog.open) dialog.close();
+      else open();
+    } else if (event.key === '/' && !typing && !dialog.open) {
+      event.preventDefault();
+      open();
+    }
+  });
+  input.addEventListener('input', search);
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (!results.length) return;
+      active = (active + (event.key === 'ArrowDown' ? 1 : -1) + results.length) % results.length;
+      highlight();
+    } else if (event.key === 'Enter' && results[active]) {
+      event.preventDefault();
+      location.href = results[active].u;
+      dialog.close();
+    }
+  });
+  // A click on the backdrop closes the dialog.
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+}
