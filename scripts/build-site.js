@@ -78,6 +78,7 @@ async function searchIndex() {
     'playground.html': 'Playground',
     'themes.html': 'Themes',
     'lab.html': 'Stress lab',
+    'legal.html': 'Legal',
   };
   for (const [file, page] of Object.entries(PAGES)) {
     const html = await readFile(`site/${file}`, 'utf8');

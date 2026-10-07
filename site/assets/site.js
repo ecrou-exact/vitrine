@@ -123,6 +123,7 @@ syncComponents();
     '.lab > .verdict',
     '.docs-nav',
     '.docs-content',
+    '.legal > .legal-card',
     '.site-footer .wrap > *',
   ].join(', ');
   /** Grids whose items follow each other. */
@@ -491,4 +492,73 @@ syncComponents();
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
   });
+}
+
+// ---------------------------------------------------------------- typing
+// Components on the site can type their content in, like a person writing it:
+// `data-type-in="chars"` (code, Markdown) or `"lines"` (trees, tables, HTTP).
+{
+  const motion = root.classList.contains('motion');
+
+  /**
+   * Types text into a Vitrine element through its content property.
+   *
+   * @param {HTMLElement & { content: string }} element
+   * @param {string} text
+   * @param {'chars' | 'lines'} mode
+   * @param {number} [duration] - Total time in milliseconds.
+   * @returns {Promise<void>}
+   */
+  function typeInto(element, text, mode, duration = 1400) {
+    if (!motion || !text) {
+      element.content = text;
+      return Promise.resolve();
+    }
+    const token = Symbol('typing');
+    /** @type {any} */ (element).__typing = token;
+    const lines = text.split('\n');
+    const total = mode === 'lines' ? lines.length : text.length;
+    const steps = Math.max(1, Math.min(total, Math.round(duration / 24)));
+    let step = 0;
+    element.classList.add('is-typing');
+    return new Promise((resolve) => {
+      const tick = () => {
+        if (/** @type {any} */ (element).__typing !== token) return resolve();
+        step += 1;
+        const count = Math.ceil((total * step) / steps);
+        element.content =
+          mode === 'lines' ? lines.slice(0, count).join('\n') : text.slice(0, count);
+        if (step < steps) setTimeout(tick, duration / steps);
+        else {
+          element.classList.remove('is-typing');
+          resolve();
+        }
+      };
+      element.content = '';
+      setTimeout(tick, 80);
+    });
+  }
+  /** @type {any} */ (window).siteTyping = { typeInto };
+
+  if (motion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          const element = /** @type {HTMLElement & { content: string }} */ (entry.target);
+          const mode = element.dataset.typeIn === 'lines' ? 'lines' : 'chars';
+          typeInto(element, element.content, mode, mode === 'lines' ? 900 : 1300);
+        }
+      },
+      { threshold: 0.5 },
+    );
+    for (const element of document.querySelectorAll('[data-type-in]')) {
+      // Wait until the element has read its inline content.
+      customElements.whenDefined(element.localName).then(() => {
+        if (/** @type {any} */ (element).content) observer.observe(element);
+        else element.addEventListener('vt-ready', () => observer.observe(element), { once: true });
+      });
+    }
+  }
 }
