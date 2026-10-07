@@ -16,6 +16,7 @@ import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { configure, getConfig } from './core/config.js';
 import { EVENTS } from './core/events.js';
 import { registerLocale } from './core/i18n.js';
+import { listSyntaxThemes } from './core/syntax-themes.js';
 import { BUILT_IN_THEMES, getTheme, listThemes, registerTheme } from './core/themes.js';
 
 export {
@@ -33,6 +34,7 @@ export {
   getTheme,
   listThemes,
   BUILT_IN_THEMES,
+  listSyntaxThemes,
 };
 
 /* global __VITRINE_VERSION__ */
