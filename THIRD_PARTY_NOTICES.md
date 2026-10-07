@@ -12,6 +12,7 @@ changing a dependency.
 | [Lucide](https://lucide.dev) | 1.52.0 | ISC; icons derived from Feather: MIT | Interface icons | Library bundle (src/core/icons.js) |
 | [Apache ECharts](https://github.com/apache/echarts) | 6.1.0 | Apache-2.0 | Charts drawn by `<vt-chart>` | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
 | [ZRender](https://github.com/ecomfe/zrender) | 6.1.0 | BSD-3-Clause | Canvas rendering engine of Apache ECharts | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
+| [js-yaml](https://github.com/nodeca/js-yaml) | 4.3.2 | MIT | YAML reading for `<vt-openapi>` | dist/vendor/yaml.js, loaded by `<vt-openapi>` for YAML only |
 | [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | 5.3.0 | OFL-1.1 | Website font and outlined logo wordmark | Website and brand/ only (not in the library) |
 | [IBM Plex Sans](https://github.com/IBM/plex) | 5.3.0 | OFL-1.1 | Website font | Website only (not in the library) |
 
@@ -647,6 +648,36 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+
+---
+
+## js-yaml 4.3.2
+
+License: MIT. Source: https://github.com/nodeca/js-yaml
+
+```text
+(The MIT License)
+
+Copyright (C) 2011-2015 by Vitaly Puzrin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 ```
 
 ---

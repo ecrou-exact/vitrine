@@ -16,6 +16,7 @@ import { VtHttp } from './components/http/vt-http.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtLog } from './components/log/vt-log.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
+import { VtOpenapi } from './components/openapi/vt-openapi.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -36,6 +37,7 @@ export {
   VtHttp,
   VtLog,
   VtChart,
+  VtOpenapi,
   configure,
   getConfig,
   EVENTS,
@@ -75,6 +77,7 @@ export const registry = new Map(
     ['vt-http', VtHttp],
     ['vt-log', VtLog],
     ['vt-chart', VtChart],
+    ['vt-openapi', VtOpenapi],
   ]),
 );
 
@@ -91,6 +94,7 @@ const TYPES = /** @type {const} */ ({
   http: 'vt-http',
   log: 'vt-log',
   chart: 'vt-chart',
+  openapi: 'vt-openapi',
 });
 
 /**

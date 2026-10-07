@@ -70,7 +70,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {
@@ -109,7 +109,7 @@ const languages = {
 };
 
 // Apache ECharts, loaded on demand by <vt-chart> only (never part of the main bundles).
-const charting = parties.filter((c) => c.where.startsWith('dist/vendor/echarts'));
+const charting = parties.filter((c) => c.where.startsWith('dist/vendor/'));
 /**
  * ECharts and ZRender empty their container with `el.innerHTML = ''`. Under Trusted Types
  * (which Vitrine recommends and its website enforces) even an empty string is refused, so
@@ -133,7 +133,7 @@ const trustedTypesSafe = {
 
 /** @type {import('esbuild').BuildOptions} */
 const vendor = {
-  entryPoints: { echarts: 'src/vendor/echarts.js' },
+  entryPoints: { echarts: 'src/vendor/echarts.js', yaml: 'src/vendor/yaml.js' },
   outdir: 'dist/vendor',
   plugins: [trustedTypesSafe],
   bundle: true,
