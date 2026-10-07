@@ -318,7 +318,10 @@ for (const trial of TRIALS) {
   title.textContent = trial.title;
   const detail = document.createElement('span');
   detail.textContent = trial.detail;
-  button.append(title, detail);
+  const run = document.createElement('span');
+  run.className = 'trial-run';
+  run.textContent = 'Run test';
+  button.append(title, detail, run);
   button.addEventListener('click', async () => {
     for (const other of trials.children)
       other.setAttribute('aria-pressed', String(other === button));

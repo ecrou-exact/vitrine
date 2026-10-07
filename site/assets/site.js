@@ -104,18 +104,30 @@ syncComponents();
 
   /** Blocks that rise in as they are reached. Siblings in a grid follow each other. */
   const REVEAL = [
+    '.page-head > *',
+    '.subnav',
     '.section-head',
     '.components > .component',
     '.reasons > .reason',
     '.showcase',
+    '.install-tabs',
     '.example-group > h2',
     '.example',
     '.integration',
     '.binding',
     '.builder > *',
-    '.lab > *',
+    '.playground > *',
+    '.theme-grid > *',
+    '.syntax-explorer > *',
+    '.trials > .trial',
+    '.lab > .verdict',
+    '.docs-nav',
+    '.docs-content',
     '.site-footer .wrap > *',
   ].join(', ');
+  /** Grids whose items follow each other. */
+  const STAGGERED =
+    '.component, .reason, .builder > *, .theme-grid > *, .trials > .trial, .page-head > *, .site-footer .wrap > *';
 
   if (motion && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
@@ -126,27 +138,42 @@ syncComponents();
           observer.unobserve(el);
           el.classList.add('is-visible');
           // Once in place, hover transitions take over without the reveal delay.
-          el.addEventListener(
-            'transitionend',
-            () => {
-              el.removeAttribute('data-reveal');
-              el.classList.remove('is-visible');
-              el.style.removeProperty('--reveal-delay');
-            },
-            { once: true },
-          );
+          const done = () => {
+            el.removeAttribute('data-reveal');
+            el.classList.remove('is-visible');
+            el.style.removeProperty('--reveal-delay');
+          };
+          el.addEventListener('transitionend', done, { once: true });
+          setTimeout(done, 1600);
         }
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.06 },
     );
-    for (const el of document.querySelectorAll(REVEAL)) {
-      const element = /** @type {HTMLElement} */ (el);
-      const index = Array.prototype.indexOf.call(element.parentElement?.children ?? [], element);
-      const grid = element.matches('.component, .reason, .builder > *, .site-footer .wrap > *');
-      if (grid) element.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 80}ms`);
-      element.setAttribute('data-reveal', '');
-      observer.observe(element);
-    }
+    const seen = new WeakSet();
+    /** @param {Element} element */
+    const register = (element) => {
+      if (seen.has(element)) return;
+      seen.add(element);
+      const el = /** @type {HTMLElement} */ (element);
+      if (el.matches(STAGGERED)) {
+        const index = Array.prototype.indexOf.call(el.parentElement?.children ?? [], el);
+        el.style.setProperty('--reveal-delay', `${Math.min(index % 3, 2) * 80}ms`);
+      }
+      el.setAttribute('data-reveal', '');
+      observer.observe(el);
+    };
+    for (const el of document.querySelectorAll(REVEAL)) register(el);
+    // Galleries and lists built by page scripts after load.
+    new MutationObserver((records) => {
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          if (node instanceof Element && node.matches(REVEAL)) register(node);
+        }
+      }
+    }).observe(document.getElementById('main') ?? document.body, {
+      childList: true,
+      subtree: true,
+    });
   }
 
   // Section menus (examples, integrations): mark the section being read.

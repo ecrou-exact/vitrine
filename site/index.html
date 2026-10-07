@@ -25,8 +25,9 @@
               >
             </h1>
             <p class="lede">
-              Web components that show code, Markdown and JSON on any site. One script tag, no
-              framework, safe with content you did not write.
+              Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees
+              and HTTP calls on any site. One script tag, no framework, safe with content you did
+              not write.
             </p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="docs.html?page=getting-started">Get started</a>
@@ -43,6 +44,9 @@
                 <button type="button" data-type="code" aria-pressed="true">Code</button>
                 <button type="button" data-type="markdown" aria-pressed="false">Markdown</button>
                 <button type="button" data-type="json" aria-pressed="false">JSON</button>
+                <button type="button" data-type="terminal" aria-pressed="false">Terminal</button>
+                <button type="button" data-type="tree" aria-pressed="false">Tree</button>
+                <button type="button" data-type="http" aria-pressed="false">HTTP</button>
               </div>
               <div class="swatches" role="group" aria-label="Theme">
                 <button
@@ -358,55 +362,76 @@ Content-Type: application/json
               </button>
             </div>
             <div role="tabpanel" id="panel-cdn" aria-labelledby="tab-cdn">
-              <vt-code
-                language="html"
-                variant="full"
-                label="index.html"
-                line-numbers="false"
-                search="false"
-                download="false"
-              >
-                <template>
-                  <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
-
-                  <vt-code language="python">
-                  def hello(name):
-                      return f"Hello {name}"
+              <div class="demo">
+                <div class="demo-bar">
+                  <span class="demo-dots" aria-hidden="true"></span
+                  ><span class="demo-title">Result</span>
+                </div>
+                <div class="demo-canvas">
+                  <vt-code language="python" label="hello.py" header>
+                    <template>
+                      def hello(name):
+                          return f"Hello {name}"
+                    </template>
                   </vt-code>
-                </template>
-              </vt-code>
+                </div>
+                <vt-code class="demo-code" language="html" label="index.html" header copy badge="false">
+                  <template>
+                    <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+
+                    <vt-code language="python" label="hello.py" header>
+                      def hello(name):
+                          return f"Hello {name}"
+                    </vt-code>
+                  </template>
+                </vt-code>
+              </div>
             </div>
             <div role="tabpanel" id="panel-esm" aria-labelledby="tab-esm" hidden>
-              <vt-code
-                language="html"
-                variant="full"
-                label="index.html"
-                line-numbers="false"
-                search="false"
-                download="false"
-              >
-                <template>
-                  <script type="module">
-                    import { defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.esm.js';
-                    defineAll();
-                  </script>
-                </template>
-              </vt-code>
+              <div class="demo">
+                <div class="demo-bar">
+                  <span class="demo-dots" aria-hidden="true"></span
+                  ><span class="demo-title">Result</span>
+                </div>
+                <div class="demo-canvas">
+                  <vt-code language="python" label="hello.py" header>
+                    <template>
+                      def hello(name):
+                          return f"Hello {name}"
+                    </template>
+                  </vt-code>
+                </div>
+                <vt-code class="demo-code" language="html" label="index.html" header copy badge="false">
+                  <template>
+                    <script type="module">
+                      import 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-code.js';
+                    </script>
+
+                    <vt-code language="python" label="hello.py" header>
+                      def hello(name):
+                          return f"Hello {name}"
+                    </vt-code>
+                  </template>
+                </vt-code>
+              </div>
             </div>
             <div role="tabpanel" id="panel-git" aria-labelledby="tab-git" hidden>
-              <vt-code
-                language="bash"
-                variant="full"
-                label="Terminal"
-                line-numbers="false"
-                search="false"
-                download="false"
-              >
-                <script type="text/plain">
-                  git submodule add https://github.com/ecrou-exact/vitrine.git vendor/vitrine
-                  cd vendor/vitrine && git checkout v1.0.0
-                </script>
-              </vt-code>
+              <div class="demo">
+                <div class="demo-bar">
+                  <span class="demo-dots" aria-hidden="true"></span
+                  ><span class="demo-title">Terminal</span>
+                </div>
+                <div class="demo-canvas">
+                  <vt-terminal label="Vendor Vitrine with git" header copy>
+                    <template>
+                      $ git submodule add https://github.com/ecrou-exact/vitrine.git vendor/vitrine
+                      Cloning into 'vendor/vitrine'...
+                      $ git -C vendor/vitrine checkout v1.0.0
+                      $ cp vendor/vitrine/dist/vitrine.min.js public/js/
+                    </template>
+                  </vt-terminal>
+                </div>
+              </div>
             </div>
           </div>
         </div>
