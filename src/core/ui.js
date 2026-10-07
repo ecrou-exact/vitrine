@@ -266,7 +266,7 @@ export function createTabs({ tabs, selected, label, onSelect, panelId }) {
 }
 
 /**
- * Loading placeholder: three pulsing skeleton lines.
+ * Loading indicator: the Vitrine mark (V drawing itself, pulsing dot), shown after 300 ms.
  *
  * @param {Translate} t
  * @returns {HTMLElement}

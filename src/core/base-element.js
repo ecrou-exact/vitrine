@@ -158,7 +158,7 @@ export const COMMON_ATTRIBUTES = Object.freeze([
  * @csspart body - Scrollable content area.
  * @csspart error - Error message.
  * @csspart empty - Empty state.
- * @csspart loading - Loading skeleton.
+ * @csspart loading - Loading indicator (the Vitrine mark, shown after 300 ms).
  * @csspart match - Search match.
  */
 export class VtBase extends HTMLElement {
