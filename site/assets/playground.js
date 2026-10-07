@@ -10,6 +10,10 @@ const SAMPLES = {
   code: 'def fibonacci(n: int) -> list[int]:\n    """Returns the first n Fibonacci numbers."""\n    seq = [0, 1]\n    while len(seq) < n:\n        seq.append(seq[-1] + seq[-2])\n    return seq[:n]\n\nprint(fibonacci(10))\n',
   markdown:
     '# Release 1.2\n\nThis release adds **search** to every component.\n\n## Changes\n\n- [x] Search in code, Markdown and JSON\n- [ ] Side-by-side diffs\n\n| Area | Status |\n|:--|:--|\n| Code | done |\n\n```js\nel.content = untrustedText;\n```\n\n<b>Raw HTML</b> is shown as text unless allow-html is set.\n',
+  terminal:
+    '$ npm test\n\u001b[1m RUN \u001b[22m \u001b[36mv3.2.4\u001b[39m\n \u001b[32m✓\u001b[39m tests/parser.test.js \u001b[2m(42 tests)\u001b[22m\n \u001b[31m×\u001b[39m tests/render.test.js\n\u001b[41m FAIL \u001b[49m 1 failed | 41 passed\n$ git commit -am "Fix escaping"\n[main 3f2a1c9] Fix escaping\n 1 file changed, 2 insertions(+)\n',
+  tree: 'src/\n  components/\n    + Button.tsx  # new\n    ~ Header.tsx\n    - Legacy.tsx\n  app.ts\npublic/\n  logo.svg\n* package.json  # scripts\nREADME.md\n',
+  http: 'POST /v1/tasks?api_key=demo_key_7f3a9c2e51b84d06 HTTP/1.1\nHost: api.example.com\nContent-Type: application/json\nAuthorization: Bearer eyJhbGciOiJIUzI1NiJ9.example\n\n{"title": "Write docs", "priority": 2}\n\nHTTP/1.1 201 Created\nContent-Type: application/json\n\n{"id": 981, "status": "open"}\n',
   json: '{\n  "id": 12345678901234567890,\n  "name": "Ada",\n  "roles": ["admin", "editor"],\n  "address": { "city": "London", "zip": null },\n  "active": true\n}\n',
 };
 
@@ -113,6 +117,37 @@ const SCHEMA = {
       { name: 'context', type: 'text', placeholder: '3 or all' },
     ],
   },
+  terminal: {
+    tag: 'vt-terminal',
+    flags: ['colors', 'command-copy', 'wrap', 'typing', 'escapes'],
+    fields: [
+      { name: 'prompt', type: 'text', placeholder: '$ ❯' },
+      { name: 'collapse-output', type: 'number', placeholder: 'never' },
+      { name: 'typing-speed', type: 'number', placeholder: '35' },
+    ],
+  },
+  tree: {
+    tag: 'vt-tree',
+    flags: ['icons', 'guides', 'expand-controls', 'path'],
+    fields: [
+      { name: 'depth', type: 'number', placeholder: 'all' },
+      { name: 'sort', type: 'select', options: ['', 'none', 'name'] },
+      {
+        name: 'href-template',
+        type: 'text',
+        placeholder: 'https://github.com/you/repo/blob/main/{path}',
+      },
+    ],
+  },
+  http: {
+    tag: 'vt-http',
+    flags: ['tabs', 'mask-secrets'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'exchange', 'code'] },
+      { name: 'layout', type: 'select', options: ['', 'stacked', 'columns'] },
+      { name: 'snippets', type: 'text', placeholder: 'curl fetch python httpie' },
+    ],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -165,6 +200,9 @@ function buildControls() {
         csv: '<vt-csv>',
         tags: '<vt-tags>',
         diff: '<vt-diff>',
+        terminal: '<vt-terminal>',
+        tree: '<vt-tree>',
+        http: '<vt-http>',
       }),
     ),
     field(
@@ -281,6 +319,9 @@ function switchType(type) {
     csv: 'scores.csv',
     tags: 'Topics',
     diff: 'app.py',
+    terminal: 'Test run',
+    tree: 'my-app',
+    http: 'Create a task',
   }[type];
   buildControls();
   render();

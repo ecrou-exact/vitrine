@@ -25,6 +25,9 @@
           <a href="#csv">CSV</a>
           <a href="#tags">Tags</a>
           <a href="#diff">Diff</a>
+          <a href="#terminal">Terminal</a>
+          <a href="#tree">Tree</a>
+          <a href="#http">HTTP</a>
           <a href="#api">JavaScript</a>
         </nav>
       </header>
@@ -650,6 +653,272 @@ export { unit };</template>
      run()
 +    log("done")</template>
             </vt-diff>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="terminal" aria-labelledby="terminal-title">
+        <h2 id="terminal-title">&lt;vt-terminal&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Commands and output</h3>
+            <p>
+              Lines starting with <code>$</code> are commands: hover one to copy it without the
+              prompt. The header button copies every command, ready to run.
+            </p>
+          </div>
+          <template>
+            <vt-terminal variant="full" label="Install">
+              <template>
+                $ npm install vitrine
+                added 1 package, and audited 2 packages in 1s
+                found 0 vulnerabilities
+                $ npx vitrine --version
+                0.7.0
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>ANSI colors and progress bars</h3>
+            <p>
+              <code>escapes</code> lets you write <code>\e</code> in HTML. Colors follow the theme;
+              carriage returns redraw the line, so the progress bar shows its final state.
+            </p>
+          </div>
+          <template>
+            <vt-terminal variant="full" label="Test run" escapes>
+              <template>
+                $ npm test
+                \e[1m RUN \e[22m \e[36mv3.2.4\e[39m
+                 \e[32m✓\e[39m tests/parser.test.js \e[2m(42 tests)\e[22m
+                 \e[31m×\e[39m tests/render.test.js › \e[1mescapes HTML\e[22m
+                \e[41m\e[1m FAIL \e[22m\e[49m \e[33m1 failed\e[39m | \e[32m41 passed\e[39m
+                $ npm run build
+                building 20%\rbuilding 60%\rbuilding 100%
+                \e[32mdone\e[39m in 840ms
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Prompts with a context, continued commands</h3>
+            <p>
+              <code>ada@box:~/app$</code> is a prompt too. A command ending with <code>\</code>
+              continues on the next line, and is copied as one command.
+            </p>
+          </div>
+          <template>
+            <vt-terminal>
+              <template>
+                ada@box:~/app$ docker run --rm \
+                  -p 8080:80 \
+                  nginx:alpine
+                Starting nginx…
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Long output, collapsed</h3>
+            <p><code>collapse-output="4"</code> keeps long logs short. Search still finds hidden lines.</p>
+          </div>
+          <template>
+            <vt-terminal variant="full" collapse-output="4" label="build.log">
+              <template>
+                $ make
+                cc -c parser.c
+                cc -c lexer.c
+                cc -c eval.c
+                cc -c main.c
+                cc -c gc.c
+                cc -c io.c
+                cc -o app parser.o lexer.o eval.o main.o gc.o io.o
+                $ ./app --check
+                ok
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Typing replay</h3>
+            <p>
+              <code>typing</code> types each command when the session comes into view, then shows
+              its output. Press Replay to watch it again.
+            </p>
+          </div>
+          <template>
+            <vt-terminal variant="full" typing typing-speed="40" label="Quick start">
+              <template>
+                $ npm create vitrine@latest my-docs
+                ✔ Template: … documentation
+                $ cd my-docs && npm run dev
+                Local: http://localhost:5173/
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="tree" aria-labelledby="tree-title">
+        <h2 id="tree-title">&lt;vt-tree&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Indented names, notes and change markers</h3>
+            <p>
+              <code>+</code>, <code>-</code>, <code>~</code> and <code>*</code> mark added, removed,
+              modified and highlighted entries; <code># text</code> adds a note.
+            </p>
+          </div>
+          <template>
+            <vt-tree variant="full" label="my-app">
+              <template>
+                src/
+                  components/
+                    + Button.tsx  # new
+                    ~ Header.tsx
+                    - Legacy.tsx
+                  app.ts
+                public/
+                  logo.svg
+                * package.json  # scripts and dependencies
+                README.md
+                .gitignore
+              </template>
+            </vt-tree>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Straight from the tree command</h3>
+            <p>Paste the output as it is; <code>sort="name"</code> puts folders first.</p>
+          </div>
+          <template>
+            <vt-tree sort="name">
+              <template>
+                .
+                ├── README.md
+                ├── src
+                │   ├── main.rs
+                │   └── lib.rs
+                └── Cargo.toml
+
+                1 directory, 4 files
+              </template>
+            </vt-tree>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Paths, links to a repository</h3>
+            <p>
+              One path per line, as <code>git ls-files</code> prints them.
+              <code>href-template</code> turns files into links; <code>depth="1"</code> keeps
+              folders closed at first.
+            </p>
+          </div>
+          <template>
+            <vt-tree
+              variant="full"
+              depth="1"
+              href-template="https://github.com/ecrou-exact/vitrine/blob/main/{path}"
+              link-target="_blank"
+              label="vitrine"
+            >
+              <template>
+                src/core/base-element.js
+                src/core/security.js
+                src/components/tree/vt-tree.js
+                src/components/tree/parser.js
+                docs/components/tree.md
+                package.json
+              </template>
+            </vt-tree>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="http" aria-labelledby="http-title">
+        <h2 id="http-title">&lt;vt-http&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Request and response</h3>
+            <p>
+              Raw HTTP, as in a <code>.http</code> file. The token and the API key are masked; the
+              eye button shows them. Open the Code tab for curl, fetch, Python and HTTPie.
+            </p>
+          </div>
+          <template>
+            <vt-http variant="full" label="Create a task">
+              <template>
+                POST /v1/projects/{projectId}/tasks?api_key=demo_key_7f3a9c2e51b84d06 HTTP/1.1
+                Host: api.example.com
+                Content-Type: application/json
+                Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.example.signature
+
+                {"title": "Write docs", "priority": 2, "labels": ["docs"]}
+
+                HTTP/1.1 201 Created
+                Content-Type: application/json
+                Location: /v1/projects/7/tasks/981
+
+                {"id": 981, "title": "Write docs", "status": "open"}
+              </template>
+            </vt-http>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>From a curl command, code first</h3>
+            <p>
+              Paste "Copy as cURL" from your browser. <code>view="code"</code> opens the Code tab;
+              <code>snippets</code> picks the languages and their order.
+            </p>
+          </div>
+          <template>
+            <vt-http variant="full" view="code" snippets="python fetch curl">
+              <template>
+                curl -X PATCH 'https://api.example.com/v1/tasks/981' \
+                  -H 'Content-Type: application/json' \
+                  --data-raw '{"status": "done", "done_at": "2026-10-07T18:00:00Z"}'
+              </template>
+            </vt-http>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An error, side by side</h3>
+            <p><code>layout="columns"</code> puts the response next to the request on wide screens.</p>
+          </div>
+          <template>
+            <vt-http variant="full" layout="columns" tabs="false" label="Validation error">
+              <template>
+                POST https://api.example.com/v1/users
+                Content-Type: application/x-www-form-urlencoded
+
+                name=Ada&email=not-an-email
+
+                HTTP/1.1 422 Unprocessable Content
+                Content-Type: application/json
+
+                {"errors": [{"field": "email", "message": "is not a valid address"}]}
+              </template>
+            </vt-http>
           </template>
         </article>
       </section>

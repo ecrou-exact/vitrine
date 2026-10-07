@@ -96,7 +96,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Six elements, view or edit</h2>
+            <h2 id="components-title">Nine elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -183,6 +183,50 @@ Madrid,3223000</template>
                 <template data-modified>const total = price * TAX_RATE;</template>
               </vt-diff>
               <a href="examples.html#diff">Diff examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-terminal&gt;</h3>
+              <p>
+                Shell sessions with ANSI colors, commands copied without their prompt, and an
+                optional typing replay.
+              </p>
+              <vt-terminal class="preview" escapes>
+                <template>$ npm test
+\e[32m✓\e[0m 42 passed  \e[2m(1.2s)\e[0m
+$ git push</template>
+              </vt-terminal>
+              <a href="examples.html#terminal">Terminal examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-tree&gt;</h3>
+              <p>
+                File trees from <code>tree</code> output, paths or JSON, with icons, change markers
+                and keyboard navigation.
+              </p>
+              <vt-tree class="preview">
+                <template>src/
+  + Button.tsx  # new
+  app.ts
+package.json</template>
+              </vt-tree>
+              <a href="examples.html#tree">Tree examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-http&gt;</h3>
+              <p>
+                HTTP requests and responses for API docs, with masked secrets and the same request
+                as curl, fetch or Python.
+              </p>
+              <vt-http class="preview">
+                <template>GET /v1/users/42 HTTP/1.1
+Host: api.example.com
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"id": 42, "name": "Ada"}</template>
+              </vt-http>
+              <a href="examples.html#http">HTTP examples</a>
             </article>
           </div>
         </div>

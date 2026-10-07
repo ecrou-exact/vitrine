@@ -38,7 +38,7 @@ const HIGHLIGHT_COMMAND = 2000;
  * @since 0.7.0
  *
  * @attr {string} prompt - Prompts that start a command, separated by spaces (default `$ ❯`), or `none` for output only.
- * @attr {boolean} escapes - Also read literal `\e`, `\x1b`, `\033` and `\u001b` as the escape character.
+ * @attr {boolean} escapes - Also read literal `\e`, `\x1b`, `\033` and `\u001b` as the escape character, and `\r` as a carriage return.
  * @attr {boolean} colors - ANSI colors and text styles (default on). Off: plain text.
  * @attr {boolean} command-copy - A copy button on each command (default on).
  * @attr {number} collapse-output - Output blocks longer than this many lines are collapsed (default: never).

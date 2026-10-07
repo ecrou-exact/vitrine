@@ -166,6 +166,75 @@ const TRIALS = [
       }),
   },
   {
+    title: '100,000-line colored build log',
+    detail: 'ANSI colors on every line; blocks of lines are built as you scroll.',
+    run: () =>
+      mount(
+        'vt-terminal',
+        { variant: 'full', prompt: 'none', 'max-height': '420px', label: 'build.log' },
+        Array.from(
+          { length: 100_000 },
+          (_, i) =>
+            `\u001b[2m${String(i).padStart(6, '0')}\u001b[22m \u001b[3${i % 7}mstep ${i}\u001b[39m ok`,
+        ).join('\n'),
+      ),
+  },
+  {
+    title: 'Hostile terminal escapes',
+    detail:
+      'javascript: links, a window title change, cursor jumps, a 50,000-byte escape sequence and HTML in output.',
+    run: () =>
+      mount(
+        'vt-terminal',
+        { variant: 'full' },
+        [
+          '$ cat evil.txt',
+          '\u001b]8;;javascript:window.__xss=30\u001b\\click me\u001b]8;;\u001b\\',
+          '\u001b]0;pwned title\u0007\u001b[2J\u001b[999;999H<img src=x onerror="window.__xss=31">',
+          `\u001b[${'1;'.repeat(25_000)}mafter a huge sequence`,
+          '\u001b[38;2;999;-1;0mbad color\u001b[0m \u0000\u0007\u0008 control characters',
+        ].join('\n'),
+      ),
+  },
+  {
+    title: '20,000-file tree',
+    detail: 'One path per line; folders open on demand, and the search filters all 20,000.',
+    run: () =>
+      mount(
+        'vt-tree',
+        { variant: 'full', depth: '1', 'max-height': '420px', sort: 'name' },
+        Array.from(
+          { length: 20_000 },
+          (_, i) => `src/module-${i % 100}/part-${i % 7}/file-${i}.ts`,
+        ).join('\n'),
+      ),
+  },
+  {
+    title: 'Hostile tree and HTTP exchange',
+    detail:
+      'HTML in file names, a javascript: link template, and an HTTP message with HTML in every header and body.',
+    run: async () => {
+      const tree = await mount(
+        'vt-tree',
+        { 'href-template': 'javascript:window.__xss=32//{path}' },
+        '<img src=x onerror="window.__xss=33">/\n  <script>window.__xss=34</script>.js',
+      );
+      if (!tree.ok) return tree;
+      return mount(
+        'vt-http',
+        { variant: 'full', view: 'code' },
+        JSON.stringify({
+          request: {
+            method: 'POST',
+            url: "https://x.dev/'; window.__xss=35 //",
+            headers: { 'X-Evil': '<img src=x onerror="window.__xss=36">' },
+            body: '</script><script>window.__xss=37</script>',
+          },
+        }),
+      );
+    },
+  },
+  {
     title: 'Search 5,000+ matches',
     detail: 'Open the search and type "a": matches stop being marked after 5,000.',
     run: () =>

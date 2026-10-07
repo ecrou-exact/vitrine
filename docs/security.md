@@ -6,7 +6,7 @@ To report a vulnerability, follow the [security policy](../SECURITY.md).
 
 ## Threat model
 
-Vitrine assumes that the **content** you pass through the `content` property, the `data` property or `src` may be hostile. It must never:
+Vitrine assumes that the **content** you pass through the `content` property, the `data` or `exchange` property or `src` may be hostile. It must never:
 
 - run script, in any form (script tags, event handlers, `javascript:` URLs, SVG, mutation XSS);
 - inject styles or markup outside the sanitizer's allow-list;
@@ -19,14 +19,17 @@ Vitrine trusts the **page itself**: its HTML, its scripts and its CSS.
 
 ## Guarantees by component
 
-| Component       | How content is displayed                                                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `<vt-code>`     | As text. Highlighting output is sanitized again (see below). No HTML parsing of the content.                        |
-| `<vt-json>`     | With DOM text APIs only. The built-in parser never evaluates anything, and keys such as `__proto__` are plain data. |
-| `<vt-markdown>` | Through the sanitization pipeline below. Raw HTML is shown as text unless `allow-html` is set.                      |
-| `<vt-csv>`      | Cells, headers and the raw view as text only. No HTML parsing of the content.                                       |
-| `<vt-diff>`     | As text. Highlighting output is sanitized like `<vt-code>`; changed words are wrapped with DOM APIs.                |
-| `<vt-tags>`     | Labels, groups, descriptions and counts as text. Colors, links and part names are validated (see [Tags](#tags)).    |
+| Component       | How content is displayed                                                                                                                                                                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `<vt-code>`     | As text. Highlighting output is sanitized again (see below). No HTML parsing of the content.                                                                                                                                                           |
+| `<vt-json>`     | With DOM text APIs only. The built-in parser never evaluates anything, and keys such as `__proto__` are plain data.                                                                                                                                    |
+| `<vt-markdown>` | Through the sanitization pipeline below. Raw HTML is shown as text unless `allow-html` is set.                                                                                                                                                         |
+| `<vt-csv>`      | Cells, headers and the raw view as text only. No HTML parsing of the content.                                                                                                                                                                          |
+| `<vt-diff>`     | As text. Highlighting output is sanitized like `<vt-code>`; changed words are wrapped with DOM APIs.                                                                                                                                                   |
+| `<vt-tags>`     | Labels, groups, descriptions and counts as text. Colors, links and part names are validated (see [Tags](#tags)).                                                                                                                                       |
+| `<vt-terminal>` | Commands and output as text. ANSI escape sequences are parsed into colors and text styles only; everything else is removed. OSC 8 links become links only for absolute `http:` or `https:` URLs, with `rel="noopener noreferrer nofollow"`.            |
+| `<vt-tree>`     | Names and notes as text. `href-template` URLs are checked with the [URL rules](#url-rules), and path segments are URL-encoded; a refused URL leaves the name as text.                                                                                  |
+| `<vt-http>`     | Methods, URLs, headers and bodies as text. Nothing is ever sent: curl commands are only parsed, never run. The Code tab quotes every value for its language. Secrets are masked by default, but masking is a display feature, not a security boundary. |
 
 Interface text (labels, titles, translations, search queries, error messages) is always inserted with `textContent`. Vitrine's own interface is built with `createElement`; the security module is the only place where an HTML string becomes DOM nodes.
 
@@ -147,6 +150,9 @@ Syntax theme files are fetched differently: only names from Vitrine's built-in l
 | CSV cell preview          | 1,000 characters                 | none                                |
 | Diff exact comparison     | 2,000 edits, then simplified     | none                                |
 | Tags per list             | 100,000                          | none                                |
+| Terminal line length      | 20,000 characters                | none                                |
+| Tree entries              | 20,000 entries, 64 levels        | none                                |
+| HTTP headers per message  | 200                              | none                                |
 | Editor undo history       | 300 steps, 20,000,000 characters | none                                |
 
 The JSON parser and the JSON serializer are iterative, so deep nesting cannot overflow the call stack. If the Markdown parser fails on pathological input, the element shows an error instead of breaking the page. Configuration values cannot exceed the ceilings, even when set from page code.
@@ -213,6 +219,7 @@ Syntax themes are loaded with `fetch()`, so their origin must be allowed by `con
 - **Your own page code and styles.** Code on the page can change element attributes, properties and global configuration. Your CSS can change how parts look.
 - **Where links go.** Markdown links may point to any `http:`, `https:`, `mailto:` or `tel:` URL. Vitrine marks external links `nofollow` and removes the opener and referrer, but it cannot judge the destination.
 - **Images under the `allow` policy.** External images are fetched by the browser, which reveals the reader's IP address to the image host. Use `images="same-origin"` or `images="block"` for untrusted content.
+- **Credentials in `<vt-http>`.** Masking hides values on screen and in what copy and download produce, but the real values are in the page source. Never publish real credentials; use example values.
 - **Remote servers you allow.** With `allow-remote`, the content of the remote URL is still sanitized, but you rely on that server for what is displayed.
 
 ## How the test suite verifies it

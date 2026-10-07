@@ -70,7 +70,7 @@ Bold text in one of the 8 base colors uses the bright variant, as most terminals
 
 ### Writing escapes by hand
 
-HTML cannot contain the escape character. Add `escapes` and write `\e`, `\x1b`, `\033` or `\u001b` instead:
+HTML cannot contain the escape character. Add `escapes` and write `\e`, `\x1b`, `\033` or `\u001b` instead, and `\r` for a carriage return:
 
 ```html
 <vt-terminal escapes>
@@ -140,16 +140,16 @@ With `mode="edit"`, an editor holds the transcript and a live preview is shown u
 
 This table lists the attributes specific to `<vt-terminal>`. The shared attributes are described in [Common attributes](../common-attributes.md).
 
-| Attribute         | Type                                   | Default     | Description                                                     |
-| ----------------- | -------------------------------------- | ----------- | --------------------------------------------------------------- |
-| `prompt`          | prompts separated by spaces, or `none` | `$ ❯`       | Prompts that start a command.                                   |
-| `escapes`         | boolean                                | off         | Read `\e`, `\x1b`, `\033` and `\u001b` as the escape character. |
-| `colors`          | boolean                                | on          | ANSI colors and text styles.                                    |
-| `command-copy`    | boolean                                | on          | A copy button on each command.                                  |
-| `collapse-output` | integer                                | `0` (never) | Collapse output blocks longer than this many lines.             |
-| `typing`          | boolean                                | off         | Replay the session when it comes into view.                     |
-| `typing-speed`    | integer 5 to 200                       | `35`        | Milliseconds per typed character.                               |
-| `wrap`            | boolean                                | on          | Wrap long lines (off: scroll horizontally).                     |
+| Attribute         | Type                                   | Default     | Description                                                                                |
+| ----------------- | -------------------------------------- | ----------- | ------------------------------------------------------------------------------------------ |
+| `prompt`          | prompts separated by spaces, or `none` | `$ ❯`       | Prompts that start a command.                                                              |
+| `escapes`         | boolean                                | off         | Read `\e`, `\x1b`, `\033` and `\u001b` as the escape character, `\r` as a carriage return. |
+| `colors`          | boolean                                | on          | ANSI colors and text styles.                                                               |
+| `command-copy`    | boolean                                | on          | A copy button on each command.                                                             |
+| `collapse-output` | integer                                | `0` (never) | Collapse output blocks longer than this many lines.                                        |
+| `typing`          | boolean                                | off         | Replay the session when it comes into view.                                                |
+| `typing-speed`    | integer 5 to 200                       | `35`        | Milliseconds per typed character.                                                          |
+| `wrap`            | boolean                                | on          | Wrap long lines (off: scroll horizontally).                                                |
 
 ## Properties
 

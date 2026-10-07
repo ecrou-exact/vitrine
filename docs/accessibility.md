@@ -6,10 +6,10 @@ Vitrine elements are designed to be usable with a keyboard, a screen reader, tou
 
 ### Common controls
 
-| Element                                                                                                                    | Keys                                                                     |
-| -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Icon buttons (copy, search, download, wrap, expand all, full screen, edit, undo…)                                          | Tab to reach, Enter or Space to activate                                 |
-| Scrollable content areas (code, source view, Markdown preview, raw JSON, CSV table, diff, Markdown tables and code blocks) | Tab to focus, then arrow keys, Page Up / Page Down, Home / End to scroll |
+| Element                                                                                                                              | Keys                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Icon buttons (copy, search, download, wrap, expand all, full screen, edit, undo…)                                                    | Tab to reach, Enter or Space to activate                                 |
+| Scrollable content areas (code, source view, Markdown preview, raw JSON, CSV table, diff, terminal, Markdown tables and code blocks) | Tab to focus, then arrow keys, Page Up / Page Down, Home / End to scroll |
 
 ### Search bar
 
@@ -21,7 +21,7 @@ Vitrine elements are designed to be usable with a keyboard, a screen reader, tou
 
 The match counter (`2 / 14`) is visual; results are announced through the live region (see below). Navigation wraps around from the last match to the first.
 
-### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw, `<vt-csv>` Table / Raw, `<vt-diff>` Side by side / Unified)
+### Tabs (`<vt-markdown>` Preview / Source / Split, `<vt-json>` Tree / Raw, `<vt-csv>` Table / Raw, `<vt-diff>` Side by side / Unified, `<vt-http>` Exchange / Code and its section and language tabs)
 
 Tabs follow the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) with automatic activation: moving to a tab selects it.
 
@@ -33,7 +33,7 @@ Tabs follow the [WAI-ARIA tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns
 | Home        | First tab                                                                                  |
 | End         | Last tab                                                                                   |
 
-The tab list has `role="tablist"` and the accessible name "View"; each tab has `role="tab"`, `aria-selected` and `aria-controls` pointing to the panel (`role="tabpanel"`).
+The tab list has `role="tablist"` and the accessible name "View"; each tab has `role="tab"`, `aria-selected` and `aria-controls` pointing to the panel (`role="tabpanel"`). In `<vt-http>`, the section tab lists are named "Request" and "Response", and the language tab list "Language".
 
 ### JSON tree
 
@@ -85,6 +85,18 @@ In `<vt-csv>` with `sortable`, each column header contains a button ("Sort by na
 ### Diff
 
 `<vt-diff>` is exposed as a table (`role="table"`, named after the `label`, or "Changes") of rows and cells. Line numbers are hidden from assistive technologies, and the sign of each changed line is read as "Added: " or "Removed: ". "Show N unchanged lines" buttons expand folded regions.
+
+### Terminal
+
+The transcript of `<vt-terminal>` is a focusable region named after the `label`, or "Terminal". Prompts are hidden from assistive technologies, and each command is introduced as "Command:". Colors only add to the text, which is always there. The copy button of each command is named "Copy command" and announces the result.
+
+### File tree
+
+`<vt-tree>` follows the [WAI-ARIA tree view pattern](https://www.w3.org/WAI/ARIA/apg/patterns/treeview/): one Tab stop (roving `tabindex`), Up and Down arrows to move, Right and Left arrows to open, close or move between levels, Home and End, `*` to open every folder at the same level, and type-ahead (a letter moves to the next entry whose name starts with it). The status of a changed entry is read after its name ("Header.tsx, modified"). See [Keyboard](components/tree.md#keyboard).
+
+### HTTP
+
+In `<vt-http>`, the request and the response are labeled sections. Headers, query parameters and form fields are tables with row headers. The method and the status are text, so color only adds to them. Showing or hiding secrets is announced ("Secrets shown", "Secrets hidden").
 
 ### Full screen
 
@@ -143,7 +155,7 @@ On devices with a coarse pointer (touch screens), icon buttons grow to 44 by 44 
 
 ## Reduced motion
 
-When the user prefers reduced motion (`prefers-reduced-motion: reduce`), transitions take 0 ms, the loading placeholder stops pulsing, and in-document Markdown links jump to their target instead of scrolling smoothly. See [Theming](theming.md#reduced-motion).
+When the user prefers reduced motion (`prefers-reduced-motion: reduce`), transitions take 0 ms, the loading placeholder stops pulsing, in-document Markdown links jump to their target instead of scrolling smoothly, and the typing replay of `<vt-terminal>` is skipped: the session is shown at once (the Replay button still plays it). See [Theming](theming.md#reduced-motion).
 
 ## Contrast
 

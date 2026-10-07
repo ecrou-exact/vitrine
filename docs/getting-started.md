@@ -1,6 +1,6 @@
 # Getting started
 
-Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags and diffs on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>` and `<vt-diff>` elements in your HTML.
+Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees and HTTP exchanges on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>` and `<vt-http>` elements in your HTML.
 
 This page covers installation, a first example for each component, and the ways to give content to an element.
 
@@ -10,7 +10,7 @@ The `dist/` folder contains:
 
 | File                       | Format         | Behavior                                                                                                                                                                         |
 | -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the six elements automatically and exposes a global `Vitrine` object.                                                                       |
+| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the nine elements automatically and exposes a global `Vitrine` object.                                                                      |
 | `dist/vitrine.esm.js`      | ES module      | Every component in one file. Defines nothing by itself: import `defineAll()` and call it.                                                                                        |
 | `dist/esm/vt-<name>.js`    | ES modules     | One module per component, which defines its element when imported. Code shared between components is in `dist/esm/chunks/`. See [Per-component modules](#per-component-modules). |
 | `dist/esm/vitrine.js`      | ES module      | Every component, built from the same shared chunks as the per-component modules. Call `defineAll()`.                                                                             |
@@ -23,7 +23,7 @@ The `dist/` folder contains:
 <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
 ```
 
-The script defines the six elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
+The script defines the nine elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
 
 Each GitHub release lists SRI hashes for the release files. If you add an `integrity` attribute, pin an exact version (`@1.2.3`) instead of `@1`, because the hash changes with every release:
 
@@ -72,15 +72,18 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 
 | File                                         | Size (gzip) |
 | -------------------------------------------- | ----------- |
-| `dist/vitrine.min.js`, `dist/vitrine.esm.js` | 99.2 KB     |
-| `dist/esm/vt-code.js`                        | 54.3 KB     |
-| `dist/esm/vt-markdown.js`                    | 72.8 KB     |
-| `dist/esm/vt-json.js`                        | 58.5 KB     |
-| `dist/esm/vt-csv.js`                         | 55.4 KB     |
-| `dist/esm/vt-tags.js`                        | 26.3 KB     |
-| `dist/esm/vt-diff.js`                        | 59.0 KB     |
+| `dist/vitrine.min.js`, `dist/vitrine.esm.js` | 125.4 KB    |
+| `dist/esm/vt-code.js`                        | 56.5 KB     |
+| `dist/esm/vt-markdown.js`                    | 74.9 KB     |
+| `dist/esm/vt-json.js`                        | 60.7 KB     |
+| `dist/esm/vt-csv.js`                         | 57.5 KB     |
+| `dist/esm/vt-tags.js`                        | 28.1 KB     |
+| `dist/esm/vt-diff.js`                        | 63.3 KB     |
+| `dist/esm/vt-terminal.js`                    | 59.5 KB     |
+| `dist/esm/vt-tree.js`                        | 59.0 KB     |
+| `dist/esm/vt-http.js`                        | 64.1 KB     |
 
-These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (104 KB for the full bundles; 58, 76, 62, 60, 32 and 62 KB for the modules above). Language files and syntax themes are loaded on demand and are not included. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
+These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (128 KB for the full bundles; 58, 76, 62, 60, 32, 64, 60, 60 and 66 KB for the modules above). Language files and syntax themes are loaded on demand and are not included. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
 
 ### Git submodule
 
@@ -208,6 +211,40 @@ If a language file cannot be loaded, the code is shown without highlighting and 
 </vt-diff>
 ```
 
+### Terminal
+
+```html
+<vt-terminal variant="full" label="Install">
+  <template>
+    $ npm install vitrine
+    added 1 package in 2s
+  </template>
+</vt-terminal>
+```
+
+### Tree
+
+```html
+<vt-tree variant="full" label="my-app">
+  <template>
+    src/
+      app.ts
+    package.json  # scripts and dependencies
+  </template>
+</vt-tree>
+```
+
+### HTTP
+
+```html
+<vt-http variant="full" label="Get a task">
+  <template>
+    GET https://api.example.com/v1/tasks/981
+    Accept: application/json
+  </template>
+</vt-http>
+```
+
 ### Editing
 
 Any component can become an editor:
@@ -243,7 +280,7 @@ The features of each preset are listed in [Presets are shortcuts](common-attribu
 
 An element reads its content from the first available source, in this order:
 
-1. The `content` property (or the `data` property of `<vt-json>`), set from JavaScript. `<vt-diff>` also has `original` and `modified`, and `<vt-tags>` has `value` and `options`.
+1. The `content` property (or the `data` property of `<vt-json>` and `<vt-tree>`, or the `exchange` property of `<vt-http>`), set from JavaScript. `<vt-diff>` also has `original` and `modified`, and `<vt-tags>` has `value` and `options`.
 2. The `src` attribute: a URL fetched by Vitrine.
 3. A child `<template>`, or a child `<script>` with a non-executable data type: `text/plain`, `text/markdown`, `text/x-markdown`, `application/json` or `text/json` (whichever comes first among the children).
 4. The text of the element itself.
@@ -251,7 +288,7 @@ An element reads its content from the first available source, in this order:
 Setting the `content` property overrides `src` and inline content. Setting it back to `null` (or `undefined`) returns to `src` or inline content.
 
 > **Warning: inline content is not safe for untrusted data.**
-> Everything written inside the element (sources 3 and 4) is parsed by the browser as part of your page HTML _before_ Vitrine runs. Vitrine cannot sanitize what the browser has already parsed. Never write user-provided or third-party data inside the element. Pass untrusted data through the `content` property (or `data` for `<vt-json>`), or load it with `src`.
+> Everything written inside the element (sources 3 and 4) is parsed by the browser as part of your page HTML _before_ Vitrine runs. Vitrine cannot sanitize what the browser has already parsed. Never write user-provided or third-party data inside the element. Pass untrusted data through the `content` property (or `data` for `<vt-json>` and `<vt-tree>`, `exchange` for `<vt-http>`), or load it with `src`.
 >
 > For the same reason, a `</script>` sequence inside a `<script type="text/plain">` block closes the block early, and whatever follows is parsed as page HTML.
 
@@ -339,7 +376,7 @@ While content loads from `src`, the element shows a loading placeholder. If cont
 ## Next steps
 
 - [Common attributes and events](common-attributes.md)
-- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md)
+- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md)
 - [Editing](editing.md)
 - [Theming](theming.md) and [Configuration](configuration.md)
 - [Security](security.md) before displaying untrusted content

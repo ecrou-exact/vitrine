@@ -1,6 +1,6 @@
 # Editing
 
-Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
+Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>` and `<vt-http>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
 
 ```html
 <vt-code mode="edit" language="python" line-numbers label="script.py">
@@ -103,6 +103,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-csv>`      | `content`, or `rows` (the parsed rows)                                                   |
 | `<vt-diff>`     | `original`, `modified` and `patch`; `content` for a patch                                |
 | `<vt-tags>`     | `value` (selected values) or `tags` (selected tags with details)                         |
+| `<vt-terminal>` | `content`                                                                                |
+| `<vt-tree>`     | `content`                                                                                |
+| `<vt-http>`     | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 
@@ -158,6 +161,18 @@ In edit mode, the default view is `raw`, and it is a plain text editor. A status
 ### `<vt-diff>`
 
 Edit mode adds an "Original" and a "Modified" editor (or one "Patch" editor) above the comparison, which is updated 200 ms after typing stops. See [`<vt-diff>`](components/diff.md#editing).
+
+### `<vt-terminal>`
+
+In edit mode, an editor holds the transcript, and a live preview of the session is shown under it, updated 120 ms after typing stops. In full screen, both fill the screen. See [`<vt-terminal>`](components/terminal.md#editing).
+
+### `<vt-tree>`
+
+In edit mode, an editor holds the source (any of the [formats](components/tree.md#formats)), and the tree under it is updated 120 ms after typing stops, with the folder and file counts of the badge. See [`<vt-tree>`](components/tree.md#editing).
+
+### `<vt-http>`
+
+In edit mode, an editor holds the source (raw HTTP, a curl command or JSON), and the exchange under it is updated 150 ms after typing stops. See [`<vt-http>`](components/http.md#editing).
 
 ### `<vt-tags>`
 

@@ -1,6 +1,6 @@
 # Common attributes and events
 
-The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>` and `<vt-diff>`. Component-specific attributes are described in each component reference.
+The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>` and `<vt-http>`. Component-specific attributes are described in each component reference.
 
 ## How attribute values are read
 
@@ -52,16 +52,19 @@ Attributes are observed: changing one after the element is on the page updates i
 
 Features turned on by each preset (everything else is off):
 
-| Component       | `simple`                      | `full`                                                                                                                                            |
-| --------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<vt-code>`     | nothing                       | `header`, `dot`, `copy`, `search`, `download`, `line-numbers`, `wrap-toggle`, `fullscreen`                                                        |
-| `<vt-markdown>` | `line-numbers`, `sync-scroll` | `header`, `dot`, `copy`, `search`, `download`, `toc`, `anchors`, `line-numbers`, `sync-scroll`, `split-controls`, `fullscreen`; all three tabs    |
-| `<vt-json>`     | nothing                       | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `show-types`, `expand-controls`, `path`, `line-numbers`, `fullscreen`; initial view `tree` |
-| `<vt-csv>`      | `header-row`                  | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `sortable`, `line-numbers`, `header-row`, `fullscreen`                                     |
-| `<vt-tags>`     | `allow-create`                | `header`, `dot`, `copy`, `browse`, `counts`, `clear`, `fullscreen`, `allow-create`                                                                |
-| `<vt-diff>`     | `line-numbers`                | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `line-numbers`, `fullscreen`; initial view `split`                                         |
+| Component       | `simple`                         | `full`                                                                                                                                            |
+| --------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<vt-code>`     | nothing                          | `header`, `dot`, `copy`, `search`, `download`, `line-numbers`, `wrap-toggle`, `fullscreen`                                                        |
+| `<vt-markdown>` | `line-numbers`, `sync-scroll`    | `header`, `dot`, `copy`, `search`, `download`, `toc`, `anchors`, `line-numbers`, `sync-scroll`, `split-controls`, `fullscreen`; all three tabs    |
+| `<vt-json>`     | nothing                          | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `show-types`, `expand-controls`, `path`, `line-numbers`, `fullscreen`; initial view `tree` |
+| `<vt-csv>`      | `header-row`                     | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `sortable`, `line-numbers`, `header-row`, `fullscreen`                                     |
+| `<vt-tags>`     | `allow-create`                   | `header`, `dot`, `copy`, `browse`, `counts`, `clear`, `fullscreen`, `allow-create`                                                                |
+| `<vt-diff>`     | `line-numbers`                   | `header`, `dot`, `copy`, `search`, `download`, `tabs`, `line-numbers`, `fullscreen`; initial view `split`                                         |
+| `<vt-terminal>` | `colors`, `command-copy`, `wrap` | `header`, `dot`, `copy`, `search`, `download`, `fullscreen`, `colors`, `command-copy`, `wrap`                                                     |
+| `<vt-tree>`     | `icons`, `guides`                | `header`, `dot`, `copy`, `search`, `download`, `fullscreen`, `icons`, `guides`, `expand-controls`, `path`                                         |
+| `<vt-http>`     | `mask-secrets`                   | `header`, `dot`, `copy`, `search`, `download`, `fullscreen`, `tabs`, `mask-secrets`                                                               |
 
-`edit-toggle`, `wrap`, `sort-keys`, `allow-html`, `diff`, `clickable` and `case-sensitive` are off in both presets. `badge`, `history` and `status` are on unless set to a false value. `<vt-tags>` has no search or download button.
+`edit-toggle`, `wrap` (except in `<vt-terminal>`), `sort-keys`, `allow-html`, `diff`, `clickable` and `case-sensitive` are off in both presets. `badge`, `history` and `status` are on unless set to a false value. `<vt-tags>` has no search or download button.
 
 ### `variant`
 
@@ -121,14 +124,17 @@ In the split view of `<vt-markdown>`, `max-height` sets the height of the panes 
 
 Shows a copy button. What is copied depends on the component:
 
-| Component       | Button label | Copied text                                                                                             |
-| --------------- | ------------ | ------------------------------------------------------------------------------------------------------- |
-| `<vt-code>`     | Copy code    | The full source text                                                                                    |
-| `<vt-markdown>` | Copy source  | The Markdown source; each fenced code block also gets a "Copy code" button                              |
-| `<vt-json>`     | Copy         | The pretty-printed JSON (using the current `indent` and `sort-keys`); in the editor, the text as edited |
-| `<vt-csv>`      | Copy         | The CSV text                                                                                            |
-| `<vt-tags>`     | Copy         | The selected values as a JSON array                                                                     |
-| `<vt-diff>`     | Copy patch   | The comparison as a unified patch                                                                       |
+| Component       | Button label  | Copied text                                                                                             |
+| --------------- | ------------- | ------------------------------------------------------------------------------------------------------- |
+| `<vt-code>`     | Copy code     | The full source text                                                                                    |
+| `<vt-markdown>` | Copy source   | The Markdown source; each fenced code block also gets a "Copy code" button                              |
+| `<vt-json>`     | Copy          | The pretty-printed JSON (using the current `indent` and `sort-keys`); in the editor, the text as edited |
+| `<vt-csv>`      | Copy          | The CSV text                                                                                            |
+| `<vt-tags>`     | Copy          | The selected values as a JSON array                                                                     |
+| `<vt-diff>`     | Copy patch    | The comparison as a unified patch                                                                       |
+| `<vt-terminal>` | Copy commands | Every command without its prompt, one per line; each command also gets a "Copy command" button          |
+| `<vt-tree>`     | Copy tree     | The tree drawn like the `tree` command, with notes                                                      |
+| `<vt-http>`     | Copy          | The exchange as raw HTTP, as displayed (secrets masked or not)                                          |
 
 After a click, the icon changes to a check mark (or an alert icon on failure) for 1.5 seconds, "Copied" or "Copy failed" is announced to screen readers, and a `vt-copy` event is dispatched on success. Outside secure contexts (plain `http:`), where the Clipboard API is unavailable, Vitrine falls back to the legacy copy command.
 
@@ -150,13 +156,16 @@ Typing searches automatically after a short pause (150 ms). The counter shows `c
 
 Shows a download button that saves the content as a file.
 
-| Component       | Downloaded text                                         | Default file name | MIME type          |
-| --------------- | ------------------------------------------------------- | ----------------- | ------------------ |
-| `<vt-code>`     | The source text                                         | `code.<ext>`      | `text/plain`       |
-| `<vt-markdown>` | The Markdown source                                     | `document.md`     | `text/markdown`    |
-| `<vt-json>`     | The pretty-printed JSON (the edited text in the editor) | `data.json`       | `application/json` |
-| `<vt-csv>`      | The CSV text                                            | `data.csv`        | `text/csv`         |
-| `<vt-diff>`     | The unified patch                                       | `changes.diff`    | `text/x-diff`      |
+| Component       | Downloaded text                                                    | Default file name | MIME type          |
+| --------------- | ------------------------------------------------------------------ | ----------------- | ------------------ |
+| `<vt-code>`     | The source text                                                    | `code.<ext>`      | `text/plain`       |
+| `<vt-markdown>` | The Markdown source                                                | `document.md`     | `text/markdown`    |
+| `<vt-json>`     | The pretty-printed JSON (the edited text in the editor)            | `data.json`       | `application/json` |
+| `<vt-csv>`      | The CSV text                                                       | `data.csv`        | `text/csv`         |
+| `<vt-diff>`     | The unified patch                                                  | `changes.diff`    | `text/x-diff`      |
+| `<vt-terminal>` | The session as plain text (prompts kept, escape sequences removed) | `session.txt`     | `text/plain`       |
+| `<vt-tree>`     | The tree drawn like the `tree` command                             | `tree.txt`        | `text/plain`       |
+| `<vt-http>`     | The exchange as raw HTTP, as displayed                             | `exchange.http`   | `text/plain`       |
 
 The file name is the value of the `download` attribute when it is not a boolean value (`download="report.md"`), else the `label` or `title` when it looks like a file name (it ends with an extension of 1 to 10 letters or digits), else the default name. `<vt-tags>` has no download button.
 
@@ -190,7 +199,7 @@ Sets the language of the interface strings (button labels, messages) for this el
 
 ### `badge`
 
-The header badge shows the language (`<vt-code>`), the type (`JSON`, `CSV`) or the number of added and removed lines (`<vt-diff>`). It is on by default; `badge="false"` hides it. It is only visible when the header is shown, and is replaced by tabs in `<vt-json>` and `<vt-csv>` when `tabs` is on.
+The header badge shows the language (`<vt-code>`), the type (`JSON`, `CSV`), the number of added and removed lines (`<vt-diff>`), the number of folders and files (`<vt-tree>`: "3 folders, 12 files") or `HTTP` (`<vt-http>` without tabs). It is on by default; `badge="false"` hides it. It is only visible when the header is shown, and is replaced by tabs in `<vt-json>`, `<vt-csv>` and `<vt-http>` when `tabs` is on.
 
 ```html
 <vt-code variant="full" badge="false" language="bash">ls -la</vt-code>
@@ -234,27 +243,31 @@ When the header is off but some actions are on (for example `<vt-code copy>` in 
 <vt-code copy search language="bash">npm run build</vt-code>
 ```
 
-Tabs (on `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>`) and the search bar are shown above the content in this case.
+Tabs (on `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-diff>` and `<vt-http>`) and the search bar are shown above the content in this case.
 
 ## Events
 
 Every event is a `CustomEvent` that bubbles and crosses the shadow DOM boundary (`composed: true`), so you can listen on the element or on any ancestor. Event names are also available as `Vitrine.EVENTS`.
 
-| Event                  | `EVENTS` key        | Dispatched by                                         | When                                                                                                          | `detail`                                                                                   |
-| ---------------------- | ------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `vt-ready`             | `READY`             | all                                                   | Content was rendered (after each new content: initial load, `content` change, `src` change, `maxSize` change) | `{ type }`: `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"` or `"diff"`                |
-| `vt-copy`              | `COPY`              | all                                                   | Text was copied successfully                                                                                  | `{ text }`: the copied text                                                                |
-| `vt-search`            | `SEARCH`            | all with a search bar                                 | A search ran (including an empty query after clearing)                                                        | `{ query, matches }`: the query and the number of highlighted matches                      |
-| `vt-tab-change`        | `TAB_CHANGE`        | `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-diff>` | The user changed the tab or view                                                                              | `{ tab }`: `"preview"`, `"source"`, `"split"`, `"tree"`, `"raw"`, `"table"` or `"unified"` |
-| `vt-input`             | `INPUT`             | editors                                               | The content was edited                                                                                        | `{ value }` (see [Editing](editing.md#events))                                             |
-| `vt-change`            | `CHANGE`            | editors, `<vt-tags>`                                  | An editor lost focus after edits; on `<vt-tags>`, the selection changed                                       | `{ value }`; `{ value, added, removed }` on `<vt-tags>`                                    |
-| `vt-mode-change`       | `MODE_CHANGE`       | all                                                   | The edit toggle button switched the mode                                                                      | `{ mode }`: `"view"` or `"edit"`                                                           |
-| `vt-fullscreen-change` | `FULLSCREEN_CHANGE` | all                                                   | Full screen was entered or left                                                                               | `{ fullscreen }`: `true` or `false`                                                        |
-| `vt-sort`              | `SORT`              | `<vt-csv>`                                            | A column header was clicked                                                                                   | `{ column, name, direction }`                                                              |
-| `vt-layout-change`     | `LAYOUT_CHANGE`     | `<vt-markdown>`                                       | A split view button changed the layout                                                                        | `{ preview, sync }`                                                                        |
-| `vt-error`             | `ERROR`             | all                                                   | Content could not be loaded or displayed                                                                      | `{ message, cause }`: a translated message and the original error                          |
+| Event                  | `EVENTS` key        | Dispatched by                                                      | When                                                                                                          | `detail`                                                                                                                                                                                                                                              |
+| ---------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vt-ready`             | `READY`             | all                                                                | Content was rendered (after each new content: initial load, `content` change, `src` change, `maxSize` change) | `{ type }`: `"code"`, `"markdown"`, `"json"`, `"csv"`, `"tags"`, `"diff"`, `"terminal"`, `"tree"` or `"http"`                                                                                                                                         |
+| `vt-copy`              | `COPY`              | all                                                                | Text was copied successfully                                                                                  | `{ text }`: the copied text                                                                                                                                                                                                                           |
+| `vt-search`            | `SEARCH`            | all with a search bar                                              | A search ran (including an empty query after clearing)                                                        | `{ query, matches }`: the query and the number of highlighted matches                                                                                                                                                                                 |
+| `vt-tab-change`        | `TAB_CHANGE`        | `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-diff>`, `<vt-http>` | The user changed the tab or view                                                                              | `{ tab }`: `"preview"`, `"source"`, `"split"`, `"tree"`, `"raw"`, `"table"` or `"unified"`; on `<vt-http>`, a view (`"exchange"`, `"code"`), a section (`"body"`, `"headers"`, `"query"`) or a language (`"curl"`, `"fetch"`, `"python"`, `"httpie"`) |
+| `vt-input`             | `INPUT`             | editors                                                            | The content was edited                                                                                        | `{ value }` (see [Editing](editing.md#events))                                                                                                                                                                                                        |
+| `vt-change`            | `CHANGE`            | editors, `<vt-tags>`                                               | An editor lost focus after edits; on `<vt-tags>`, the selection changed                                       | `{ value }`; `{ value, added, removed }` on `<vt-tags>`                                                                                                                                                                                               |
+| `vt-mode-change`       | `MODE_CHANGE`       | all                                                                | The edit toggle button switched the mode                                                                      | `{ mode }`: `"view"` or `"edit"`                                                                                                                                                                                                                      |
+| `vt-fullscreen-change` | `FULLSCREEN_CHANGE` | all                                                                | Full screen was entered or left                                                                               | `{ fullscreen }`: `true` or `false`                                                                                                                                                                                                                   |
+| `vt-sort`              | `SORT`              | `<vt-csv>`                                                         | A column header was clicked                                                                                   | `{ column, name, direction }`                                                                                                                                                                                                                         |
+| `vt-layout-change`     | `LAYOUT_CHANGE`     | `<vt-markdown>`, `<vt-diff>`                                       | A split view button changed the layout; on `<vt-diff>`, scroll sync was turned on or off                      | `{ preview, sync }`; `{ sync }` on `<vt-diff>`                                                                                                                                                                                                        |
+| `vt-change-navigate`   | `CHANGE_NAVIGATE`   | `<vt-diff>`                                                        | Moved to a change                                                                                             | `{ index, total, original, modified }`                                                                                                                                                                                                                |
+| `vt-select`            | `SELECT`            | `<vt-tree>`                                                        | An entry was selected                                                                                         | `{ path, name, type, note, status }`                                                                                                                                                                                                                  |
+| `vt-toggle`            | `TOGGLE`            | `<vt-tree>`                                                        | A folder was opened or closed                                                                                 | `{ path, expanded }`                                                                                                                                                                                                                                  |
+| `vt-typing-end`        | `TYPING_END`        | `<vt-terminal>`                                                    | The typing replay finished or was stopped                                                                     | `{}`                                                                                                                                                                                                                                                  |
+| `vt-error`             | `ERROR`             | all                                                                | Content could not be loaded or displayed                                                                      | `{ message, cause }`: a translated message and the original error                                                                                                                                                                                     |
 
-`<vt-tags>` also dispatches `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click`, which are not in `EVENTS`; see [`<vt-tags>` events](components/tags.md#events).
+`<vt-tags>` also dispatches `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click` (`EVENTS.TAG_ADD`, `TAG_REMOVE`, `TAG_CREATE` and `TAG_CLICK`); see [`<vt-tags>` events](components/tags.md#events).
 
 ```js
 document.addEventListener('vt-copy', (event) => {
@@ -274,30 +287,30 @@ Events are created as cancelable. Calling `preventDefault()` only has an effect 
 
 These parts exist on every component. Style them with `::part()` (see [Theming](theming.md#styling-parts)).
 
-| Part                         | Element                                                                    |
-| ---------------------------- | -------------------------------------------------------------------------- |
-| `container`                  | The outer frame                                                            |
-| `header`                     | The header bar                                                             |
-| `status-dot`                 | The accent dot at the start of the header                                  |
-| `title`                      | The header title                                                           |
-| `badge`                      | The language or type badge                                                 |
-| `toolbar`                    | The group of action buttons                                                |
-| `button`                     | Every icon button                                                          |
-| `copy-button`                | Copy buttons (icon buttons and the text buttons of the JSON path bar)      |
-| `download-button`            | The download button                                                        |
-| `search-button`              | The search toggle button                                                   |
-| `search`                     | The search bar                                                             |
-| `search-input`               | The search field                                                           |
-| `search-count`               | The match counter                                                          |
-| `match`                      | A highlighted search match                                                 |
-| `body`                       | The scrollable content area                                                |
-| `notice`                     | A notice above the content (for example "syntax highlighting is disabled") |
-| `error`                      | The error message                                                          |
-| `empty`                      | The "Nothing to display" message                                           |
-| `loading`                    | The loading placeholder                                                    |
-| `tabs`                       | The tab list (`<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-diff>`)       |
-| `tab`, `tab-active`          | A tab; the selected one also has `tab-active`                              |
-| `fullscreen-button`          | The full screen button                                                     |
-| `edit-button`                | The edit toggle button                                                     |
-| `undo-button`, `redo-button` | The undo and redo buttons (edit mode)                                      |
-| `editor`                     | The text field of a code editor (edit mode)                                |
+| Part                         | Element                                                                           |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| `container`                  | The outer frame                                                                   |
+| `header`                     | The header bar                                                                    |
+| `status-dot`                 | The accent dot at the start of the header                                         |
+| `title`                      | The header title                                                                  |
+| `badge`                      | The language or type badge                                                        |
+| `toolbar`                    | The group of action buttons                                                       |
+| `button`                     | Every icon button                                                                 |
+| `copy-button`                | Copy buttons (icon buttons and the text buttons of the JSON path bar)             |
+| `download-button`            | The download button                                                               |
+| `search-button`              | The search toggle button                                                          |
+| `search`                     | The search bar                                                                    |
+| `search-input`               | The search field                                                                  |
+| `search-count`               | The match counter                                                                 |
+| `match`                      | A highlighted search match                                                        |
+| `body`                       | The scrollable content area                                                       |
+| `notice`                     | A notice above the content (for example "syntax highlighting is disabled")        |
+| `error`                      | The error message                                                                 |
+| `empty`                      | The "Nothing to display" message                                                  |
+| `loading`                    | The loading placeholder                                                           |
+| `tabs`                       | The tab list (`<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-diff>`, `<vt-http>`) |
+| `tab`, `tab-active`          | A tab; the selected one also has `tab-active`                                     |
+| `fullscreen-button`          | The full screen button                                                            |
+| `edit-button`                | The edit toggle button                                                            |
+| `undo-button`, `redo-button` | The undo and redo buttons (edit mode)                                             |
+| `editor`                     | The text field of a code editor (edit mode)                                       |
