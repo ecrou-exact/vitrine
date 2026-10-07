@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- @head -->
+    <title>Themes — Vitrine</title>
+    <meta
+      name="description"
+      content="Built-in Vitrine themes and a builder for your own, with live contrast checks."
+    />
+    <script src="assets/themes.js" defer></script>
+  </head>
+  <body data-page="themes">
+    <!-- @header -->
+
+    <main id="main" class="wrap">
+      <header class="page-head">
+        <h1>Themes</h1>
+        <p>
+          Five themes ship with Vitrine, all checked for WCAG AA contrast. Set
+          <code>theme="…"</code> on an element, or <code>Vitrine.configure({ theme })</code> for the
+          whole page.
+        </p>
+      </header>
+
+      <div class="theme-grid" id="gallery"></div>
+
+      <section class="section" aria-labelledby="builder-title">
+        <div class="section-head">
+          <h2 id="builder-title">Make your own</h2>
+          <p>
+            Start from a theme, change the colors, and copy the code. Every text color is checked
+            against its background as you go.
+          </p>
+        </div>
+        <div class="builder">
+          <form class="controls" id="builder" aria-label="Theme colors"></form>
+          <div class="stage">
+            <div id="builder-preview"></div>
+            <div class="verdict" id="contrast" aria-live="polite"></div>
+            <vt-code
+              id="builder-code"
+              language="js"
+              variant="full"
+              label="my-theme.js"
+              search="false"
+              download="false"
+              line-numbers="false"
+            ></vt-code>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- @footer -->
+  </body>
+</html>

@@ -4,10 +4,59 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vitrine demo</title>
+    <!--
+      Plain demo, no build: run `npm run build`, then `npm run serve` and open
+      http://localhost:4173/demo/. The full website lives in site/ (`npm run site`).
+    -->
+    <link rel="stylesheet" href="../dist/vitrine.css" />
+    <script src="../dist/vitrine.min.js"></script>
+    <style>
+      body {
+        max-width: 860px;
+        margin: 40px auto;
+        padding: 0 16px;
+        font:
+          16px/1.6 system-ui,
+          sans-serif;
+      }
+      vt-code,
+      vt-markdown,
+      vt-json {
+        margin: 16px 0 32px;
+      }
+    </style>
   </head>
   <body>
     <h1>Vitrine demo</h1>
-    <p>Components will appear here as they are implemented.</p>
-    <script src="../dist/vitrine.min.js"></script>
+
+    <h2>vt-code</h2>
+    <vt-code language="python" line-numbers highlight-lines="2">
+      def hello(name): return f"Hello {name}"
+    </vt-code>
+    <vt-code variant="full" language="js" label="app.js">
+      <script type="text/plain">
+        const answer = 42;
+        console.log(`The answer is ${answer}`);
+      </script>
+    </vt-code>
+
+    <h2>vt-markdown</h2>
+    <vt-markdown variant="full" label="README.md">
+      <script type="text/markdown">
+        # Hello
+
+        Some **Markdown** with a [link](https://example.com) and a list:
+
+        - [x] done
+        - [ ] todo
+      </script>
+    </vt-markdown>
+
+    <h2>vt-json</h2>
+    <vt-json variant="full" label="data.json">
+      <script type="application/json">
+        { "id": 12345678901234567890, "name": "Ada", "tags": ["a", "b"], "nested": { "ok": true } }
+      </script>
+    </vt-json>
   </body>
 </html>
