@@ -61,6 +61,13 @@ test.describe('Edit mode', () => {
     page,
   }) => {
     await mount(page, 'vt-code', { mode: 'edit' }, 'x');
+    // A control after the editor, so Tab has somewhere to go in every browser.
+    await page.evaluate(() => {
+      const after = document.createElement('button');
+      after.id = 'after';
+      after.textContent = 'Next control';
+      document.getElementById('root').append(after);
+    });
     const field = page.locator('#el textarea');
     await field.click();
     await page.keyboard.press('Control+End');
@@ -72,7 +79,7 @@ test.describe('Edit mode', () => {
     expect(await field.inputValue()).toBe('x\n  y\n  z');
     await page.keyboard.press('Escape');
     await page.keyboard.press('Tab');
-    await expect(field).not.toBeFocused();
+    await expect(page.locator('#after')).toBeFocused();
   });
 
   test('undo and redo buttons follow the history', async ({ page }) => {

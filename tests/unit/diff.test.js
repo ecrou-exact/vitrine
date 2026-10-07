@@ -70,8 +70,9 @@ describe('diffTexts and patches', () => {
   it('writes a unified patch and reads it back', () => {
     const { lines } = diffTexts(original, modified);
     const patch = toPatch(lines, { originalName: 'a/x.js', modifiedName: 'b/x.js' });
-    expect(patch.startsWith('--- a/x.js\n+++ b/x.js\n@@ -1,7 +1,7 @@\n')).toBe(true);
-    expect(patch).toContain('@@ -8,3 +8,4 @@');
+    // The changes are 5 lines apart: with 3 lines of context the hunks merge, like git.
+    expect(patch.startsWith('--- a/x.js\n+++ b/x.js\n@@ -1,10 +1,11 @@\n')).toBe(true);
+    expect(patch.match(/^@@/gm)).toHaveLength(1);
     const back = parsePatch(patch);
     expect(back.originalName).toBe('a/x.js');
     expect(back.lines.filter((l) => l.type !== 'context').map((l) => l.text)).toEqual([
