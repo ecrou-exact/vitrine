@@ -17,7 +17,6 @@
   font-variant-ligatures: var(--vt-font-ligatures, none);
   line-height: var(--_line-height);
   tab-size: var(--_tab-size);
-  counter-reset: vt-line var(--_line-start, 0);
 }
 
 .wrap .code {
@@ -27,6 +26,18 @@
 .line {
   display: flex;
   min-width: 0;
+}
+
+/* Long code: off-screen blocks of lines skip layout and paint. */
+.chunk.revealed {
+  content-visibility: visible;
+}
+
+.chunk {
+  display: block;
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto
+    calc(var(--_chunk-lines) * var(--_font-size) * var(--_line-height));
 }
 
 .gutter {
@@ -48,8 +59,7 @@
 }
 
 .gutter::before {
-  counter-increment: vt-line;
-  content: counter(vt-line);
+  content: attr(data-n);
 }
 
 .sign {

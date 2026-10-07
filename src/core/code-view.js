@@ -33,6 +33,11 @@ import { plainLines, splitLines } from './lines.js';
 
 /** @typedef {"added"|"removed"|"hunk"|"meta"|"context"} DiffKind */
 
+/** Code longer than this many lines is split into blocks of {@link CHUNK_LINES}. */
+export const CHUNK_THRESHOLD = 1000;
+/** Lines per block for long code. */
+export const CHUNK_LINES = 200;
+
 /**
  * Splits a unified diff into display kinds and the code without the sign column.
  *
@@ -93,11 +98,21 @@ export function buildCodeView(text, options) {
   const lastNumber = options.startLine + lines.length - 1;
   const digits = Math.max(String(options.startLine).length, String(lastNumber).length);
   const pre = h('pre', { class: 'code', part: 'code' });
-  pre.style.setProperty('--_line-start', String(options.startLine - 1));
   pre.style.setProperty('--_digits', String(digits));
 
   const rows = document.createDocumentFragment();
+  // Long code is grouped in blocks the browser can skip while they are off-screen
+  // (content-visibility), which keeps tens of thousands of lines fast to lay out.
+  const chunked = lines.length > CHUNK_THRESHOLD;
+  /** @type {Node} */
+  let target = rows;
   lines.forEach((fragment, index) => {
+    if (chunked && index % CHUNK_LINES === 0) {
+      target = h('span', { class: 'chunk' });
+      const size = Math.min(CHUNK_LINES, lines.length - index);
+      /** @type {HTMLElement} */ (target).style.setProperty('--_chunk-lines', String(size));
+      rows.append(target);
+    }
     const number = options.startLine + index;
     const kind = kinds?.[index];
     const row = h('span', { class: 'line', part: 'line', attrs: { 'data-line': number } });
@@ -108,10 +123,11 @@ export function buildCodeView(text, options) {
     if (kind && kind !== 'context') row.classList.add(kind);
     if (options.lineNumbers) {
       row.append(
+        // The number is drawn from data-n by CSS, so it is never selected or copied.
         h('span', {
           class: 'gutter',
           part: 'gutter line-number',
-          attrs: { 'aria-hidden': 'true' },
+          attrs: { 'aria-hidden': 'true', 'data-n': number },
         }),
       );
     }
@@ -135,9 +151,21 @@ export function buildCodeView(text, options) {
     content.append(fragment);
     if (index < lines.length - 1) content.append('\n');
     row.append(content);
-    rows.append(row);
+    target.appendChild(row);
   });
   pre.append(rows);
   const element = h('div', { class: 'code-view' }, pre);
   return { element, code: pre, lineCount: lines.length, highlightSkipped };
+}
+
+/**
+ * Scrolls a search match into view. Blocks of long code skip layout while off-screen,
+ * and some browsers scroll to an estimated position: lay the block out first.
+ *
+ * @param {Element | null} mark
+ */
+export function revealMatch(mark) {
+  if (!mark) return;
+  mark.closest('.chunk')?.classList.add('revealed');
+  mark.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 }
