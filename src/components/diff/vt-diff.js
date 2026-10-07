@@ -27,6 +27,7 @@ import { TextSearch } from '../../core/search.js';
 import { revealMatch } from '../../core/code-view.js';
 import { createTabs, emptyView, iconButton, loadingView, noticeView } from '../../core/ui.js';
 import { diffTexts, foldLines, parsePatch, toPatch } from './diff.js';
+import { EditorSync, linePairs } from './sync.js';
 
 const VIEWS = /** @type {const} */ (['split', 'unified']);
 
@@ -56,16 +57,25 @@ const VIEWS = /** @type {const} */ (['split', 'unified']);
  * @attr {string} modified-src - URL of the modified text.
  * @attr {string} original-label - Name of the original in the patch (default `original`).
  * @attr {string} modified-label - Name of the modified text in the patch (default `modified`).
+ * @attr {boolean} navigation - Previous / next change buttons and the change counter. Full variant: on.
+ * @attr {boolean} sync-scroll - Edit mode: the two editors scroll to matching lines (default on).
  *
  * @prop {string} original - The original text.
  * @prop {string} modified - The modified text.
  * @prop {string} patch - The comparison as a unified patch (read-only).
+ * @prop {number} changeCount - Number of changes (blocks of added or removed lines, read-only).
  *
  * @csspart diff - The diff grid.
  * @csspart row - A line of the diff (also `row-insert`, `row-delete`, `row-context`).
  * @csspart line-number - A line number cell.
  * @csspart word-change - A changed word inside a modified line.
  * @csspart fold - "Show unchanged lines" button.
+ * @csspart change-count - Position in the changes ("2 of 7"), between the navigation arrows.
+ * @csspart current-change - Rows of the change reached with the navigation (also on `row`).
+ *
+ * @fires vt-layout-change - Scroll sync turned on or off with its button. Detail: `{ sync }`.
+ * @fires vt-change-navigate - Moved to a change. Detail: `{ index, total, original, modified }`
+ *   (`original` and `modified` are the first line numbers of the change, or `null`).
  *
  * @example
  * <vt-diff language="js" variant="full">
@@ -78,14 +88,14 @@ export class VtDiff extends VtBase {
 
   static componentAttributes = Object.freeze([
     'language', 'view', 'tabs', 'context', 'line-numbers', 'wrap', 'original-src', 'modified-src',
-    'original-label', 'modified-label',
+    'original-label', 'modified-label', 'navigation', 'sync-scroll',
   ]); // prettier-ignore
 
   static presets = {
-    simple: { 'line-numbers': true },
+    simple: { 'line-numbers': true, 'sync-scroll': true },
     full: {
       header: true, dot: true, copy: true, search: true, download: true, tabs: true,
-      'line-numbers': true, fullscreen: true,
+      'line-numbers': true, fullscreen: true, navigation: true, 'sync-scroll': true,
     },
   }; // prettier-ignore
 
@@ -127,6 +137,16 @@ export class VtDiff extends VtBase {
     this.updateHistoryButtons = null;
     /** @type {import('../../core/history.js').EditHistory[]} */
     this.histories = [];
+    /** @type {{ rows: HTMLElement[], line: Line }[]} Changes in display order. */
+    this.changes = [];
+    /** Change reached with the navigation, or -1. */
+    this.changeIndex = -1;
+    /** @type {(() => void) | null} */
+    this.updateChangeNav = null;
+    /** @type {EditorSync | null} */
+    this.editorSync = null;
+    /** @type {boolean | null} Sync chosen with the button; `null` follows `sync-scroll`. */
+    this.sync = null;
   }
 
   // ------------------------------------------------------------------ sources
@@ -207,6 +227,8 @@ export class VtDiff extends VtBase {
   disconnectedCallback() {
     this.sidesAbort?.abort();
     clearTimeout(this.diffTimer);
+    this.editorSync?.stop();
+    this.editorSync = null;
     for (const editor of this.editors) editor.destroy();
     super.disconnectedCallback();
   }
@@ -219,6 +241,7 @@ export class VtDiff extends VtBase {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'view') this.viewState = null;
     if (name === 'context') this.expanded.clear();
+    if (name === 'sync-scroll') this.sync = null;
     if (
       (name === 'original-src' || name === 'modified-src') &&
       oldValue !== newValue &&
@@ -403,8 +426,10 @@ export class VtDiff extends VtBase {
       clear: () => active?.clear(),
     };
     const actions = [
+      this.feature('navigation') ? this.changeNavigation() : null,
       this.searchButton(target),
       ...(this.editing ? this.diffHistoryButtons() : []),
+      this.editing && this.editors.length === 2 ? this.syncButton() : null,
       this.editToggleButton(),
       this.fullscreenButton(),
       this.feature('download')
@@ -412,8 +437,9 @@ export class VtDiff extends VtBase {
         : null,
       this.feature('copy') ? this.copyButton(() => this.patch, t('copyPatch')) : null,
     ];
-    frame.append(...this.chrome({ badge: stats, tabs, actions }), panel);
+    frame.append(...this.chrome({ badge: stats, tabs, actions: actions.flat() }), panel);
     for (const editor of this.editors) editor.align();
+    this.startSync();
   }
 
   /**
@@ -445,10 +471,13 @@ export class VtDiff extends VtBase {
       );
       return;
     }
+    this.changes = [];
+    this.changeIndex = -1;
     if (!result || !result.lines.some((line) => line.type !== 'context')) {
       host.replaceChildren(
         h('div', { class: 'empty', part: 'empty', text: this.t('noDifferences') }),
       );
+      this.updateChangeNav?.();
       return;
     }
     const view = this.view;
@@ -470,16 +499,20 @@ export class VtDiff extends VtBase {
     let lastOld = 0;
     /** @type {HTMLElement[]} */
     const open = [];
+    /** @type {{ rows: HTMLElement[], line: Line } | null} Change being built. */
+    let change = null;
     for (const row of rows) {
       if (row.type === 'fold') {
         grid.append(this.foldRow(row));
         lastOld = 0;
         open.length = 0;
+        change = null;
         continue;
       }
       // Patches skip unchanged regions between hunks: show where lines are missing.
       const oldNo = row.line.oldNo;
       if (oldNo !== null && lastOld && oldNo > lastOld + 1) {
+        change = null;
         grid.append(
           h('div', {
             class: 'gap',
@@ -490,12 +523,211 @@ export class VtDiff extends VtBase {
         );
       }
       if (oldNo !== null) lastOld = oldNo;
-      if (view === 'unified') grid.append(this.unifiedRow(row.line, fragments));
-      else this.splitRows(row.line, fragments, grid, open);
+      /** @type {HTMLElement} */
+      let element;
+      if (view === 'unified') {
+        element = this.unifiedRow(row.line, fragments);
+        grid.append(element);
+      } else element = this.splitRows(row.line, fragments, grid, open);
+      // Consecutive added and removed lines form one change.
+      if (row.line.type === 'context') change = null;
+      else {
+        if (!change) {
+          change = { rows: [], line: row.line };
+          this.changes.push(change);
+        }
+        if (!change.rows.includes(element)) change.rows.push(element);
+      }
     }
     host.replaceChildren(
-      h('div', { class: 'body diff-body', part: 'body', attrs: { tabindex: '0' } }, grid),
+      h(
+        'div',
+        {
+          class: 'body diff-body',
+          part: 'body',
+          attrs: { tabindex: '0' },
+          on: { keydown: (event) => this.onDiffKeydown(/** @type {KeyboardEvent} */ (event)) },
+        },
+        grid,
+      ),
     );
+    this.updateChangeNav?.();
+  }
+
+  // ------------------------------------------------------------------ navigation
+
+  /** @returns {number} */
+  get changeCount() {
+    return this.changes.length;
+  }
+
+  /** Moves to the next change (the first one when none is selected yet). */
+  nextChange() {
+    this.goToChange(this.changeIndex + 1);
+  }
+
+  /** Moves to the previous change. */
+  previousChange() {
+    this.goToChange(this.changeIndex < 0 ? this.changes.length - 1 : this.changeIndex - 1);
+  }
+
+  /**
+   * Scrolls to a change and marks it as the current one.
+   *
+   * @param {number} index - 0-based; clamped to the existing changes.
+   */
+  goToChange(index) {
+    const total = this.changes.length;
+    if (!total) return;
+    const next = Math.min(total - 1, Math.max(0, Math.trunc(index) || 0));
+    for (const row of this.changes[this.changeIndex]?.rows ?? []) markCurrent(row, false);
+    this.changeIndex = next;
+    const change = this.changes[next];
+    for (const row of change.rows) markCurrent(row, true);
+
+    const body = /** @type {HTMLElement | null} */ (this.diffHost?.querySelector('.diff-body'));
+    const first = change.rows[0];
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (body && body.scrollHeight > body.clientHeight + 1) {
+      const top =
+        first.getBoundingClientRect().top - body.getBoundingClientRect().top + body.scrollTop;
+      body.scrollTo({ top: top - body.clientHeight / 3, behavior: smooth ? 'smooth' : 'auto' });
+    } else {
+      first.scrollIntoView({ block: 'center', behavior: smooth ? 'smooth' : 'auto' });
+    }
+
+    const { original, modified } = this.changeLines(change.line);
+    if (this.editorSync && original !== null && modified !== null)
+      this.editorSync.reveal(original, modified);
+    this.updateChangeNav?.();
+    this.announce(this.t('changePosition', { current: next + 1, total }));
+    emit(this, EVENTS.CHANGE_NAVIGATE, { index: next, total, original, modified });
+  }
+
+  /**
+   * First line of a change on each side (for an insertion, the original line it follows).
+   *
+   * @param {Line} line - First line of the change.
+   * @returns {{ original: number | null, modified: number | null }}
+   */
+  changeLines(line) {
+    const result = this.compare();
+    if (!result) return { original: line.oldNo, modified: line.newNo };
+    const start = result.lines.indexOf(line);
+    /** @param {'oldNo' | 'newNo'} key */
+    const find = (key) => {
+      for (let i = start; i < result.lines.length; i += 1) {
+        const value = result.lines[i][key];
+        if (value !== null) return value;
+        if (result.lines[i].type === 'context') break;
+      }
+      // Only additions (or only removals): the line just before on that side.
+      for (let i = start - 1; i >= 0; i -= 1) {
+        const value = result.lines[i][key];
+        if (value !== null) return value + 1;
+      }
+      return 1;
+    };
+    return { original: find('oldNo'), modified: find('newNo') };
+  }
+
+  /**
+   * Previous change, position ("2 of 7") and next change.
+   *
+   * @returns {HTMLElement[]}
+   */
+  changeNavigation() {
+    const t = this.t;
+    const previous = iconButton({
+      icon: 'chevron-up',
+      label: t('previousChange'),
+      key: 'previous-change',
+      part: 'previous-change',
+      onClick: () => this.previousChange(),
+    });
+    const next = iconButton({
+      icon: 'chevron-down',
+      label: t('nextChange'),
+      key: 'next-change',
+      part: 'next-change',
+      onClick: () => this.nextChange(),
+    });
+    const count = h('span', { class: 'change-count', part: 'change-count' });
+    this.updateChangeNav = () => {
+      const total = this.changes.length;
+      const index = this.changeIndex;
+      count.textContent =
+        index < 0
+          ? t('changeTotal', { count: formatNumber(total, this.locale) })
+          : t('changePosition', {
+              current: formatNumber(index + 1, this.locale),
+              total: formatNumber(total, this.locale),
+            });
+      previous.disabled = total === 0 || index === 0;
+      next.disabled = total === 0 || index === total - 1;
+    };
+    this.updateChangeNav();
+    return [previous, count, next];
+  }
+
+  /**
+   * Keyboard navigation in the diff: n / p, or Alt + arrow down / up.
+   *
+   * @param {KeyboardEvent} event
+   */
+  onDiffKeydown(event) {
+    if (event.ctrlKey || event.metaKey) return;
+    const key = event.key;
+    const forward = (key === 'n' && !event.altKey) || (key === 'ArrowDown' && event.altKey);
+    const back = (key === 'p' && !event.altKey) || (key === 'ArrowUp' && event.altKey);
+    if (!forward && !back) return;
+    event.preventDefault();
+    if (forward) this.nextChange();
+    else this.previousChange();
+  }
+
+  // ------------------------------------------------------------------ scroll sync
+
+  /** @returns {boolean} */
+  get syncScroll() {
+    return this.sync ?? this.feature('sync-scroll');
+  }
+
+  /** Starts scroll sync between the two editors, when there are two and it is enabled. */
+  startSync() {
+    this.editorSync?.stop();
+    this.editorSync = null;
+    if (!this.editing || this.editors.length !== 2 || !this.syncScroll) return;
+    const panes = /** @type {HTMLElement[]} */ (
+      Array.from(this.root.querySelectorAll('.diff-editor .editor-body'))
+    );
+    if (panes.length !== 2) return;
+    this.editorSync = new EditorSync([panes[0], panes[1]], () => {
+      try {
+        const result = this.compare();
+        return result ? linePairs(result.lines) : null;
+      } catch {
+        return null;
+      }
+    }).start();
+  }
+
+  /** @returns {HTMLButtonElement} */
+  syncButton() {
+    const button = iconButton({
+      icon: 'sync-scroll',
+      label: this.t('syncScroll'),
+      key: 'sync-scroll',
+      part: 'sync-button',
+      pressed: this.syncScroll,
+      onClick: () => {
+        this.sync = !this.syncScroll;
+        button.setAttribute('aria-pressed', String(this.sync));
+        this.startSync();
+        emit(this, EVENTS.LAYOUT_CHANGE, { sync: this.sync });
+      },
+    });
+    return button;
   }
 
   /**
@@ -592,19 +824,19 @@ export class VtDiff extends VtBase {
    * @param {Map<Line, DocumentFragment>} fragments
    * @param {HTMLElement} grid
    * @param {HTMLElement[]} open - Rows of removed lines still waiting for an added line.
+   * @returns {HTMLElement} The row the line was put in.
    */
   splitRows(line, fragments, grid, open) {
     if (line.type === 'context') {
       open.length = 0;
-      grid.append(
-        h(
-          'div',
-          { class: 'row context', part: 'row row-context', attrs: { role: 'row' } },
-          ...this.half(line, 'left', fragments),
-          ...this.half(line, 'right', fragments),
-        ),
+      const row = h(
+        'div',
+        { class: 'row context', part: 'row row-context', attrs: { role: 'row' } },
+        ...this.half(line, 'left', fragments),
+        ...this.half(line, 'right', fragments),
       );
-      return;
+      grid.append(row);
+      return row;
     }
     if (line.type === 'insert' && open.length) {
       const row = /** @type {HTMLElement} */ (open.shift());
@@ -612,7 +844,7 @@ export class VtDiff extends VtBase {
       row.append(...this.half(line, 'right', fragments));
       row.classList.add('insert');
       row.setAttribute('part', 'row row-delete row-insert');
-      return;
+      return row;
     }
     const row = h('div', {
       class: `row ${line.type}`,
@@ -627,6 +859,7 @@ export class VtDiff extends VtBase {
       row.append(...this.half(null, 'left', fragments), ...this.half(line, 'right', fragments));
     }
     grid.append(row);
+    return row;
   }
 
   /**
@@ -810,6 +1043,21 @@ export class VtDiff extends VtBase {
     /** @type {HTMLElement | null} */ (this.root.querySelector(`[data-tab="${view}"]`))?.focus();
     emit(this, EVENTS.TAB_CHANGE, { tab: view });
   }
+}
+
+/**
+ * Marks or unmarks a row as part of the current change (class and part).
+ *
+ * @param {HTMLElement} row
+ * @param {boolean} current
+ */
+function markCurrent(row, current) {
+  row.classList.toggle('current-change', current);
+  const parts = (row.getAttribute('part') ?? '')
+    .split(' ')
+    .filter((p) => p && p !== 'current-change');
+  if (current) parts.push('current-change');
+  row.setAttribute('part', parts.join(' '));
 }
 
 /**

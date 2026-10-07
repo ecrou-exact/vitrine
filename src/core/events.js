@@ -35,8 +35,10 @@ export const EVENTS = Object.freeze({
   SORT: 'vt-sort',
   /** Full screen entered or left. Detail: `{ fullscreen }`. */
   FULLSCREEN_CHANGE: 'vt-fullscreen-change',
-  /** Split layout changed. Detail: `{ preview, sync }`. */
+  /** Split layout or scroll sync changed. Detail: `{ preview, sync }` (diff: `{ sync }`). */
   LAYOUT_CHANGE: 'vt-layout-change',
+  /** Diff: moved to a change. Detail: `{ index, total, original, modified }`. */
+  CHANGE_NAVIGATE: 'vt-change-navigate',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

@@ -30,6 +30,8 @@ Lines are compared with the Myers algorithm (the one used by `git diff`). Text i
 | `tabs` (Side by side / Unified) | off                | on      |
 | `line-numbers`                  | on                 | on      |
 | `fullscreen`                    | off                | on      |
+| `navigation` (change arrows)    | off                | on      |
+| `sync-scroll` (edit mode)       | on                 | on      |
 
 Every feature can be turned on or off individually, whatever the variant.
 
@@ -152,12 +154,41 @@ Both produce a unified patch, also available as the `patch` property:
 <vt-diff variant="full" label="settings.diff" original-label="a/settings.json" modified-label="b/settings.json" language="json"></vt-diff>
 ```
 
+## Moving between changes
+
+A change is a block of consecutive removed and added lines. With `navigation` (on in the full variant), the header has **Previous change** and **Next change** arrows around a counter: "8 changes" until you move, then "3 of 8". The current change is scrolled a third of the way down the diff, and an accent bar runs along its rows.
+
+From the keyboard, focus the diff and press:
+
+| Keys               | Action          |
+| ------------------ | --------------- |
+| `n` or `Alt` + `↓` | Next change     |
+| `p` or `Alt` + `↑` | Previous change |
+
+The same moves are available from JavaScript, so you can build your own controls:
+
+```js
+const diff = document.querySelector('vt-diff');
+diff.nextChange();
+diff.previousChange();
+diff.goToChange(0); // first change
+console.log(diff.changeCount);
+diff.addEventListener('vt-change-navigate', (event) => {
+  const { index, total, original, modified } = event.detail;
+  status.textContent = `Change ${index + 1} of ${total}, line ${modified}`;
+});
+```
+
+Side by side, both columns are one table, so they always scroll together.
+
 ## Editing
 
 With `mode="edit"`, editors appear above the comparison:
 
 - when comparing two texts, one editor labeled "Original" and one labeled "Modified", side by side (stacked when the element is 640px wide or less);
 - otherwise, one "Patch" editor.
+
+The two editors scroll together, line for line: unchanged lines are aligned on both sides, and a block that exists on one side only is spread over the space it takes on the other. The **Sync scrolling** button in the header (or `sync-scroll="false"`) turns this off. Moving to a change also scrolls both editors to it.
 
 The comparison, the badge and an open search are updated 200 ms after typing stops. Undo and redo apply to the editor that last had focus. Editing a side sets the `original` or `modified` property, so it takes priority over `original-src` and inline templates; editing a patch sets `content`.
 
@@ -197,31 +228,42 @@ This table lists the attributes specific to `<vt-diff>`. The shared attributes a
 | `modified-src`   | URL                         | none                               | URL of the modified text.                                      |
 | `original-label` | text                        | `original`                         | Name of the original in the patch.                             |
 | `modified-label` | text                        | `modified`                         | Name of the modified text in the patch.                        |
+| `navigation`     | boolean                     | preset                             | Previous / next change arrows and the change counter.          |
+| `sync-scroll`    | boolean                     | on                                 | Edit mode: the two editors scroll to matching lines.           |
 
 `language` accepts the same names as `<vt-code>`; languages that are not bundled are loaded on demand. Unlike `<vt-code>`, `auto` is not supported.
 
 ## Properties
 
-| Property   | Type     | Description                                                                  |
-| ---------- | -------- | ---------------------------------------------------------------------------- |
-| `original` | `string` | The original text. Reading it returns the text in use (empty in patch mode). |
-| `modified` | `string` | The modified text. Reading it returns the text in use (empty in patch mode). |
-| `patch`    | `string` | The comparison as a unified patch. Read-only.                                |
-| `content`  | `string` | The patch given as content. Setting it overrides `src` and inline content.   |
+| Property      | Type     | Description                                                                  |
+| ------------- | -------- | ---------------------------------------------------------------------------- |
+| `original`    | `string` | The original text. Reading it returns the text in use (empty in patch mode). |
+| `modified`    | `string` | The modified text. Reading it returns the text in use (empty in patch mode). |
+| `patch`       | `string` | The comparison as a unified patch. Read-only.                                |
+| `content`     | `string` | The patch given as content. Setting it overrides `src` and inline content.   |
+| `changeCount` | `number` | Number of changes. Read-only.                                                |
+
+| Method              | Description                                                            |
+| ------------------- | ---------------------------------------------------------------------- |
+| `nextChange()`      | Moves to the next change (the first one when none is selected yet).    |
+| `previousChange()`  | Moves to the previous change.                                          |
+| `goToChange(index)` | Moves to a change by its 0-based index (clamped to the existing ones). |
 
 `original`, `modified` and `content` can be set before the element is defined; they are applied when it upgrades.
 
 ## Events
 
-| Event           | `detail`                            | When                                  |
-| --------------- | ----------------------------------- | ------------------------------------- |
-| `vt-ready`      | `{ type: "diff" }`                  | The comparison was rendered           |
-| `vt-tab-change` | `{ tab }`: `"split"` or `"unified"` | The user changed the view             |
-| `vt-copy`       | `{ text }`                          | The patch was copied                  |
-| `vt-search`     | `{ query, matches }`                | A search ran                          |
-| `vt-input`      | see [Editing](#editing)             | A text was edited                     |
-| `vt-change`     | see [Editing](#editing)             | An editor lost focus after edits      |
-| `vt-error`      | `{ message, cause }`                | Loading failed or a text is too large |
+| Event                | `detail`                               | When                                                                         |
+| -------------------- | -------------------------------------- | ---------------------------------------------------------------------------- |
+| `vt-ready`           | `{ type: "diff" }`                     | The comparison was rendered                                                  |
+| `vt-tab-change`      | `{ tab }`: `"split"` or `"unified"`    | The user changed the view                                                    |
+| `vt-copy`            | `{ text }`                             | The patch was copied                                                         |
+| `vt-search`          | `{ query, matches }`                   | A search ran                                                                 |
+| `vt-input`           | see [Editing](#editing)                | A text was edited                                                            |
+| `vt-change`          | see [Editing](#editing)                | An editor lost focus after edits                                             |
+| `vt-error`           | `{ message, cause }`                   | Loading failed or a text is too large                                        |
+| `vt-change-navigate` | `{ index, total, original, modified }` | Moved to a change; `original` and `modified` are its first line on each side |
+| `vt-layout-change`   | `{ sync }`                             | Scroll sync turned on or off with its button                                 |
 
 ## Search
 
@@ -231,15 +273,19 @@ Search looks at the code of the displayed lines (folded regions excluded); line 
 
 In addition to the [shared parts](../common-attributes.md#shared-css-parts):
 
-| Part                         | Element                                                                                                                                                                        |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `diff`                       | The diff grid (`role="table"`)                                                                                                                                                 |
-| `row`                        | A line of the diff. It also has `row-context`, `row-insert` or `row-delete`; a side-by-side row that pairs a removed and an added line has both `row-delete` and `row-insert`. |
-| `line-number`                | A line number cell                                                                                                                                                             |
-| `word-change`                | A changed word inside a modified line                                                                                                                                          |
-| `fold`                       | A "Show N unchanged lines" button                                                                                                                                              |
-| `hunk`                       | The `⋯` row between two hunks of a patch                                                                                                                                       |
-| `undo-button`, `redo-button` | Undo and redo (edit mode)                                                                                                                                                      |
+| Part                             | Element                                                                                                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `diff`                           | The diff grid (`role="table"`)                                                                                                                                                 |
+| `row`                            | A line of the diff. It also has `row-context`, `row-insert` or `row-delete`; a side-by-side row that pairs a removed and an added line has both `row-delete` and `row-insert`. |
+| `line-number`                    | A line number cell                                                                                                                                                             |
+| `word-change`                    | A changed word inside a modified line                                                                                                                                          |
+| `fold`                           | A "Show N unchanged lines" button                                                                                                                                              |
+| `hunk`                           | The `⋯` row between two hunks of a patch                                                                                                                                       |
+| `undo-button`, `redo-button`     | Undo and redo (edit mode)                                                                                                                                                      |
+| `previous-change`, `next-change` | The change navigation arrows                                                                                                                                                   |
+| `change-count`                   | "3 of 8" between the arrows                                                                                                                                                    |
+| `current-change`                 | Rows of the change reached with the arrows (also `row`)                                                                                                                        |
+| `sync-button`                    | Sync scrolling toggle (edit mode)                                                                                                                                              |
 
 ```css
 vt-diff::part(word-change) {
@@ -256,7 +302,7 @@ Colors come from the theme tokens `--vt-diff-added`, `--vt-diff-removed`, `--vt-
 
 ## Accessibility
 
-The diff is exposed as a table: each line is a row (`role="row"`) of cells. Line numbers are hidden from assistive technologies, and the sign of each changed line is read as "Added: " or "Removed: ". The table is named after the `label`, or "Changes". Status is never shown by color alone: added and removed lines also have a `+` or `-` sign.
+The diff is exposed as a table: each line is a row (`role="row"`) of cells. Line numbers are hidden from assistive technologies, and the sign of each changed line is read as "Added: " or "Removed: ". The table is named after the `label`, or "Changes". Status is never shown by color alone: added and removed lines also have a `+` or `-` sign. Moving to a change announces its position ("3 of 8") to screen readers.
 
 ## Limits
 

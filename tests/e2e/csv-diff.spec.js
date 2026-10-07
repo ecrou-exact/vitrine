@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { STRICT, collectErrors, mount } from './helpers.js';
+import { STRICT, collectErrors, events, mount, recordEvents } from './helpers.js';
 
 const CSV =
   'name,score,joined\nAda,98.5,1842-10-01\nAlan,,1936-05-28\n"Hopper, Grace",91,1944-01-01\nMargaret,99,1969-07-20\n';
@@ -135,6 +135,74 @@ test.describe('<vt-diff>', () => {
     await page.keyboard.press('Control+End');
     await page.keyboard.type('c\n');
     await expect(el.locator('.row.insert')).toHaveCount(1);
+  });
+
+  test('arrows and n / p move between changes', async ({ page }) => {
+    const original = Array.from({ length: 200 }, (_, i) => `line ${i + 1}`);
+    const modified = original.map((line, i) => (i % 50 === 10 ? `${line} changed` : line));
+    await mountDiff(
+      page,
+      { variant: 'full', context: 'all', 'max-height': '200px' },
+      original.join('\n'),
+      modified.join('\n'),
+    );
+    await recordEvents(page, ['vt-change-navigate']);
+    const el = page.locator('#el');
+    const count = el.locator('[part~="change-count"]');
+    await expect(count).toHaveText('4 changes');
+    const next = el.getByRole('button', { name: 'Next change' });
+    const previous = el.getByRole('button', { name: 'Previous change' });
+    await next.click();
+    await expect(count).toHaveText('1 of 4');
+    await expect(previous).toBeDisabled();
+    await next.click();
+    await expect(count).toHaveText('2 of 4');
+    await expect(el.locator('.row.current-change')).toHaveCount(1);
+    await expect(el.locator('.row.current-change [data-n="61"]').first()).toBeInViewport();
+    await el.locator('.diff-body').focus();
+    await page.keyboard.press('n');
+    await page.keyboard.press('n');
+    await expect(count).toHaveText('4 of 4');
+    await expect(next).toBeDisabled();
+    await page.keyboard.press('Alt+ArrowUp');
+    await expect(count).toHaveText('3 of 4');
+    expect((await events(page)).at(-1)).toEqual({
+      type: 'vt-change-navigate',
+      detail: { index: 2, total: 4, original: 111, modified: 111 },
+    });
+  });
+
+  test('edit mode: the two editors scroll to matching lines', async ({ page }) => {
+    const original = Array.from({ length: 300 }, (_, i) => `line ${i + 1}`);
+    // 20 lines added near the top: line N of the original is line N + 20 on the right.
+    const modified = [...original.slice(0, 5), ...Array(20).fill('new'), ...original.slice(5)];
+    await mountDiff(
+      page,
+      { mode: 'edit', variant: 'full' },
+      original.join('\n'),
+      modified.join('\n'),
+    );
+    const panes = page.locator('#el .diff-editor .editor-body');
+    await panes.nth(0).evaluate((pane) => {
+      const line = pane.querySelectorAll('.editor-layer .line')[149];
+      pane.scrollTop += line.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+    });
+    const firstVisible = () =>
+      panes.evaluateAll((list) =>
+        list.map((pane) => {
+          const top = pane.getBoundingClientRect().top;
+          const line = Array.from(pane.querySelectorAll('.editor-layer .line')).find(
+            (row) => row.getBoundingClientRect().top >= top - 1,
+          );
+          return line?.textContent.trim();
+        }),
+      );
+    await expect.poll(firstVisible).toEqual(['line 150', 'line 150']);
+    // Turning sync off leaves the other editor where it is.
+    await page.locator('#el').getByRole('button', { name: 'Sync scrolling' }).click();
+    await panes.nth(0).evaluate((pane) => (pane.scrollTop = 0));
+    await page.waitForTimeout(200);
+    expect((await firstVisible())[1]).toBe('line 150');
   });
 });
 
