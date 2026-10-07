@@ -16,7 +16,10 @@ import python from 'highlight.js/lib/languages/python';
 import shell from 'highlight.js/lib/languages/shell';
 import xml from 'highlight.js/lib/languages/xml';
 import yaml from 'highlight.js/lib/languages/yaml';
+import { defaultLanguagesUrl, setDefaultLanguagesUrl } from './asset-urls.js';
 import { getConfig } from './config.js';
+
+export { setDefaultLanguagesUrl };
 import { LANGUAGE_INDEX } from './language-index.js';
 import { sanitizeHighlight } from './security.js';
 
@@ -34,18 +37,6 @@ let aliases = null;
 
 /** @type {Map<string, Promise<boolean>>} */
 const pending = new Map();
-
-/** Base URL of the lazy language files, set by the entry point. */
-let defaultBaseUrl = '';
-
-/**
- * Sets the default base URL of `languages/*.js` (called by the entry points).
- *
- * @param {string} url
- */
-export function setDefaultLanguagesUrl(url) {
-  defaultBaseUrl = url;
-}
 
 /**
  * Maps a language name or alias to its canonical highlight.js name.
@@ -103,7 +94,7 @@ export function loadLanguage(name) {
  * @returns {Promise<boolean>}
  */
 async function importLanguage(name) {
-  const base = getConfig().languagesUrl || defaultBaseUrl;
+  const base = getConfig().languagesUrl || defaultLanguagesUrl();
   if (!base) return false;
   try {
     const url = new URL(

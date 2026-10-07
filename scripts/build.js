@@ -67,6 +67,23 @@ const builds = [
   },
 ];
 
+// Per-component ES modules with shared chunks: load only the elements you use.
+const components = ['code', 'markdown', 'json', 'csv', 'tags', 'diff'];
+/** @type {import('esbuild').BuildOptions} */
+const split = {
+  ...shared,
+  entryPoints: {
+    vitrine: 'src/entries/all.js',
+    ...Object.fromEntries(components.map((name) => [`vt-${name}`, `src/entries/vt-${name}.js`])),
+  },
+  format: 'esm',
+  splitting: true,
+  minify: true,
+  outdir: 'dist/esm',
+  chunkNames: 'chunks/[name]-[hash]',
+};
+builds.push(split);
+
 const lazy = listLanguages()
   .map(({ name }) => name)
   .filter((name) => !BUNDLED_LANGUAGES.includes(name));
