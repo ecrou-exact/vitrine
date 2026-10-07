@@ -41,7 +41,7 @@ configure({ theme: 'auto', syntaxTheme: 'github', syntaxThemeDark: 'github-dark'
 defineAll();
 ```
 
-The modules find `languages/` and `syntax-themes/` relative to their own URL. When a bundler rewrites or inlines them, that location changes: serve the `languages/` and `syntax-themes/` folders yourself and set `languagesUrl` and `syntaxThemesUrl`:
+The modules find `languages/`, `syntax-themes/` and `vendor/` relative to their own URL. When a bundler rewrites or inlines them, that location changes: serve the `languages/`, `syntax-themes/` and `vendor/` folders yourself and set `languagesUrl`, `syntaxThemesUrl` and `vendorUrl` (`vendor/` holds Apache ECharts for `<vt-chart>` and the YAML reader for `<vt-openapi>`):
 
 ```js
 import { configure } from './vendor/vitrine/dist/esm/vt-code.js';
@@ -49,6 +49,7 @@ import { configure } from './vendor/vitrine/dist/esm/vt-code.js';
 configure({
   languagesUrl: '/vendor/vitrine/languages/',
   syntaxThemesUrl: '/vendor/vitrine/syntax-themes/',
+  vendorUrl: '/vendor/vitrine/vendor/',
 });
 ```
 
@@ -548,7 +549,10 @@ vt-tags:not(:defined),
 vt-diff:not(:defined),
 vt-terminal:not(:defined),
 vt-tree:not(:defined),
-vt-http:not(:defined) {
+vt-http:not(:defined),
+vt-log:not(:defined),
+vt-chart:not(:defined),
+vt-openapi:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

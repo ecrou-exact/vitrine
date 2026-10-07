@@ -19,17 +19,20 @@ Vitrine trusts the **page itself**: its HTML, its scripts and its CSS.
 
 ## Guarantees by component
 
-| Component       | How content is displayed                                                                                                                                                                                                                               |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `<vt-code>`     | As text. Highlighting output is sanitized again (see below). No HTML parsing of the content.                                                                                                                                                           |
-| `<vt-json>`     | With DOM text APIs only. The built-in parser never evaluates anything, and keys such as `__proto__` are plain data.                                                                                                                                    |
-| `<vt-markdown>` | Through the sanitization pipeline below. Raw HTML is shown as text unless `allow-html` is set.                                                                                                                                                         |
-| `<vt-csv>`      | Cells, headers and the raw view as text only. No HTML parsing of the content.                                                                                                                                                                          |
-| `<vt-diff>`     | As text. Highlighting output is sanitized like `<vt-code>`; changed words are wrapped with DOM APIs.                                                                                                                                                   |
-| `<vt-tags>`     | Labels, groups, descriptions and counts as text. Colors, links and part names are validated (see [Tags](#tags)).                                                                                                                                       |
-| `<vt-terminal>` | Commands and output as text. ANSI escape sequences are parsed into colors and text styles only; everything else is removed. OSC 8 links become links only for absolute `http:` or `https:` URLs, with `rel="noopener noreferrer nofollow"`.            |
-| `<vt-tree>`     | Names and notes as text. `href-template` URLs are checked with the [URL rules](#url-rules), and path segments are URL-encoded; a refused URL leaves the name as text.                                                                                  |
-| `<vt-http>`     | Methods, URLs, headers and bodies as text. Nothing is ever sent: curl commands are only parsed, never run. The Code tab quotes every value for its language. Secrets are masked by default, but masking is a display feature, not a security boundary. |
+| Component       | How content is displayed                                                                                                                                                                                                                                                                                                                                                                                         |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<vt-code>`     | As text. Highlighting output is sanitized again (see below). No HTML parsing of the content.                                                                                                                                                                                                                                                                                                                     |
+| `<vt-json>`     | With DOM text APIs only. The built-in parser never evaluates anything, and keys such as `__proto__` are plain data.                                                                                                                                                                                                                                                                                              |
+| `<vt-markdown>` | Through the sanitization pipeline below. Raw HTML is shown as text unless `allow-html` is set.                                                                                                                                                                                                                                                                                                                   |
+| `<vt-csv>`      | Cells, headers and the raw view as text only. No HTML parsing of the content.                                                                                                                                                                                                                                                                                                                                    |
+| `<vt-diff>`     | As text. Highlighting output is sanitized like `<vt-code>`; changed words are wrapped with DOM APIs.                                                                                                                                                                                                                                                                                                             |
+| `<vt-tags>`     | Labels, groups, descriptions and counts as text. Colors, links and part names are validated (see [Tags](#tags)).                                                                                                                                                                                                                                                                                                 |
+| `<vt-terminal>` | Commands and output as text. ANSI escape sequences are parsed into colors and text styles only; everything else is removed. OSC 8 links become links only for absolute `http:` or `https:` URLs, with `rel="noopener noreferrer nofollow"`.                                                                                                                                                                      |
+| `<vt-tree>`     | Names and notes as text. `href-template` URLs are checked with the [URL rules](#url-rules), and path segments are URL-encoded; a refused URL leaves the name as text.                                                                                                                                                                                                                                            |
+| `<vt-http>`     | Methods, URLs, headers and bodies as text. Nothing is ever sent: curl commands are only parsed, never run. The Code tab quotes every value for its language. Secrets are masked by default, but masking is a display feature, not a security boundary.                                                                                                                                                           |
+| `<vt-log>`      | Times, levels, messages, fields and stack traces as text. ANSI escape sequences are parsed like in `<vt-terminal>`: colors and text styles only.                                                                                                                                                                                                                                                                 |
+| `<vt-chart>`    | Labels and values are drawn on a canvas by Apache ECharts. Tooltips are drawn on the canvas too, never inserted as HTML. The ECharts build shipped in `dist/vendor/` replaces its `innerHTML` clearing with `textContent`, so it works under Trusted Types. ECharts 6.1 has no known vulnerability.                                                                                                              |
+| `<vt-openapi>`  | Every name, path, type and value as text. Markdown descriptions go through the [sanitization pipeline](#markdown-sanitization-pipeline), with images blocked. Only local `$ref` references are followed; references to other files are never fetched. Nothing is ever sent to the API. YAML is read with the core schema, which produces only plain data (strings, numbers, booleans, null, arrays and objects). |
 
 Interface text (labels, titles, translations, search queries, error messages) is always inserted with `textContent`. Vitrine's own interface is built with `createElement`; the security module is the only place where an HTML string becomes DOM nodes.
 
@@ -135,25 +138,35 @@ The same rules (protocol, same-origin unless `allow-remote`, credentials, size l
 
 Syntax theme files are fetched differently: only names from Vitrine's built-in list become a URL, under the configured `syntaxThemesUrl` (or the `syntax-themes/` folder next to the script), with `http:` or `https:` only and cookies sent to the same origin only. The files are generated at build time without `url()` values, and are applied as constructable stylesheets.
 
+The files of `dist/vendor/` (`echarts.js` for `<vt-chart>`, `yaml.js` for `<vt-openapi>`) are code: they are imported with `import()` from the configured `vendorUrl` (or the `vendor/` folder next to the script), and only these two file names are ever requested. Like the language files, they run with the rights of your page, so serve them from an origin you trust.
+
 ## Size and complexity limits
 
-| Limit                     | Default                          | Setting                             |
-| ------------------------- | -------------------------------- | ----------------------------------- |
-| Content length            | 2,097,152 characters             | `maxSize` (ceiling 50 MiB)          |
-| Syntax highlighting       | Skipped above 300,000 characters | `highlightLimit` (ceiling 5 MiB)    |
-| JSON nesting depth        | 512                              | `maxDepth` (ceiling 10,000)         |
-| `src` timeout             | 15,000 ms                        | `fetchTimeout` (ceiling 120,000 ms) |
-| JSON tree rows per render | 20,000                           | none                                |
-| Search matches            | 5,000                            | none                                |
-| Search query              | 200 characters                   | none                                |
-| CSV columns per row       | 1,000                            | none                                |
-| CSV cell preview          | 1,000 characters                 | none                                |
-| Diff exact comparison     | 2,000 edits, then simplified     | none                                |
-| Tags per list             | 100,000                          | none                                |
-| Terminal line length      | 20,000 characters                | none                                |
-| Tree entries              | 20,000 entries, 64 levels        | none                                |
-| HTTP headers per message  | 200                              | none                                |
-| Editor undo history       | 300 steps, 20,000,000 characters | none                                |
+| Limit                            | Default                                              | Setting                             |
+| -------------------------------- | ---------------------------------------------------- | ----------------------------------- |
+| Content length                   | 2,097,152 characters                                 | `maxSize` (ceiling 50 MiB)          |
+| Syntax highlighting              | Skipped above 300,000 characters                     | `highlightLimit` (ceiling 5 MiB)    |
+| JSON nesting depth               | 512                                                  | `maxDepth` (ceiling 10,000)         |
+| `src` timeout                    | 15,000 ms                                            | `fetchTimeout` (ceiling 120,000 ms) |
+| JSON tree rows per render        | 20,000                                               | none                                |
+| Search matches                   | 5,000                                                | none                                |
+| Search query                     | 200 characters                                       | none                                |
+| CSV columns per row              | 1,000                                                | none                                |
+| CSV cell preview                 | 1,000 characters                                     | none                                |
+| Diff exact comparison            | 2,000 edits, then simplified                         | none                                |
+| Tags per list                    | 100,000                                              | none                                |
+| Terminal line length             | 20,000 characters                                    | none                                |
+| Tree entries                     | 20,000 entries, 64 levels                            | none                                |
+| HTTP headers per message         | 200                                                  | none                                |
+| Log line length                  | 20,000 characters                                    | none                                |
+| Log continuation lines           | 1,000 per entry                                      | none                                |
+| Log fields                       | 50 per JSON line                                     | none                                |
+| Log entries kept                 | 50,000                                               | `max-entries` (100 to 1,000,000)    |
+| Chart data                       | 12 series of 5,000 points                            | none                                |
+| OpenAPI endpoints                | 2,000                                                | none                                |
+| OpenAPI schemas                  | 12 levels shown, examples built 8 levels deep        | none                                |
+| OpenAPI properties and responses | 200 properties per object, 40 responses per endpoint | none                                |
+| Editor undo history              | 300 steps, 20,000,000 characters                     | none                                |
 
 The JSON parser and the JSON serializer are iterative, so deep nesting cannot overflow the call stack. If the Markdown parser fails on pathological input, the element shows an error instead of breaking the page. Configuration values cannot exceed the ceilings, even when set from page code.
 
@@ -177,17 +190,17 @@ Vitrine needs no `'unsafe-inline'`, no `'unsafe-eval'` and no inline styles: sty
 default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types vitrine
 ```
 
-| Directive                            | Why                                                                                                                                                                                                   |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default-src 'self'`                 | Fallback for every resource type not listed.                                                                                                                                                          |
-| `script-src 'self'`                  | The Vitrine script and the lazy-loaded language files. Language files are ES modules loaded with `import()` from the `languages/` folder, so `script-src` must allow the origin that serves them.     |
-| `style-src 'self'`                   | Only for your own stylesheets. Vitrine itself does not need any `style-src` source.                                                                                                                   |
-| `img-src 'self' data:`               | Images in rendered Markdown. Adjust it to your image policy (below).                                                                                                                                  |
-| `connect-src 'self'`                 | Requests made for `src`, `original-src`, `modified-src`, `options-src`, `suggest-src`, and for syntax theme files. Add the origins you load with `allow-remote`, and the origin of `syntaxThemesUrl`. |
-| `object-src 'none'`                  | No plugins. Vitrine does not use any.                                                                                                                                                                 |
-| `base-uri 'none'`                    | Prevents `<base>` injection from changing how relative URLs resolve.                                                                                                                                  |
-| `require-trusted-types-for 'script'` | Enforces Trusted Types for DOM injection sinks.                                                                                                                                                       |
-| `trusted-types vitrine`              | Allows Vitrine's policy (see [Trusted Types](#trusted-types)).                                                                                                                                        |
+| Directive                            | Why                                                                                                                                                                                                                                 |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default-src 'self'`                 | Fallback for every resource type not listed.                                                                                                                                                                                        |
+| `script-src 'self'`                  | The Vitrine script, the lazy-loaded language files and the files of `dist/vendor/`. They are ES modules loaded with `import()` from the `languages/` and `vendor/` folders, so `script-src` must allow the origin that serves them. |
+| `style-src 'self'`                   | Only for your own stylesheets. Vitrine itself does not need any `style-src` source.                                                                                                                                                 |
+| `img-src 'self' data:`               | Images in rendered Markdown. Adjust it to your image policy (below).                                                                                                                                                                |
+| `connect-src 'self'`                 | Requests made for `src`, `original-src`, `modified-src`, `options-src`, `suggest-src`, and for syntax theme files. Add the origins you load with `allow-remote`, and the origin of `syntaxThemesUrl`.                               |
+| `object-src 'none'`                  | No plugins. Vitrine does not use any.                                                                                                                                                                                               |
+| `base-uri 'none'`                    | Prevents `<base>` injection from changing how relative URLs resolve.                                                                                                                                                                |
+| `require-trusted-types-for 'script'` | Enforces Trusted Types for DOM injection sinks.                                                                                                                                                                                     |
+| `trusted-types vitrine`              | Allows Vitrine's policy (see [Trusted Types](#trusted-types)).                                                                                                                                                                      |
 
 ### Adapting the policy
 
@@ -208,7 +221,7 @@ default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'
 
 The CSP and the image policy work together: the image policy decides which images are kept in the document, and `img-src` decides which ones the browser may fetch.
 
-If the language files are served from another origin than the page, add that origin to `script-src`. If they cannot load, code is shown without highlighting and a warning is logged.
+If the language files are served from another origin than the page, add that origin to `script-src`. If they cannot load, code is shown without highlighting and a warning is logged. The same applies to the files of `dist/vendor/`: if `echarts.js` or `yaml.js` cannot load, `<vt-chart>` or `<vt-openapi>` shows a notice that says so ("The chart library could not be loaded", "The YAML reader could not be loaded").
 
 Syntax themes are loaded with `fetch()`, so their origin must be allowed by `connect-src` (not `style-src`). With the files served from jsDelivr, add `https://cdn.jsdelivr.net` to `connect-src`. If a theme cannot load, the built-in colors are kept and a warning is logged.
 
