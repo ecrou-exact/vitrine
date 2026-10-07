@@ -12,7 +12,7 @@ import { isSameOrigin } from './security.js';
  */
 export class VitrineError extends Error {
   /**
-   * @param {"tooLarge"|"tooDeep"|"remoteBlocked"|"unsafeUrl"|"timeout"|"loadFailed"|"invalidJson"} code
+   * @param {"tooLarge"|"tooComplex"|"tooDeep"|"remoteBlocked"|"unsafeUrl"|"timeout"|"loadFailed"|"invalidJson"} code
    * @param {Record<string, string | number>} [params]
    * @param {unknown} [cause]
    */
