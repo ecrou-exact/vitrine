@@ -15,6 +15,15 @@ const MORE = {
   'vt-csv': ['name,score\nAda,98\nAlan,95', {}],
   'vt-tags': ['{"value":["design"],"options":["design","research","a11y"]}', { mode: 'edit' }],
   'vt-diff': ['--- a\n+++ b\n@@ -1,2 +1,2 @@\n same\n-old line\n+new line', {}],
+  'vt-terminal': [
+    '$ npm test\n\u001b[32m✓\u001b[0m 42 passed\n\u001b[31m×\u001b[0m 1 failed\n\u001b[41m FAIL \u001b[0m\n$ git status',
+    { 'collapse-output': '2' },
+  ],
+  'vt-tree': ['src/\n  + app.js  # entry\n  ~ util.js\n  - old.js\n* README.md', {}],
+  'vt-http': [
+    'POST /api/users HTTP/1.1\nHost: api.example.com\nContent-Type: application/json\nAuthorization: Bearer abcdefghijklmnopqrst\n\n{"name":"Ada"}\n\nHTTP/1.1 404 Not Found\nContent-Type: application/json\n\n{"error":"missing"}',
+    { layout: 'columns' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {
