@@ -1,0 +1,261 @@
+/*
+ * Log viewer: one row per entry (line number, time, level, message, fields), stack
+ * traces under their entry, level buttons in the header.
+ */
+.log-body {
+  background: var(--_code-bg);
+}
+
+.log {
+  min-width: 100%;
+  width: max-content;
+  padding: var(--_space-2) 0;
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  line-height: 1.55;
+}
+
+.log.wrapped {
+  width: auto;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: auto auto 6ch minmax(0, 1fr);
+  column-gap: var(--_space-3);
+  align-items: baseline;
+  padding: 2px var(--_space-4) 2px var(--_space-3);
+  border-left: 3px solid transparent;
+}
+
+.log:not(.numbered) .entry {
+  grid-template-columns: auto 6ch minmax(0, 1fr);
+}
+
+.log.no-time .entry {
+  grid-template-columns: auto 6ch minmax(0, 1fr);
+}
+
+.log.no-time:not(.numbered) .entry {
+  grid-template-columns: 6ch minmax(0, 1fr);
+}
+
+.entry:hover {
+  background: color-mix(in srgb, var(--_code-fg) 5%, transparent);
+}
+
+.entry .num {
+  min-width: calc(var(--_digits, 4) * 1ch);
+  color: var(--_code-gutter);
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.entry .num::before {
+  content: attr(data-n);
+}
+
+.time {
+  min-width: var(--_time-width, auto);
+  color: var(--_code-gutter);
+  white-space: nowrap;
+}
+
+.lvl {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.msg {
+  min-width: 0;
+  white-space: pre;
+}
+
+.log.wrapped .msg,
+.log.wrapped .stack-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.lvl-trace,
+.lvl-debug {
+  color: var(--_code-gutter);
+}
+
+.lvl-info,
+.lvl-notice {
+  color: var(--_info);
+}
+
+.lvl-warn {
+  color: var(--_warning);
+}
+
+.lvl-error,
+.lvl-fatal {
+  color: var(--_danger);
+}
+
+.entry.level-warn {
+  border-left-color: color-mix(in srgb, var(--_warning) 60%, transparent);
+  background: color-mix(in srgb, var(--_warning) 6%, transparent);
+}
+
+.entry.level-error {
+  border-left-color: var(--_danger);
+  background: color-mix(in srgb, var(--_danger) 8%, transparent);
+}
+
+.entry.level-fatal {
+  border-left-color: var(--_danger);
+  background: color-mix(in srgb, var(--_danger) 15%, transparent);
+}
+
+.entry.level-fatal .lvl {
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--_danger);
+  color: var(--_code-bg-solid);
+}
+
+.entry.level-trace .msg,
+.entry.level-debug .msg {
+  color: color-mix(in srgb, var(--_code-fg) 72%, var(--_code-bg-solid));
+}
+
+/* ---------- Structured fields ---------- */
+
+.fields {
+  display: inline;
+  margin-left: var(--_space-2);
+}
+
+.field {
+  display: inline-block;
+  margin: 1px 6px 1px 0;
+  padding: 0 6px;
+  border-radius: var(--_radius-full);
+  background: color-mix(in srgb, var(--_code-fg) 7%, transparent);
+  white-space: nowrap;
+}
+
+.field-key {
+  color: var(--_syntax-attr);
+}
+
+.field-key::after {
+  content: '=';
+  color: var(--_code-gutter);
+}
+
+.field-value {
+  color: var(--_syntax-string);
+}
+
+/* ---------- Stack traces ---------- */
+
+.stack {
+  grid-column: -2 / -1;
+  display: grid;
+  margin: 2px 0 4px;
+  padding-left: var(--_space-3);
+  border-left: 1px solid color-mix(in srgb, var(--_code-gutter) 50%, transparent);
+  color: color-mix(in srgb, var(--_code-fg) 80%, var(--_code-bg-solid));
+}
+
+.stack-line {
+  white-space: pre;
+}
+
+.stack-more {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 1px 8px;
+  border: 1px dashed color-mix(in srgb, var(--_code-gutter) 60%, transparent);
+  border-radius: var(--_radius-sm);
+  background: none;
+  color: var(--_accent-fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+mark.match {
+  border-radius: 2px;
+  background: var(--_highlight);
+  color: inherit;
+}
+
+mark.match.current {
+  background: var(--_highlight-current);
+}
+
+/* ---------- Level buttons ---------- */
+
+.level-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  background: transparent;
+  color: var(--_fg-muted);
+  font: 600 11px/1 var(--_font-mono);
+  cursor: pointer;
+  transition:
+    background-color var(--_duration-fast) var(--_easing),
+    opacity var(--_duration-fast) var(--_easing);
+}
+
+.level-chip[aria-pressed='false'] {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.level-chip .chip-count {
+  color: var(--_fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.level-chip.level-error,
+.level-chip.level-fatal {
+  border-color: color-mix(in srgb, var(--_danger) 45%, var(--_border));
+  color: var(--_danger);
+}
+
+.level-chip.level-warn {
+  border-color: color-mix(in srgb, var(--_warning) 45%, var(--_border));
+  color: var(--_warning);
+}
+
+.level-chip.level-info,
+.level-chip.level-notice {
+  color: var(--_info);
+}
+
+.level-chip:hover {
+  background: color-mix(in srgb, var(--_fg) 6%, transparent);
+}
+
+/* ---------- Edit mode ---------- */
+
+.log-edit > .editor-body {
+  max-height: min(40vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}
+
+.vt[data-fullscreen] .log-edit {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.vt[data-fullscreen] .log-edit > .editor-body {
+  max-height: none;
+}
