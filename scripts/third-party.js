@@ -10,14 +10,16 @@ const pkg = async (name) =>
   );
 
 /**
- * @returns {Promise<{ name: string, version: string, license: string, url: string, use: string, where: string, licenseFile: string }[]>}
+ * @returns {Promise<{ name: string, version: string, license: string, url: string, use: string, where: string, licenseFile: string, noticeFile?: string }[]>}
  */
 export async function thirdParty() {
-  const [hljs, marked, purify, mono, plex] = await Promise.all(
+  const [hljs, marked, purify, echarts, zrender, mono, plex] = await Promise.all(
     [
       'highlight.js',
       'marked',
       'dompurify',
+      'echarts',
+      'zrender',
       '@fontsource/jetbrains-mono',
       '@fontsource/ibm-plex-sans',
     ].map(pkg),
@@ -58,6 +60,25 @@ export async function thirdParty() {
       use: 'Interface icons',
       where: 'Library bundle (src/core/icons.js)',
       licenseFile: 'scripts/licenses/lucide.txt',
+    },
+    {
+      name: 'Apache ECharts',
+      version: echarts.version,
+      license: 'Apache-2.0',
+      url: 'https://github.com/apache/echarts',
+      use: 'Charts drawn by `<vt-chart>`',
+      where: 'dist/vendor/echarts.js, loaded by `<vt-chart>` only',
+      licenseFile: 'node_modules/echarts/LICENSE',
+      noticeFile: 'node_modules/echarts/NOTICE',
+    },
+    {
+      name: 'ZRender',
+      version: zrender.version,
+      license: 'BSD-3-Clause',
+      url: 'https://github.com/ecomfe/zrender',
+      use: 'Canvas rendering engine of Apache ECharts',
+      where: 'dist/vendor/echarts.js, loaded by `<vt-chart>` only',
+      licenseFile: 'node_modules/zrender/LICENSE',
     },
     {
       name: 'JetBrains Mono',

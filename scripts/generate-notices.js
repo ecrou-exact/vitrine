@@ -36,6 +36,11 @@ for (const c of components) {
     text,
     '```',
   );
+  // Apache-2.0 components ship a NOTICE file that must be reproduced.
+  if (c.noticeFile) {
+    const notice = (await readFile(new URL(`../${c.noticeFile}`, import.meta.url), 'utf8')).trim();
+    parts.push('', 'NOTICE:', '', '```text', notice, '```');
+  }
 }
 const output = `${parts.join('\n')}\n`;
 const target = new URL('../THIRD_PARTY_NOTICES.md', import.meta.url);

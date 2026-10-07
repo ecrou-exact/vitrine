@@ -45,7 +45,8 @@ vt-diff:not(:defined),
 vt-terminal:not(:defined),
 vt-tree:not(:defined),
 vt-http:not(:defined),
-vt-log:not(:defined) {
+vt-log:not(:defined),
+vt-chart:not(:defined) {
   position: relative;
   min-height: 96px;
   max-height: 160px;
