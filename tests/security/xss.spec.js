@@ -105,6 +105,26 @@ const MODES = [
   },
   { tag: 'vt-json', attrs: { view: 'raw' }, wrap: (p) => JSON.stringify({ p }) },
   { tag: 'vt-json', attrs: {}, wrap: (p) => p }, // invalid JSON path
+  {
+    tag: 'vt-csv',
+    attrs: { variant: 'full' },
+    wrap: (p) => `name,value\n"${p.replace(/"/g, '""')}",${p.length}`,
+  },
+  {
+    tag: 'vt-tags',
+    attrs: { counts: '', clickable: '' },
+    wrap: (p) => JSON.stringify([p, { value: p, href: p, color: p, kind: p }]),
+  },
+  {
+    tag: 'vt-tags',
+    attrs: { mode: 'edit', variant: 'full' },
+    wrap: (p) => JSON.stringify({ value: [p], options: [{ value: p, description: p, group: p }] }),
+  },
+  {
+    tag: 'vt-diff',
+    attrs: { variant: 'full' },
+    wrap: (p) => `--- a\n+++ b\n@@ -1 +1 @@\n-${p.replace(/\n/g, ' ')}\n+${p.replace(/\n/g, ' ')}!`,
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */
