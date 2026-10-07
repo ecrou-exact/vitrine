@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; require-trusted-types-for 'script'; trusted-types vitrine"
+    />
+    <title>vt-json fixture</title>
+    <link rel="stylesheet" href="fixture.css" />
+    <script src="../../../dist/vitrine.min.js"></script>
+    <script src="hostile.js" defer></script>
+  </head>
+  <body>
+    <vt-json id="full" variant="full" label="users.json">
+      { "users": [ { "id": 1, "name": "Ada Lovelace", "admin": true, "tags": ["math", "poetry"],
+      "manager": null }, { "id": 12345678901234567890, "name": "Alan Turing", "admin": false,
+      "score": 9.75e2 } ], "meta": { "count": 2, "weird key": "x", "": "empty key", "__proto__": {
+      "polluted": true } } }
+    </vt-json>
+    <vt-json id="hostile" variant="full" label="hostile.json"></vt-json>
+    <vt-json id="simple">{"compact": [1, 2, 3], "ok": true}</vt-json>
+    <vt-json id="invalid" variant="full" label="broken.json">
+      { "a": 1, "b": [1, 2,], "c": 3 }
+    </vt-json>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+body {
+  max-width: 860px;
+  margin: 24px auto;
+  padding: 0 16px;
+  font-family: Georgia, serif;
+  font-size: 17px;
+  background: #f3f4f1;
+}
+
+body > * + * {
+  margin-top: 16px;
+}
