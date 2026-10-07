@@ -4,7 +4,7 @@ import { STRICT, collectErrors, events, mount, recordEvents } from './helpers.js
 const DOC = [
   '# Title',
   '',
-  'Intro with **bold**, a [section link](#h-usage) and an [external link](https://example.com).',
+  'Intro with **bold**, a [section link](#usage) and an [external link](https://example.com).',
   '',
   '## Usage',
   '',
@@ -50,7 +50,7 @@ test.describe('<vt-markdown>', () => {
   test('gives headings unique ids', async ({ page }) => {
     await mount(page, 'vt-markdown', {}, DOC);
     const ids = await page.locator('#el h2').evaluateAll((hs) => hs.map((h) => h.id));
-    expect(ids).toEqual(['h-usage', 'h-usage-1']);
+    expect(ids).toEqual(['usage', 'usage-1']);
   });
 
   test('shows raw HTML as text by default', async ({ page }) => {
@@ -138,7 +138,7 @@ test.describe('<vt-markdown>', () => {
     await el.getByRole('button', { name: 'Search' }).click();
     await el.getByRole('searchbox').fill('usage');
     await expect(el.locator('[part="search-count"]')).toHaveText('1 / 2');
-    // Split: 2 headings in the preview + 3 source lines ("## Usage" twice and "#h-usage").
+    // Split: 2 headings in the preview + 3 source lines ("## Usage" twice and "#usage").
     await el.getByRole('tab', { name: 'Split' }).click();
     await expect(el.locator('[part="search-count"]')).toHaveText('1 / 5');
   });
