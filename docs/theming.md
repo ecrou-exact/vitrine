@@ -162,6 +162,10 @@ Vitrine never loads fonts. The stacks use fonts already installed or already loa
 
 `<vt-tags>` has its own custom properties (`--vt-tag-bg`, `--vt-tag-fg`, `--vt-tag-border`, `--vt-tag-radius`, `--vt-tag-height`, `--vt-tag-gap`, `--vt-tag-font-size`) and per-tag parts. See [Customizing tags](components/tags.md#customizing-tags).
 
+### Terminal tokens
+
+`<vt-terminal>` maps the 16 ANSI colors to theme colors, and exposes them as custom properties (`--vt-ansi-black` … `--vt-ansi-white`, `--vt-ansi-bright-black` … `--vt-ansi-bright-white`), with `--vt-terminal-prompt` for the prompt. See [Theme colors](components/terminal.md#theme-colors).
+
 ### Examples
 
 ```css
@@ -308,7 +312,7 @@ In the current build, 14 of the 258 themes reach 4.5:1 for every color: `a11y-da
 
 ## Styling parts
 
-Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts), [csv](components/csv.md#css-parts), [tags](components/tags.md#css-parts), [diff](components/diff.md#css-parts).
+Parts expose internal elements to `::part()` selectors. The shared parts are listed in [Common attributes](common-attributes.md#shared-css-parts), and each component reference lists its own: [code](components/code.md#css-parts), [markdown](components/markdown.md#css-parts), [json](components/json.md#css-parts), [csv](components/csv.md#css-parts), [tags](components/tags.md#css-parts), [diff](components/diff.md#css-parts), [terminal](components/terminal.md#css-parts), [tree](components/tree.md#css-parts), [http](components/http.md#css-parts).
 
 ```css
 /* Uppercase, accent-colored title */

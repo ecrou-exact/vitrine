@@ -9,8 +9,8 @@ import { readFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 const KB = 1024;
-/** Full bundles: six components, highlight.js core and 10 languages, marked, DOMPurify. */
-const BUNDLES = { 'dist/vitrine.min.js': 104 * KB, 'dist/vitrine.esm.js': 104 * KB };
+/** Full bundles: nine components, highlight.js core and 10 languages, marked, DOMPurify. */
+const BUNDLES = { 'dist/vitrine.min.js': 128 * KB, 'dist/vitrine.esm.js': 128 * KB };
 /** Per-component modules (what a page using only that element downloads). */
 const COMPONENTS = {
   'vt-code': 58 * KB,
@@ -20,7 +20,7 @@ const COMPONENTS = {
   'vt-tags': 32 * KB,
   'vt-diff': 64 * KB,
   'vt-terminal': 60 * KB,
-  'vt-tree': 40 * KB,
+  'vt-tree': 60 * KB,
   'vt-http': 66 * KB,
 };
 

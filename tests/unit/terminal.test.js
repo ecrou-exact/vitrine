@@ -89,6 +89,7 @@ describe('parseAnsi', () => {
     expect(decodeLiteralEscapes('\\e[31mred \\x1b[0m \\033[1m')).toBe(
       `${ESC}[31mred ${ESC}[0m ${ESC}[1m`,
     );
+    expect(stripAnsi(decodeLiteralEscapes('10%\\r100%'))).toBe('100%');
   });
 });
 

@@ -243,13 +243,14 @@ class LineBuffer {
 
 /**
  * Replaces literal escapes written in source text (`\e`, `\x1b`, `\033`, `\u001b`) by
- * the escape character, for transcripts written by hand in HTML.
+ * the escape character, and `\r` by a carriage return, for transcripts written by hand
+ * in HTML.
  *
  * @param {string} text
  * @returns {string}
  */
 export function decodeLiteralEscapes(text) {
-  return text.replace(/\\(?:e|x1b|x1B|033|u001b|u001B)/g, '\u001b');
+  return text.replace(/\\(?:e|x1b|x1B|033|u001b|u001B)/g, '\u001b').replace(/\\r/g, '\r');
 }
 
 /**
