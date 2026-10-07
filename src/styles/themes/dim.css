@@ -1,0 +1,35 @@
+/* Vitrine Dim — softer, blue-grey dark theme for long reading sessions. */
+[data-theme='dim'] {
+  color-scheme: dark;
+  --vt-bg: #1b2230;
+  --vt-surface: #212a3a;
+  --vt-surface-sunken: #192030;
+  --vt-surface-raised: #29334a;
+  --vt-border: #33405a;
+  --vt-border-strong: #46557a;
+  --vt-fg: #dce2ec;
+  --vt-fg-muted: #a3adc0;
+  --vt-accent: #14b8a6;
+  --vt-accent-fg: #2dd4bf;
+  --vt-on-accent: #11151c;
+  --vt-accent-soft: rgba(45, 212, 191, 0.16);
+  --vt-highlight: rgba(242, 169, 59, 0.3);
+  --vt-highlight-current: rgba(242, 169, 59, 0.6);
+  --vt-line-highlight: rgba(45, 212, 191, 0.12);
+  --vt-success: #2dd4bf;
+  --vt-warning: #f2a93b;
+  --vt-danger: #ff9b82;
+  --vt-info: #8faeff;
+  --vt-diff-added: rgba(45, 212, 191, 0.16);
+  --vt-diff-removed: rgba(255, 155, 130, 0.16);
+  --vt-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --vt-syntax-keyword: #c9aeff;
+  --vt-syntax-string: #6ee7d5;
+  --vt-syntax-number: #f5b85c;
+  --vt-syntax-function: #8faeff;
+  --vt-syntax-type: #ff9b82;
+  --vt-syntax-comment: #95a0b5;
+  --vt-syntax-attr: #8faeff;
+  --vt-syntax-tag: #ff9b82;
+  --vt-syntax-meta: #a3adc0;
+}

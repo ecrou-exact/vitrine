@@ -1,0 +1,97 @@
+/*
+ * Syntax highlighting roles for highlight.js classes.
+ * Mapping: docs/DESIGN_SYSTEM.md §2.3. Colors come from theme tokens.
+ */
+.hljs-keyword,
+.hljs-built_in,
+.hljs-literal,
+.hljs-bullet,
+.hljs-doctag {
+  color: var(--_syntax-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-symbol,
+.hljs-char,
+.hljs-code,
+.hljs-link {
+  color: var(--_syntax-string);
+}
+
+.hljs-number {
+  color: var(--_syntax-number);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-section,
+.hljs-selector-class,
+.hljs-selector-id {
+  color: var(--_syntax-function);
+}
+
+.hljs-type,
+.hljs-title.class_,
+.hljs-title.class_.inherited__ {
+  color: var(--_syntax-type);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--_syntax-comment);
+  font-style: italic;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-property,
+.hljs-template-variable,
+.hljs-variable.language_ {
+  color: var(--_syntax-attr);
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-selector-pseudo,
+.hljs-selector-attr {
+  color: var(--_syntax-tag);
+}
+
+.hljs-meta,
+.hljs-punctuation,
+.hljs-operator,
+.hljs-tag .hljs-punctuation {
+  color: var(--_syntax-meta);
+}
+
+.hljs-meta .hljs-keyword {
+  color: var(--_syntax-keyword);
+}
+
+.hljs-meta .hljs-string {
+  color: var(--_syntax-string);
+}
+
+.hljs-addition {
+  color: var(--_success);
+}
+
+.hljs-deletion {
+  color: var(--_danger);
+}
+
+.hljs-section,
+.hljs-strong {
+  font-weight: 600;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

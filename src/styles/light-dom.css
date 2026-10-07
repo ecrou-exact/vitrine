@@ -1,0 +1,37 @@
+/*
+ * Vitrine — optional page stylesheet (dist/vitrine.css).
+ *
+ * The components style themselves in their shadow DOM. This file only avoids a flash of
+ * unstyled inline content before the script has loaded and defined the elements.
+ */
+vt-code,
+vt-markdown,
+vt-json {
+  display: block;
+}
+
+vt-code:not(:defined),
+vt-json:not(:defined) {
+  overflow: auto;
+  padding: 12px 16px;
+  border: 1px solid var(--vt-border, #d6d9d2);
+  border-radius: var(--vt-radius, 10px);
+  background: var(--vt-surface-sunken, #eaece7);
+  color: var(--vt-fg, #11151c);
+  font: 14px/1.6
+    var(--vt-font-mono, ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace);
+  white-space: pre;
+}
+
+vt-markdown:not(:defined) {
+  white-space: pre-line;
+}
+
+@media (prefers-color-scheme: dark) {
+  vt-code:not(:defined),
+  vt-json:not(:defined) {
+    border-color: var(--vt-border, #262d3a);
+    background: var(--vt-surface-sunken, #0c0f14);
+    color: var(--vt-fg, #e8eae6);
+  }
+}

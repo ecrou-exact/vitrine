@@ -1,0 +1,35 @@
+/* Vitrine Paper — warm, low-glare light theme. */
+[data-theme='paper'] {
+  color-scheme: light;
+  --vt-bg: #f4efe4;
+  --vt-surface: #fbf8f1;
+  --vt-surface-sunken: #f0e9da;
+  --vt-surface-raised: #fffdf8;
+  --vt-border: #ddd3c0;
+  --vt-border-strong: #c3b79f;
+  --vt-fg: #2b2620;
+  --vt-fg-muted: #5c5347;
+  --vt-accent: #14b8a6;
+  --vt-accent-fg: #0a6566;
+  --vt-on-accent: #11151c;
+  --vt-accent-soft: rgba(20, 184, 166, 0.14);
+  --vt-highlight: rgba(242, 169, 59, 0.38);
+  --vt-highlight-current: rgba(242, 169, 59, 0.72);
+  --vt-line-highlight: rgba(20, 184, 166, 0.11);
+  --vt-success: #0a6566;
+  --vt-warning: #974a09;
+  --vt-danger: #a63148;
+  --vt-info: #2b4fbd;
+  --vt-diff-added: rgba(20, 184, 166, 0.14);
+  --vt-diff-removed: rgba(166, 49, 72, 0.12);
+  --vt-shadow: 0 8px 24px rgba(43, 38, 32, 0.12);
+  --vt-syntax-keyword: #7239bd;
+  --vt-syntax-string: #0a6566;
+  --vt-syntax-number: #974a09;
+  --vt-syntax-function: #2b4fbd;
+  --vt-syntax-type: #a63148;
+  --vt-syntax-comment: #6b6255;
+  --vt-syntax-attr: #2b4fbd;
+  --vt-syntax-tag: #a63148;
+  --vt-syntax-meta: #5c5347;
+}
