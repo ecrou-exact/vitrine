@@ -1,4 +1,5 @@
-// Applies the saved site theme before first paint (no flash). Kept tiny and blocking.
+// Applies the saved site theme before first paint (no flash), and turns site motion on
+// when the system allows it. Kept tiny and blocking.
 (() => {
   try {
     const saved = localStorage.getItem('vitrine-site-theme');
@@ -6,4 +7,6 @@
   } catch {
     // Storage unavailable (private mode): follow the system preference.
   }
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+    document.documentElement.classList.add('motion');
 })();

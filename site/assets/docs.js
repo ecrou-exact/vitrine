@@ -15,6 +15,16 @@ function show(page) {
     if (link.dataset.page === name) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
+  // The new page rises in once rendered.
+  doc.addEventListener(
+    'vt-ready',
+    () => {
+      doc.classList.remove('switching');
+      void doc.offsetWidth;
+      doc.classList.add('switching');
+    },
+    { once: true },
+  );
   const label = links.find((link) => link.dataset.page === name)?.textContent ?? 'Docs';
   document.title = `${label} — Vitrine docs`;
   return name;
