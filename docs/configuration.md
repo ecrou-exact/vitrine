@@ -376,7 +376,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml` and `vt-toml` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron` and `vt-cert` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 

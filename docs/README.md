@@ -1,6 +1,6 @@
 # Vitrine documentation
 
-Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML and TOML on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>` and `<vt-toml>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
+Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules and X.509 certificates on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>` and `<vt-cert>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
 
 ## Guides
 
@@ -40,6 +40,9 @@ Vitrine is a library of framework-free web components to display and edit source
 | `<vt-yaml>`     | YAML as a tree, with several documents, anchors and merge keys                                                                 | [components/yaml.md](components/yaml.md)         |
 | `<vt-xml>`      | XML as a tree, read safely without entity expansion                                                                            | [components/xml.md](components/xml.md)           |
 | `<vt-toml>`     | TOML configuration as a typed tree                                                                                             | [components/toml.md](components/toml.md)         |
+| `<vt-jwt>`      | JSON Web Token decoded, with claims, status and warnings                                                                       | [components/jwt.md](components/jwt.md)           |
+| `<vt-cron>`     | Cron expression or crontab explained, with next runs                                                                           | [components/cron.md](components/cron.md)         |
+| `<vt-cert>`     | X.509 certificates and chains, read without verifying or fetching                                                              | [components/cert.md](components/cert.md)         |
 
 ## Quick example
 

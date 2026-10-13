@@ -82,6 +82,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-toml>`: TOML 1.0 parser (tables, arrays of tables, inline tables, dotted keys, every
   string, number and date kind) with errors at line and column; typed tree; copy as JSON with
   exact integers.
+- `<vt-jwt>`: JWS and JWE compact tokens decoded (strict base64url and UTF-8); parts colored;
+  header and payload as trees; claims table with meanings and dates; validity from `exp` and
+  `nbf` with `now`; warnings for `alg: none`, shared secrets, URL headers, missing expiry and long
+  lifetimes; `mask-signature`. Signatures are never verified and tokens never sent.
+- `<vt-cron>`: 5 or 6 fields, macros, names, ranges, steps and Quartz `? L W #`; description in
+  words; next runs in a time zone with daylight saving handled; week grid; crontabs with
+  comments, variables, `CRON_TZ` and the `system` user column; errors at their field and column.
+- `<vt-cert>`: bounded DER reader; certificates, chains and CSRs from PEM, base64 or hex; names,
+  validity status, keys, signature algorithms with weak ones flagged, extensions, SHA-256 and
+  SHA-1 fingerprints; issuer links; ASN.1 view; private keys never shown.
 - Website: the examples page lists its sections in a drop-down list, and the playground has
   every element.
 - Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
