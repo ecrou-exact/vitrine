@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `<vt-openapi>`: the search no longer moves focus to the first match after each key, and the
+  page scrolls again over the reference.
+
 ### Added
 
 - `<vt-csv>`: RFC 4180 parser with delimiter detection, typed columns, sorting, pagination,
@@ -43,6 +48,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   YAML (js-yaml loaded on demand from `dist/vendor/yaml.js`); endpoints grouped by tag,
   parameters, request bodies, responses, schema trees and generated examples; example requests
   with `<vt-http>`; sanitized Markdown descriptions; endpoint search; only local `$ref` followed.
+- `<vt-env>`: dotenv, INI and Java `.properties` files read line by line (quotes, `export`,
+  comments, sections, multiline values, `\uXXXX` escapes); `${VAR}` references linked to their
+  row; secret values masked by key name in the table, raw view, search, copy and download until
+  revealed (`mask-secrets`, `secret-keys`); Table / Raw tabs; search that filters entries.
+- `<vt-hex>`: hex dumps from `src` (fetched as bytes), hex text (`xxd`, `hexdump -C`) or base64,
+  and the `bytes` property; offset, hex and ASCII columns with `columns` and `group`; bytes colored
+  by kind; file type from magic bytes; byte and text search; keyboard grid navigation; rows built
+  as they scroll; copy as hex or base64 and download of the binary.
+- `<vt-timeline>`: events from JSON or a Keep a Changelog file, grouped by day, month or year,
+  with durations between events, kinds colored with theme tokens, kind buttons with counts,
+  search that filters events, order toggle, folding descriptions in sanitized Markdown, `events`
+  property, `vt-select` and `vt-filter-change` events.
 - Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
   redesigned typography and demo windows.
 - `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,

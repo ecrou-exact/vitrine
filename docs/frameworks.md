@@ -552,7 +552,10 @@ vt-tree:not(:defined),
 vt-http:not(:defined),
 vt-log:not(:defined),
 vt-chart:not(:defined),
-vt-openapi:not(:defined) {
+vt-openapi:not(:defined),
+vt-env:not(:defined),
+vt-hex:not(:defined),
+vt-timeline:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;
