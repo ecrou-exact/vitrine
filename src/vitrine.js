@@ -24,8 +24,11 @@ import { VtJob } from './components/job/vt-job.js';
 import { VtHex } from './components/hex/vt-hex.js';
 import { VtRegex } from './components/regex/vt-regex.js';
 import { VtToml } from './components/toml/vt-toml.js';
+import { VtJwt } from './components/jwt/vt-jwt.js';
 import { VtXml } from './components/xml/vt-xml.js';
+import { VtCert } from './components/cert/vt-cert.js';
 import { VtYaml } from './components/yaml/vt-yaml.js';
+import { VtCron } from './components/cron/vt-cron.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -54,8 +57,11 @@ export {
   VtHex,
   VtRegex,
   VtToml,
+  VtJwt,
   VtXml,
+  VtCert,
   VtYaml,
+  VtCron,
   configure,
   getConfig,
   EVENTS,
@@ -103,8 +109,11 @@ export const registry = new Map(
     ['vt-hex', VtHex],
     ['vt-regex', VtRegex],
     ['vt-toml', VtToml],
+    ['vt-jwt', VtJwt],
     ['vt-xml', VtXml],
+    ['vt-cert', VtCert],
     ['vt-yaml', VtYaml],
+    ['vt-cron', VtCron],
   ]),
 );
 
@@ -129,8 +138,11 @@ const TYPES = /** @type {const} */ ({
   hex: 'vt-hex',
   regex: 'vt-regex',
   toml: 'vt-toml',
+  jwt: 'vt-jwt',
   xml: 'vt-xml',
+  cert: 'vt-cert',
   yaml: 'vt-yaml',
+  cron: 'vt-cron',
 });
 
 /**
