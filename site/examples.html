@@ -34,6 +34,9 @@
         <a href="#log">Log</a>
         <a href="#chart">Chart</a>
         <a href="#openapi">OpenAPI</a>
+        <a href="#env">Env</a>
+        <a href="#hex">Hex</a>
+        <a href="#timeline">Timeline</a>
         <a href="#api">JavaScript</a>
       </nav>
 
@@ -1103,6 +1106,133 @@ export { unit };</template>
                     bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
               </template>
             </vt-openapi>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="env" aria-labelledby="env-title">
+        <h2 id="env-title">&lt;vt-env&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A dotenv file with secrets</h3>
+            <p>Secret values are masked in the table, the raw view, copy and download until the eye button reveals them. References link to the variable they use.</p>
+          </div>
+          <template>
+            <vt-env variant="full" label=".env">
+              <template>
+                # Application
+                NODE_ENV=production
+                PORT=8080
+                export BASE_URL="https://shop.example.com"
+
+                # Database
+                DB_HOST=db.internal
+                DB_PASSWORD="s3cr3t-value"
+                DATABASE_URL=postgres://app:${DB_PASSWORD}@${DB_HOST}:5432/shop
+                STRIPE_API_KEY=sk_live_51Hx9example # rotated monthly
+              </template>
+            </vt-env>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>INI sections</h3>
+            <p><code>[sections]</code> group the keys; the Raw tab shows the file as written.</p>
+          </div>
+          <template>
+            <vt-env variant="full" label="config.ini">
+              <template>
+                [server]
+                host = 0.0.0.0
+                port = 8443
+
+                [auth]
+                issuer = https://id.example.com
+                client_secret = 9f2c-example
+              </template>
+            </vt-env>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="hex" aria-labelledby="hex-title">
+        <h2 id="hex-title">&lt;vt-hex&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A PNG header</h3>
+            <p>The badge names the file type from its first bytes. Point at a byte to see it in both columns, or focus the dump and move with the arrow keys.</p>
+          </div>
+          <template>
+            <vt-hex variant="full" label="logo.png">
+              <template>
+                89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52
+                00 00 00 20 00 00 00 20 08 06 00 00 00 73 7a 7a
+                f4 00 00 00 19 74 45 58 74 53 6f 66 74 77 61 72
+                65 00 41 64 6f 62 65 20 49 6d 61 67 65 52 65 61
+                64 79 71 c9 65 3c 00 00 00 00 49 45 4e 44 ae 42
+              </template>
+            </vt-hex>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Base64 and narrow rows</h3>
+            <p><code>format="base64"</code> reads base64; <code>columns</code> and <code>group</code> set the layout. Search accepts hex bytes or text.</p>
+          </div>
+          <template>
+            <vt-hex variant="full" format="base64" columns="8" group="4" label="payload.bin">
+              <template>SGVsbG8sIFZpdHJpbmUhCgDerb7v/wECAwQ=</template>
+            </vt-hex>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="timeline" aria-labelledby="timeline-title">
+        <h2 id="timeline-title">&lt;vt-timeline&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An incident timeline</h3>
+            <p>Events are grouped by day with the time elapsed between them. The kind buttons show or hide each kind; long descriptions fold.</p>
+          </div>
+          <template>
+            <vt-timeline variant="full" label="Incident 2026-10-07">
+              <template>
+                [
+                  {"time": "2026-10-07T18:00:00Z", "title": "Error rate above 5%", "kind": "danger", "tags": ["api"], "description": "Alert fired on **checkout** requests."},
+                  {"time": "2026-10-07T18:04:00Z", "title": "On-call engineer acknowledged", "kind": "info"},
+                  {"time": "2026-10-07T18:12:00Z", "title": "Rollback of release 4.2.0 started", "kind": "warning"},
+                  {"time": "2026-10-07T18:31:00Z", "title": "Service restored", "kind": "success"},
+                  {"time": "2026-10-08T09:00:00Z", "title": "Postmortem published", "kind": "info", "link": "https://example.com/postmortem"}
+                ]
+              </template>
+            </vt-timeline>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>From a changelog</h3>
+            <p>A Keep a Changelog file becomes one release per version, with its sections as tags.</p>
+          </div>
+          <template>
+            <vt-timeline variant="full" label="CHANGELOG.md">
+              <template>
+                ## [1.2.0] - 2026-09-30
+                ### Added
+                - Dark mode.
+                ### Fixed
+                - Search keeps focus.
+
+                ## [1.1.0] - 2026-08-12
+                ### Changed
+                - Faster start.
+              </template>
+            </vt-timeline>
           </template>
         </article>
       </section>
