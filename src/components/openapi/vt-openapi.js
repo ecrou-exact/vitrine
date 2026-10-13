@@ -22,7 +22,7 @@ import {
   resolve,
   typeLabel,
 } from './spec.js';
-import { loadYaml } from './yaml-loader.js';
+import { loadYaml } from '../../core/yaml-loader.js';
 
 /** @typedef {import('./spec.js').ApiModel} ApiModel */
 /** @typedef {import('./spec.js').Operation} Operation */

@@ -23,6 +23,9 @@ import { VtGit } from './components/git/vt-git.js';
 import { VtJob } from './components/job/vt-job.js';
 import { VtHex } from './components/hex/vt-hex.js';
 import { VtRegex } from './components/regex/vt-regex.js';
+import { VtToml } from './components/toml/vt-toml.js';
+import { VtXml } from './components/xml/vt-xml.js';
+import { VtYaml } from './components/yaml/vt-yaml.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -50,6 +53,9 @@ export {
   VtJob,
   VtHex,
   VtRegex,
+  VtToml,
+  VtXml,
+  VtYaml,
   configure,
   getConfig,
   EVENTS,
@@ -96,6 +102,9 @@ export const registry = new Map(
     ['vt-job', VtJob],
     ['vt-hex', VtHex],
     ['vt-regex', VtRegex],
+    ['vt-toml', VtToml],
+    ['vt-xml', VtXml],
+    ['vt-yaml', VtYaml],
   ]),
 );
 
@@ -119,6 +128,9 @@ const TYPES = /** @type {const} */ ({
   job: 'vt-job',
   hex: 'vt-hex',
   regex: 'vt-regex',
+  toml: 'vt-toml',
+  xml: 'vt-xml',
+  yaml: 'vt-yaml',
 });
 
 /**

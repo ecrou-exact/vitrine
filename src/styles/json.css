@@ -118,6 +118,11 @@
   color: var(--_syntax-keyword);
 }
 
+/* Dates and times of formats that have them (TOML). */
+.vt:not([data-syntax-theme]) .value.date {
+  color: var(--_syntax-type);
+}
+
 .count {
   margin-left: var(--_space-2);
   color: var(--_fg-muted);

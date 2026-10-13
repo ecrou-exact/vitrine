@@ -53,7 +53,10 @@ vt-timeline:not(:defined),
 vt-git:not(:defined),
 vt-job:not(:defined),
 vt-hex:not(:defined),
-vt-regex:not(:defined) {
+vt-regex:not(:defined),
+vt-toml:not(:defined),
+vt-xml:not(:defined),
+vt-yaml:not(:defined) {
   position: relative;
   min-height: 96px;
   max-height: 160px;
@@ -73,6 +76,7 @@ vt-regex:not(:defined) {
     vt-http,
     vt-log,
     vt-env,
+    vt-xml,
     vt-timeline,
     vt-git,
     vt-job
@@ -103,6 +107,7 @@ vt-regex:not(:defined) {
     vt-http,
     vt-log,
     vt-env,
+    vt-xml,
     vt-timeline,
     vt-git,
     vt-job
@@ -148,6 +153,7 @@ vt-regex:not(:defined) {
       vt-http,
       vt-log,
       vt-env,
+      vt-xml,
       vt-timeline,
       vt-git,
       vt-job
