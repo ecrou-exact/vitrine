@@ -30,6 +30,9 @@ const SAMPLES = {
   yaml: '# Deployment\nservice: shop\ndefaults: &defaults\n  memory: 512Mi\n  cpu: 250m\nweb:\n  <<: *defaults\n  ports: [80, 443]\n',
   xml: '<catalog xmlns:media="https://example.com/media">\n  <!-- Generated nightly -->\n  <item sku="A-100" stock="12">\n    <name>Desk lamp</name>\n    <media:thumb href="/img/lamp.png"/>\n  </item>\n</catalog>\n',
   toml: '[package]\nname = "shop"\nversion = "1.2.0"\nreleased = 2026-10-13\n\n[dependencies]\nserde = { version = "1.0", features = ["derive"] }\n',
+  jwt: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjIwMjYtMTAifQ.eyJpc3MiOiJodHRwczovL2lkLmV4YW1wbGUuY29tIiwic3ViIjoiNDIiLCJhdWQiOiJzaG9wIiwiZW1haWwiOiJhZGFAZXhhbXBsZS5jb20iLCJzY29wZSI6Im9yZGVyczpyZWFkIG9yZGVyczp3cml0ZSIsImlhdCI6MTc5MTI3MzYwMCwibmJmIjoxNzkxMjczNjAwLCJleHAiOjE3OTEzNjAwMDB9.ZGVtby1zaWduYXR1cmUtbm90LXJlYWwtMDEyMzQ1Njc4OWFiY2RlZg\n',
+  cron: 'SHELL=/bin/bash\nCRON_TZ=Europe/Luxembourg\n# Nightly backup\n0 2 * * * /usr/local/bin/backup --all\n# Reports on weekdays\n30 9 * * 1-5 curl -fsS https://example.com/report\n*/15 * * * * /opt/shop/bin/sync-stock\n@reboot /opt/shop/bin/warm-cache\n',
+  cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
 };
 
 /** Boolean features shared by every component. */
@@ -290,6 +293,32 @@ const SCHEMA = {
       { name: 'on-invalid', type: 'select', options: ['', 'error', 'raw'] },
     ],
   },
+  jwt: {
+    tag: 'vt-jwt',
+    flags: ['mask-signature', 'claims', 'warnings'],
+    fields: [
+      { name: 'now', type: 'text', placeholder: '2026-10-06T12:00:00Z' },
+      { name: 'depth', type: 'number', placeholder: '2' },
+    ],
+  },
+  cron: {
+    tag: 'vt-cron',
+    flags: ['system', 'grid', 'fields'],
+    fields: [
+      { name: 'expression', type: 'text', placeholder: '30 9 * * 1-5' },
+      { name: 'count', type: 'number', placeholder: '5' },
+      { name: 'timezone', type: 'text', placeholder: 'Europe/Paris' },
+      { name: 'now', type: 'text', placeholder: 'now' },
+    ],
+  },
+  cert: {
+    tag: 'vt-cert',
+    flags: ['tabs', 'fingerprints', 'extensions'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'details', 'structure'] },
+      { name: 'now', type: 'text', placeholder: 'now' },
+    ],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -478,6 +507,9 @@ function switchType(type) {
     yaml: 'deploy.yaml',
     xml: 'catalog.xml',
     toml: 'Cargo.toml',
+    jwt: '',
+    cron: 'crontab',
+    cert: 'root.pem',
   }[type];
   buildControls();
   render();
