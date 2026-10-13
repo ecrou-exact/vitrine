@@ -555,7 +555,10 @@ vt-chart:not(:defined),
 vt-openapi:not(:defined),
 vt-env:not(:defined),
 vt-hex:not(:defined),
-vt-timeline:not(:defined) {
+vt-timeline:not(:defined),
+vt-job:not(:defined),
+vt-git:not(:defined),
+vt-regex:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

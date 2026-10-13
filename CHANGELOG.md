@@ -60,6 +60,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with durations between events, kinds colored with theme tokens, kind buttons with counts,
   search that filters events, order toggle, folding descriptions in sanitized Markdown, `events`
   property, `vt-select` and `vt-filter-change` events.
+- `<vt-job>`: jobs and CI runs from JSON (GitHub fields read too) or a text format; job progress
+  bar, determinate or sliding, still under reduced motion; steps with status, duration, a small
+  bar while running and their log with ANSI colors; failed steps open; search across logs;
+  `update()`, `setStep()` and `appendLog()`; `vt-job-change` and `vt-step-toggle` events.
+- `<vt-git>`: commit graphs from `git log --graph`, a pretty format with parents, `--oneline` or
+  JSON; lanes computed from parents; branch, remote and tag labels; branch buttons; commit details
+  with parents to jump to; search; listbox keyboard navigation; rows built as they scroll.
+- `<vt-regex>`: patterns colored by part with matching parentheses, explained in words; matches and
+  groups highlighted in the text; match table; `replace`; flag buttons; live editing; limits on
+  text length, matches and time, and risky patterns run only on request; `vt-match` event.
+- Component modules register their own interface strings with `defineStrings()`, so a module does
+  not carry the strings of the others.
 - Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
   redesigned typography and demo windows.
 - `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,
