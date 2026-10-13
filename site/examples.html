@@ -19,28 +19,34 @@
         </p>
       </header>
 
-      <nav class="jump subnav" aria-label="Example sections">
-        <a href="#code">Code</a>
-        <a href="#markdown">Markdown</a>
-        <a href="#json">JSON</a>
-        <a href="#editing">Editing</a>
-        <a href="#layout">Layout and themes</a>
-        <a href="#csv">CSV</a>
-        <a href="#tags">Tags</a>
-        <a href="#diff">Diff</a>
-        <a href="#terminal">Terminal</a>
-        <a href="#tree">Tree</a>
-        <a href="#http">HTTP</a>
-        <a href="#log">Log</a>
-        <a href="#chart">Chart</a>
-        <a href="#openapi">OpenAPI</a>
-        <a href="#env">Env</a>
-        <a href="#hex">Hex</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#job">Job</a>
-        <a href="#git">Git</a>
-        <a href="#regex">Regex</a>
-        <a href="#api">JavaScript</a>
+      <nav class="subnav section-menu" aria-label="Example sections">
+        <label for="section-menu">Go to</label>
+        <select id="section-menu" data-section-menu>
+          <option value="code">Code</option>
+          <option value="markdown">Markdown</option>
+          <option value="json">JSON</option>
+          <option value="editing">Editing</option>
+          <option value="layout">Layout and themes</option>
+          <option value="csv">CSV</option>
+          <option value="tags">Tags</option>
+          <option value="diff">Diff</option>
+          <option value="terminal">Terminal</option>
+          <option value="tree">Tree</option>
+          <option value="http">HTTP</option>
+          <option value="log">Log</option>
+          <option value="chart">Chart</option>
+          <option value="openapi">OpenAPI</option>
+          <option value="env">Env</option>
+          <option value="hex">Hex</option>
+          <option value="timeline">Timeline</option>
+          <option value="job">Job</option>
+          <option value="git">Git</option>
+          <option value="regex">Regex</option>
+          <option value="yaml">YAML</option>
+          <option value="xml">XML</option>
+          <option value="toml">TOML</option>
+          <option value="api">JavaScript</option>
+        </select>
       </nav>
 
       <section class="example-group" id="code" aria-labelledby="code-title">
@@ -1365,6 +1371,149 @@ export { unit };</template>
             <vt-regex variant="full" pattern="(\d{4})-(\d{2})-(\d{2})" replace="$3/$2/$1">
               <template>Released 2026-10-13, patched 2026-10-20.</template>
             </vt-regex>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="yaml" aria-labelledby="yaml-title">
+        <h2 id="yaml-title">&lt;vt-yaml&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Anchors and merge keys</h3>
+            <p>The tree shows values resolved; the Raw tab keeps the YAML with its comments and anchors. Copy as JSON gives the same data as JSON.</p>
+          </div>
+          <template>
+            <vt-yaml variant="full" label="deploy.yaml">
+              <template>
+                # Deployment
+                service: shop
+                replicas: 3
+                defaults: &defaults
+                  memory: 512Mi
+                  cpu: 250m
+                web:
+                  <<: *defaults
+                  ports: [80, 443]
+              </template>
+            </vt-yaml>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Several documents</h3>
+            <p>A stream with <code>---</code> becomes a list of documents.</p>
+          </div>
+          <template>
+            <vt-yaml variant="full" label="k8s.yaml">
+              <template>
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: shop
+                ---
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: shop
+                spec:
+                  replicas: 3
+              </template>
+            </vt-yaml>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="xml" aria-labelledby="xml-title">
+        <h2 id="xml-title">&lt;vt-xml&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An Atom feed</h3>
+            <p>Elements, attributes and text as a tree, with namespaces. Select a node to copy its XPath. </p>
+          </div>
+          <template>
+            <vt-xml variant="full" label="feed.xml">
+              <template>
+                <feed xmlns="http://www.w3.org/2005/Atom">
+                  <title>Vitrine releases</title>
+                  <entry id="1.2.0">
+                    <title>Dark mode</title>
+                    <updated>2026-09-30</updated>
+                  </entry>
+                </feed>
+              </template>
+            </vt-xml>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Comments and namespaces</h3>
+            <p>Comments and prefixed names are rows of their own; the namespace URI is the title of a prefixed name.</p>
+          </div>
+          <template>
+            <vt-xml variant="full" label="catalog.xml">
+              <template>
+                <!-- Generated nightly -->
+                <catalog xmlns:media="https://example.com/media">
+                  <item sku="A-100" stock="12">
+                    <name>Desk lamp</name>
+                    <media:thumb href="/img/lamp.png"></media:thumb>
+                  </item>
+                </catalog>
+              </template>
+            </vt-xml>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="toml" aria-labelledby="toml-title">
+        <h2 id="toml-title">&lt;vt-toml&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A Cargo manifest</h3>
+            <p>Tables, inline tables and arrays, with the type of each value.</p>
+          </div>
+          <template>
+            <vt-toml variant="full" label="Cargo.toml">
+              <template>
+                [package]
+                name = "shop"
+                version = "1.2.0"
+                edition = "2021"
+
+                [dependencies]
+                serde = { version = "1.0", features = ["derive"] }
+                tokio = "1.40"
+              </template>
+            </vt-toml>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Dates and arrays of tables</h3>
+            <p>Dates and times keep their TOML type; numbers are shown as written.</p>
+          </div>
+          <template>
+            <vt-toml variant="full" label="config.toml">
+              <template>
+                title = "Release"
+                released = 2026-10-13T09:30:00+02:00
+                build = 0x1f_ff
+
+                [[servers]]
+                name = "alpha"
+                ip = "10.0.0.1"
+
+                [[servers]]
+                name = "beta"
+                ip = "10.0.0.2"
+              </template>
+            </vt-toml>
           </template>
         </article>
       </section>

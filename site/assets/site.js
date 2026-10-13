@@ -177,6 +177,41 @@ syncComponents();
     });
   }
 
+  // Section list (examples): go to the chosen section, and follow the section being read.
+  const sectionMenu = /** @type {HTMLSelectElement | null} */ (
+    document.querySelector('[data-section-menu]')
+  );
+  if (sectionMenu) {
+    const ids = Array.from(sectionMenu.options, (option) => option.value);
+    if (ids.includes(location.hash.slice(1))) sectionMenu.value = location.hash.slice(1);
+    sectionMenu.addEventListener('change', () => {
+      const section = document.getElementById(sectionMenu.value);
+      if (!section) return;
+      history.replaceState(null, '', `#${sectionMenu.value}`);
+      section.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    });
+    if ('IntersectionObserver' in window) {
+      const visible = new Set();
+      const spy = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) visible.add(entry.target.id);
+            else visible.delete(entry.target.id);
+          }
+          const current = ids.find((id) => visible.has(id));
+          if (current && document.activeElement !== sectionMenu) sectionMenu.value = current;
+        },
+        { rootMargin: '-30% 0px -60% 0px' },
+      );
+      for (const id of ids) {
+        const section = document.getElementById(id);
+        if (section) spy.observe(section);
+      }
+    }
+  }
+
   // Section menus (examples, integrations): mark the section being read.
   const jumpLinks = Array.from(document.querySelectorAll('.jump a[href^="#"]'));
   if (jumpLinks.length && 'IntersectionObserver' in window) {
