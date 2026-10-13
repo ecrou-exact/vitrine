@@ -558,7 +558,10 @@ vt-hex:not(:defined),
 vt-timeline:not(:defined),
 vt-job:not(:defined),
 vt-git:not(:defined),
-vt-regex:not(:defined) {
+vt-regex:not(:defined),
+vt-yaml:not(:defined),
+vt-xml:not(:defined),
+vt-toml:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

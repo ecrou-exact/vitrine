@@ -72,6 +72,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   text length, matches and time, and risky patterns run only on request; `vt-match` event.
 - Component modules register their own interface strings with `defineStrings()`, so a module does
   not carry the strings of the others.
+- `<vt-yaml>`: YAML shown with the `<vt-json>` tree, several documents (`---`), anchors, aliases
+  and merge keys, highlighted raw view, errors with line and column, copy as JSON; js-yaml shared
+  with `<vt-openapi>` and loaded on demand.
+- `<vt-xml>`: XML read by its own parser, never into the page: elements, attributes, text,
+  CDATA, comments, processing instructions, DOCTYPE and namespaces as a tree; declared entities
+  never expanded and nothing fetched; XPath and node copy; indented raw view; inline XML in
+  `<script type="application/xml">`.
+- `<vt-toml>`: TOML 1.0 parser (tables, arrays of tables, inline tables, dotted keys, every
+  string, number and date kind) with errors at line and column; typed tree; copy as JSON with
+  exact integers.
+- Website: the examples page lists its sections in a drop-down list.
 - Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
   redesigned typography and demo windows.
 - `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,
