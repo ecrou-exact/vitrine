@@ -1,6 +1,6 @@
 # Vitrine documentation
 
-Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories and regular expressions on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>` and `<vt-regex>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
+Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML and TOML on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>` and `<vt-toml>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
 
 ## Guides
 
@@ -37,6 +37,9 @@ Vitrine is a library of framework-free web components to display and edit source
 | `<vt-job>`      | Job or CI run with a progress bar, steps and their logs                                                                        | [components/job.md](components/job.md)           |
 | `<vt-git>`      | Git history as a graph of branches, merges and tags                                                                            | [components/git.md](components/git.md)           |
 | `<vt-regex>`    | Regular expression explained and tested on a text                                                                              | [components/regex.md](components/regex.md)       |
+| `<vt-yaml>`     | YAML as a tree, with several documents, anchors and merge keys                                                                 | [components/yaml.md](components/yaml.md)         |
+| `<vt-xml>`      | XML as a tree, read safely without entity expansion                                                                            | [components/xml.md](components/xml.md)           |
+| `<vt-toml>`     | TOML configuration as a typed tree                                                                                             | [components/toml.md](components/toml.md)         |
 
 ## Quick example
 
