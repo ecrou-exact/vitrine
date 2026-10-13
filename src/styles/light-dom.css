@@ -46,8 +46,11 @@ vt-terminal:not(:defined),
 vt-tree:not(:defined),
 vt-http:not(:defined),
 vt-log:not(:defined),
+vt-env:not(:defined),
 vt-chart:not(:defined),
-vt-openapi:not(:defined) {
+vt-openapi:not(:defined),
+vt-timeline:not(:defined),
+vt-hex:not(:defined) {
   position: relative;
   min-height: 96px;
   max-height: 160px;
@@ -65,7 +68,9 @@ vt-openapi:not(:defined) {
     vt-terminal,
     vt-tree,
     vt-http,
-    vt-log
+    vt-log,
+    vt-env,
+    vt-timeline
   ):not(:defined)::before {
   content: '';
   position: absolute;
@@ -91,7 +96,9 @@ vt-openapi:not(:defined) {
     vt-terminal,
     vt-tree,
     vt-http,
-    vt-log
+    vt-log,
+    vt-env,
+    vt-timeline
   ):not(:defined)::after {
   content: '';
   position: absolute;
@@ -132,7 +139,9 @@ vt-openapi:not(:defined) {
       vt-terminal,
       vt-tree,
       vt-http,
-      vt-log
+      vt-log,
+      vt-env,
+      vt-timeline
     ):not(:defined)::after {
     animation: vt-pending 0ms 300ms forwards;
   }

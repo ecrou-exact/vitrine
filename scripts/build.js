@@ -70,7 +70,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'hex',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {

@@ -11,12 +11,15 @@ import { VtChart } from './components/chart/vt-chart.js';
 import { VtCode } from './components/code/vt-code.js';
 import { VtCsv } from './components/csv/vt-csv.js';
 import { VtDiff } from './components/diff/vt-diff.js';
+import { VtEnv } from './components/env/vt-env.js';
 import { VtTags } from './components/tags/vt-tags.js';
 import { VtHttp } from './components/http/vt-http.js';
 import { VtJson } from './components/json/vt-json.js';
 import { VtLog } from './components/log/vt-log.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { VtOpenapi } from './components/openapi/vt-openapi.js';
+import { VtTimeline } from './components/timeline/vt-timeline.js';
+import { VtHex } from './components/hex/vt-hex.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -36,8 +39,11 @@ export {
   VtTree,
   VtHttp,
   VtLog,
+  VtEnv,
   VtChart,
   VtOpenapi,
+  VtTimeline,
+  VtHex,
   configure,
   getConfig,
   EVENTS,
@@ -76,8 +82,11 @@ export const registry = new Map(
     ['vt-tree', VtTree],
     ['vt-http', VtHttp],
     ['vt-log', VtLog],
+    ['vt-env', VtEnv],
     ['vt-chart', VtChart],
     ['vt-openapi', VtOpenapi],
+    ['vt-timeline', VtTimeline],
+    ['vt-hex', VtHex],
   ]),
 );
 
@@ -93,8 +102,11 @@ const TYPES = /** @type {const} */ ({
   tree: 'vt-tree',
   http: 'vt-http',
   log: 'vt-log',
+  env: 'vt-env',
   chart: 'vt-chart',
   openapi: 'vt-openapi',
+  timeline: 'vt-timeline',
+  hex: 'vt-hex',
 });
 
 /**

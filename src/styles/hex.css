@@ -1,0 +1,114 @@
+/*
+ * Hex dump: offset, hex bytes and ASCII characters per row, bytes colored by kind,
+ * the hovered byte paired in both columns.
+ */
+.hex-body {
+  background: var(--_code-bg);
+}
+
+.dump {
+  --_cell: 2.6ch;
+  min-width: 100%;
+  width: max-content;
+  padding: var(--_space-2) 0;
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.dump:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+/* Blocks not built yet keep their height so the scroll bar is right. */
+.chunk:not(.filled) {
+  height: calc(var(--_rows) * 1.6em);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: calc(var(--_digits) * 1ch) calc(var(--_columns) * var(--_cell) + 2ch) auto;
+  column-gap: var(--_space-4);
+  padding: 0 var(--_space-4);
+}
+
+.dump.no-ascii .row {
+  grid-template-columns: calc(var(--_digits) * 1ch) auto;
+}
+
+.row:hover {
+  background: color-mix(in srgb, var(--_code-fg) 5%, transparent);
+}
+
+.offset {
+  color: var(--_code-gutter);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hex .b {
+  display: inline-block;
+  width: var(--_cell);
+  text-align: center;
+  border-radius: var(--_radius-sm);
+}
+
+.hex .b.group {
+  margin-left: 1ch;
+}
+
+.ascii {
+  white-space: pre;
+  border-left: 1px solid var(--_border);
+  padding-left: var(--_space-3);
+}
+
+.ascii .c {
+  border-radius: var(--_radius-sm);
+}
+
+/* Byte kinds. */
+.null {
+  color: var(--vt-hex-null, var(--_code-gutter));
+}
+
+.whitespace {
+  color: var(--_syntax-string);
+}
+
+.control {
+  color: var(--vt-hex-control, var(--_syntax-keyword));
+}
+
+.high {
+  color: var(--vt-hex-high, var(--_syntax-number));
+}
+
+.pair {
+  background: color-mix(in srgb, var(--_accent) 18%, transparent);
+}
+
+.match {
+  background: var(--_highlight);
+  color: var(--_fg);
+}
+
+.current {
+  background: var(--_highlight-current);
+  color: var(--_fg);
+}
+
+.selected {
+  outline: 2px solid var(--_accent);
+  outline-offset: -1px;
+}
+
+@media (forced-colors: active) {
+  .selected,
+  .current {
+    outline: 2px solid Highlight;
+  }
+}
