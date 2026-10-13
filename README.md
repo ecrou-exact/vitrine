@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML and TOML — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules and X.509 certificates — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -52,6 +52,9 @@
 - **`<vt-yaml>`** — YAML as a tree like `<vt-json>`, with several documents, anchors, aliases and merge keys, a highlighted raw view and copy as JSON (js-yaml loaded on demand).
 - **`<vt-xml>`** — XML as a tree of elements, attributes, text, CDATA, comments and namespaces, with XPath copy and an indented raw view; read with its own parser, entities never expanded and nothing fetched.
 - **`<vt-toml>`** — TOML 1.0 as a typed tree (dates, times, integers as written), with errors at their line and column, and copy as JSON.
+- **`<vt-jwt>`** — JSON Web Tokens decoded: parts colored, header and payload as trees, claims explained with dates, validity status and security warnings; never verified and never sent anywhere.
+- **`<vt-cron>`** — cron expressions and crontabs explained in words, with the next runs in a time zone, a week grid, Quartz extensions and errors at their field.
+- **`<vt-cert>`** — X.509 certificates, chains and CSRs from PEM or DER with a bounded DER reader: names, validity, keys, extensions, fingerprints and an ASN.1 view; nothing verified or fetched.
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
 - **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.
@@ -127,6 +130,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-yaml>`     | YAML tree, several documents, anchors               | Tree / Raw tabs, search, expand / collapse, copy as JSON, download                                      | [docs/components/yaml.md](docs/components/yaml.md)         |
 | `<vt-xml>`      | XML tree with attributes and namespaces             | Tree / Raw tabs, search, XPath copy, indent, download                                                   | [docs/components/xml.md](docs/components/xml.md)           |
 | `<vt-toml>`     | Typed TOML tree                                     | Tree / Raw tabs, search, path copy, copy as JSON, download                                              | [docs/components/toml.md](docs/components/toml.md)         |
+| `<vt-jwt>`      | Decoded token, claims and status                    | Copy header, payload or token, masked signature, full screen                                            | [docs/components/jwt.md](docs/components/jwt.md)           |
+| `<vt-cron>`     | Schedule in words and next runs                     | Crontab table, search, week grid, copy, download                                                        | [docs/components/cron.md](docs/components/cron.md)         |
+| `<vt-cert>`     | Certificate cards and chain                         | Details / ASN.1 tabs, search, fingerprints copy, copy PEM, download                                     | [docs/components/cert.md](docs/components/cert.md)         |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 

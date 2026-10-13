@@ -1,6 +1,6 @@
 # Editing
 
-Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>` and `<vt-toml>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
+Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>` and `<vt-cert>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
 
 ```html
 <vt-code mode="edit" language="python" line-numbers label="script.py">
@@ -118,6 +118,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-yaml>`     | `content`                                                                                |
 | `<vt-xml>`      | `content`                                                                                |
 | `<vt-toml>`     | `content`                                                                                |
+| `<vt-jwt>`      | `content`                                                                                |
+| `<vt-cron>`     | `content`                                                                                |
+| `<vt-cert>`     | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

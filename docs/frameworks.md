@@ -561,7 +561,10 @@ vt-git:not(:defined),
 vt-regex:not(:defined),
 vt-yaml:not(:defined),
 vt-xml:not(:defined),
-vt-toml:not(:defined) {
+vt-toml:not(:defined),
+vt-jwt:not(:defined),
+vt-cron:not(:defined),
+vt-cert:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;
