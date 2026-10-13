@@ -1,6 +1,6 @@
 # Vitrine documentation
 
-Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts and OpenAPI descriptions on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>` and `<vt-openapi>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
+Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps and timelines on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>` and `<vt-timeline>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
 
 ## Guides
 
@@ -31,6 +31,9 @@ Vitrine is a library of framework-free web components to display and edit source
 | `<vt-log>`      | Application logs in plain text, JSON lines or logfmt, with levels, fields, stack traces, level filters and live streaming      | [components/log.md](components/log.md)           |
 | `<vt-chart>`    | Line, area, bar and donut charts from CSV or JSON, drawn with Apache ECharts in the theme colors, with a Table view            | [components/chart.md](components/chart.md)       |
 | `<vt-openapi>`  | API reference from an OpenAPI 3.0 or 3.1 (or Swagger 2.0) description in JSON or YAML, with schema trees and examples          | [components/openapi.md](components/openapi.md)   |
+| `<vt-env>`      | Dotenv, INI or `.properties` file as a table, with references linked and secrets masked                                        | [components/env.md](components/env.md)           |
+| `<vt-hex>`      | Hex dump of binary data with offsets, ASCII, colored bytes and the detected file type                                          | [components/hex.md](components/hex.md)           |
+| `<vt-timeline>` | Timeline of events from JSON or a changelog, grouped by date with durations                                                    | [components/timeline.md](components/timeline.md) |
 
 ## Quick example
 

@@ -1,6 +1,6 @@
 # Getting started
 
-Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts and OpenAPI descriptions on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>` and `<vt-openapi>` elements in your HTML.
+Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps and timelines on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>` and `<vt-timeline>` elements in your HTML.
 
 This page covers installation, a first example for each component, and the ways to give content to an element.
 
@@ -10,7 +10,7 @@ The `dist/` folder contains:
 
 | File                       | Format         | Behavior                                                                                                                                                                         |
 | -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the twelve elements automatically and exposes a global `Vitrine` object.                                                                    |
+| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the fifteen elements automatically and exposes a global `Vitrine` object.                                                                   |
 | `dist/vitrine.esm.js`      | ES module      | Every component in one file. Defines nothing by itself: import `defineAll()` and call it.                                                                                        |
 | `dist/esm/vt-<name>.js`    | ES modules     | One module per component, which defines its element when imported. Code shared between components is in `dist/esm/chunks/`. See [Per-component modules](#per-component-modules). |
 | `dist/esm/vitrine.js`      | ES module      | Every component, built from the same shared chunks as the per-component modules. Call `defineAll()`.                                                                             |
@@ -24,7 +24,7 @@ The `dist/` folder contains:
 <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
 ```
 
-The script defines the twelve elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
+The script defines the fifteen elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
 
 Each GitHub release lists SRI hashes for the release files. If you add an `integrity` attribute, pin an exact version (`@1.2.3`) instead of `@1`, because the hash changes with every release:
 
@@ -73,22 +73,25 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 
 | File                      | Size (gzip) |
 | ------------------------- | ----------- |
-| `dist/vitrine.min.js`     | 146.7 KB    |
-| `dist/vitrine.esm.js`     | 146.6 KB    |
-| `dist/esm/vt-code.js`     | 57.4 KB     |
-| `dist/esm/vt-markdown.js` | 75.8 KB     |
-| `dist/esm/vt-json.js`     | 61.6 KB     |
-| `dist/esm/vt-csv.js`      | 58.4 KB     |
-| `dist/esm/vt-tags.js`     | 28.9 KB     |
-| `dist/esm/vt-diff.js`     | 64.1 KB     |
-| `dist/esm/vt-terminal.js` | 60.4 KB     |
-| `dist/esm/vt-tree.js`     | 59.9 KB     |
-| `dist/esm/vt-http.js`     | 65.2 KB     |
-| `dist/esm/vt-log.js`      | 62.0 KB     |
-| `dist/esm/vt-chart.js`    | 59.4 KB     |
-| `dist/esm/vt-openapi.js`  | 62.0 KB     |
+| `dist/vitrine.min.js`     | 159.7 KB    |
+| `dist/vitrine.esm.js`     | 159.6 KB    |
+| `dist/esm/vt-code.js`     | 57.9 KB     |
+| `dist/esm/vt-markdown.js` | 76.3 KB     |
+| `dist/esm/vt-json.js`     | 62.1 KB     |
+| `dist/esm/vt-csv.js`      | 58.9 KB     |
+| `dist/esm/vt-tags.js`     | 29.4 KB     |
+| `dist/esm/vt-diff.js`     | 64.6 KB     |
+| `dist/esm/vt-terminal.js` | 61.0 KB     |
+| `dist/esm/vt-tree.js`     | 60.4 KB     |
+| `dist/esm/vt-http.js`     | 65.7 KB     |
+| `dist/esm/vt-log.js`      | 62.6 KB     |
+| `dist/esm/vt-chart.js`    | 59.9 KB     |
+| `dist/esm/vt-openapi.js`  | 62.6 KB     |
+| `dist/esm/vt-env.js`      | 59.0 KB     |
+| `dist/esm/vt-hex.js`      | 27.0 KB     |
+| `dist/esm/vt-timeline.js` | 58.4 KB     |
 
-These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (152 KB for the full bundles; 60, 78, 64, 61, 32, 66, 62, 62, 67, 64, 62 and 64 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
+These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (164 KB for the full bundles; 60, 78, 64, 61, 32, 66, 62, 62, 67, 64, 62, 64, 60, 56 and 62 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
 
 ### Git submodule
 
@@ -415,7 +418,7 @@ While content loads from `src`, the element shows a loading placeholder. If cont
 ## Next steps
 
 - [Common attributes and events](common-attributes.md)
-- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md)
+- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md), [`<vt-env>`](components/env.md), [`<vt-hex>`](components/hex.md), [`<vt-timeline>`](components/timeline.md)
 - [Editing](editing.md)
 - [Theming](theming.md) and [Configuration](configuration.md)
 - [Security](security.md) before displaying untrusted content
