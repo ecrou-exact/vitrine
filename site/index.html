@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Twelve elements, view or edit</h2>
+            <h2 id="components-title">Fifteen elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -282,6 +282,46 @@ paths:
     delete: { summary: Cancel an order, responses: { '204': { description: Cancelled } } }</template>
               </vt-openapi>
               <a href="examples.html#openapi">OpenAPI examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-env&gt;</h3>
+              <p>
+                Dotenv, INI and properties files as a table, with references linked and secrets
+                masked until revealed.
+              </p>
+              <vt-env class="preview" data-type-in="lines">
+                <template># Database
+DATABASE_URL=postgres://app@db:5432/shop
+DB_PASSWORD=s3cr3t-value
+CACHE_URL=${DATABASE_URL}/cache</template>
+              </vt-env>
+              <a href="examples.html#env">Env examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-hex&gt;</h3>
+              <p>
+                Hex dumps of binary data with offsets, ASCII, bytes colored by kind and the file
+                type read from its first bytes.
+              </p>
+              <vt-hex class="preview">
+                <template>89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 00 10 00 00 00 10 08 06 00 00 00 1f f3 ff 61</template>
+              </vt-hex>
+              <a href="examples.html#hex">Hex examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-timeline&gt;</h3>
+              <p>
+                Incident timelines and release history from JSON or a changelog, grouped by date
+                with the time between events.
+              </p>
+              <vt-timeline class="preview" durations>
+                <template>[
+  {"time": "2026-10-07T18:00:00Z", "title": "Alert: error rate above 5%", "kind": "danger"},
+  {"time": "2026-10-07T18:12:00Z", "title": "Rollback started", "kind": "warning"},
+  {"time": "2026-10-07T18:31:00Z", "title": "Service restored", "kind": "success"}
+]</template>
+              </vt-timeline>
+              <a href="examples.html#timeline">Timeline examples</a>
             </article>
           </div>
         </div>
