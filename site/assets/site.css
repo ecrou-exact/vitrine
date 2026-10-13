@@ -2942,3 +2942,31 @@ h3 {
 .motion .theme-btn:hover .sun {
   transform: rotate(45deg);
 }
+
+/* ---------- Section list (examples) ---------- */
+
+.section-menu {
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.section-menu label {
+  color: var(--site-fg-muted);
+  font-size: var(--vt-text-small);
+}
+
+.section-menu select {
+  min-width: 14rem;
+  min-height: var(--control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius-full);
+  background: var(--site-surface);
+  color: var(--site-fg);
+  font: inherit;
+  font-size: var(--vt-text-small);
+}
+
+.section-menu select:hover {
+  border-color: var(--site-accent);
+}

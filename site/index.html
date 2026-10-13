@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Eighteen elements, view or edit</h2>
+            <h2 id="components-title">Twenty-one elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -375,6 +375,57 @@ status: queued</template>
                 <template>ada@example.com, alan.turing@test.org</template>
               </vt-regex>
               <a href="examples.html#regex">Regex examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-yaml&gt;</h3>
+              <p>
+                YAML as a tree like JSON, with several documents, anchors and merge keys, and a highlighted raw view.
+              </p>
+              <vt-yaml class="preview">
+                <template># Deployment
+service: shop
+replicas: 3
+defaults: &defaults
+  memory: 512Mi
+  cpu: 250m
+web:
+  <<: *defaults
+  ports: [80, 443]</template>
+              </vt-yaml>
+              <a href="examples.html#yaml">YAML examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-xml&gt;</h3>
+              <p>
+                XML as a tree of elements, attributes, text and comments, read safely: no entities expanded, nothing fetched.
+              </p>
+              <vt-xml class="preview">
+                <template><feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Vitrine releases</title>
+  <entry id="1.2.0">
+    <title>Dark mode</title>
+    <updated>2026-09-30</updated>
+  </entry>
+</feed></template>
+              </vt-xml>
+              <a href="examples.html#xml">XML examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-toml&gt;</h3>
+              <p>
+                TOML configuration files as a typed tree, with dates, inline tables and arrays of tables.
+              </p>
+              <vt-toml class="preview">
+                <template>[package]
+name = "shop"
+version = "1.2.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = "1.40"</template>
+              </vt-toml>
+              <a href="examples.html#toml">TOML examples</a>
             </article>
           </div>
         </div>
