@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps and timelines — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories and regular expressions — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -46,6 +46,9 @@
 - **`<vt-env>`** — dotenv, INI and `.properties` files as a table, with `${VAR}` references linked and secrets masked until revealed.
 - **`<vt-hex>`** — hex dumps of binary data from `src`, hex or base64, with offsets, an ASCII column, bytes colored by kind, byte search and the file type read from its magic bytes.
 - **`<vt-timeline>`** — incident timelines and release history from JSON or a Keep a Changelog file, grouped by date, with durations, kind filters and search.
+- **`<vt-job>`** — jobs and CI runs with a progress bar, steps with status and duration, the log of each step with ANSI colors, and live updates with `setStep()` and `appendLog()`.
+- **`<vt-git>`** — commit history as a graph of branches and merges from `git log` output or JSON, with branch and tag labels, branch filters, commit details and keyboard navigation.
+- **`<vt-regex>`** — regular expressions colored by part and explained in words, matches and groups highlighted in a test text, a match table, replacement, and limits against catastrophic patterns.
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
 - **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.
@@ -115,6 +118,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-env>`      | Config entries as a table, secrets masked           | Table / Raw tabs, search that filters entries, reveal secrets, copy, download                           | [docs/components/env.md](docs/components/env.md)           |
 | `<vt-hex>`      | Hex dump with offsets and ASCII                     | Title bar with the file type, byte search, copy as hex or base64, download, full screen                 | [docs/components/hex.md](docs/components/hex.md)           |
 | `<vt-timeline>` | Events grouped by date                              | Kind buttons with counts, search that filters events, order toggle, copy as JSON, download              | [docs/components/timeline.md](docs/components/timeline.md) |
+| `<vt-job>`      | Job summary, progress bar and steps with logs       | Search across logs, expand / collapse all, copy and download the log, full screen                       | [docs/components/job.md](docs/components/job.md)           |
+| `<vt-git>`      | Commit graph with lanes, branches and tags          | Branch buttons, commit search, commit details, copy, download                                           | [docs/components/git.md](docs/components/git.md)           |
+| `<vt-regex>`    | Colored pattern, highlighted matches and groups     | Flag buttons, match table, explanation, copy pattern and matches, download                              | [docs/components/regex.md](docs/components/regex.md)       |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 
