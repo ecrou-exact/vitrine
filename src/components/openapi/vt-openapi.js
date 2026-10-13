@@ -229,11 +229,11 @@ export class VtOpenapi extends VtBase {
       },
       /** @param {number} index */
       go: (index) => {
+        // Focus stays in the search field so typing goes on; the match is only marked.
         const ops = this.listHost?.querySelectorAll('.op') ?? [];
+        for (const op of ops) op.classList.remove('current');
+        ops[index]?.classList.add('current');
         ops[index]?.scrollIntoView({ block: 'nearest' });
-        /** @type {HTMLElement | null} */ (ops[index]?.querySelector('.op-head') ?? null)?.focus({
-          preventScroll: true,
-        });
       },
       clear: () => {
         this.query = '';

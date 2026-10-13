@@ -5,6 +5,13 @@
 .api-body {
   padding: var(--_space-5);
   background: var(--_surface);
+  /* Without a height limit the page scrolls, not the reference. */
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .api-body,
+.vt[data-fullscreen] .api-body {
+  overscroll-behavior: contain;
 }
 
 /* ---------- Introduction ---------- */
@@ -172,6 +179,11 @@
   border: 1px solid color-mix(in srgb, var(--_tone) 30%, var(--_border));
   border-radius: var(--_radius);
   background: color-mix(in srgb, var(--_tone) 4%, var(--_surface));
+}
+
+.op.current {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
 }
 
 .op.method-get,
