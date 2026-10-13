@@ -15,6 +15,21 @@ const SAMPLES = {
   tree: 'src/\n  components/\n    + Button.tsx  # new\n    ~ Header.tsx\n    - Legacy.tsx\n  app.ts\npublic/\n  logo.svg\n* package.json  # scripts\nREADME.md\n',
   http: 'POST /v1/tasks?api_key=demo_key_7f3a9c2e51b84d06 HTTP/1.1\nHost: api.example.com\nContent-Type: application/json\nAuthorization: Bearer eyJhbGciOiJIUzI1NiJ9.example\n\n{"title": "Write docs", "priority": 2}\n\nHTTP/1.1 201 Created\nContent-Type: application/json\n\n{"id": 981, "status": "open"}\n',
   json: '{\n  "id": 12345678901234567890,\n  "name": "Ada",\n  "roles": ["admin", "editor"],\n  "address": { "city": "London", "zip": null },\n  "active": true\n}\n',
+  log: '2026-10-07T18:00:00.120Z INFO  server listening on :8080\n{"level":40,"time":"2026-10-07T18:00:03Z","msg":"slow query","ms":812}\n2026-10-07T18:00:04.330Z ERROR payment failed: card declined\n    at Billing.charge (billing.js:88)\ntime=2026-10-07T18:00:05Z level=warn msg="retrying" attempt=2\n',
+  chart:
+    'month,desktop,mobile\nJan,186,80\nFeb,305,200\nMar,237,120\nApr,73,190\nMay,209,130\nJun,214,140\n',
+  openapi:
+    "openapi: 3.1.0\ninfo: { title: Orders API, version: 1.0.0 }\npaths:\n  /orders:\n    get: { summary: List orders, tags: [orders], responses: { '200': { description: OK } } }\n    post: { summary: Create an order, tags: [orders], responses: { '201': { description: Created } } }\n  /orders/{id}:\n    delete: { summary: Cancel an order, tags: [orders], responses: { '204': { description: Cancelled } } }\n",
+  env: '# Database\nDB_HOST=db.internal\nDB_PASSWORD="s3cr3t-value"\nDATABASE_URL=postgres://app:${DB_PASSWORD}@${DB_HOST}:5432/shop\nexport NODE_ENV=production\n',
+  hex: '89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52\n00 00 00 20 00 00 00 20 08 06 00 00 00 73 7a 7a\n',
+  timeline:
+    '[\n  {"time": "2026-10-07T18:00:00Z", "title": "Error rate above 5%", "kind": "danger"},\n  {"time": "2026-10-07T18:12:00Z", "title": "Rollback started", "kind": "warning"},\n  {"time": "2026-10-07T18:31:00Z", "title": "Service restored", "kind": "success"}\n]\n',
+  job: "# deploy\n## Checkout\nstatus: success\nduration: 2s\nCloning into 'shop'...\n## Test\nstatus: running\nprogress: 64\nPASS src/cart.test.js\nRUNS src/payment.test.js\n## Deploy\nstatus: queued\n",
+  git: "* 9f3c2a1 (HEAD -> main, tag: v1.2.0) Merge branch 'feature/login'\n|\\\n| * 4b7e9d0 (feature/login) Add login form\n* | 7d6e5b4 Fix cart total rounding\n|/\n* 1e0f9a2 Add checkout page\n* 0c3b7d1 Initial commit\n",
+  regex: 'Contact ada@example.com or alan.turing@test.org, not @nobody.\n',
+  yaml: '# Deployment\nservice: shop\ndefaults: &defaults\n  memory: 512Mi\n  cpu: 250m\nweb:\n  <<: *defaults\n  ports: [80, 443]\n',
+  xml: '<catalog xmlns:media="https://example.com/media">\n  <!-- Generated nightly -->\n  <item sku="A-100" stock="12">\n    <name>Desk lamp</name>\n    <media:thumb href="/img/lamp.png"/>\n  </item>\n</catalog>\n',
+  toml: '[package]\nname = "shop"\nversion = "1.2.0"\nreleased = 2026-10-13\n\n[dependencies]\nserde = { version = "1.0", features = ["derive"] }\n',
 };
 
 /** Boolean features shared by every component. */
@@ -148,6 +163,133 @@ const SCHEMA = {
       { name: 'snippets', type: 'text', placeholder: 'curl fetch python httpie' },
     ],
   },
+  log: {
+    tag: 'vt-log',
+    flags: ['level-filter', 'follow', 'fields', 'colors', 'line-numbers', 'wrap'],
+    fields: [
+      { name: 'levels', type: 'text', placeholder: 'info warn error' },
+      { name: 'time', type: 'select', options: ['', 'full', 'short', 'none'] },
+      { name: 'collapse', type: 'number', placeholder: '6' },
+      { name: 'max-entries', type: 'number', placeholder: '50000' },
+    ],
+  },
+  chart: {
+    tag: 'vt-chart',
+    flags: [
+      'stacked',
+      'smooth',
+      'horizontal',
+      'zoom',
+      'legend',
+      'grid',
+      'points',
+      'compact',
+      'tabs',
+    ],
+    fields: [
+      { name: 'type', type: 'select', options: ['line', 'area', 'bar', 'pie'] },
+      { name: 'height', type: 'number', placeholder: '300' },
+      { name: 'unit', type: 'text', placeholder: 'ms' },
+      { name: 'view', type: 'select', options: ['', 'chart', 'table'] },
+    ],
+  },
+  openapi: {
+    tag: 'vt-openapi',
+    flags: ['expand', 'examples', 'markdown'],
+    fields: [
+      { name: 'tags', type: 'text', placeholder: 'orders' },
+      { name: 'server', type: 'number', placeholder: '0' },
+    ],
+  },
+  env: {
+    tag: 'vt-env',
+    flags: ['mask-secrets', 'tabs', 'comments', 'line-numbers'],
+    fields: [
+      { name: 'format', type: 'select', options: ['', 'auto', 'dotenv', 'ini', 'properties'] },
+      { name: 'secret-keys', type: 'text', placeholder: 'STRIPE_KEY' },
+      { name: 'view', type: 'select', options: ['', 'table', 'raw'] },
+    ],
+  },
+  hex: {
+    tag: 'vt-hex',
+    flags: ['ascii', 'uppercase'],
+    fields: [
+      { name: 'columns', type: 'number', placeholder: '16' },
+      { name: 'group', type: 'number', placeholder: '8' },
+      { name: 'format', type: 'select', options: ['', 'auto', 'hex', 'base64'] },
+      { name: 'offset', type: 'number', placeholder: '0' },
+    ],
+  },
+  timeline: {
+    tag: 'vt-timeline',
+    flags: ['kind-filter', 'durations', 'markdown'],
+    fields: [
+      { name: 'order', type: 'select', options: ['', 'newest', 'oldest'] },
+      { name: 'group', type: 'select', options: ['', 'day', 'month', 'year', 'none'] },
+      { name: 'kinds', type: 'text', placeholder: 'danger warning' },
+      { name: 'collapse', type: 'number', placeholder: '6' },
+    ],
+  },
+  job: {
+    tag: 'vt-job',
+    flags: ['progress', 'durations', 'open-failed', 'follow'],
+    fields: [],
+  },
+  git: {
+    tag: 'vt-git',
+    flags: ['branch-filter', 'author', 'date'],
+    fields: [
+      { name: 'branch', type: 'text', placeholder: 'main' },
+      { name: 'date-format', type: 'select', options: ['', 'relative', 'absolute'] },
+      { name: 'hash-length', type: 'number', placeholder: '7' },
+      { name: 'selected', type: 'text', placeholder: '4b7e9d0' },
+    ],
+  },
+  regex: {
+    tag: 'vt-regex',
+    flags: ['flag-buttons', 'table', 'explain'],
+    fields: [
+      { name: 'pattern', type: 'text', placeholder: '(?<user>[\\w.]+)@(?<host>[\\w.-]+)' },
+      { name: 'flags', type: 'text', placeholder: 'g' },
+      { name: 'replace', type: 'text', placeholder: '$<user> at $<host>' },
+    ],
+  },
+  yaml: {
+    tag: 'vt-yaml',
+    flags: ['tabs', 'show-types', 'expand-controls', 'path', 'sort-keys', 'line-numbers'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'tree', 'raw'] },
+      { name: 'depth', type: 'number', placeholder: '2' },
+      { name: 'on-invalid', type: 'select', options: ['', 'error', 'raw'] },
+    ],
+  },
+  xml: {
+    tag: 'vt-xml',
+    flags: ['tabs', 'pretty', 'expand-controls', 'path', 'line-numbers'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'tree', 'raw'] },
+      { name: 'depth', type: 'number', placeholder: '2' },
+      { name: 'indent', type: 'number', placeholder: '2' },
+      { name: 'on-invalid', type: 'select', options: ['', 'error', 'raw'] },
+    ],
+  },
+  toml: {
+    tag: 'vt-toml',
+    flags: [
+      'tabs',
+      'show-types',
+      'expand-controls',
+      'path',
+      'sort-keys',
+      'line-numbers',
+      'copy-json',
+    ],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'tree', 'raw'] },
+      { name: 'depth', type: 'number', placeholder: '2' },
+      { name: 'on-invalid', type: 'select', options: ['', 'error', 'raw'] },
+    ],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -193,17 +335,13 @@ function buildControls() {
   general.append(
     field(
       'Element',
-      select('type', Object.keys(SCHEMA), state.type, (value) => switchType(value), {
-        code: '<vt-code>',
-        markdown: '<vt-markdown>',
-        json: '<vt-json>',
-        csv: '<vt-csv>',
-        tags: '<vt-tags>',
-        diff: '<vt-diff>',
-        terminal: '<vt-terminal>',
-        tree: '<vt-tree>',
-        http: '<vt-http>',
-      }),
+      select(
+        'type',
+        Object.keys(SCHEMA),
+        state.type,
+        (value) => switchType(value),
+        Object.fromEntries(Object.entries(SCHEMA).map(([key, { tag }]) => [key, `<${tag}>`])),
+      ),
     ),
     field(
       'variant',
@@ -310,7 +448,13 @@ function buildControls() {
 function switchType(type) {
   state.type = type;
   state.flags = {};
-  state.fields = type === 'code' || type === 'diff' ? { language: 'python' } : {};
+  state.fields =
+    {
+      code: { language: 'python' },
+      diff: { language: 'python' },
+      chart: { type: 'line' },
+      regex: { pattern: '(?<user>[\\w.]+)@(?<host>[\\w.-]+)' },
+    }[type] ?? {};
   state.content = SAMPLES[type];
   state.attrs.label = {
     code: 'fibonacci.py',
@@ -322,6 +466,18 @@ function switchType(type) {
     terminal: 'Test run',
     tree: 'my-app',
     http: 'Create a task',
+    log: 'api.log',
+    chart: 'Visitors',
+    openapi: '',
+    env: '.env',
+    hex: 'logo.png',
+    timeline: 'Incident',
+    job: 'deploy',
+    git: 'shop',
+    regex: '',
+    yaml: 'deploy.yaml',
+    xml: 'catalog.xml',
+    toml: 'Cargo.toml',
   }[type];
   buildControls();
   render();

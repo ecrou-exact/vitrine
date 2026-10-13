@@ -82,7 +82,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-toml>`: TOML 1.0 parser (tables, arrays of tables, inline tables, dotted keys, every
   string, number and date kind) with errors at line and column; typed tree; copy as JSON with
   exact integers.
-- Website: the examples page lists its sections in a drop-down list.
+- Website: the examples page lists its sections in a drop-down list, and the playground has
+  every element.
 - Website: search with Ctrl+K (Cmd+K on macOS), back to top button, typing animation on the home page, Legal page,
   redesigned typography and demo windows.
 - `<vt-diff>`: previous / next change arrows with a counter, `n` / `p` keys, `nextChange()`,
