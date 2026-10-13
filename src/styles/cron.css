@@ -1,0 +1,359 @@
+/*
+ * Cron schedules: labelled fields, a description, the next runs and the hours of the week,
+ * or a crontab as a table with the selected entry under it.
+ */
+.cron-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.cron-detail {
+  display: grid;
+  gap: var(--_space-4);
+  padding-top: var(--_space-4);
+  border-top: 1px solid var(--_border);
+}
+
+.cron-detail:empty {
+  display: none;
+}
+
+/* ---------- Fields ---------- */
+
+.cron-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_space-2);
+}
+
+.cron-fields .field {
+  --_tone: var(--_accent);
+  display: inline-grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 4.5rem;
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px solid color-mix(in srgb, var(--_tone) 40%, var(--_border));
+  border-radius: var(--_radius);
+  background: color-mix(in srgb, var(--_tone) 8%, var(--_surface));
+  cursor: help;
+}
+
+.cron-fields .field code {
+  color: var(--_tone);
+  font-family: var(--_font-mono);
+  font-size: calc(var(--_font-size) * 1.15);
+  font-weight: 600;
+}
+
+.cron-fields .field.any code {
+  color: var(--_fg-muted);
+}
+
+.cron-fields .field-name {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.cron-fields .f-second {
+  --_tone: var(--vt-chart-6, var(--_syntax-string));
+}
+
+.cron-fields .f-minute {
+  --_tone: var(--vt-chart-1, var(--_accent));
+}
+
+.cron-fields .f-hour {
+  --_tone: var(--vt-chart-2, var(--_syntax-function));
+}
+
+.cron-fields .f-day {
+  --_tone: var(--vt-chart-3, var(--_warning));
+}
+
+.cron-fields .f-month {
+  --_tone: var(--vt-chart-4, var(--_syntax-keyword));
+}
+
+.cron-fields .f-weekday {
+  --_tone: var(--vt-chart-5, var(--_syntax-number));
+}
+
+.cron-fields .field.invalid {
+  --_tone: var(--_danger);
+  border-style: dashed;
+  border-width: 2px;
+}
+
+.cron-fields .field:not(.f-second, .f-minute, .f-hour, .f-day, .f-month, .f-weekday) {
+  --_tone: var(--_fg);
+}
+
+.cron-fields .field.invalid {
+  --_tone: var(--_danger);
+}
+
+.cron-macro {
+  align-self: center;
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+}
+
+.cron-description {
+  margin: 0;
+  color: var(--_fg);
+  font-size: calc(var(--_font-size-ui) * 1.1);
+  font-weight: 600;
+}
+
+/* ---------- Next runs ---------- */
+
+.cron-runs-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-3);
+}
+
+.cron-runs h3,
+.cron-week-figure figcaption {
+  margin: 0;
+  color: var(--_fg);
+  font-size: var(--_font-size-ui);
+  font-weight: 600;
+}
+
+.cron-zone,
+.cron-note,
+.cron-none {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.cron-note,
+.cron-none {
+  margin: var(--_space-1) 0 0;
+}
+
+.cron-run-list {
+  display: grid;
+  gap: 2px;
+  margin: var(--_space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: run;
+}
+
+.cron-run-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-3);
+  padding: 4px var(--_space-2);
+  border-radius: var(--_radius-sm);
+  counter-increment: run;
+}
+
+.cron-run-list li::before {
+  min-width: 1.5em;
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  content: counter(run);
+}
+
+.cron-run-list li:nth-child(odd) {
+  background: var(--_surface-sunken);
+}
+
+.cron-run-list time {
+  font-family: var(--_font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.cron-relative {
+  color: var(--_fg-muted);
+}
+
+/* ---------- Week grid ---------- */
+
+.cron-week-figure {
+  margin: 0;
+}
+
+.cron-week-scroll {
+  margin-top: var(--_space-2);
+  overflow-x: auto;
+}
+
+.cron-week {
+  border-collapse: separate;
+  border-spacing: 2px;
+  font-size: var(--_font-size-small);
+}
+
+.cron-week th {
+  padding: 0 var(--_space-1);
+  color: var(--_fg-muted);
+  font-weight: 400;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.cron-week th.hour {
+  font-family: var(--_font-mono);
+  text-align: start;
+}
+
+.cron-week .cell {
+  width: 14px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0;
+  border-radius: 3px;
+  background: var(--_surface-sunken);
+}
+
+.cron-week .cell.l1 {
+  background: color-mix(in srgb, var(--_accent) 30%, var(--_surface));
+}
+
+.cron-week .cell.l2 {
+  background: color-mix(in srgb, var(--_accent) 50%, var(--_surface));
+}
+
+.cron-week .cell.l3 {
+  background: color-mix(in srgb, var(--_accent) 75%, var(--_surface));
+}
+
+.cron-week .cell.l4 {
+  background: var(--_accent);
+}
+
+/* ---------- Crontab ---------- */
+
+.cron-vars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2) var(--_space-4);
+  margin: 0;
+  font-size: var(--_font-size-small);
+}
+
+.cron-vars div {
+  display: flex;
+  gap: 4px;
+}
+
+.cron-vars dt::after {
+  color: var(--_fg-muted);
+  content: '=';
+}
+
+.cron-vars dd {
+  margin: 0;
+}
+
+.cron-vars code {
+  font-family: var(--_font-mono);
+}
+
+.cron-table-wrap {
+  overflow-x: auto;
+}
+
+.cron-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.cron-table th,
+.cron-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.cron-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--_surface-sunken);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cron-table tr.entry:hover > * {
+  background: color-mix(in srgb, var(--_accent-soft) 50%, transparent);
+}
+
+.cron-table tr.entry.selected > *,
+.cron-table tr.entry.current > * {
+  background: var(--_accent-soft);
+}
+
+.cron-table .next {
+  color: var(--_fg-muted);
+  white-space: nowrap;
+}
+
+.cron-table .command code,
+.cron-table .user code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.schedule-button {
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.schedule-button code {
+  font-family: var(--_font-mono);
+}
+
+.schedule-button[aria-pressed='true'] {
+  border-color: var(--_accent);
+  color: var(--_accent);
+}
+
+.cron-body mark.match {
+  border-radius: 2px;
+  background: var(--_highlight);
+  color: inherit;
+}
+
+/* ---------- Editing ---------- */
+
+.cron-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}
+
+.cron-status {
+  padding: 6px var(--_space-4);
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface-sunken);
+  color: var(--_success);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+}
+
+.cron-status.invalid {
+  color: var(--_danger);
+}
