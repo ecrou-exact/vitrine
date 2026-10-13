@@ -45,6 +45,9 @@
           <option value="yaml">YAML</option>
           <option value="xml">XML</option>
           <option value="toml">TOML</option>
+          <option value="jwt">JWT</option>
+          <option value="cron">Cron</option>
+          <option value="cert">Certificates</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -1514,6 +1517,152 @@ export { unit };</template>
                 ip = "10.0.0.2"
               </template>
             </vt-toml>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="jwt" aria-labelledby="jwt-title">
+        <h2 id="jwt-title">&lt;vt-jwt&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An access token</h3>
+            <p>Header and payload as trees, registered claims explained, dates in your language. <code>now</code> fixes the time used for the status.</p>
+          </div>
+          <template>
+            <vt-jwt variant="full" now="2026-10-06T12:00:00Z" mask-signature>
+              <template>
+                eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjIwMjYtMTAifQ.eyJpc3MiOiJodHRwczovL2lkLmV4YW1wbGUuY29tIiwic3ViIjoiNDIiLCJhdWQiOiJzaG9wIiwiZW1haWwiOiJhZGFAZXhhbXBsZS5jb20iLCJzY29wZSI6Im9yZGVyczpyZWFkIG9yZGVyczp3cml0ZSIsImlhdCI6MTc5MTI3MzYwMCwibmJmIjoxNzkxMjczNjAwLCJleHAiOjE3OTEzNjAwMDB9.ZGVtby1zaWduYXR1cmUtbm90LXJlYWwtMDEyMzQ1Njc4OWFiY2RlZg
+              </template>
+            </vt-jwt>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Warnings</h3>
+            <p>An unsigned token (<code>alg: none</code>) without expiry is flagged. Nothing is ever verified or sent.</p>
+          </div>
+          <template>
+            <vt-jwt variant="full">
+              <template>
+                eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
+              </template>
+            </vt-jwt>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="cron" aria-labelledby="cron-title">
+        <h2 id="cron-title">&lt;vt-cron&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>One expression</h3>
+            <p>Each field is colored and explained; the next runs are listed in the time zone you choose, with a week grid.</p>
+          </div>
+          <template>
+            <vt-cron variant="full" expression="*/15 9-17 * * 1-5" timezone="Europe/Luxembourg" now="2026-10-13T08:00:00Z"></vt-cron>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A crontab</h3>
+            <p>Comments, variables and <code>CRON_TZ</code> are read; every entry gets its description, next run and highlighted command.</p>
+          </div>
+          <template>
+            <vt-cron variant="full" label="crontab" now="2026-10-13T08:00:00Z">
+              <template>
+                SHELL=/bin/bash
+                CRON_TZ=Europe/Luxembourg
+                # Nightly backup
+                0 2 * * * /usr/local/bin/backup --all
+                # Reports on weekdays
+                30 9 * * 1-5 curl -fsS https://example.com/report
+                */15 * * * * /opt/shop/bin/sync-stock
+                @reboot /opt/shop/bin/warm-cache
+              </template>
+            </vt-cron>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="cert" aria-labelledby="cert-title">
+        <h2 id="cert-title">&lt;vt-cert&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A chain</h3>
+            <p>Each certificate is a card linked to its issuer; the self-signed root is marked. Fingerprints are computed in the browser.</p>
+          </div>
+          <template>
+            <vt-cert variant="full" label="chain.pem" now="2026-10-14T12:00:00Z">
+              <template>
+                -----BEGIN CERTIFICATE-----
+                MIID4zCCA4igAwIBAgIGChssPU5fMAoGCCqGSM49BAMCMEMxCzAJBgNVBAYTAkxV
+                MRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS
+                b290IENBMB4XDTI2MTAxMzIxMDEzNFoXDTI3MTExNDIxMDEzNFowPzELMAkGA1UE
+                BhMCTFUxFTATBgNVBAoMDEV4YW1wbGUgU2hvcDEZMBcGA1UEAwwQc2hvcC5leGFt
+                cGxlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKu68SJTrEU7
+                7RdKVZQs1L8HHSxJwLrxqIZXDsI2ImCgEhWcofC0OJGbJqdDHsYFH9nOsgDur4Lt
+                sP8vu4XWIfTfx7HgU0MrvqcVs6HFK31oiN2O7lYmcEZem5CGKe/DhRN6qoYXNmxM
+                BDxm9GtjubYZkRCZWmARVIxrjm5z+g8TrsuarqBJnAE9LrF2uUETblMv1plJF+kh
+                f7BRSTG75oK3lyGs87I388XdfelM09OBF6JyAhA080xI43xO7T9QQa8C4hdxM6GX
+                SKlXYcBZsETHRVS8SC1Gco25cKsO7Px0DBF8aGngWBHiEydcpyeFbrBcIc8E12fr
+                idhxRE0ishkCAwEAAaOCAZ8wggGbMHcGA1UdEQRwMG6CEHNob3AuZXhhbXBsZS5j
+                b22CFHd3dy5zaG9wLmV4YW1wbGUuY29thwTAAAIKhxAgAQ24AAAAAAAAAAAAAAAB
+                gRFhZG1pbkBleGFtcGxlLmNvbYYZaHR0cHM6Ly9zaG9wLmV4YW1wbGUuY29tLzAJ
+                BgNVHRMEAjAAMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYI
+                KwYBBQUHAwIwHQYDVR0OBBYEFBEcFd4cUBw32ZMKzh0tTg5JznvgMB8GA1UdIwQY
+                MBaAFAyqLSbgIuAbs8T2GzLmLPHmR9gFMDAGA1UdHwQpMCcwJaAjoCGGH2h0dHA6
+                Ly9jcmwuZXhhbXBsZS5jb20vcm9vdC5jcmwwXwYIKwYBBQUHAQEEUzBRMCMGCCsG
+                AQUFBzABhhdodHRwOi8vb2NzcC5leGFtcGxlLmNvbTAqBggrBgEFBQcwAoYeaHR0
+                cDovL2NhLmV4YW1wbGUuY29tL3Jvb3QuY3J0MBMGA1UdIAQMMAowCAYGZ4EMAQIB
+                MAoGCCqGSM49BAMCA0kAMEYCIQCloC+xdq8JR1QrtqoG2eGjj502yeXyfHeJ+q+M
+                yzmEigIhAO+8uWrgQUpzQMbC8CO8EcyxorZT/nDDrYsAA4s7EX95
+                -----END CERTIFICATE-----
+                -----BEGIN CERTIFICATE-----
+                MIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG
+                A1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD
+                QTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV
+                MRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS
+                b290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg
+                P+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE
+                OKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA
+                FAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P
+                AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
+                5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=
+                -----END CERTIFICATE-----
+              </template>
+            </vt-cert>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A weak certificate</h3>
+            <p>SHA-1 signatures and RSA keys under 2048 bits are flagged. The ASN.1 tab shows the raw structure.</p>
+          </div>
+          <template>
+            <vt-cert variant="full" label="legacy.pem" now="2026-10-14T12:00:00Z">
+              <template>
+                -----BEGIN CERTIFICATE-----
+                MIICKjCCAZOgAwIBAgIUbEp/Ifj/mtp9BK4Er2p6O9W/VPMwDQYJKoZIhvcNAQEF
+                BQAwJzESMBAGA1UEAwwJd2Vhay50ZXN0MREwDwYDVQQKDAhPbGQgQ29ycDAeFw0y
+                NjEwMTMyMTAxMzRaFw0yNjEwMTQyMTAxMzRaMCcxEjAQBgNVBAMMCXdlYWsudGVz
+                dDERMA8GA1UECgwIT2xkIENvcnAwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGB
+                ALBjFUnfJPYqj/XuhGZRO5ULSaGQbqnjIJ+ajuLT2eDVgc+W7I05F4WqORm9vynx
+                HYV9u9v1LwUj9NuhvyHU7kON+MI4c3Y6PubAuVA3N5IZ4sGgQFhqh6QKyqyvWvJQ
+                ugiZXWNp2zS/aR5bSjnfk9GBJNwkLOhiMG4Xrpw9VuzjAgMBAAGjUzBRMB0GA1Ud
+                DgQWBBSmjHPOm8LZ3oEvJQDreNPCc8FdODAfBgNVHSMEGDAWgBSmjHPOm8LZ3oEv
+                JQDreNPCc8FdODAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBABC/
+                J923w66/UExsO0BhqJ2dlVVLZ6VQgWqs5CmRf2iu7NuibuVezJ34Y55TIWA68Hzq
+                GXhn7CRRPyeQmG3SGmxEMp6EnG8NZhHTdzM5n+QdfZypjNzPG+HXBzc/7NSjkRpJ
+                6b1yXzXGEWfOuj7kLJIz9gRV3Ov0LJ4pC8DL+g2t
+                -----END CERTIFICATE-----
+              </template>
+            </vt-cert>
           </template>
         </article>
       </section>

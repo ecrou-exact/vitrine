@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Twenty-one elements, view or edit</h2>
+            <h2 id="components-title">Twenty-four elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -426,6 +426,45 @@ serde = { version = "1.0", features = ["derive"] }
 tokio = "1.40"</template>
               </vt-toml>
               <a href="examples.html#toml">TOML examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-jwt&gt;</h3>
+              <p>
+                JSON Web Tokens decoded: header, claims in words, expiry and warnings. Never verified, never sent anywhere.
+              </p>
+              <vt-jwt class="preview" now="2026-10-06T12:00:00Z">
+                <template>eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjIwMjYtMTAifQ.eyJpc3MiOiJodHRwczovL2lkLmV4YW1wbGUuY29tIiwic3ViIjoiNDIiLCJhdWQiOiJzaG9wIiwiZW1haWwiOiJhZGFAZXhhbXBsZS5jb20iLCJzY29wZSI6Im9yZGVyczpyZWFkIG9yZGVyczp3cml0ZSIsImlhdCI6MTc5MTI3MzYwMCwibmJmIjoxNzkxMjczNjAwLCJleHAiOjE3OTEzNjAwMDB9.ZGVtby1zaWduYXR1cmUtbm90LXJlYWwtMDEyMzQ1Njc4OWFiY2RlZg</template>
+              </vt-jwt>
+              <a href="examples.html#jwt">JWT examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-cron&gt;</h3>
+              <p>
+                Cron expressions and crontabs explained in words, with the next runs in your time zone and a week grid.
+              </p>
+              <vt-cron class="preview" expression="30 9 * * 1-5" now="2026-10-13T08:00:00Z" timezone="Europe/Luxembourg"></vt-cron>
+              <a href="examples.html#cron">Cron examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-cert&gt;</h3>
+              <p>
+                X.509 certificates and chains from PEM: names, validity, keys, extensions and fingerprints, read without fetching anything.
+              </p>
+              <vt-cert class="preview" now="2026-10-14T12:00:00Z">
+                <template>-----BEGIN CERTIFICATE-----
+MIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG
+A1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD
+QTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV
+MRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS
+b290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg
+P+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE
+OKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA
+FAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P
+AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
+5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=
+-----END CERTIFICATE-----</template>
+              </vt-cert>
+              <a href="examples.html#cert">Certificate examples</a>
             </article>
           </div>
         </div>
