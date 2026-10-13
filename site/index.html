@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Fifteen elements, view or edit</h2>
+            <h2 id="components-title">Eighteen elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -322,6 +322,59 @@ CACHE_URL=${DATABASE_URL}/cache</template>
 ]</template>
               </vt-timeline>
               <a href="examples.html#timeline">Timeline examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-job&gt;</h3>
+              <p>
+                Jobs and pipelines with a progress bar, steps with their status and duration, and the log of each step.
+              </p>
+              <vt-job class="preview">
+                <template># deploy
+## Checkout
+status: success
+duration: 2s
+Cloning into 'shop'...
+## Install
+status: success
+duration: 18s
+added 412 packages in 17.9s
+## Test
+status: running
+progress: 64
+PASS src/cart.test.js
+PASS src/checkout.test.js
+RUNS src/payment.test.js
+## Deploy
+status: queued</template>
+              </vt-job>
+              <a href="examples.html#job">Job examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-git&gt;</h3>
+              <p>
+                Commit history as a graph of branches and merges, with branch labels, tags and the details of each commit.
+              </p>
+              <vt-git class="preview">
+                <template>* 9f3c2a1 (HEAD -> main, origin/main, tag: v1.2.0) Merge branch 'feature/login'
+|\
+| * 4b7e9d0 (feature/login) Add login form
+| * 2a1c8f3 Validate passwords
+* | 7d6e5b4 Fix cart total rounding
+|/
+* 1e0f9a2 Add checkout page
+* 0c3b7d1 Initial commit</template>
+              </vt-git>
+              <a href="examples.html#git">Git examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-regex&gt;</h3>
+              <p>
+                Regular expressions explained and tested: tokens colored, matches and groups highlighted in the text.
+              </p>
+              <vt-regex class="preview" pattern="(?&lt;user&gt;[\w.]+)@(?&lt;host&gt;[\w.-]+)">
+                <template>ada@example.com, alan.turing@test.org</template>
+              </vt-regex>
+              <a href="examples.html#regex">Regex examples</a>
             </article>
           </div>
         </div>
