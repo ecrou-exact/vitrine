@@ -37,6 +37,9 @@
         <a href="#env">Env</a>
         <a href="#hex">Hex</a>
         <a href="#timeline">Timeline</a>
+        <a href="#job">Job</a>
+        <a href="#git">Git</a>
+        <a href="#regex">Regex</a>
         <a href="#api">JavaScript</a>
       </nav>
 
@@ -1233,6 +1236,135 @@ export { unit };</template>
                 - Faster start.
               </template>
             </vt-timeline>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="job" aria-labelledby="job-title">
+        <h2 id="job-title">&lt;vt-job&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A running job</h3>
+            <p>The bar follows the steps; a running step shows its own progress. Open a step to read its log.</p>
+          </div>
+          <template>
+            <vt-job variant="full" label="deploy">
+              <template>
+                # deploy
+                ## Checkout
+                status: success
+                duration: 2s
+                Cloning into 'shop'...
+                ## Install
+                status: success
+                duration: 18s
+                added 412 packages in 17.9s
+                ## Test
+                status: running
+                progress: 64
+                PASS src/cart.test.js
+                PASS src/checkout.test.js
+                RUNS src/payment.test.js
+                ## Deploy
+                status: queued
+              </template>
+            </vt-job>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A failed run from JSON</h3>
+            <p>The failed step opens by default, with ANSI colors in its log. The search goes through every step.</p>
+          </div>
+          <template>
+            <vt-job variant="full">
+              <template>
+                {
+                  "name": "build #1841",
+                  "steps": [
+                    { "name": "Checkout", "status": "success", "duration": 2, "log": "Cloning into 'shop'..." },
+                    { "name": "Install", "status": "success", "duration": 18, "log": "added 412 packages in 17.9s" },
+                    { "name": "Test", "status": "failure", "duration": 41, "log": "PASS src/cart.test.js\n\u001b[31mFAIL\u001b[0m src/payment.test.js\n  Expected: 200\n  Received: 402" },
+                    { "name": "Deploy", "status": "skipped" }
+                  ]
+                }
+              </template>
+            </vt-job>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="git" aria-labelledby="git-title">
+        <h2 id="git-title">&lt;vt-git&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>From <code>git log --graph</code></h3>
+            <p>Paste the output of <code>git log --graph --oneline --decorate</code>: lanes, merges and labels are drawn from it. Select a commit to see its details.</p>
+          </div>
+          <template>
+            <vt-git variant="full" label="shop">
+              <template>
+                * 9f3c2a1 (HEAD -> main, origin/main, tag: v1.2.0) Merge branch 'feature/login'
+                |\
+                | * 4b7e9d0 (feature/login) Add login form
+                | * 2a1c8f3 Validate passwords
+                * | 7d6e5b4 Fix cart total rounding
+                |/
+                * 1e0f9a2 Add checkout page
+                * 0c3b7d1 Initial commit
+              </template>
+            </vt-git>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>From a pretty format, with authors and dates</h3>
+            <p>With <code>--pretty=format:'%H|%P|%an|%ad|%D|%s'</code> the lanes are computed from the parents. The branch buttons show only what a branch reaches.</p>
+          </div>
+          <template>
+            <vt-git variant="full" label="shop">
+              <template>
+                9f3c2a1e|7d6e5b4c 4b7e9d0a|Ada Lovelace|2026-10-12T10:00:00Z|HEAD -> main, origin/main, tag: v1.2.0|Merge branch 'feature/login'
+                4b7e9d0a|2a1c8f3b|Alan Turing|2026-10-11T16:20:00Z|feature/login|Add login form
+                7d6e5b4c|1e0f9a2d|Grace Hopper|2026-10-11T09:12:00Z||Fix cart total rounding
+                2a1c8f3b|1e0f9a2d|Alan Turing|2026-10-10T14:03:00Z||Validate passwords
+                5c9d8e7f|1e0f9a2d|Linus Torvalds|2026-10-10T11:45:00Z|origin/hotfix/tax|Round tax per line
+                1e0f9a2d|0c3b7d1e|Ada Lovelace|2026-10-09T08:30:00Z||Add checkout page
+                0c3b7d1e||Ada Lovelace|2026-10-08T08:00:00Z||Initial commit
+              </template>
+            </vt-git>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="regex" aria-labelledby="regex-title">
+        <h2 id="regex-title">&lt;vt-regex&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Named groups</h3>
+            <p>The pattern is colored by part and explained in words; each group has its color in the text and its column in the table.</p>
+          </div>
+          <template>
+            <vt-regex variant="full" pattern="(?&lt;user&gt;[\w.]+)@(?&lt;host&gt;[\w.-]+)" flags="gi">
+              <template>Contact ada@example.com or alan.turing@test.org, not @nobody.</template>
+            </vt-regex>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Replace</h3>
+            <p><code>replace</code> shows the result of the substitution, with <code>$1</code> or <code>$&lt;name&gt;</code>.</p>
+          </div>
+          <template>
+            <vt-regex variant="full" pattern="(\d{4})-(\d{2})-(\d{2})" replace="$3/$2/$1">
+              <template>Released 2026-10-13, patched 2026-10-20.</template>
+            </vt-regex>
           </template>
         </article>
       </section>
