@@ -1,4 +1,6 @@
 // @ts-check
+import { defineStrings } from '../../core/i18n.js';
+import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import envCss from '../../styles/env.css?raw';
@@ -14,6 +16,8 @@ import { MAX_MATCHES, MAX_QUERY_LENGTH, TextSearch } from '../../core/search.js'
 import { createTabs, iconButton, noticeView } from '../../core/ui.js';
 import { isSecretName, maskValue } from '../http/secrets.js';
 import { FORMATS, parseEnv, splitReferences } from './parser.js';
+
+defineStrings({ en: strings, fr: stringsFr });
 
 /** @typedef {import('./parser.js').EnvEntry} EnvEntry */
 /** @typedef {import('./parser.js').EnvResult} EnvResult */

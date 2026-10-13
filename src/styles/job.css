@@ -1,0 +1,290 @@
+/*
+ * Job: a summary with the status, duration and progress bar, then steps that open to
+ * show their logs.
+ */
+.job-body {
+  padding: var(--_space-4) var(--_space-5);
+  background: var(--_surface);
+  /* Without a height limit the page scrolls, not the job. */
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .job-body,
+.vt[data-fullscreen] .job-body {
+  overscroll-behavior: contain;
+}
+
+/* ---------- Statuses ---------- */
+
+.status-queued,
+.status-skipped,
+.status-cancelled {
+  --_tone: var(--_fg-muted);
+}
+
+.status-running {
+  --_tone: var(--_info);
+}
+
+.status-success {
+  --_tone: var(--_success);
+}
+
+.status-failure {
+  --_tone: var(--_danger);
+}
+
+.job-status {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  color: var(--_tone);
+  font: 600 var(--_font-size-ui) / 1 var(--_font-ui);
+}
+
+.job-status .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.job-status.status-running .icon {
+  animation: vt-job-spin 1s linear infinite;
+}
+
+@keyframes vt-job-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Summary ---------- */
+
+.job-summary {
+  display: grid;
+  gap: var(--_space-2);
+  padding-bottom: var(--_space-4);
+  margin-bottom: var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+}
+
+.job-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-3);
+}
+
+.job-title h2 {
+  margin: 0;
+  color: var(--_fg);
+  font: 600 16px / 1.3 var(--_font-ui);
+}
+
+.job-percent {
+  margin-left: auto;
+  color: var(--_fg-muted);
+  font: 500 var(--_font-size-ui) / 1 var(--_font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.job-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-4);
+  color: var(--_fg-muted);
+  font: var(--_font-size-ui) / 1.4 var(--_font-ui);
+}
+
+.job-duration {
+  color: var(--_fg-muted);
+  font: var(--_font-size-small) / 1 var(--_font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Progress bars ---------- */
+
+.job-progress {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--_radius-full);
+  background: color-mix(in srgb, var(--_tone, var(--_accent)) 15%, var(--_surface-sunken));
+}
+
+.job-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--_value, 0%);
+  border-radius: inherit;
+  background: var(--_tone, var(--_accent));
+  transition: width var(--_duration) var(--_easing);
+}
+
+.job-progress.indeterminate .job-progress-fill {
+  width: 35%;
+  animation: vt-job-slide 1.4s var(--_easing) infinite;
+}
+
+@keyframes vt-job-slide {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(300%);
+  }
+}
+
+.job-progress.mini {
+  flex: 0 1 120px;
+  height: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .job-status.status-running .icon,
+  .job-progress.indeterminate .job-progress-fill {
+    animation: none;
+  }
+
+  /* Without motion, an unknown progress reads as a half-filled, faded bar. */
+  .job-progress.indeterminate .job-progress-fill {
+    width: 50%;
+    opacity: 0.6;
+  }
+}
+
+/* ---------- Steps ---------- */
+
+.job-steps {
+  display: grid;
+  gap: var(--_space-1);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.job-step {
+  overflow: hidden;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.job-step.status-failure {
+  border-color: color-mix(in srgb, var(--_danger) 40%, var(--_border));
+}
+
+.job-step-head {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  width: 100%;
+  min-height: 36px;
+  padding: 0 var(--_space-3);
+  border: 0;
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 500 var(--_font-size-ui) / 1.3 var(--_font-ui);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--_duration-fast) var(--_easing);
+}
+
+.job-step-head:hover {
+  background: color-mix(in srgb, var(--_fg) 4%, var(--_surface));
+}
+
+.job-step-head:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.job-step-head > .icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--_fg-muted);
+  transition: transform var(--_duration-fast) var(--_easing);
+}
+
+.job-step-head[aria-expanded='true'] > .icon {
+  transform: rotate(90deg);
+}
+
+.job-step-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-step-word {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.job-step.status-skipped .job-step-name,
+.job-step.status-queued .job-step-name {
+  color: var(--_fg-muted);
+}
+
+/* ---------- Logs ---------- */
+
+.job-log {
+  max-height: min(50vh, 420px);
+  padding: var(--_space-2) 0;
+  overflow: auto;
+  border-top: 1px solid var(--_border);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font: var(--_font-size-small) / var(--_line-height) var(--_font-mono);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.job-log:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.job-line {
+  display: flex;
+  min-width: max-content;
+}
+
+.job-ln {
+  flex: none;
+  width: 4.5ch;
+  padding-right: var(--_space-3);
+  color: var(--_fg-muted);
+  text-align: right;
+  user-select: none;
+}
+
+.job-text {
+  padding-right: var(--_space-4);
+  white-space: pre;
+}
+
+.job-log-empty {
+  padding: 0 var(--_space-4);
+  color: var(--_fg-muted);
+}
+
+mark.match {
+  border-radius: 2px;
+  background: var(--_highlight);
+  color: inherit;
+}
+
+mark.match.current {
+  background: var(--_highlight-current);
+}
+
+/* ---------- Edit mode ---------- */
+
+.job-edit > .editor-body {
+  max-height: min(40vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}

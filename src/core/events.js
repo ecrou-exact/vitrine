@@ -47,6 +47,12 @@ export const EVENTS = Object.freeze({
   TYPING_END: 'vt-typing-end',
   /** Diff: moved to a change. Detail: `{ index, total, original, modified }`. */
   CHANGE_NAVIGATE: 'vt-change-navigate',
+  /** Job: a step was opened or closed. Detail: `{ name, open }`. */
+  STEP_TOGGLE: 'vt-step-toggle',
+  /** Job: the status of the job or a step changed. Detail: `{ status, step, previous }`. */
+  JOB_CHANGE: 'vt-job-change',
+  /** Regex: matching ran. Detail: `{ count, capped, timedOut }`. */
+  MATCH: 'vt-match',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

@@ -1,4 +1,6 @@
 // @ts-check
+import { defineStrings } from '../../core/i18n.js';
+import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import timelineCss from '../../styles/timeline.css?raw';
@@ -20,6 +22,8 @@ import {
   readEvents,
   sortEvents,
 } from './events.js';
+
+defineStrings({ en: strings, fr: stringsFr });
 
 /** @typedef {import('./events.js').TimelineEvent} TimelineEvent */
 
