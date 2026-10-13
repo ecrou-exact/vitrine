@@ -18,7 +18,10 @@
  *   | keyof typeof import('../components/timeline/strings.js').en
  *   | keyof typeof import('../components/job/strings.js').en
  *   | keyof typeof import('../components/git/strings.js').en
- *   | keyof typeof import('../components/regex/strings.js').en} StringKey
+ *   | keyof typeof import('../components/regex/strings.js').en
+ *   | keyof typeof import('../components/toml/strings.js').en
+ *   | keyof typeof import('../components/yaml/strings.js').en
+ *   | keyof typeof import('../components/xml/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

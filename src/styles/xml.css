@@ -1,0 +1,36 @@
+/*
+ * XML tree: adds element, prefix and closing-tag styles to the JSON tree styles.
+ * Spec: docs/DESIGN_SYSTEM.md §2.4 (syntax roles) and §6 (tree-toggle).
+ */
+.xml-prefix {
+  color: var(--_fg-muted);
+}
+
+.xml-text {
+  color: var(--_code-fg);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.row > .xml-text,
+.row > .xml-comment,
+.row > .xml-cdata,
+.row > .xml-doctype {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.xml-close > .row {
+  color: var(--_fg-muted);
+}
+
+.xml-close > .row:hover {
+  background: none;
+}
+
+.xml-entity {
+  text-decoration: underline dashed;
+  text-underline-offset: 3px;
+}

@@ -31,6 +31,8 @@ const DATA_SCRIPT_TYPES = new Set([
   'text/x-markdown',
   'application/json',
   'text/json',
+  'application/xml',
+  'text/xml',
 ]);
 
 /**

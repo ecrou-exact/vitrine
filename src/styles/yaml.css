@@ -1,0 +1,26 @@
+/*
+ * YAML additions to the JSON tree: number of documents and the anchors of the stream.
+ */
+.yaml-anchors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+  align-items: center;
+  padding: var(--_space-2) var(--_space-4);
+  border-top: 1px solid var(--_border);
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.yaml-docs {
+  margin-right: var(--_space-3);
+}
+
+.yaml-anchor {
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  color: var(--_accent-fg);
+  font-family: var(--_font-mono);
+}

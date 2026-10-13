@@ -17,6 +17,7 @@
  * @property {number} id - Unique id within the document.
  * @property {JsonContainer | null} parent
  * @property {string | number | null} key - Key in the parent object, or index in the parent array.
+ * @property {string} [kind] - Type shown instead of `type`, for formats with more types (TOML dates).
  */
 /** @typedef {JsonBase & { type: "object", entries: { key: string, value: JsonNode }[] }} JsonObject */
 /** @typedef {JsonBase & { type: "array", items: JsonNode[] }} JsonArray */

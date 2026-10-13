@@ -207,7 +207,7 @@ export class JsonTree {
       row.append(this.renderValue(node));
     }
     if (this.options.showTypes)
-      row.append(h('span', { class: 'type', part: 'type-badge', text: node.type }));
+      row.append(h('span', { class: 'type', part: 'type-badge', text: node.kind ?? node.type }));
     this.decorate(row, node);
     return row;
   }
@@ -237,9 +237,10 @@ export class JsonTree {
     }
     const text =
       node.type === 'number' ? node.raw : node.type === 'boolean' ? String(node.value) : 'null';
-    const kind = node.type === 'number' ? 'number' : 'literal';
+    const date = node.kind ? /^(date|time)/.test(node.kind) : false;
+    const kind = date ? 'date' : node.type === 'number' ? 'number' : 'literal';
     return h('span', {
-      class: `value ${kind} ${kind === 'number' ? 'hljs-number' : 'hljs-literal'}`,
+      class: `value ${kind} ${kind === 'number' ? 'hljs-number' : kind === 'date' ? 'hljs-symbol' : 'hljs-literal'}`,
       part: 'value',
       text,
     });

@@ -86,6 +86,20 @@ export class VtJson extends VtBase {
 
   static upgradeProperties = ['content', 'data'];
 
+  /** Language, file name, media type and badge of the source text (subclasses change them). */
+  /** @type {Readonly<{ language: string, file: string, mime: string, badge: string }>} */
+  static source = Object.freeze({
+    language: 'json',
+    file: 'data.json',
+    mime: 'application/json',
+    badge: 'JSON',
+  });
+
+  /** @returns {typeof VtJson.source} */
+  get source() {
+    return /** @type {typeof VtJson} */ (this.constructor).source;
+  }
+
   constructor() {
     super();
     /** @type {View | null} View chosen by the user; `null` follows the `view` attribute. */
@@ -227,9 +241,9 @@ export class VtJson extends VtBase {
         clear: () => activeTree.search(''),
       };
     } else {
-      const text = this.prettyText(root);
+      const text = this.rawText(root);
       const codeView = buildCodeView(text, {
-        language: 'json',
+        language: this.source.language,
         lineNumbers: this.feature('line-numbers'),
         startLine: 1,
         highlightRanges: [],
@@ -248,7 +262,11 @@ export class VtJson extends VtBase {
           {
             class: 'body',
             part: 'body',
-            attrs: { tabindex: '0', role: 'region', 'aria-label': this.heading || 'JSON' },
+            attrs: {
+              tabindex: '0',
+              role: 'region',
+              'aria-label': this.heading || this.source.badge,
+            },
           },
           codeView.element,
         ),
@@ -263,12 +281,13 @@ export class VtJson extends VtBase {
       this.fullscreenButton(),
       this.feature('download')
         ? this.downloadButton(
-            () => this.prettyText(root),
-            this.downloadName('data.json'),
-            'application/json',
+            () => this.rawText(root),
+            this.downloadName(this.source.file),
+            this.source.mime,
           )
         : null,
-      this.feature('copy') ? this.copyButton(() => this.prettyText(root), this.t('copy')) : null,
+      ...this.extraActions(root),
+      this.feature('copy') ? this.copyButton(() => this.rawText(root), this.t('copy')) : null,
     ].flat();
     const tabs = this.viewTabs(view);
     const panel = h(
@@ -276,7 +295,28 @@ export class VtJson extends VtBase {
       { class: 'panel', attrs: { id: this.panelId, role: tabs ? 'tabpanel' : null } },
       ...content,
     );
-    frame.append(...this.chrome({ badge: tabs ? '' : 'JSON', tabs, actions }), panel);
+    frame.append(...this.chrome({ badge: tabs ? '' : this.source.badge, tabs, actions }), panel);
+  }
+
+  /**
+   * Text of the raw view, copied and downloaded: pretty-printed JSON.
+   *
+   * @param {JsonNode} root
+   * @returns {string}
+   */
+  rawText(root) {
+    return this.prettyText(root);
+  }
+
+  /**
+   * Extra toolbar buttons, before the copy button.
+   *
+   * @param {JsonNode} root
+   * @returns {(HTMLButtonElement | null)[]}
+   */
+  // eslint-disable-next-line no-unused-vars
+  extraActions(root) {
+    return [];
   }
 
   /**
@@ -312,12 +352,12 @@ export class VtJson extends VtBase {
     this.editor?.destroy();
     const editor = new CodeEditor({
       text: this.text ?? '',
-      language: 'json',
+      language: this.source.language,
       lineNumbers: this.feature('line-numbers'),
       wrap: false,
       highlightRanges: error ? [[error.line, error.line]] : [],
       highlightLimit: getConfig().highlightLimit,
-      label: this.heading || `JSON ${t('editor').toLowerCase()}`,
+      label: this.heading || `${this.source.badge} ${t('editor').toLowerCase()}`,
       placeholder: this.getAttribute('placeholder') ?? undefined,
       onInput: (text) => this.edited(text),
       onChange: (text) => emit(this, EVENTS.CHANGE, { value: text }),
@@ -348,8 +388,8 @@ export class VtJson extends VtBase {
       this.feature('download')
         ? this.downloadButton(
             () => this.text ?? '',
-            this.downloadName('data.json'),
-            'application/json',
+            this.downloadName(this.source.file),
+            this.source.mime,
           )
         : null,
       this.feature('copy') ? this.copyButton(() => this.text ?? '', t('copy')) : null,
@@ -360,25 +400,43 @@ export class VtJson extends VtBase {
       h('div', { class: 'body editor-body', part: 'body' }, editor.element),
       parseBoolean(this.getAttribute('status')) === false ? null : this.status,
     );
-    frame.append(...this.chrome({ badge: tabs ? '' : 'JSON', tabs, actions }), panel);
+    frame.append(...this.chrome({ badge: tabs ? '' : this.source.badge, tabs, actions }), panel);
     editor.align();
   }
 
   /**
-   * Shows whether the edited text is valid JSON.
+   * @returns {string} Status shown in the editor when the text is valid.
+   */
+  validMessage() {
+    return this.t('validJson');
+  }
+
+  /**
+   * @param {import('./parser.js').JsonSyntaxError} error
+   * @returns {string}
+   */
+  syntaxMessage(error) {
+    return error.tooDeep
+      ? this.t('tooDeep', { limit: getConfig().maxDepth })
+      : this.t('invalidJson', { line: error.line, column: error.column, message: error.message });
+  }
+
+  /**
+   * @param {import('./parser.js').JsonSyntaxError} error
+   * @returns {string}
+   */
+  rawNotice(error) {
+    return this.t('invalidJsonRaw', { line: error.line, column: error.column });
+  }
+
+  /**
+   * Shows whether the edited text is valid.
    *
    * @param {ParseResult} result
    */
   showStatus(result) {
     if (!this.status) return;
-    const t = this.t;
-    let message = t('validJson');
-    if (!result.ok) {
-      const { error } = result;
-      message = error.tooDeep
-        ? t('tooDeep', { limit: getConfig().maxDepth })
-        : t('invalidJson', { line: error.line, column: error.column, message: error.message });
-    }
+    const message = result.ok ? this.validMessage() : this.syntaxMessage(result.error);
     this.status.className = `edit-status ${result.ok ? 'ok' : 'bad'}`;
     this.status.replaceChildren(icon(result.ok ? 'check' : 'alert'), h('span', { text: message }));
   }
@@ -499,9 +557,7 @@ export class VtJson extends VtBase {
       /** @type {const} */ (['error', 'raw']),
       'error',
     );
-    const message = error.tooDeep
-      ? t('tooDeep', { limit: getConfig().maxDepth })
-      : t('invalidJson', { line: error.line, column: error.column, message: error.message });
+    const message = this.syntaxMessage(error);
     const view = buildCodeView(this.text ?? '', {
       language: 'plaintext',
       lineNumbers: true,
@@ -515,22 +571,20 @@ export class VtJson extends VtBase {
       {
         class: 'body',
         part: 'body',
-        attrs: { tabindex: '0', role: 'region', 'aria-label': this.heading || 'JSON' },
+        attrs: { tabindex: '0', role: 'region', 'aria-label': this.heading || this.source.badge },
       },
       view.element,
     );
     frame.append(
       ...this.chrome({
-        badge: 'JSON',
+        badge: this.source.badge,
         actions: [
           this.editToggleButton(),
           this.fullscreenButton(),
           this.feature('copy') ? this.copyButton(() => this.text ?? '') : null,
         ],
       }),
-      mode === 'raw'
-        ? noticeView(t('invalidJsonRaw', { line: error.line, column: error.column }))
-        : errorView(t('errorTitle'), message),
+      mode === 'raw' ? noticeView(this.rawNotice(error)) : errorView(t('errorTitle'), message),
       body,
     );
     requestAnimationFrame(() => {
