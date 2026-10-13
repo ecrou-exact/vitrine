@@ -247,6 +247,21 @@ const ICONS = {
     ],
     ['path', { d: 'm2 2 20 20' }],
   ],
+  'status-circle': [['circle', { cx: '12', cy: '12', r: '9' }]],
+  'status-running': [['path', { d: 'M21 12a9 9 0 1 1-6.22-8.56' }]],
+  'status-skipped': [
+    ['circle', { cx: '12', cy: '12', r: '9' }],
+    ['path', { d: 'm5.7 5.7 12.6 12.6' }],
+  ],
+  'status-success': [
+    ['circle', { cx: '12', cy: '12', r: '9' }],
+    ['path', { d: 'm8.5 12 2.5 2.5 4.5-5' }],
+  ],
+  'status-failure': [
+    ['circle', { cx: '12', cy: '12', r: '9' }],
+    ['path', { d: 'm15 9-6 6' }],
+    ['path', { d: 'm9 9 6 6' }],
+  ],
 };
 
 /** @typedef {keyof typeof ICONS} IconName */

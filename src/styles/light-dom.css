@@ -50,7 +50,10 @@ vt-env:not(:defined),
 vt-chart:not(:defined),
 vt-openapi:not(:defined),
 vt-timeline:not(:defined),
-vt-hex:not(:defined) {
+vt-git:not(:defined),
+vt-job:not(:defined),
+vt-hex:not(:defined),
+vt-regex:not(:defined) {
   position: relative;
   min-height: 96px;
   max-height: 160px;
@@ -70,7 +73,9 @@ vt-hex:not(:defined) {
     vt-http,
     vt-log,
     vt-env,
-    vt-timeline
+    vt-timeline,
+    vt-git,
+    vt-job
   ):not(:defined)::before {
   content: '';
   position: absolute;
@@ -98,7 +103,9 @@ vt-hex:not(:defined) {
     vt-http,
     vt-log,
     vt-env,
-    vt-timeline
+    vt-timeline,
+    vt-git,
+    vt-job
   ):not(:defined)::after {
   content: '';
   position: absolute;
@@ -141,7 +148,9 @@ vt-hex:not(:defined) {
       vt-http,
       vt-log,
       vt-env,
-      vt-timeline
+      vt-timeline,
+      vt-git,
+      vt-job
     ):not(:defined)::after {
     animation: vt-pending 0ms 300ms forwards;
   }

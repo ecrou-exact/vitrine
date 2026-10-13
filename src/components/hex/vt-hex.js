@@ -1,4 +1,6 @@
 // @ts-check
+import { defineStrings } from '../../core/i18n.js';
+import { en as strings, fr as stringsFr } from './strings.js';
 import hexCss from '../../styles/hex.css?raw';
 import { parseBoolean, parseEnum, parseInteger } from '../../core/attributes.js';
 import { VtBase } from '../../core/base-element.js';
@@ -22,6 +24,8 @@ import {
   toHex,
 } from './bytes.js';
 import { fetchBytes } from './fetch-bytes.js';
+
+defineStrings({ en: strings, fr: stringsFr });
 
 const FORMATS = /** @type {const} */ (['auto', 'hex', 'base64']);
 /** Rows built at once; longer dumps are built in blocks as they scroll into view. */

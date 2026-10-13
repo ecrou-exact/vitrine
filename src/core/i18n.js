@@ -8,7 +8,18 @@
  * @module core/i18n
  */
 
-/** @typedef {keyof typeof en} StringKey */
+/**
+ * Keys of the core strings, and of the strings each component module defines with
+ * {@link defineStrings} (type-only imports: nothing is bundled from them).
+ *
+ * @typedef {keyof typeof en
+ *   | keyof typeof import('../components/env/strings.js').en
+ *   | keyof typeof import('../components/hex/strings.js').en
+ *   | keyof typeof import('../components/timeline/strings.js').en
+ *   | keyof typeof import('../components/job/strings.js').en
+ *   | keyof typeof import('../components/git/strings.js').en
+ *   | keyof typeof import('../components/regex/strings.js').en} StringKey
+ */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 
 const en = Object.freeze({
@@ -115,13 +126,6 @@ const en = Object.freeze({
   followLog: 'Follow new lines',
   levelToggle: 'Show or hide {level} entries',
   logNoMatch: 'No entry matches the filters.',
-  env: 'Configuration',
-  envKey: 'Key',
-  envValue: 'Value',
-  envEmpty: 'empty',
-  envSecret: 'Secret value, masked',
-  envNoMatch: 'No entry matches the search.',
-  envInvalid: '{count} lines could not be read (first: line {line}).',
   chartView: 'Chart',
   legend: 'Legend',
   seriesToggle: 'Show or hide {name}',
@@ -155,22 +159,6 @@ const en = Object.freeze({
   openapiResponses: 'Responses',
   openapiExample: 'Example',
   openapiExampleValue: 'Example',
-  timelineInvalid: 'These events could not be read: {message}',
-  timelineCount: '{count} events',
-  timelineNoMatch: 'No event matches.',
-  timelineKinds: 'Kinds',
-  timelineAll: 'All',
-  timelineNewest: 'Newest first',
-  timelineOldest: 'Oldest first',
-  timelineCopyJson: 'Copy as JSON',
-  timelineMore: 'Show more',
-  timelineLess: 'Show less',
-  timelineKindInfo: 'Info',
-  timelineKindSuccess: 'Success',
-  timelineKindWarning: 'Warning',
-  timelineKindDanger: 'Danger',
-  timelineKindRelease: 'Release',
-  timelineKindNeutral: 'Other',
   unchangedLines: 'Show {count} unchanged lines',
   copyPatch: 'Copy patch',
   changes: 'Changes',
@@ -224,12 +212,6 @@ const en = Object.freeze({
   stopEditing: 'Stop editing',
   editor: 'Editor',
   validJson: 'Valid JSON',
-  hexLabel: 'Bytes',
-  hexSize: '{size} bytes',
-  hexCopyHex: 'Copy as hex',
-  hexCopyBase64: 'Copy as base64',
-  hexByte: 'Offset {offset}: {value}, {char}',
-  hexInvalid: 'These bytes could not be read: {message}',
 });
 
 const fr = Object.freeze({
@@ -339,13 +321,6 @@ const fr = Object.freeze({
   followLog: 'Suivre les nouvelles lignes',
   levelToggle: 'Afficher ou masquer les entrées {level}',
   logNoMatch: 'Aucune entrée ne correspond aux filtres.',
-  env: 'Configuration',
-  envKey: 'Clé',
-  envValue: 'Valeur',
-  envEmpty: 'vide',
-  envSecret: 'Valeur secrète, masquée',
-  envNoMatch: 'Aucune entrée ne correspond à la recherche.',
-  envInvalid: '{count} lignes n’ont pas pu être lues (première : ligne {line}).',
   chartView: 'Graphique',
   legend: 'Légende',
   seriesToggle: 'Afficher ou masquer {name}',
@@ -379,22 +354,6 @@ const fr = Object.freeze({
   openapiResponses: 'Réponses',
   openapiExample: 'Exemple',
   openapiExampleValue: 'Exemple',
-  timelineInvalid: 'Impossible de lire ces événements : {message}',
-  timelineCount: '{count} événements',
-  timelineNoMatch: 'Aucun événement ne correspond.',
-  timelineKinds: 'Types',
-  timelineAll: 'Tous',
-  timelineNewest: 'Plus récents d’abord',
-  timelineOldest: 'Plus anciens d’abord',
-  timelineCopyJson: 'Copier en JSON',
-  timelineMore: 'Afficher plus',
-  timelineLess: 'Afficher moins',
-  timelineKindInfo: 'Info',
-  timelineKindSuccess: 'Succès',
-  timelineKindWarning: 'Avertissement',
-  timelineKindDanger: 'Danger',
-  timelineKindRelease: 'Version',
-  timelineKindNeutral: 'Autre',
   unchangedLines: 'Afficher {count} lignes inchangées',
   copyPatch: 'Copier le patch',
   changes: 'Modifications',
@@ -448,13 +407,27 @@ const fr = Object.freeze({
   stopEditing: 'Terminer la modification',
   editor: 'Éditeur',
   validJson: 'JSON valide',
-  hexLabel: 'Octets',
-  hexSize: '{size} octets',
-  hexCopyHex: 'Copier en hexadécimal',
-  hexCopyBase64: 'Copier en base64',
-  hexByte: 'Position {offset} : {value}, {char}',
-  hexInvalid: 'Ces octets n’ont pas pu être lus : {message}',
 });
+
+/** @type {Record<string, string>} Strings of component modules, in English. */
+const extraEn = {};
+
+/** @type {Map<string, Record<string, string>>} Built-in translations of component strings. */
+const extraLocales = new Map();
+
+/**
+ * Adds the strings of a component module (English and built-in translations).
+ * Locales registered with {@link registerLocale} still take precedence.
+ *
+ * @param {Record<string, Readonly<Record<string, string>>>} table - `{ en: {...}, fr: {...} }`.
+ */
+export function defineStrings(table) {
+  for (const [code, strings] of Object.entries(table)) {
+    if (code === 'en') Object.assign(extraEn, strings);
+    else extraLocales.set(code, { ...(extraLocales.get(code) ?? {}), ...strings });
+  }
+  for (const listener of localeListeners) listener();
+}
 
 /** @type {Map<string, Partial<Strings>>} */
 const locales = new Map(
@@ -481,7 +454,11 @@ export function registerLocale(code, strings) {
   /** @type {Record<string, string>} */
   const clean = {};
   for (const [key, value] of Object.entries(strings ?? {})) {
-    if (Object.prototype.hasOwnProperty.call(en, key) && typeof value === 'string') {
+    if (
+      (Object.prototype.hasOwnProperty.call(en, key) ||
+        Object.prototype.hasOwnProperty.call(extraEn, key)) &&
+      typeof value === 'string'
+    ) {
       clean[key] = value.slice(0, 500);
     }
   }
@@ -511,10 +488,20 @@ export function onLocaleChange(listener) {
  * @returns {(key: keyof Strings, params?: Record<string, string | number>) => string}
  */
 export function translator(code) {
-  const exact = locales.get(code);
-  const base = locales.get(String(code).split('-')[0]);
+  const exact = /** @type {Record<string, string> | undefined} */ (locales.get(code));
+  const base = /** @type {Record<string, string> | undefined} */ (
+    locales.get(String(code).split('-')[0])
+  );
   return (key, params) => {
-    const template = exact?.[key] ?? base?.[key] ?? en[key] ?? String(key);
+    const lang = String(code).split('-')[0];
+    const template =
+      exact?.[key] ??
+      base?.[key] ??
+      extraLocales.get(code)?.[key] ??
+      extraLocales.get(lang)?.[key] ??
+      /** @type {Record<string, string>} */ (en)[key] ??
+      extraEn[key] ??
+      String(key);
     if (!params) return template;
     return template.replace(/\{(\w+)\}/g, (match, name) =>
       Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match,

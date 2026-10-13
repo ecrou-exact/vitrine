@@ -19,7 +19,10 @@ import { VtLog } from './components/log/vt-log.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { VtOpenapi } from './components/openapi/vt-openapi.js';
 import { VtTimeline } from './components/timeline/vt-timeline.js';
+import { VtGit } from './components/git/vt-git.js';
+import { VtJob } from './components/job/vt-job.js';
 import { VtHex } from './components/hex/vt-hex.js';
+import { VtRegex } from './components/regex/vt-regex.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -43,7 +46,10 @@ export {
   VtChart,
   VtOpenapi,
   VtTimeline,
+  VtGit,
+  VtJob,
   VtHex,
+  VtRegex,
   configure,
   getConfig,
   EVENTS,
@@ -86,7 +92,10 @@ export const registry = new Map(
     ['vt-chart', VtChart],
     ['vt-openapi', VtOpenapi],
     ['vt-timeline', VtTimeline],
+    ['vt-git', VtGit],
+    ['vt-job', VtJob],
     ['vt-hex', VtHex],
+    ['vt-regex', VtRegex],
   ]),
 );
 
@@ -106,7 +115,10 @@ const TYPES = /** @type {const} */ ({
   chart: 'vt-chart',
   openapi: 'vt-openapi',
   timeline: 'vt-timeline',
+  git: 'vt-git',
+  job: 'vt-job',
   hex: 'vt-hex',
+  regex: 'vt-regex',
 });
 
 /**
