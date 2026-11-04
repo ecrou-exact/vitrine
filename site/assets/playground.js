@@ -32,6 +32,16 @@ const SAMPLES = {
   toml: '[package]\nname = "shop"\nversion = "1.2.0"\nreleased = 2026-10-13\n\n[dependencies]\nserde = { version = "1.0", features = ["derive"] }\n',
   jwt: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjIwMjYtMTAifQ.eyJpc3MiOiJodHRwczovL2lkLmV4YW1wbGUuY29tIiwic3ViIjoiNDIiLCJhdWQiOiJzaG9wIiwiZW1haWwiOiJhZGFAZXhhbXBsZS5jb20iLCJzY29wZSI6Im9yZGVyczpyZWFkIG9yZGVyczp3cml0ZSIsImlhdCI6MTc5MTI3MzYwMCwibmJmIjoxNzkxMjczNjAwLCJleHAiOjE3OTEzNjAwMDB9.ZGVtby1zaWduYXR1cmUtbm90LXJlYWwtMDEyMzQ1Njc4OWFiY2RlZg\n',
   cron: 'SHELL=/bin/bash\nCRON_TZ=Europe/Luxembourg\n# Nightly backup\n0 2 * * * /usr/local/bin/backup --all\n# Reports on weekdays\n30 9 * * 1-5 curl -fsS https://example.com/report\n*/15 * * * * /opt/shop/bin/sync-stock\n@reboot /opt/shop/bin/warm-cache\n',
+  table: JSON.stringify(
+    ['Ada', 'Alan', 'Grace', 'Linus', 'Margaret', 'Ken', 'Barbara', 'Dennis'].map((name, i) => ({
+      id: i + 1,
+      name,
+      team: ['Core', 'Infra', 'Data'][i % 3],
+      score: [98, 95, 91, 88, 97, 84, 90, 86][i],
+      joined: `20${18 + (i % 6)}-0${1 + (i % 9)}-1${i % 9}`,
+      active: i % 3 !== 2,
+    })),
+  ),
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
 };
 
@@ -311,6 +321,30 @@ const SCHEMA = {
       { name: 'now', type: 'text', placeholder: 'now' },
     ],
   },
+  table: {
+    tag: 'vt-table',
+    flags: [
+      'sortable',
+      'filters',
+      'column-menu',
+      'resizable',
+      'reorderable',
+      'expandable',
+      'editable',
+      'footer',
+      'row-numbers',
+      'wrap',
+    ],
+    fields: [
+      { name: 'selectable', type: 'select', options: ['', 'none', 'single', 'multiple'] },
+      { name: 'group-by', type: 'text', placeholder: 'team' },
+      { name: 'density', type: 'select', options: ['', 'compact', 'normal', 'comfortable'] },
+      { name: 'layout', type: 'select', options: ['', 'auto', 'table', 'cards'] },
+      { name: 'page-size', type: 'number', placeholder: '50' },
+      { name: 'pinned', type: 'number', placeholder: '0' },
+      { name: 'row-key', type: 'text', placeholder: 'id' },
+    ],
+  },
   cert: {
     tag: 'vt-cert',
     flags: ['tabs', 'fingerprints', 'extensions'],
@@ -510,6 +544,7 @@ function switchType(type) {
     jwt: '',
     cron: 'crontab',
     cert: 'root.pem',
+    table: 'Team',
   }[type];
   buildControls();
   render();

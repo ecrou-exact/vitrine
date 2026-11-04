@@ -150,6 +150,11 @@ const ICONS = {
     ['path', { d: 'm16 21 4-4-4-4' }],
     ['path', { d: 'M20 17H4' }],
   ],
+  filter: [['path', { d: 'M22 3H2l8 9.46V19l4 2v-8.54L22 3z' }]],
+  keyboard: [
+    ['rect', { width: '20', height: '16', x: '2', y: '4', rx: '2' }],
+    ['path', { d: 'M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10' }],
+  ],
   rows: [
     ['rect', { width: '18', height: '18', x: '3', y: '3', rx: '2' }],
     ['path', { d: 'M3 12h18' }],

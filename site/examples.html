@@ -48,6 +48,7 @@
           <option value="jwt">JWT</option>
           <option value="cron">Cron</option>
           <option value="cert">Certificates</option>
+          <option value="table">Tables</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -1663,6 +1664,45 @@ export { unit };</template>
                 -----END CERTIFICATE-----
               </template>
             </vt-cert>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="table" aria-labelledby="table-title">
+        <h2 id="table-title">&lt;vt-table&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Everything on</h3>
+            <p>
+              Shift+click headers to sort on several columns, type <code>&gt;60000</code> or <code>2020-01-01..2022-12-31</code> in a filter,
+              select rows for the bulk bar, drag headers and their edges, open a header menu to group or pin, press <kbd>?</kbd> for the shortcuts.
+            </p>
+          </div>
+          <template>
+            <vt-table variant="full" label="Team" row-key="id" editable footer page-size="10">
+              <template>[{"id":1,"name":"Ada","team":"Core","salary":42000,"hired":"2016-01-01","active":false},{"id":2,"name":"Alan","team":"Infra","salary":49919,"hired":"2017-02-04","active":true},{"id":3,"name":"Grace","team":"Design","salary":57838,"hired":"2018-03-07","active":true},{"id":4,"name":"Linus","team":"Data","salary":65757,"hired":"2019-04-10","active":false},{"id":5,"name":"Margaret","team":"Core","salary":73676,"hired":"2020-05-13","active":true},{"id":6,"name":"Ken","team":"Infra","salary":81595,"hired":"2021-06-16","active":true},{"id":7,"name":"Barbara","team":"Design","salary":89514,"hired":"2022-07-19","active":false},{"id":8,"name":"Dennis","team":"Data","salary":47433,"hired":"2023-08-22","active":true},{"id":9,"name":"Frances","team":"Core","salary":55352,"hired":"2024-09-25","active":true},{"id":10,"name":"Edsger","team":"Infra","salary":63271,"hired":"2016-10-28","active":false},{"id":11,"name":"Donald","team":"Design","salary":71190,"hired":"2017-11-03","active":true},{"id":12,"name":"Radia","team":"Data","salary":79109,"hired":"2018-12-06","active":true},{"id":13,"name":"Tim","team":"Core","salary":87028,"hired":"2019-01-09","active":false},{"id":14,"name":"Hedy","team":"Infra","salary":44947,"hired":"2020-02-12","active":true},{"id":15,"name":"Claude","team":"Design","salary":52866,"hired":"2021-03-15","active":true},{"id":16,"name":"Katherine","team":"Data","salary":60785,"hired":"2022-04-18","active":false},{"id":17,"name":"Niklaus","team":"Core","salary":68704,"hired":"2023-05-21","active":true},{"id":18,"name":"Sophie","team":"Infra","salary":76623,"hired":"2024-06-24","active":true},{"id":19,"name":"John","team":"Design","salary":84542,"hired":"2016-07-27","active":false},{"id":20,"name":"Lynn","team":"Data","salary":42461,"hired":"2017-08-02","active":true},{"id":21,"name":"Guido","team":"Core","salary":50380,"hired":"2018-09-05","active":true},{"id":22,"name":"Bjarne","team":"Infra","salary":58299,"hired":"2019-10-08","active":false},{"id":23,"name":"Anita","team":"Design","salary":66218,"hired":"2020-11-11","active":true},{"id":24,"name":"Leslie","team":"Data","salary":74137,"hired":"2021-12-14","active":true}]</template>
+            </vt-table>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Grouped, from CSV</h3>
+            <p>Rows grouped by a column, with expand and collapse all; the footer sums the numbers of each view.</p>
+          </div>
+          <template>
+            <vt-table variant="full" label="sales.csv" group-by="region" footer selectable="none" density="compact">
+              <template>
+                region,product,units,revenue
+                North,Keyboard,120,5400
+                North,Mouse,340,6800
+                South,Keyboard,80,3600
+                South,Screen,25,7500
+                West,Mouse,210,4200
+                West,Screen,40,12000
+              </template>
+            </vt-table>
           </template>
         </article>
       </section>

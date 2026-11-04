@@ -59,6 +59,7 @@ vt-cron:not(:defined),
 vt-jwt:not(:defined),
 vt-xml:not(:defined),
 vt-cert:not(:defined),
+vt-table:not(:defined),
 vt-yaml:not(:defined) {
   position: relative;
   min-height: 96px;
@@ -81,6 +82,7 @@ vt-yaml:not(:defined) {
     vt-env,
     vt-xml,
     vt-cert,
+    vt-table,
     vt-timeline,
     vt-git,
     vt-job
@@ -113,6 +115,7 @@ vt-yaml:not(:defined) {
     vt-env,
     vt-xml,
     vt-cert,
+    vt-table,
     vt-timeline,
     vt-git,
     vt-job
@@ -160,6 +163,7 @@ vt-yaml:not(:defined) {
       vt-env,
       vt-xml,
       vt-cert,
+      vt-table,
       vt-timeline,
       vt-git,
       vt-job

@@ -55,6 +55,7 @@
 - **`<vt-jwt>`** — JSON Web Tokens decoded: parts colored, header and payload as trees, claims explained with dates, validity status and security warnings; never verified and never sent anywhere.
 - **`<vt-cron>`** — cron expressions and crontabs explained in words, with the next runs in a time zone, a week grid, Quartz extensions and errors at their field.
 - **`<vt-cert>`** — X.509 certificates, chains and CSRs from PEM or DER with a bounded DER reader: names, validity, keys, extensions, fingerprints and an ASN.1 view; nothing verified or fetched.
+- **`<vt-table>`** — a complete data table: sorting on several columns, filters per column, selection with bulk actions, grouping, expandable rows, a column chooser, resizing, reordering and pinning, footer totals, cell editing, virtual scrolling, keyboard navigation and a card layout on phones.
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
 - **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.

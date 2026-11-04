@@ -10,7 +10,7 @@ import { gzipSync } from 'node:zlib';
 
 const KB = 1024;
 /** Full bundles: twenty-four components, highlight.js core and 10 languages, marked, DOMPurify. */
-const BUNDLES = { 'dist/vitrine.min.js': 226 * KB, 'dist/vitrine.esm.js': 226 * KB };
+const BUNDLES = { 'dist/vitrine.min.js': 252 * KB, 'dist/vitrine.esm.js': 252 * KB };
 /** Per-component modules (what a page using only that element downloads). */
 const COMPONENTS = {
   'vt-code': 60 * KB,
@@ -37,6 +37,7 @@ const COMPONENTS = {
   'vt-xml': 64 * KB,
   'vt-cert': 66 * KB,
   'vt-yaml': 64 * KB,
+  'vt-table': 72 * KB,
 };
 
 const rawCss = {

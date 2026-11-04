@@ -14,6 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-table>`: data table from JSON, CSV or the `data` / `columns` properties, with typed
+  sorting on several columns, per-column filters (`>10`, `1..5`, `=x`, `!x`, `empty`), global
+  search, row selection (click, Shift, Ctrl, keyboard) with a bulk action bar (copy, CSV, JSON,
+  custom actions), grouping with expand / collapse all, expandable rows, a column chooser,
+  drag-to-resize and drag-to-reorder columns, pinned columns, footer aggregates, cell editing,
+  density, pagination or virtual scrolling for large tables, a card layout on narrow screens,
+  a full keyboard grid with a shortcut panel, and a `state` saved with `persist`.
+
 - `<vt-csv>`: RFC 4180 parser with delimiter detection, typed columns, sorting, pagination,
   search that filters rows, Table / Raw views and an editor.
 - `<vt-tags>`: tags as chips from JSON, and a form-associated tag field with suggestions,
