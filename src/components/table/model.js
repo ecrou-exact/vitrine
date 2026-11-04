@@ -35,6 +35,35 @@ export const MAX_ROWS = 200_000;
  * @property {Aggregate} [aggregate] - Footer aggregate.
  * @property {(value: unknown, row: Row) => string} [format] - Display text.
  * @property {(value: unknown, row: Row) => Node | string} [render] - Custom cell content.
+ * @property {string} [display] - How cells look: `text`, `number`, `badge`, `status`, `tags`, `progress`,
+ *   `rating`, `link`, `email`, `image`, `avatar`, `code`, `date`, `relative`, `currency`, `percent`,
+ *   `bytes`, `color`, `json` or `boolean` (default: from the type).
+ * @property {Record<string, string>} [colors] - Badge, status and tag colors by value (`red`, `green`…).
+ * @property {boolean} [autoColors] - Values missing from `colors` still get a color.
+ * @property {Record<string, string>} [labels] - Badge text by value (e.g. `{ "1": "Open" }`).
+ * @property {number} [maxLength] - Characters shown before "See all" (default 140 for text; 0: never cut).
+ * @property {number} [lines] - Lines shown before "See all" when the cell wraps.
+ * @property {number} [maxItems] - Tags shown before "+N" (default 3).
+ * @property {boolean} [wrap] - Text of this column wraps.
+ * @property {number} [max] - Maximum of `progress` (100) and `rating` (5).
+ * @property {[number, number]} [thresholds] - `progress` ratios where red turns orange, then green.
+ * @property {string} [tone] - Fixed `progress` color.
+ * @property {string} [currency] - ISO code of `currency` (default `EUR`).
+ * @property {boolean} [ratio] - `percent` values are ratios (0.42 → 42 %).
+ * @property {number} [decimals] - Fraction digits of numbers.
+ * @property {boolean} [grouping] - `false`: no digit grouping (1234 instead of 1,234).
+ * @property {string} [prefix] - Text before numbers and text.
+ * @property {string} [suffix] - Text after numbers and text.
+ * @property {string} [dateStyle] - `short`, `medium`, `long`, `full`, `datetime` or `time`.
+ * @property {string} [href] - Link template, e.g. `/users/{id}`.
+ * @property {string} [linkText] - Link text template.
+ * @property {string} [src] - Image template for `image` and `avatar`, e.g. `/avatars/{id}.png`.
+ * @property {string} [alt] - Image text template.
+ * @property {string} [subtitle] - Second line of `avatar`, e.g. `{email}`.
+ * @property {number} [size] - Image size in pixels.
+ * @property {string} [trueLabel] - Text of true booleans (shown as a badge).
+ * @property {string} [falseLabel] - Text of false booleans.
+ * @property {string} [emptyText] - Text of empty cells.
  */
 
 /**

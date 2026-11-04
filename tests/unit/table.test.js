@@ -295,3 +295,78 @@ describe('<vt-table>', () => {
     el.remove();
   });
 });
+
+describe('cells and pages', async () => {
+  const { formatValue, listOf, safeHref, fillTemplate, formatBytes, toneOf } =
+    await import('../../src/components/table/cells.js');
+  const { pageList } = await import('../../src/components/table/vt-table.js');
+  const t = (/** @type {string} */ k) => k;
+  const col = (/** @type {any} */ extra) => ({
+    key: 'v',
+    label: 'V',
+    type: 'text',
+    aggregate: 'none',
+    ...extra,
+  });
+
+  it('formats currencies, percents, bytes and booleans', () => {
+    expect(formatValue(col({ display: 'currency', currency: 'USD' }), 1234.5, 'en', t)).toBe(
+      '$1,234.50',
+    );
+    expect(formatValue(col({ display: 'percent' }), 42, 'en', t)).toBe('42%');
+    expect(formatValue(col({ display: 'percent', ratio: true }), 0.5, 'en', t)).toBe('50%');
+    expect(formatBytes(1536, 'en')).toBe('1.5 KB');
+    expect(formatValue(col({ display: 'boolean', trueLabel: 'on' }), true, 'en', t)).toBe('on');
+    expect(formatValue(col({ display: 'number', suffix: ' ms' }), 12, 'en', t)).toBe('12 ms');
+  });
+
+  it('reads lists, keeps safe links and fills templates', () => {
+    expect(listOf('a, b;c')).toEqual(['a', 'b', 'c']);
+    expect(listOf(['x', null, 'y'])).toEqual(['x', 'y']);
+    expect(safeHref('javascript:alert(1)')).toBeNull();
+    expect(safeHref('//evil.example')).toBeNull();
+    expect(safeHref('/users/1')).toBe('/users/1');
+    expect(safeHref('https://a.example/x')).toBe('https://a.example/x');
+    expect(fillTemplate('/u/{id}', { id: 'a b' }, true)).toBe('/u/a%20b');
+    expect(fillTemplate('{email}', { email: 'a@b.c' })).toBe('a@b.c');
+    expect(toneOf(col({ colors: { open: 'green' } }), 'open')).toBe('green');
+  });
+
+  it('lists page numbers with gaps', () => {
+    expect(pageList(0, 5)).toEqual([0, 1, 2, 3, 4]);
+    expect(pageList(0, 20)).toEqual([0, 1, 2, 3, 4, -1, 19]);
+    expect(pageList(10, 20)).toEqual([0, -1, 9, 10, 11, -1, 19]);
+    expect(pageList(19, 20)).toEqual([0, -1, 15, 16, 17, 18, 19]);
+  });
+});
+
+describe('<vt-table> query bar and selection', () => {
+  it('filters with AND / OR conditions and selects the page', () => {
+    if (!customElements.get('vt-table')) customElements.define('vt-table', VtTable);
+    const el = /** @type {VtTable} */ (document.createElement('vt-table'));
+    el.setAttribute('row-key', 'id');
+    el.setAttribute('page-size', '10');
+    document.body.append(el);
+    el.data = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      team: i % 2 ? 'red' : 'blue',
+      score: i,
+    }));
+    el.render();
+    const a = /** @type {any} */ (el.parseCondition('team:=red'));
+    const b = /** @type {any} */ (el.parseCondition('score:>25'));
+    expect(a).toEqual({ key: 'team', value: '=red', not: false });
+    el.setConditions([a, b]);
+    expect(el.getRows().map((r) => r.id)).toEqual([27, 29]);
+    el.matchAll = false;
+    el.setConditions([a, b]);
+    expect(el.getRows()).toHaveLength(17);
+    el.setConditions([/** @type {any} */ (el.parseCondition('-team:red'))]);
+    expect(el.getRows().every((r) => r.team === 'blue')).toBe(true);
+    el.setConditions([/** @type {any} */ (el.parseCondition('team:red,blue'))]);
+    expect(el.getRows()).toHaveLength(30);
+    el.select(el.pageKeys());
+    expect(el.selectedKeys).toHaveLength(10);
+    el.remove();
+  });
+});

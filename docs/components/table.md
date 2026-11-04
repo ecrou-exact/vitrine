@@ -112,6 +112,77 @@ table.addEventListener('vt-bulk-action', async (event) => {
 
 **Saved layout** — `persist="users"` saves the column order, visibility, widths, sort, grouping, density and page size in `localStorage`. The `state` property reads and restores the same object (plus filters), for example to keep it in the URL or on your server.
 
+## Cell displays
+
+Every column can choose how its cells look with `display` (default: from its type). All of it also works in HTML through the `columns` attribute, which takes the same JSON as the property.
+
+| `display`  | Shows                                                   | Options                                                        |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------- |
+| `text`     | Text, cut after `maxLength` characters with **See all** | `maxLength` (140; `0` never cuts), `lines`, `prefix`, `suffix` |
+| `number`   | Number in the locale                                    | `decimals`, `grouping: false`, `prefix`, `suffix`              |
+| `currency` | `€1,234.50`                                             | `currency` (`EUR`), `decimals`                                 |
+| `percent`  | `42 %`                                                  | `ratio: true` for 0–1 values                                   |
+| `bytes`    | `1.5 MB`                                                | —                                                              |
+| `date`     | Date as written, or formatted                           | `dateStyle`: `short`, `medium`, `long`, `datetime`, `time`     |
+| `relative` | `3 hours ago` (full date in the tooltip)                | —                                                              |
+| `badge`    | One colored chip per value                              | `colors`, `labels`, `autoColors`                               |
+| `status`   | A colored dot and the text                              | `colors`, `labels`                                             |
+| `tags`     | Chips from an array or `a, b, c`, then **+N**           | `maxItems` (3), `colors`                                       |
+| `progress` | A bar, red → orange → green                             | `max` (100), `thresholds`, `tone`                              |
+| `rating`   | Stars, halves included                                  | `max` (5)                                                      |
+| `link`     | A link (http(s), mailto, tel or relative only)          | `href` (`/users/{id}`), `linkText`                             |
+| `email`    | A `mailto:` link                                        | —                                                              |
+| `image`    | A picture                                               | `src` (`/img/{id}.png`), `alt`, `size`                         |
+| `avatar`   | A round picture or initials, the text and a second line | `src`, `subtitle` (`{email}`)                                  |
+| `code`     | Monospace text                                          | `maxLength`                                                    |
+| `color`    | A swatch and the color                                  | —                                                              |
+| `json`     | Objects and arrays as compact JSON, with **See all**    | `maxLength` (80)                                               |
+| `boolean`  | ✓ / ✕, or badges with `trueLabel` / `falseLabel`        | `trueLabel`, `falseLabel`                                      |
+
+Colors are `gray`, `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `purple` and `pink`. Without `colors`, each value gets a stable color of its own. `emptyText` sets the text of empty cells.
+
+```html
+<vt-table columns='[
+  {"key":"state","display":"status","colors":{"open":"green","closed":"gray"}},
+  {"key":"labels","display":"tags","maxItems":2},
+  {"key":"title","maxLength":60}
+]' src="/api/issues.json"></vt-table>
+```
+
+**Long content** — whatever the text, a row keeps its height: cells are cut with an ellipsis, **See all** opens one in place (the row grows only while it is open), the row details show every field in full, and widths are bounded. With virtual scrolling, **See all** opens the row details instead. On narrow screens the table turns into cards.
+
+## Filter bar
+
+`query-bar` (full variant) adds a field that turns what you type into conditions, like tags:
+
+| Typed                                      | Condition                         |
+| ------------------------------------------ | --------------------------------- |
+| `team:Core`                                | Team contains “Core”              |
+| `team:=Core`                               | Team is exactly Core              |
+| `team:Core,Infra`                          | Team is Core or Infra             |
+| `-team:Core`                               | Team is not Core                  |
+| `score:>50`, `date:2024-01-01..2024-06-30` | Comparisons and ranges            |
+| `ada`                                      | Any visible column contains “ada” |
+
+Typing `team:` suggests the most frequent values with their counts; ↑ ↓ and Enter pick one, Backspace removes the last chip, a click on a chip edits it. Between chips, **AND** / **OR** (and the **Match all / Match any** button) choose how they combine. Conditions are in `state.conditions` and `state.match`.
+
+## Selection
+
+- The header box selects **the page** (`select-all="all"`: every matching row). The arrow next to it (`select-menu`) offers: select the page, all matching rows, every row ignoring filters, invert the page, unselect the page, clear.
+- `select-on-click` selects a row with a simple click (Shift+click: a range).
+- `bulk-bar="false"` keeps the selection without the action bar; the count is shown in the pager.
+
+## Pagination
+
+| Attribute        | Values                                                                                                                                                     |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pagination`     | `pages` (numbers with gaps, first / last, jump to a page), `simple` (previous / next), `more` (Show more, Show all), `none` (every row, virtual scrolling) |
+| `page-size`      | Rows per page (default 50); `0` is `none`.                                                                                                                 |
+| `pager-position` | `bottom` (default), `top` or `both`.                                                                                                                       |
+| `page-sizes`     | `false` hides the rows-per-page select.                                                                                                                    |
+
+**Sticky header** — the table scrolls in its own box (`max-height`, default `min(78vh, 760px)`) so the header and the footer stay visible; the page keeps scrolling past the table. `sticky-header="false"` lets the table take its full height.
+
 ## Keyboard
 
 The table is one tab stop (an ARIA grid); the arrows move between cells. The keyboard button shows this list.
