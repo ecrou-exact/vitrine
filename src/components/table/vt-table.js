@@ -2,14 +2,15 @@
 import { defineStrings, formatNumber } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import tableCss from '../../styles/table.css?raw';
-import { parseEnum, parseInteger } from '../../core/attributes.js';
+import { parseBoolean, parseEnum, parseInteger } from '../../core/attributes.js';
 import { copyText, downloadText } from '../../core/actions.js';
 import { VtBase } from '../../core/base-element.js';
-import { h, uid } from '../../core/dom.js';
+import { append, h, uid } from '../../core/dom.js';
 import { EVENTS, emit } from '../../core/events.js';
 import { icon } from '../../core/icons.js';
 import { TextSearch } from '../../core/search.js';
 import { iconButton, noticeView } from '../../core/ui.js';
+import { formatValue, renderCell } from './cells.js';
 import {
   AGGREGATES,
   aggregate,
@@ -22,7 +23,6 @@ import {
   serialize,
   sortIndexes,
   sortKeys,
-  toBoolean,
   toText,
 } from './model.js';
 
@@ -40,11 +40,14 @@ defineStrings({ en: strings, fr: stringsFr });
  *   | { kind: 'detail', index: number }} Item
  */
 /** @typedef {{ id: string, label: string, icon?: string, danger?: boolean }} BulkAction */
+/** @typedef {{ key: string | null, value: string, not?: boolean }} Condition */
 /**
  * @typedef {object} TableState
  * @property {{ key: string, hidden: boolean, width?: number, aggregate?: Aggregate }[]} [columns]
  * @property {SortSpec[]} [sort]
  * @property {Record<string, string>} [filters]
+ * @property {Condition[]} [conditions] - Query bar conditions.
+ * @property {"all"|"any"} [match] - Conditions joined with AND (`all`) or OR (`any`).
  * @property {string | null} [groupBy]
  * @property {"compact"|"normal"|"comfortable"} [density]
  * @property {number} [pageSize]
@@ -57,6 +60,7 @@ const LAYOUTS = /** @type {const} */ (['auto', 'table', 'cards']);
 const SELECTION = /** @type {const} */ (['none', 'single', 'multiple']);
 const FORMATS = /** @type {const} */ (['auto', 'json', 'csv']);
 const PAGE_SIZES = [10, 25, 50, 100, 250, 500, 0];
+const PAGINATIONS = /** @type {const} */ (['pages', 'simple', 'more', 'none']);
 /** Rows rendered beyond the visible window when virtual scrolling. */
 const OVERSCAN = 8;
 const MIN_WIDTH = 56;
@@ -137,15 +141,18 @@ export class VtTable extends VtBase {
   static componentAttributes = Object.freeze([
     'format', 'sortable', 'filters', 'selectable', 'column-menu', 'resizable', 'reorderable',
     'group-by', 'expandable', 'editable', 'footer', 'density', 'layout', 'card-breakpoint',
-    'page-size', 'pinned', 'row-numbers', 'wrap', 'row-key', 'persist',
+    'page-size', 'pinned', 'row-numbers', 'wrap', 'row-key', 'persist', 'columns', 'pagination',
+    'pager-position', 'page-sizes', 'select-all', 'select-menu', 'select-on-click', 'bulk-bar',
+    'query-bar', 'sticky-header',
   ]); // prettier-ignore
 
   static presets = {
-    simple: { sortable: true, resizable: true },
+    simple: { sortable: true, resizable: true, 'bulk-bar': true, 'select-menu': true, 'sticky-header': true },
     full: {
       header: true, dot: true, copy: true, search: true, download: true, fullscreen: true,
       sortable: true, filters: true, 'column-menu': true, resizable: true, reorderable: true,
-      expandable: true, 'row-numbers': true,
+      expandable: true, 'row-numbers': true, 'bulk-bar': true, 'select-menu': true,
+      'query-bar': true, 'sticky-header': true,
     },
   }; // prettier-ignore
 
@@ -167,7 +174,7 @@ export class VtTable extends VtBase {
     this.keyCache = new Map();
     /** @type {Map<string, string[]>} Lower-case text per column, for search. */
     this.textCache = new Map();
-    /** @type {{ items: Item[], order: number[], key: string } | null} */
+    /** @type {{ items: Item[], order: number[], base: number[], key: string } | null} */
     this.viewCache = null;
     /** @type {string[] | null} Column keys in display order. */
     this.order = null;
@@ -190,6 +197,8 @@ export class VtTable extends VtBase {
     this.collapsed = new Set();
     /** @type {Set<number>} */
     this.expanded = new Set();
+    /** @type {Set<string>} Cells opened with "See all" (`rowKey\0column`). */
+    this.openCells = new Set();
     /** @type {Set<string>} */
     this.selected = new Set();
     /** @type {number | null} Item index the Shift selection starts from. */
@@ -202,11 +211,17 @@ export class VtTable extends VtBase {
     this.pinnedState = null;
     this.page = 0;
     this.query = '';
+    /** @type {Condition[]} */
+    this.conditions = [];
+    this.matchAll = true;
+    /** @type {Map<string, [string, number][]>} Distinct values per column, for suggestions. */
+    this.valueCache = new Map();
+    this.focusQuery = false;
     /** @type {{ r: number, c: number }} Focused cell: `r` item index (-1 header), `c` column. */
     this.focusPos = { r: -1, c: 0 };
     /** @type {{ r: number, c: number } | null} */
     this.editingCell = null;
-    /** @type {"columns" | "help" | { column: string } | null} */
+    /** @type {"columns" | "help" | "select" | { column: string } | null} */
     this.panel = null;
     /** @type {Map<number, number>} Measured heights of detail rows. */
     this.detailHeights = new Map();
@@ -284,7 +299,7 @@ export class VtTable extends VtBase {
     if (name === 'density') this.densityState = null;
     if (name === 'page-size') this.pageSizeState = null;
     if (name === 'pinned') this.pinnedState = null;
-    if (name === 'format' || name === 'row-key') this.invalidateData();
+    if (name === 'format' || name === 'row-key' || name === 'columns') this.invalidateData();
     else this.invalidateView();
     super.attributeChangedCallback(name, oldValue, newValue);
   }
@@ -491,6 +506,8 @@ export class VtTable extends VtBase {
       })),
       sort: this.sortSpecs.map((s) => ({ ...s })),
       filters: Object.fromEntries([...this.filterValues].filter(([, v]) => v.trim())),
+      conditions: this.conditions.map((c) => ({ ...c })),
+      match: this.matchAll ? 'all' : 'any',
       groupBy: this.groupKey,
       density: this.density,
       pageSize: this.pageSize,
@@ -563,23 +580,87 @@ export class VtTable extends VtBase {
 
   /** Virtual scrolling: every row in one scroll area, only the visible ones rendered. */
   get virtual() {
-    return this.pageSize === 0 && !this.cards && !this.feature('wrap');
+    const all = this.pageSize === 0 || this.paginationAttr === 'none';
+    return all && !this.cards && !this.feature('wrap');
+  }
+
+  /** @returns {"pages"|"simple"|"more"|"none"} */
+  get paginationAttr() {
+    return parseEnum(this.getAttribute('pagination'), PAGINATIONS, 'pages');
+  }
+
+  /** Pagination used: layouts that cannot scroll virtually show "more" instead of all. */
+  get paginationMode() {
+    const mode = this.paginationAttr;
+    if ((mode === 'none' || this.pageSize === 0) && !this.virtual) return 'more';
+    return this.pageSize === 0 ? 'none' : mode;
   }
 
   /** Rows per page, with the fallbacks of layouts that cannot scroll virtually. */
   get effectivePageSize() {
-    const size = this.pageSize;
-    if (size) return size;
-    return this.virtual ? Infinity : CARD_LIMIT;
+    if (this.virtual) return Infinity;
+    return this.pageSize || CARD_LIMIT;
+  }
+
+  /**
+   * Items shown for the current page: a page, or the first pages in "more" mode.
+   *
+   * @param {number} total - Number of items.
+   * @returns {{ from: number, to: number, pages: number, size: number, rowFrom: number, rowTo: number }}
+   */
+  // eslint-disable-next-line no-unused-vars
+  pageWindow(total) {
+    const { items, base } = this.view();
+    const size = this.effectivePageSize;
+    const count = (/** @type {number} */ from, /** @type {number} */ to) => {
+      let n = 0;
+      for (let i = from; i < to; i += 1) if (items[i].kind === 'row') n += 1;
+      return n;
+    };
+    if (!Number.isFinite(size))
+      return {
+        from: 0,
+        to: items.length,
+        pages: 1,
+        size,
+        rowFrom: 0,
+        rowTo: count(0, items.length),
+      };
+    const pages = Math.max(1, Math.ceil(base.length / size));
+    this.page = Math.max(0, Math.min(this.page, pages - 1));
+    const first = this.paginationMode === 'more' ? 0 : this.page * size;
+    const last = Math.min(base.length, (this.page + 1) * size);
+    const from = base[first] ?? items.length;
+    const to = last < base.length ? base[last] : items.length;
+    const rowFrom = count(0, from);
+    return { from, to, pages, size, rowFrom, rowTo: rowFrom + count(from, to) };
   }
 
   // ---------------------------------------------------------------- data
+
+  /** @returns {ColumnDef[] | null} Columns from the property, else the `columns` attribute (JSON). */
+  get columnDefs() {
+    if (this._columnDefs) return this._columnDefs;
+    const attr = this.getAttribute('columns');
+    if (!attr) return null;
+    try {
+      const value = JSON.parse(attr);
+      if (Array.isArray(value)) return value.map((c) => (typeof c === 'string' ? { key: c } : c));
+    } catch {
+      // Not JSON: a comma-separated list of keys.
+      return attr
+        .split(',')
+        .map((key) => ({ key: key.trim() }))
+        .filter((c) => c.key);
+    }
+    return null;
+  }
 
   /** @returns {Dataset} */
   getDataset() {
     if (this._data) {
       if (!this.cache || this.cacheText !== null) {
-        this.cache = fromValue(this._data, this._columnDefs);
+        this.cache = fromValue(this._data, this.columnDefs);
         this.cache.rows = this._data;
         this.cacheText = null;
       }
@@ -589,8 +670,8 @@ export class VtTable extends VtBase {
     if (!this.cache || this.cacheText !== text) {
       const format = parseEnum(this.getAttribute('format'), FORMATS, 'auto');
       const parsed = parseTable(text, format);
-      this.cache = this._columnDefs
-        ? { ...fromValue(parsed.rows, this._columnDefs), error: parsed.error }
+      this.cache = this.columnDefs
+        ? { ...fromValue(parsed.rows, this.columnDefs), error: parsed.error }
         : parsed;
       this.cacheText = text;
     }
@@ -612,6 +693,7 @@ export class VtTable extends VtBase {
   invalidateValues() {
     this.keyCache.clear();
     this.textCache.clear();
+    this.valueCache.clear();
     this.invalidateView();
   }
 
@@ -704,7 +786,7 @@ export class VtTable extends VtBase {
   /**
    * Filtered and sorted rows, and the items shown (groups, rows, details).
    *
-   * @returns {{ items: Item[], order: number[] }}
+   * @returns {{ items: Item[], order: number[], base: number[] }}
    */
   view() {
     const columns = this.allColumns();
@@ -712,6 +794,8 @@ export class VtTable extends VtBase {
       this.sortSpecs,
       [...this.filterValues],
       this.query,
+      this.conditions,
+      this.matchAll,
       this.groupKey,
       [...this.collapsed],
       [...this.expanded],
@@ -726,6 +810,16 @@ export class VtTable extends VtBase {
       const value = this.filterValues.get(column.key) ?? '';
       const test = compileFilter(value, column.type);
       if (test) order = order.filter((i) => test(rows[i][column.key]));
+    }
+    // Query bar conditions, joined with AND or OR.
+    const tests = this.conditions
+      .map((c) => this.compileCondition(c, columns))
+      .filter((f) => f !== null);
+    if (tests.length) {
+      const all = this.matchAll;
+      order = order.filter((i) =>
+        all ? tests.every((test) => test(i)) : tests.some((test) => test(i)),
+      );
     }
     // Global search over the visible columns.
     const q = this.query.trim().toLowerCase();
@@ -756,7 +850,10 @@ export class VtTable extends VtBase {
         if (!this.collapsed.has(g.value)) g.indexes.forEach(pushRow);
       }
     } else order.forEach(pushRow);
-    this.viewCache = { items, order, key };
+    /** @type {number[]} Items that count for paging: groups and rows, not details. */
+    const base = [];
+    items.forEach((item, i) => item.kind !== 'detail' && base.push(i));
+    this.viewCache = { items, order, base, key };
     return this.viewCache;
   }
 
@@ -776,12 +873,11 @@ export class VtTable extends VtBase {
         return toText(value);
       }
     }
-    if (typeof value === 'number' && column.type === 'number' && !isIdentifier(column.key))
-      return formatNumber(value, this.locale);
-    if (value instanceof Date && !Number.isNaN(value.getTime()))
+    if (isIdentifier(column.key) && column.grouping === undefined && !column.display)
+      return toText(value);
+    if (value instanceof Date && !Number.isNaN(value.getTime()) && !column.display)
       return value.toLocaleString(this.locale);
-    if (typeof value === 'boolean') return this.t(value ? 'tableYes' : 'tableNo');
-    return toText(value);
+    return formatValue(column, value, this.locale, this.t);
   }
 
   // ---------------------------------------------------------------- state
@@ -814,6 +910,15 @@ export class VtTable extends VtBase {
         }));
     if (state.filters && typeof state.filters === 'object')
       this.filterValues = new Map(Object.entries(state.filters).map(([k, v]) => [k, String(v)]));
+    if (Array.isArray(state.conditions))
+      this.conditions = state.conditions
+        .filter((c) => c && typeof c.value === 'string')
+        .map((c) => ({
+          key: typeof c.key === 'string' ? c.key : null,
+          value: c.value,
+          not: Boolean(c.not),
+        }));
+    if (state.match) this.matchAll = state.match !== 'any';
     if (state.groupBy !== undefined) this.groupState = state.groupBy || null;
     if (state.density && DENSITIES.includes(state.density)) this.densityState = state.density;
     if (typeof state.pageSize === 'number')
@@ -875,6 +980,7 @@ export class VtTable extends VtBase {
     const t = this.t;
     const data = this.getDataset();
     this.frame.dataset.density = this.density;
+    this.frame.toggleAttribute('data-sticky', this.feature('sticky-header'));
     this.frame.toggleAttribute('data-wrap', this.feature('wrap'));
     const expandable = this.feature('expandable') || Boolean(this.groupKey);
     const actions = [
@@ -972,9 +1078,7 @@ export class VtTable extends VtBase {
       this.root.activeElement !== null;
 
     const { order, items } = this.view();
-    const size = this.effectivePageSize;
-    const pages = Number.isFinite(size) ? Math.max(1, Math.ceil(items.length / size)) : 1;
-    this.page = Math.min(this.page, pages - 1);
+    const win = this.pageWindow(items.length);
 
     const scroller = h('div', {
       class: `body tb-body${this.virtual ? ' virtual' : ''}`,
@@ -991,12 +1095,17 @@ export class VtTable extends VtBase {
     if (this.cards) scroller.append(this.renderCards(items));
     else scroller.append(this.renderTable());
 
+    const position = this.getAttribute('pager-position');
     this.host.replaceChildren(
       ...[
+        this.queryBar(),
         this.bulkBar(order),
         this.stateBar(),
+        position === 'top' || position === 'both'
+          ? this.pager(items.length, order.length, win, 'top')
+          : null,
         scroller,
-        this.pager(items.length, order.length, pages),
+        position === 'top' ? null : this.pager(items.length, order.length, win, 'bottom'),
         this.renderPanel(),
       ].filter((n) => n !== null),
     );
@@ -1035,11 +1144,9 @@ export class VtTable extends VtBase {
     table.style.width = `max(100%, ${total}px)`;
     const colgroup = h('colgroup');
     for (const c of controls)
-      colgroup.append(
-        h('col', { class: `tb-col-${c.id}`, attrs: { style: `width:${c.width}px` } }),
-      );
+      colgroup.append(sized(h('col', { class: `tb-col-${c.id}` }), 'width', c.width));
     columns.forEach((c, i) =>
-      colgroup.append(h('col', { attrs: { 'data-key': c.key, style: `width:${widths[i]}px` } })),
+      colgroup.append(sized(h('col', { attrs: { 'data-key': c.key } }), 'width', widths[i])),
     );
     this.table = table;
     this.tbody = h('tbody');
@@ -1143,23 +1250,27 @@ export class VtTable extends VtBase {
       });
       if (c.id === 'select') {
         if (this.selectionMode === 'multiple') {
-          const count = order.filter((i) => this.selected.has(this.rowKey(i))).length;
-          const box = h('input', {
-            class: 'tb-check',
-            attrs: {
-              type: 'checkbox',
-              'aria-label': t('tableSelectAll'),
-              'data-focus-key': 'select-all',
-              tabindex: '-1',
-            },
-            on: {
-              change: () =>
-                count === order.length && count ? this.clearSelection() : this.selectAll(),
-            },
-          });
-          box.checked = count > 0 && count === order.length;
-          box.indeterminate = count > 0 && count < order.length;
-          th.append(box);
+          th.append(this.headerCheckbox(order));
+          if (this.feature('select-menu'))
+            th.append(
+              h(
+                'button',
+                {
+                  class: 'tb-select-more',
+                  attrs: {
+                    type: 'button',
+                    tabindex: '-1',
+                    'aria-haspopup': 'menu',
+                    'aria-expanded': String(this.panel === 'select'),
+                    'aria-label': t('tableSelectMenu'),
+                    'data-popover-anchor': '',
+                    'data-focus-key': 'select-menu',
+                  },
+                  on: { click: (event) => (event.stopPropagation(), this.togglePanel('select')) },
+                },
+                icon('chevron-down'),
+              ),
+            );
         } else th.append(h('span', { class: 'sr-only', text: t('tableSelect') }));
       } else if (c.id === 'expand')
         th.append(h('span', { class: 'sr-only', text: t('tableDetails') }));
@@ -1236,6 +1347,41 @@ export class VtTable extends VtBase {
     const thead = h('thead', {}, head);
     if (this.showFilters) thead.append(this.filterRow(columns, controls));
     return thead;
+  }
+
+  /**
+   * Header checkbox: selects the page (`select-all="page"`, default) or every matching row.
+   *
+   * @param {number[]} order
+   * @returns {HTMLInputElement}
+   */
+  headerCheckbox(order) {
+    const t = this.t;
+    const scopeAll = this.getAttribute('select-all') === 'all';
+    const keys = scopeAll ? order.map((i) => this.rowKey(i)) : this.pageKeys();
+    const count = keys.filter((k) => this.selected.has(k)).length;
+    const label = t(scopeAll ? 'tableSelectAll' : 'tableSelectPage');
+    const box = h('input', {
+      class: 'tb-check',
+      attrs: {
+        type: 'checkbox',
+        'aria-label': label,
+        title: label,
+        'data-focus-key': 'select-all',
+        tabindex: '-1',
+      },
+      on: {
+        change: () => {
+          if (count === keys.length && count) {
+            for (const k of keys) this.selected.delete(k);
+            this.selectionChanged();
+          } else this.select(keys, { add: true });
+        },
+      },
+    });
+    box.checked = count > 0 && count === keys.length;
+    box.indeterminate = count > 0 && count < keys.length;
+    return box;
   }
 
   /**
@@ -1323,7 +1469,12 @@ export class VtTable extends VtBase {
     const footer = this.feature('footer');
     const aggs = columns.map((c) => {
       if (c.aggregate !== 'none') return c.aggregate;
-      return footer && c.type === 'number' && !isIdentifier(c.key) ? 'sum' : 'none';
+      return footer &&
+        c.type === 'number' &&
+        !isIdentifier(c.key) &&
+        !['rating', 'progress', 'percent'].includes(c.display ?? '')
+        ? 'sum'
+        : 'none';
     });
     if (!footer && aggs.every((a) => a === 'none')) return null;
     const { rows } = this.getDataset();
@@ -1396,16 +1547,14 @@ export class VtTable extends VtBase {
       after = heights.slice(to).reduce((a, b) => a + b, 0);
       this.windowRange = [from, to];
     } else {
-      const size = this.effectivePageSize;
-      from = this.page * size;
-      to = Math.min(items.length, from + size);
+      ({ from, to } = this.pageWindow(items.length));
     }
     if (before)
       rows.push(
         h(
           'tr',
           { class: 'tb-spacer', attrs: { 'aria-hidden': 'true' } },
-          h('td', { attrs: { colspan: span, style: `height:${before}px` } }),
+          sized(h('td', { attrs: { colspan: span } }), 'height', before),
         ),
       );
     for (let r = from; r < to; r += 1) rows.push(this.renderItem(items[r], r, columns, controls));
@@ -1414,7 +1563,7 @@ export class VtTable extends VtBase {
         h(
           'tr',
           { class: 'tb-spacer', attrs: { 'aria-hidden': 'true' } },
-          h('td', { attrs: { colspan: span, style: `height:${after}px` } }),
+          sized(h('td', { attrs: { colspan: span } }), 'height', after),
         ),
       );
     if (!items.length)
@@ -1487,13 +1636,14 @@ export class VtTable extends VtBase {
         h(
           'span',
           { class: 'tb-group-inner' },
-          h('span', { class: 'tb-chevron' }, icon(open ? 'chevron-down' : 'chevron-right')),
+          h('span', { class: 'tb-chevron' }, icon('chevron-right')),
           this.selectionMode === 'multiple'
             ? this.groupCheckbox(item.indexes, selectedCount)
             : null,
           h('span', { class: 'tb-group-name', text: column ? `${column.label}: ` : '' }),
           h('strong', { text: label }),
           h('span', { class: 'tb-count', text: formatNumber(item.indexes.length, this.locale) }),
+          ...this.groupAggregates(item.indexes, columns),
         ),
       );
       return h(
@@ -1517,7 +1667,14 @@ export class VtTable extends VtBase {
     if (item.kind === 'detail') {
       const list = h('dl', { class: 'tb-detail-list' });
       for (const column of this.allColumns()) {
-        list.append(h('dt', { text: column.label }), h('dd', {}, this.cellContent(column, row)));
+        list.append(
+          h(
+            'div',
+            { class: `tb-field${this.isHidden(column) ? ' hidden-col' : ''}` },
+            h('dt', { text: column.label }),
+            h('dd', {}, this.cellContent(column, row, true)),
+          ),
+        );
       }
       return h(
         'tr',
@@ -1574,7 +1731,7 @@ export class VtTable extends VtBase {
               },
               on: { click: (event) => (event.stopPropagation(), this.toggleDetail(item.index)) },
             },
-            icon(open ? 'chevron-down' : 'chevron-right'),
+            icon('chevron-right'),
           ),
         );
       } else td.textContent = formatNumber(item.index + 1, this.locale);
@@ -1600,6 +1757,48 @@ export class VtTable extends VtBase {
       tr.append(td);
     });
     return tr;
+  }
+
+  /**
+   * Aggregates of a group, for the columns that have one.
+   *
+   * @param {number[]} indexes
+   * @param {Column[]} columns
+   * @returns {HTMLElement[]}
+   */
+  groupAggregates(indexes, columns) {
+    const { rows } = this.getDataset();
+    return columns
+      .filter((c) => c.aggregate !== 'none')
+      .slice(0, 4)
+      .map((c) => {
+        const value = aggregate(rows, indexes, c, c.aggregate);
+        if (value === null) return null;
+        const text =
+          c.type === 'date' && c.aggregate !== 'count'
+            ? new Date(value).toLocaleDateString(this.locale)
+            : c.aggregate === 'count'
+              ? formatNumber(value, this.locale)
+              : formatValue(
+                  {
+                    ...c,
+                    display:
+                      c.display === 'progress' || c.display === 'rating' ? 'number' : c.display,
+                  },
+                  Math.round(value * 100) / 100,
+                  this.locale,
+                  this.t,
+                );
+        return h(
+          'span',
+          { class: 'tb-group-agg' },
+          h('span', {
+            text: `${c.label} · ${this.t(/** @type {any} */ (`tableAgg_${c.aggregate}`))}`,
+          }),
+          h('strong', { text }),
+        );
+      })
+      .filter((n) => n !== null);
   }
 
   /**
@@ -1634,9 +1833,10 @@ export class VtTable extends VtBase {
    *
    * @param {Column} column
    * @param {Row} row
+   * @param {boolean} [inDetail] - Shown in full (row details).
    * @returns {Node}
    */
-  cellContent(column, row) {
+  cellContent(column, row, inDetail = false) {
     const value = row[column.key];
     if (column.render) {
       try {
@@ -1647,30 +1847,25 @@ export class VtTable extends VtBase {
         // Fall back to the text below.
       }
     }
-    if (column.type === 'boolean' && !column.format) {
-      const b = toBoolean(value);
-      if (b !== null)
-        return h(
-          'span',
-          { class: `tb-bool ${b ? 'yes' : 'no'}` },
-          icon(b ? 'check' : 'close'),
-          h('span', { class: 'sr-only', text: this.t(b ? 'tableYes' : 'tableNo') }),
-        );
-    }
     const text = this.displayText(column, row);
-    if (column.type === 'url' && typeof value === 'string') {
-      const href = safeUrl(value);
-      if (href)
-        return h('a', {
-          class: 'tb-link',
-          text,
-          attrs: { href, target: '_blank', rel: 'noopener noreferrer nofollow', tabindex: '-1' },
-        });
-    }
-    return h('span', {
-      class: 'tb-text',
-      text,
-      attrs: { title: text.length > 24 ? text.slice(0, 500) : null },
+    const index = this.getDataset().rows.indexOf(row);
+    const id = `${this.rowKey(index)}\u0000${column.key}`;
+    return renderCell(column, value, row, text, {
+      t: this.t,
+      locale: this.locale,
+      expanded: inDetail || this.openCells.has(id),
+      onToggle: inDetail
+        ? null
+        : () => {
+            if (this.virtual && this.feature('expandable')) {
+              this.toggleDetail(index);
+              return;
+            }
+            if (this.openCells.has(id)) this.openCells.delete(id);
+            else this.openCells.add(id);
+            if (this.cards) this.renderGrid();
+            else this.renderBody();
+          },
     });
   }
 
@@ -1681,8 +1876,7 @@ export class VtTable extends VtBase {
   renderCards(items) {
     const t = this.t;
     const columns = this.visibleColumns();
-    const size = this.effectivePageSize;
-    const from = this.page * size;
+    const win = this.pageWindow(items.length);
     const list = h('div', {
       class: 'tb-cards',
       attrs: { role: 'list', 'aria-label': this.heading || t('table') },
@@ -1744,7 +1938,7 @@ export class VtTable extends VtBase {
     }
     const wrap = h('div', { class: 'tb-cards-wrap' }, tools, list);
     const { rows } = this.getDataset();
-    for (let r = from; r < Math.min(items.length, from + size); r += 1) {
+    for (let r = win.from; r < win.to; r += 1) {
       const item = items[r];
       if (item.kind === 'detail') continue;
       if (item.kind === 'group') {
@@ -1758,7 +1952,7 @@ export class VtTable extends VtBase {
               attrs: { type: 'button', 'aria-expanded': String(open), role: 'listitem' },
               on: { click: () => this.toggleGroup(item.value) },
             },
-            icon(open ? 'chevron-down' : 'chevron-right'),
+            icon('chevron-right'),
             h('strong', { text: item.value || t('tableEmpty') }),
             h('span', { class: 'tb-count', text: formatNumber(item.indexes.length, this.locale) }),
           ),
@@ -1807,7 +2001,8 @@ export class VtTable extends VtBase {
    * @returns {HTMLElement | null}
    */
   bulkBar(order) {
-    if (!this.selected.size || this.selectionMode === 'none') return null;
+    if (!this.selected.size || this.selectionMode === 'none' || !this.feature('bulk-bar'))
+      return null;
     const t = this.t;
     const count = this.selected.size;
     const bar = h('div', {
@@ -1979,27 +2174,44 @@ export class VtTable extends VtBase {
   }
 
   /**
+   * Pagination bar: range, rows per page, page numbers with gaps, jump to a page,
+   * or a "Show more" button.
+   *
    * @param {number} itemCount
    * @param {number} rowCount
-   * @param {number} pages
+   * @param {{ from: number, to: number, pages: number, size: number, rowFrom: number, rowTo: number }} win
+   * @param {"top"|"bottom"} where
    * @returns {HTMLElement}
    */
-  pager(itemCount, rowCount, pages) {
+  pager(itemCount, rowCount, win, where) {
     const t = this.t;
+    const mode = this.paginationMode;
     const total = this.getDataset().rows.length;
-    const size = this.effectivePageSize;
+    const { pages } = win;
     const fmt = (/** @type {number} */ n) => formatNumber(n, this.locale);
     let info;
-    if (Number.isFinite(size) && pages > 1) {
-      const from = itemCount ? this.page * size + 1 : 0;
-      const to = Math.min(itemCount, (this.page + 1) * size);
-      info = t('rowsRange', { from: fmt(from), to: fmt(to), total: fmt(itemCount) });
-    } else info = t('tableRows', { count: fmt(rowCount) });
+    if (pages > 1 && mode !== 'more')
+      info = t('rowsRange', {
+        from: fmt(rowCount ? win.rowFrom + 1 : 0),
+        to: fmt(win.rowTo),
+        total: fmt(rowCount),
+      });
+    else if (mode === 'more' && win.to < itemCount)
+      info = t('tableShowing', { shown: fmt(win.rowTo), total: fmt(rowCount) });
+    else info = t('tableRows', { count: fmt(rowCount) });
     if (rowCount !== total) info += ` · ${t('tableFiltered', { total: fmt(total) })}`;
+    if (this.selected.size && !this.feature('bulk-bar'))
+      info += ` · ${t('tableSelected', { count: fmt(this.selected.size) })}`;
     const go = (/** @type {number} */ page) => {
       this.page = Math.max(0, Math.min(pages - 1, page));
       this.renderGrid();
-      this.scroller?.scrollTo({ top: 0 });
+      if (mode !== 'more') this.scroller?.scrollTo({ top: 0 });
+      /** @type {HTMLElement | null} */ (
+        this.root.querySelector(
+          `.tb-pager.${where} [data-focus-key="${where}-page-${this.page}"], .tb-pager.${where} .tb-page-btn[aria-current]`,
+        )
+      )?.focus();
+      this.announce(t('tablePageAnnounce', { page: fmt(this.page + 1), pages: fmt(pages) }));
     };
     const button = (
       /** @type {string} */ name,
@@ -2007,55 +2219,673 @@ export class VtTable extends VtBase {
       /** @type {number} */ page,
       /** @type {boolean} */ disabled,
     ) => {
-      const b = iconButton({ icon: name, label: t(label), key: label, onClick: () => go(page) });
+      const b = iconButton({
+        icon: name,
+        label: t(label),
+        key: `${where}-${label}`,
+        onClick: () => go(page),
+      });
       b.disabled = disabled;
       return b;
     };
+    const controls = h('div', { class: 'toolbar tb-pages' });
+    if (mode === 'more') {
+      if (win.to < itemCount) {
+        const next = Math.min(win.size, rowCount - win.rowTo);
+        controls.append(
+          this.textButton(t('tableShowMore', { count: fmt(next) }), `${where}-more`, () =>
+            go(this.page + 1),
+          ),
+          this.textButton(t('tableShowAll'), `${where}-more-all`, () => go(pages - 1)),
+        );
+      }
+    } else if (pages > 1 && mode !== 'none') {
+      append(controls, [
+        mode === 'pages' ? button('chevrons-left', 'firstPage', 0, this.page === 0) : null,
+        button('chevron-left', 'previousPage', this.page - 1, this.page === 0),
+      ]);
+      if (mode === 'pages') {
+        for (const page of pageList(this.page, pages)) {
+          if (page < 0) {
+            controls.append(
+              h('span', { class: 'tb-gap', text: '…', attrs: { 'aria-hidden': 'true' } }),
+            );
+            continue;
+          }
+          const current = page === this.page;
+          controls.append(
+            h('button', {
+              class: `tb-page-btn${current ? ' current' : ''}`,
+              text: fmt(page + 1),
+              attrs: {
+                type: 'button',
+                'aria-current': current ? 'page' : null,
+                'aria-label': t('tableGoToPage', { page: fmt(page + 1) }),
+                'data-focus-key': `${where}-page-${page}`,
+              },
+              on: { click: () => go(page) },
+            }),
+          );
+        }
+      } else
+        controls.append(
+          h('span', {
+            class: 'tb-page',
+            text: t('tablePage', { page: fmt(this.page + 1), pages: fmt(pages) }),
+          }),
+        );
+      append(controls, [
+        button('chevron-right', 'nextPage', this.page + 1, this.page >= pages - 1),
+        mode === 'pages'
+          ? button('chevrons-right', 'lastPage', pages - 1, this.page >= pages - 1)
+          : null,
+      ]);
+      if (mode === 'pages' && pages > 7) {
+        const jump = h('input', {
+          class: 'tb-jump',
+          attrs: {
+            type: 'number',
+            min: 1,
+            max: pages,
+            inputmode: 'numeric',
+            'aria-label': t('tableJump'),
+            placeholder: t('tableJumpShort'),
+            'data-focus-key': `${where}-jump`,
+          },
+        });
+        jump.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter') return;
+          const n = Number(jump.value);
+          if (Number.isFinite(n) && n >= 1) go(Math.round(n) - 1);
+        });
+        controls.append(jump);
+      }
+    }
     const sizeSelect = h(
       'select',
       {
         class: 'tb-size',
-        attrs: { 'aria-label': t('tablePageSize'), 'data-focus-key': 'page-size' },
+        attrs: { 'aria-label': t('tablePageSize'), 'data-focus-key': `${where}-page-size` },
       },
-      ...PAGE_SIZES.map((n) =>
-        h('option', { attrs: { value: n }, text: n ? String(n) : t('tableAll') }),
-      ),
+      ...[...new Set([...PAGE_SIZES.filter((n) => n), this.pageSize, 0])]
+        .sort((x, y) => (x || Infinity) - (y || Infinity))
+        .map((n) => h('option', { attrs: { value: n }, text: n ? fmt(n) : t('tableAll') })),
     );
     sizeSelect.value = String(this.pageSize);
     sizeSelect.addEventListener('change', () => {
       this.pageSizeState = Number(sizeSelect.value);
       this.page = 0;
       this.saveState();
-      this.renderGrid();
+      this.render();
     });
     return h(
       'div',
-      { class: 'pager tb-pager', part: 'pager' },
-      h('span', { class: 'pager-info', attrs: { 'aria-live': 'polite' }, text: info }),
+      {
+        class: `pager tb-pager ${where}`,
+        part: 'pager',
+        attrs: { role: 'navigation', 'aria-label': t('tablePagination') },
+      },
+      h('span', {
+        class: 'pager-info',
+        attrs: { 'aria-live': where === 'bottom' ? 'polite' : null },
+        text: info,
+      }),
       h(
         'div',
-        { class: 'toolbar' },
-        h('label', { class: 'tb-size-label' }, h('span', { text: t('tablePerPage') }), sizeSelect),
-        pages > 1 ? button('chevrons-left', 'firstPage', 0, this.page === 0) : null,
-        pages > 1 ? button('chevron-left', 'previousPage', this.page - 1, this.page === 0) : null,
-        pages > 1
-          ? h('span', {
-              class: 'tb-page',
-              text: t('tablePage', { page: fmt(this.page + 1), pages: fmt(pages) }),
-            })
+        { class: 'tb-pager-end' },
+        parseBoolean(this.getAttribute('page-sizes')) !== false
+          ? h(
+              'label',
+              { class: 'tb-size-label' },
+              h('span', { text: t('tablePerPage') }),
+              sizeSelect,
+            )
           : null,
-        pages > 1
-          ? button('chevron-right', 'nextPage', this.page + 1, this.page >= pages - 1)
-          : null,
-        pages > 1 ? button('chevrons-right', 'lastPage', pages - 1, this.page >= pages - 1) : null,
+        controls,
       ),
     );
+  }
+
+  // ---------------------------------------------------------------- query bar
+
+  /**
+   * A condition as a row test, or `null` when it cannot apply.
+   *
+   * Values: `Core` (contains), `=Core` (exact), `Core,Infra` (any of), `!Core` (not),
+   * `>50`, `<=2024-01-01`, `1..5`, `empty`.
+   *
+   * @param {Condition} condition
+   * @param {Column[]} columns
+   * @returns {((index: number) => boolean) | null}
+   */
+  compileCondition(condition, columns) {
+    const { rows } = this.getDataset();
+    const raw = condition.value.trim();
+    if (!raw) return null;
+    /** @type {(index: number) => boolean} */
+    let test;
+    if (condition.key === null) {
+      const q = raw.toLowerCase();
+      const texts = columns.filter((c) => !this.isHidden(c)).map((c) => this.textOf(c));
+      test = (i) => texts.some((list) => list[i].includes(q));
+    } else {
+      const column = columns.find((c) => c.key === condition.key);
+      if (!column) return null;
+      const list =
+        /^[=!]?[^<>=!.]*,/.test(raw) && !/\.\./.test(raw) ? raw.replace(/^=/, '').split(',') : null;
+      if (list) {
+        const texts = this.textOf(column);
+        const wanted = list.map((v) => v.trim().toLowerCase()).filter(Boolean);
+        const raws = rows.map((row) => toText(row[column.key]).toLowerCase());
+        test = (i) => wanted.some((w) => texts[i] === w || raws[i] === w);
+      } else {
+        const predicate = compileFilter(raw, column.type);
+        if (!predicate) return null;
+        const exact = raw.startsWith('=') ? raw.slice(1).trim().toLowerCase() : null;
+        const texts = exact !== null ? this.textOf(column) : null;
+        test = (i) => (texts && texts[i] === exact) || predicate(rows[i][column.key]);
+      }
+    }
+    const inner = test;
+    return condition.not ? (i) => !inner(i) : inner;
+  }
+
+  /**
+   * Most frequent values of a column (display text, count).
+   *
+   * @param {Column} column
+   * @returns {[string, number][]}
+   */
+  valuesOf(column) {
+    let list = this.valueCache.get(column.key);
+    if (!list) {
+      /** @type {Map<string, number>} */
+      const counts = new Map();
+      const rows = this.getDataset().rows;
+      const step = Math.max(1, Math.floor(rows.length / 20000));
+      for (let i = 0; i < rows.length; i += step) {
+        const value = rows[i][column.key];
+        const parts = Array.isArray(value)
+          ? value.map(toText)
+          : [this.displayText(column, rows[i])];
+        for (const text of parts)
+          if (text && text.length <= 80) counts.set(text, (counts.get(text) ?? 0) + 1);
+      }
+      list = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 500);
+      this.valueCache.set(column.key, list);
+    }
+    return list;
+  }
+
+  /**
+   * Reads typed text into a condition: `team:Core`, `score:>50`, `-team:Core`, or free text.
+   *
+   * @param {string} text
+   * @returns {Condition | null}
+   */
+  parseCondition(text) {
+    let raw = text.trim();
+    if (!raw) return null;
+    let not = false;
+    if (raw.startsWith('-') && raw.includes(':')) {
+      not = true;
+      raw = raw.slice(1);
+    }
+    const colon = raw.indexOf(':');
+    if (colon > 0) {
+      const name = raw.slice(0, colon).trim().toLowerCase();
+      const column = this.allColumns().find(
+        (c) => c.key.toLowerCase() === name || c.label.toLowerCase() === name,
+      );
+      const value = raw.slice(colon + 1).trim();
+      if (column && value) {
+        if (value.startsWith('!') && !value.startsWith('!=') && value !== '!empty')
+          return { key: column.key, value: value.slice(1), not: !not };
+        return { key: column.key, value, not };
+      }
+    }
+    return { key: null, value: raw, not: false };
+  }
+
+  /**
+   * @param {Condition} condition
+   * @returns {string}
+   */
+  conditionLabel(condition) {
+    const t = this.t;
+    if (condition.key === null) return t('tableContains', { text: condition.value });
+    const column = this.allColumns().find((c) => c.key === condition.key);
+    const name = column?.label ?? condition.key;
+    const v = condition.value;
+    let text;
+    const op = /^(>=|<=|!=|>|<|=)\s*(.*)$/.exec(v);
+    if (/\.\./.test(v)) text = `${name} ${v.replace(/\s*\.\.\s*/, ' – ')}`;
+    else if (op)
+      text = `${name} ${op[1] === '=' ? '=' : op[1].replace('>=', '≥').replace('<=', '≤').replace('!=', '≠')} ${op[2]}`;
+    else if (v.includes(','))
+      text = `${name} ∈ ${v
+        .split(',')
+        .map((x) => x.trim())
+        .filter(Boolean)
+        .join(' | ')}`;
+    else if (v.toLowerCase() === 'empty') text = `${name} ${t('tableIsEmpty')}`;
+    else text = `${name} ~ ${v}`;
+    return condition.not ? `${t('tableNot')} ${text}` : text;
+  }
+
+  /**
+   * @param {Condition[]} conditions
+   */
+  setConditions(conditions) {
+    this.conditions = conditions;
+    this.page = 0;
+    this.invalidateView();
+    this.focusQuery = true;
+    this.refreshRows();
+    this.filterChanged();
+  }
+
+  restoreQueryFocus() {
+    if (!this.focusQuery) return;
+    this.focusQuery = false;
+    /** @type {HTMLInputElement | null} */ (this.root.querySelector('.tb-query-input'))?.focus();
+  }
+
+  /**
+   * Filter field that turns `column:value` into chips joined by AND or OR, with
+   * suggestions of columns and of their most frequent values.
+   *
+   * @returns {HTMLElement | null}
+   */
+  queryBar() {
+    if (!this.feature('query-bar')) return null;
+    const t = this.t;
+    const bar = h('div', { class: 'tb-query', part: 'query-bar' });
+    const field = h('div', { class: 'tb-query-field' });
+    bar.append(
+      h('span', { class: 'tb-query-icon', attrs: { 'aria-hidden': 'true' } }, icon('filter')),
+    );
+    this.conditions.forEach((condition, index) => {
+      if (index)
+        field.append(
+          h('button', {
+            class: `tb-join ${this.matchAll ? 'and' : 'or'}`,
+            text: t(this.matchAll ? 'tableAnd' : 'tableOr'),
+            attrs: {
+              type: 'button',
+              title: t('tableToggleJoin'),
+              'data-focus-key': `join-${index}`,
+            },
+            on: {
+              click: () => {
+                this.matchAll = !this.matchAll;
+                this.setConditions(this.conditions);
+                this.restoreFocus(`join-${index}`);
+              },
+            },
+          }),
+        );
+      const chip = h(
+        'span',
+        { class: `tb-cond${condition.not ? ' not' : ''}${condition.key === null ? ' text' : ''}` },
+        h('button', {
+          class: 'tb-cond-label',
+          text: this.conditionLabel(condition),
+          attrs: {
+            type: 'button',
+            title: t('tableEditCondition'),
+            'data-focus-key': `cond-${index}`,
+          },
+          on: {
+            click: () => {
+              // Back to text, to change it.
+              const rest = this.conditions.filter((_, i) => i !== index);
+              const column = this.allColumns().find((c) => c.key === condition.key);
+              const text =
+                condition.key === null
+                  ? condition.value
+                  : `${condition.not ? '-' : ''}${column?.key ?? condition.key}:${condition.value}`;
+              this.setConditions(rest);
+              const input = /** @type {HTMLInputElement | null} */ (
+                this.root.querySelector('.tb-query-input')
+              );
+              if (input) {
+                input.value = text;
+                input.focus();
+                input.dispatchEvent(new Event('input'));
+              }
+            },
+          },
+        }),
+        h(
+          'button',
+          {
+            class: 'tb-chip-x',
+            attrs: {
+              type: 'button',
+              'aria-label': t('tableRemoveCondition', { name: this.conditionLabel(condition) }),
+            },
+            on: { click: () => this.setConditions(this.conditions.filter((_, i) => i !== index)) },
+          },
+          icon('close'),
+        ),
+      );
+      field.append(chip);
+    });
+    const listId = `${this.tableId}-suggest`;
+    const input = h('input', {
+      class: 'tb-query-input',
+      attrs: {
+        type: 'text',
+        role: 'combobox',
+        'aria-expanded': 'false',
+        'aria-controls': listId,
+        'aria-autocomplete': 'list',
+        'aria-label': t('tableQueryLabel'),
+        placeholder: this.conditions.length ? t('tableQueryMore') : t('tableQueryPlaceholder'),
+        autocomplete: 'off',
+        spellcheck: 'false',
+        maxlength: 300,
+        'data-focus-key': 'query-input',
+      },
+    });
+    const list = h('ul', {
+      class: 'tb-suggest',
+      attrs: { id: listId, role: 'listbox', hidden: true },
+    });
+    /** @type {{ label: string, hint?: string, apply: () => void }[]} */
+    let options = [];
+    let active = -1;
+    const close = () => {
+      list.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      active = -1;
+    };
+    const paint = () => {
+      list.replaceChildren(
+        ...options.map((o, i) =>
+          h(
+            'li',
+            {
+              class: `tb-option${i === active ? ' active' : ''}`,
+              attrs: {
+                id: `${listId}-${i}`,
+                role: 'option',
+                'aria-selected': String(i === active),
+              },
+              on: {
+                pointerdown: (event) => {
+                  event.preventDefault();
+                  o.apply();
+                },
+              },
+            },
+            h('span', { text: o.label }),
+            o.hint ? h('span', { class: 'tb-option-hint', text: o.hint }) : null,
+          ),
+        ),
+      );
+      list.hidden = !options.length;
+      input.setAttribute('aria-expanded', String(options.length > 0));
+      if (active >= 0) input.setAttribute('aria-activedescendant', `${listId}-${active}`);
+      else input.removeAttribute('aria-activedescendant');
+    };
+    const commit = (/** @type {string} */ text) => {
+      const condition = this.parseCondition(text);
+      if (!condition) return;
+      input.value = '';
+      close();
+      this.setConditions([...this.conditions, condition]);
+    };
+    const suggest = () => {
+      const text = input.value;
+      const raw = text.trim();
+      const negate = raw.startsWith('-') ? '-' : '';
+      const body = negate ? raw.slice(1) : raw;
+      const colon = body.indexOf(':');
+      const columns = this.allColumns().filter((c) => c.filterable);
+      const fmt = (/** @type {number} */ n) => formatNumber(n, this.locale);
+      options = [];
+      if (colon > 0) {
+        const name = body.slice(0, colon).toLowerCase();
+        const column = columns.find(
+          (c) => c.key.toLowerCase() === name || c.label.toLowerCase() === name,
+        );
+        const typed = body.slice(colon + 1);
+        if (column) {
+          const q = typed.replace(/^[=!~]/, '').toLowerCase();
+          if (column.type === 'number' || column.type === 'date') {
+            const sample = column.type === 'number' ? '100' : '2024-01-01';
+            for (const op of ['>', '<', '>=', '<=']) {
+              if (typed && !op.startsWith(typed[0])) continue;
+              options.push({
+                label: `${column.label} ${op} …`,
+                hint: t('tableOpHint'),
+                apply: () => fill(`${negate}${column.key}:${op}`),
+              });
+            }
+            if (!typed)
+              options.push({
+                label: `${column.label} ${sample}..`,
+                hint: t('tableRangeHint'),
+                apply: () => fill(`${negate}${column.key}:`),
+              });
+          }
+          const values = this.valuesOf(column)
+            .filter(([v]) => !q || v.toLowerCase().includes(q))
+            .slice(0, 8);
+          for (const [value, count] of values)
+            options.push({
+              label: `${column.label} = ${value}`,
+              hint: fmt(count),
+              apply: () => commit(`${negate}${column.key}:=${value}`),
+            });
+          if (typed && !values.some(([v]) => v.toLowerCase() === q))
+            options.unshift({
+              label: this.conditionLabel({ key: column.key, value: typed, not: Boolean(negate) }),
+              hint: '↵',
+              apply: () => commit(text),
+            });
+        }
+      } else if (body) {
+        options.push({
+          label: t('tableContains', { text: body }),
+          hint: '↵',
+          apply: () => commit(body),
+        });
+        const q = body.toLowerCase();
+        for (const column of columns) {
+          if (column.label.toLowerCase().includes(q) || column.key.toLowerCase().includes(q))
+            options.push({
+              label: `${column.label}:`,
+              hint: t('tableFilterColumn'),
+              apply: () => fill(`${negate}${column.key}:`),
+            });
+        }
+        // Values of any column that start with the text.
+        for (const column of columns) {
+          if (options.length > 9) break;
+          for (const [value, count] of this.valuesOf(column)) {
+            if (!value.toLowerCase().startsWith(q)) continue;
+            options.push({
+              label: `${column.label} = ${value}`,
+              hint: fmt(count),
+              apply: () => commit(`${column.key}:=${value}`),
+            });
+            break;
+          }
+        }
+      } else {
+        for (const column of columns.slice(0, 10))
+          options.push({
+            label: `${column.label}:`,
+            hint: t(`tableType_${column.type}`),
+            apply: () => fill(`${column.key}:`),
+          });
+      }
+      options = options.slice(0, 10);
+      active = options.length && body ? 0 : -1;
+      paint();
+    };
+    const fill = (/** @type {string} */ text) => {
+      input.value = text;
+      input.focus();
+      suggest();
+    };
+    input.addEventListener('input', suggest);
+    input.addEventListener('focus', suggest);
+    input.addEventListener('blur', () => setTimeout(close, 100));
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (!options.length) return;
+        event.preventDefault();
+        active = (active + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+        paint();
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (active >= 0 && options[active]) options[active].apply();
+        else commit(input.value);
+      } else if (event.key === 'Tab' && active >= 0 && !list.hidden && input.value) {
+        event.preventDefault();
+        options[active].apply();
+      } else if (event.key === 'Escape') {
+        if (!list.hidden) {
+          event.stopPropagation();
+          close();
+        } else if (input.value) {
+          event.stopPropagation();
+          input.value = '';
+        }
+      } else if (event.key === 'Backspace' && !input.value && this.conditions.length) {
+        event.preventDefault();
+        this.setConditions(this.conditions.slice(0, -1));
+      }
+    });
+    field.append(h('span', { class: 'tb-query-box' }, input, list));
+    bar.append(field);
+    if (this.conditions.length > 1)
+      bar.append(
+        h(
+          'button',
+          {
+            class: 'tb-match',
+            attrs: { type: 'button', 'data-focus-key': 'match-mode', title: t('tableToggleJoin') },
+            on: {
+              click: () => {
+                this.matchAll = !this.matchAll;
+                this.setConditions(this.conditions);
+                this.restoreFocus('match-mode');
+              },
+            },
+          },
+          h('span', { text: t(this.matchAll ? 'tableMatchAll' : 'tableMatchAny') }),
+        ),
+      );
+    if (this.conditions.length)
+      bar.append(
+        iconButton({
+          icon: 'close',
+          label: t('tableClearConditions'),
+          key: 'clear-conditions',
+          onClick: () => this.setConditions([]),
+        }),
+      );
+    return bar;
+  }
+
+  // ---------------------------------------------------------------- selection menu
+
+  /** Keys of the rows on the page shown. */
+  pageKeys() {
+    const { items } = this.view();
+    const { from, to } = this.virtual
+      ? { from: 0, to: items.length }
+      : this.pageWindow(items.length);
+    /** @type {string[]} */
+    const keys = [];
+    for (let r = from; r < to; r += 1) {
+      const item = items[r];
+      if (item.kind === 'row') keys.push(this.rowKey(item.index));
+      else if (item.kind === 'group' && this.collapsed.has(item.value))
+        for (const i of item.indexes) keys.push(this.rowKey(i));
+    }
+    return keys;
+  }
+
+  /**
+   * @param {HTMLElement} box
+   */
+  selectMenu(box) {
+    const t = this.t;
+    box.setAttribute('role', 'menu');
+    box.setAttribute('aria-label', t('tableSelectMenu'));
+    box.classList.add('tb-select-menu');
+    const fmt = (/** @type {number} */ n) => formatNumber(n, this.locale);
+    const { order } = this.view();
+    const total = this.getDataset().rows.length;
+    const page = this.pageKeys();
+    const item = (
+      /** @type {string} */ label,
+      /** @type {string} */ hint,
+      /** @type {() => void} */ run,
+      disabled = false,
+    ) => {
+      const b = h(
+        'button',
+        { class: 'tb-menu-item', attrs: { type: 'button', role: 'menuitem', disabled } },
+        h('span', { text: label }),
+        h('span', { class: 'tb-option-hint', text: hint }),
+      );
+      b.addEventListener('click', () => {
+        this.panel = null;
+        run();
+        this.restoreFocus('select-all');
+      });
+      return b;
+    };
+    box.append(
+      item(t('tableSelectPage'), fmt(page.length), () => this.select(page, { add: true })),
+      item(t('tableSelectMatching'), fmt(order.length), () => this.selectAll()),
+    );
+    if (order.length !== total)
+      box.append(
+        item(t('tableSelectEverything'), fmt(total), () =>
+          this.select(this.getDataset().rows.map((_, i) => this.rowKey(i))),
+        ),
+      );
+    box.append(
+      h('hr'),
+      item(t('tableInvertPage'), fmt(page.length), () => {
+        for (const key of page) {
+          if (this.selected.has(key)) this.selected.delete(key);
+          else this.selected.add(key);
+        }
+        this.selectionChanged();
+      }),
+      item(
+        t('tableUnselectPage'),
+        '',
+        () => {
+          for (const key of page) this.selected.delete(key);
+          this.selectionChanged();
+        },
+        !page.some((k) => this.selected.has(k)),
+      ),
+      item(
+        t('tableClearSelection'),
+        fmt(this.selected.size),
+        () => this.clearSelection(),
+        !this.selected.size,
+      ),
+    );
+    box.querySelector('button:not([disabled])')?.setAttribute('data-autofocus', '');
   }
 
   // ---------------------------------------------------------------- popovers
 
   /**
-   * @param {"columns" | "help" | { column: string }} which
+   * @param {"columns" | "help" | "select" | { column: string }} which
    */
   togglePanel(which) {
     const same =
@@ -2082,7 +2912,7 @@ export class VtTable extends VtBase {
     this.renderGrid();
     if (!refocus) return;
     const key =
-      typeof was === 'string' ? (was === 'help' ? 'help' : 'columns') : `menu-${was.column}`;
+      typeof was === 'string' ? (was === 'select' ? 'select-menu' : was) : `menu-${was.column}`;
     const target = /** @type {HTMLElement | null} */ (
       this.root.querySelector(`[data-focus-key="${CSS.escape(key)}"]`)
     );
@@ -2120,12 +2950,17 @@ export class VtTable extends VtBase {
     });
     if (popover === 'help') this.helpPanel(box);
     else if (popover === 'columns') this.columnsPanel(box);
+    else if (popover === 'select') this.selectMenu(box);
     else this.columnMenu(box, popover.column);
     // Header menus open under their column.
-    if (typeof popover === 'object') {
+    if (typeof popover === 'object' || popover === 'select') {
       queueMicrotask(() => {
         const th = /** @type {HTMLElement | null} */ (
-          this.root.querySelector(`th[data-key="${CSS.escape(popover.column)}"]`)
+          this.root.querySelector(
+            typeof popover === 'object'
+              ? `th[data-key="${CSS.escape(popover.column)}"]`
+              : 'th.tb-ctl-select',
+          )
         );
         const host = this.host;
         if (!th || !host) return;
@@ -2476,9 +3311,7 @@ export class VtTable extends VtBase {
       return;
     }
     const { order, items } = this.view();
-    const size = this.effectivePageSize;
-    const pages = Number.isFinite(size) ? Math.max(1, Math.ceil(items.length / size)) : 1;
-    this.page = Math.min(this.page, pages - 1);
+    const win = this.pageWindow(items.length);
     this.renderBody();
     const columns = this.visibleColumns();
     const controls = this.controlColumns();
@@ -2489,20 +3322,23 @@ export class VtTable extends VtBase {
     const all = /** @type {HTMLInputElement | null} */ (
       this.table.querySelector('thead .tb-check')
     );
-    if (all) {
-      const count = order.filter((i) => this.selected.has(this.rowKey(i))).length;
-      all.checked = count > 0 && count === order.length;
-      all.indeterminate = count > 0 && count < order.length;
-    }
+    if (all) all.replaceWith(this.headerCheckbox(order));
     for (const el of this.host.querySelectorAll(
-      ':scope > .tb-bulk, :scope > .tb-state, :scope > .tb-pager',
+      ':scope > .tb-bulk, :scope > .tb-state, :scope > .tb-pager, :scope > .tb-query',
     ))
       el.remove();
     const bulk = this.bulkBar(order);
     const state = this.stateBar();
+    const query = this.queryBar();
+    const position = this.getAttribute('pager-position');
+    if (position === 'top' || position === 'both')
+      this.scroller?.before(this.pager(items.length, order.length, win, 'top'));
     if (state) this.host.prepend(state);
     if (bulk) this.host.prepend(bulk);
-    this.scroller?.after(this.pager(items.length, order.length, pages));
+    if (query) this.host.prepend(query);
+    if (position !== 'top')
+      this.scroller?.after(this.pager(items.length, order.length, win, 'bottom'));
+    this.restoreQueryFocus();
   }
 
   filterChanged() {
@@ -2887,9 +3723,8 @@ export class VtTable extends VtBase {
 
   /** Index of the first row item, or -1. */
   firstRowItem() {
-    const size = this.effectivePageSize;
-    const from = Number.isFinite(size) ? this.page * size : 0;
     const { items } = this.view();
+    const { from } = this.pageWindow(items.length);
     return items.length ? Math.min(from, items.length - 1) : -1;
   }
 
@@ -2906,7 +3741,13 @@ export class VtTable extends VtBase {
     }
     const size = this.effectivePageSize;
     if (Number.isFinite(size)) {
-      const page = Math.floor(r / size);
+      const want = Math.floor(
+        Math.max(
+          0,
+          this.view().base.findIndex((i) => i >= r),
+        ) / size,
+      );
+      const page = this.paginationMode === 'more' ? Math.max(want, this.page) : want;
       if (page !== this.page) {
         this.page = page;
         this.renderGrid();
@@ -3027,7 +3868,8 @@ export class VtTable extends VtBase {
       if (event.shiftKey && this.anchor !== null) {
         event.preventDefault();
         this.selectRange(this.anchor, r);
-      } else if (event.ctrlKey || event.metaKey) this.toggleRow(r);
+      } else if (event.ctrlKey || event.metaKey || this.feature('select-on-click'))
+        this.toggleRow(r);
       else this.anchor = r;
     }
     this.syncTabStop();
@@ -3363,24 +4205,45 @@ function isIdentifier(key) {
 }
 
 /**
+ * Sets a pixel size through the CSSOM (allowed by a strict CSP, unlike `style=""`).
+ *
+ * @template {HTMLElement} E
+ * @param {E} el
+ * @param {"width"|"height"} property
+ * @param {number} px
+ * @returns {E}
+ */
+function sized(el, property, px) {
+  el.style[property] = `${px}px`;
+  return el;
+}
+
+/**
+ * Page numbers to show around the current page; `-1` marks a gap.
+ *
+ * @param {number} current
+ * @param {number} pages
+ * @returns {number[]}
+ */
+export function pageList(current, pages) {
+  if (pages <= 7) return Array.from({ length: pages }, (_, i) => i);
+  const set = new Set([0, pages - 1, current, current - 1, current + 1]);
+  if (current <= 3) [1, 2, 3, 4].forEach((p) => set.add(p));
+  if (current >= pages - 4) [pages - 5, pages - 4, pages - 3, pages - 2].forEach((p) => set.add(p));
+  const list = [...set].filter((p) => p >= 0 && p < pages).sort((a, b) => a - b);
+  /** @type {number[]} */
+  const out = [];
+  list.forEach((p, i) => {
+    if (i && p - list[i - 1] > 1) out.push(p - list[i - 1] === 2 ? p - 1 : -1);
+    out.push(p);
+  });
+  return out;
+}
+
+/**
  * @param {number} width
  * @returns {number}
  */
 function clampWidth(width) {
   return Math.round(Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, width)));
-}
-
-/**
- * Keeps http(s) links only.
- *
- * @param {string} value
- * @returns {string | null}
- */
-function safeUrl(value) {
-  try {
-    const url = new URL(value.trim());
-    return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
-  } catch {
-    return null;
-  }
 }

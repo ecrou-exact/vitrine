@@ -20,7 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   custom actions), grouping with expand / collapse all, expandable rows, a column chooser,
   drag-to-resize and drag-to-reorder columns, pinned columns, footer aggregates, cell editing,
   density, pagination or virtual scrolling for large tables, a card layout on narrow screens,
-  a full keyboard grid with a shortcut panel, and a `state` saved with `persist`.
+  a full keyboard grid with a shortcut panel, and a `state` saved with `persist`. Cell displays per
+  column (badges, statuses, tags, progress, ratings, avatars, links, currencies, relative dates,
+  JSON…) with long text cut behind “See all”, a filter bar that turns `column:value` into chips
+  joined with AND / OR, a selection menu (page, all matching, invert), row click selection,
+  numbered pagination with jump, “Show more” and a sticky header.
 
 - `<vt-csv>`: RFC 4180 parser with delimiter detection, typed columns, sorting, pagination,
   search that filters rows, Table / Raw views and an editor.

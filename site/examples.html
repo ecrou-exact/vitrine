@@ -1670,29 +1670,153 @@ export { unit };</template>
 
       <section class="example-group" id="table" aria-labelledby="table-title">
         <h2 id="table-title">&lt;vt-table&gt;</h2>
+        <p class="muted prose">
+          Everything below is optional and set per column (<code>display</code>, <code>colors</code>, <code>maxLength</code>…)
+          or per table (attributes). Press <kbd>?</kbd> in a table for its keyboard shortcuts.
+        </p>
+
+        <article class="example" data-script="tableTeam">
+          <div class="example-text">
+            <h3>200 people, every display</h3>
+            <p>
+              Avatars with a second line, colored statuses, tags with <em>+N</em>, progress bars, stars, currencies, relative dates and
+              long notes cut with <em>See all</em>. The header stays on top while the table scrolls. Type <code>team:</code> in the filter
+              bar to pick values, chain conditions with AND / OR, select rows for the bulk bar, open a row with its chevron.
+            </p>
+          </div>
+        </article>
+
+        <article class="example" data-script="tableHuge">
+          <div class="example-text">
+            <h3>100 000 rows, virtual scrolling</h3>
+            <p>
+              <code>page-size="0"</code>: one scroll area, only the visible rows are in the page. Sorting, filters and selection run on
+              all the rows.
+            </p>
+          </div>
+        </article>
+
+        <article class="example" data-script="tableLong">
+          <div class="example-text">
+            <h3>Hundreds of characters per cell</h3>
+            <p>
+              Long text is cut after <code>maxLength</code> characters (140 by default) with <em>See all</em>; with <code>wrap</code> it
+              shows <code>lines</code> lines. Widths stay bounded, and on a phone the table turns into cards.
+            </p>
+          </div>
+        </article>
+
+        <article class="example" data-script="tableActions">
+          <div class="example-text">
+            <h3>Bulk actions and events</h3>
+            <p>
+              Your own buttons in the selection bar: <code>vt-bulk-action</code> gives the keys and the rows. Here Delete removes them,
+              Close changes their status with <code>updateRow()</code>. The arrow next to the header box selects the page, every
+              matching row, or inverts the page.
+            </p>
+          </div>
+        </article>
 
         <article class="example">
           <div class="example-text">
-            <h3>Everything on</h3>
-            <p>
-              Shift+click headers to sort on several columns, type <code>&gt;60000</code> or <code>2020-01-01..2022-12-31</code> in a filter,
-              select rows for the bulk bar, drag headers and their edges, open a header menu to group or pin, press <kbd>?</kbd> for the shortcuts.
-            </p>
+            <h3>Click a row to select it, no bulk bar</h3>
+            <p><code>select-on-click</code> checks the row on click; <code>bulk-bar="false"</code> keeps the count in the pager only.</p>
           </div>
           <template>
-            <vt-table variant="full" label="Team" row-key="id" editable footer page-size="10">
-              <template>[{"id":1,"name":"Ada","team":"Core","salary":42000,"hired":"2016-01-01","active":false},{"id":2,"name":"Alan","team":"Infra","salary":49919,"hired":"2017-02-04","active":true},{"id":3,"name":"Grace","team":"Design","salary":57838,"hired":"2018-03-07","active":true},{"id":4,"name":"Linus","team":"Data","salary":65757,"hired":"2019-04-10","active":false},{"id":5,"name":"Margaret","team":"Core","salary":73676,"hired":"2020-05-13","active":true},{"id":6,"name":"Ken","team":"Infra","salary":81595,"hired":"2021-06-16","active":true},{"id":7,"name":"Barbara","team":"Design","salary":89514,"hired":"2022-07-19","active":false},{"id":8,"name":"Dennis","team":"Data","salary":47433,"hired":"2023-08-22","active":true},{"id":9,"name":"Frances","team":"Core","salary":55352,"hired":"2024-09-25","active":true},{"id":10,"name":"Edsger","team":"Infra","salary":63271,"hired":"2016-10-28","active":false},{"id":11,"name":"Donald","team":"Design","salary":71190,"hired":"2017-11-03","active":true},{"id":12,"name":"Radia","team":"Data","salary":79109,"hired":"2018-12-06","active":true},{"id":13,"name":"Tim","team":"Core","salary":87028,"hired":"2019-01-09","active":false},{"id":14,"name":"Hedy","team":"Infra","salary":44947,"hired":"2020-02-12","active":true},{"id":15,"name":"Claude","team":"Design","salary":52866,"hired":"2021-03-15","active":true},{"id":16,"name":"Katherine","team":"Data","salary":60785,"hired":"2022-04-18","active":false},{"id":17,"name":"Niklaus","team":"Core","salary":68704,"hired":"2023-05-21","active":true},{"id":18,"name":"Sophie","team":"Infra","salary":76623,"hired":"2024-06-24","active":true},{"id":19,"name":"John","team":"Design","salary":84542,"hired":"2016-07-27","active":false},{"id":20,"name":"Lynn","team":"Data","salary":42461,"hired":"2017-08-02","active":true},{"id":21,"name":"Guido","team":"Core","salary":50380,"hired":"2018-09-05","active":true},{"id":22,"name":"Bjarne","team":"Infra","salary":58299,"hired":"2019-10-08","active":false},{"id":23,"name":"Anita","team":"Design","salary":66218,"hired":"2020-11-11","active":true},{"id":24,"name":"Leslie","team":"Data","salary":74137,"hired":"2021-12-14","active":true}]</template>
+            <vt-table selectable="multiple" select-on-click bulk-bar="false" row-key="code" label="Countries"
+              columns='[{"key":"code","display":"code"},{"key":"name"},{"key":"continent","display":"badge"},{"key":"population","display":"number"}]'>
+              <template>
+                [{"code":"LU","name":"Luxembourg","continent":"Europe","population":672050},
+                 {"code":"JP","name":"Japan","continent":"Asia","population":124516650},
+                 {"code":"BR","name":"Brazil","continent":"South America","population":216422446},
+                 {"code":"KE","name":"Kenya","continent":"Africa","population":55100586},
+                 {"code":"CA","name":"Canada","continent":"North America","population":40097761},
+                 {"code":"NZ","name":"New Zealand","continent":"Oceania","population":5223100}]
+              </template>
             </vt-table>
           </template>
         </article>
 
         <article class="example">
           <div class="example-text">
-            <h3>Grouped, from CSV</h3>
-            <p>Rows grouped by a column, with expand and collapse all; the footer sums the numbers of each view.</p>
+            <h3>Badges and statuses in HTML only</h3>
+            <p>The <code>columns</code> attribute takes the same JSON as the property: colors by value, labels, link templates.</p>
           </div>
           <template>
-            <vt-table variant="full" label="sales.csv" group-by="region" footer selectable="none" density="compact">
+            <vt-table variant="full" label="Issues" row-key="id" density="compact"
+              columns='[
+                {"key":"id","label":"#","width":64,"href":"https://example.org/issues/{id}","display":"link"},
+                {"key":"title","maxLength":48},
+                {"key":"state","display":"status","colors":{"open":"green","review":"orange","closed":"gray","blocked":"red"}},
+                {"key":"priority","display":"badge","colors":{"P0":"red","P1":"orange","P2":"blue","P3":"gray"}},
+                {"key":"labels","display":"tags","maxItems":2},
+                {"key":"updated","display":"relative"}
+              ]'>
+              <template>
+                [{"id":412,"title":"Table header jumps when the filter row opens on Safari","state":"open","priority":"P1","labels":["bug","safari","table"],"updated":"2026-11-03T16:20:00Z"},
+                 {"id":409,"title":"Add CSV export of the selection","state":"review","priority":"P2","labels":["feature"],"updated":"2026-11-02T09:00:00Z"},
+                 {"id":398,"title":"Crash on empty JSON array","state":"closed","priority":"P0","labels":["bug","parser","regression","json"],"updated":"2026-10-28T11:45:00Z"},
+                 {"id":395,"title":"Keyboard focus lost after sorting","state":"blocked","priority":"P1","labels":["a11y","keyboard"],"updated":"2026-10-20T14:10:00Z"},
+                 {"id":388,"title":"Dark theme contrast of badges","state":"open","priority":"P3","labels":["design"],"updated":"2026-10-12T08:30:00Z"}]
+              </template>
+            </vt-table>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Pagination styles</h3>
+            <p>
+              <code>pagination="pages"</code> (numbers, gaps, jump to a page), <code>simple</code> (previous / next),
+              <code>more</code> (a Show more button) or <code>none</code>; <code>pager-position="both"</code> repeats it above.
+            </p>
+          </div>
+          <template>
+            <vt-table id="pages-demo" pagination="pages" pager-position="both" page-size="5" density="compact"
+              columns='[{"key":"n","label":"N°"},{"key":"square","display":"number"},{"key":"even","display":"boolean","trueLabel":"even","falseLabel":"odd"}]'>
+              <template>
+                [{"n":1,"square":1,"even":false},{"n":2,"square":4,"even":true},{"n":3,"square":9,"even":false},{"n":4,"square":16,"even":true},
+                 {"n":5,"square":25,"even":false},{"n":6,"square":36,"even":true},{"n":7,"square":49,"even":false},{"n":8,"square":64,"even":true},
+                 {"n":9,"square":81,"even":false},{"n":10,"square":100,"even":true},{"n":11,"square":121,"even":false},{"n":12,"square":144,"even":true},
+                 {"n":13,"square":169,"even":false},{"n":14,"square":196,"even":true},{"n":15,"square":225,"even":false},{"n":16,"square":256,"even":true},
+                 {"n":17,"square":289,"even":false},{"n":18,"square":324,"even":true},{"n":19,"square":361,"even":false},{"n":20,"square":400,"even":true},
+                 {"n":21,"square":441,"even":false},{"n":22,"square":484,"even":true},{"n":23,"square":529,"even":false},{"n":24,"square":576,"even":true},
+                 {"n":25,"square":625,"even":false},{"n":26,"square":676,"even":true},{"n":27,"square":729,"even":false},{"n":28,"square":784,"even":true},
+                 {"n":29,"square":841,"even":false},{"n":30,"square":900,"even":true},{"n":31,"square":961,"even":false},{"n":32,"square":1024,"even":true},
+                 {"n":33,"square":1089,"even":false},{"n":34,"square":1156,"even":true},{"n":35,"square":1225,"even":false},{"n":36,"square":1296,"even":true},
+                 {"n":37,"square":1369,"even":false},{"n":38,"square":1444,"even":true},{"n":39,"square":1521,"even":false},{"n":40,"square":1600,"even":true}]
+              </template>
+            </vt-table>
+            <vt-table pagination="more" page-size="10" density="compact" columns='[{"key":"word"},{"key":"length","display":"progress","max":12}]'>
+              <template>
+                word,length
+                a,1
+                be,2
+                sea,3
+                tree,4
+                house,5
+                garden,6
+                kitchen,7
+                elephant,8
+                adventure,9
+                basketball,10
+                friendships,11
+                headquarters,12
+                thunderstorm,12
+                encyclopedia,12
+              </template>
+            </vt-table>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Grouped, from CSV, with group totals</h3>
+            <p>Each group shows the aggregates of its columns; the footer shows them for every filtered row.</p>
+          </div>
+          <template>
+            <vt-table variant="full" label="sales.csv" group-by="region" footer selectable="none" density="compact"
+              columns='[{"key":"region"},{"key":"product","display":"badge"},{"key":"units","aggregate":"sum"},{"key":"revenue","display":"currency","currency":"EUR","aggregate":"sum"}]'>
               <template>
                 region,product,units,revenue
                 North,Keyboard,120,5400
@@ -1701,6 +1825,23 @@ export { unit };</template>
                 South,Screen,25,7500
                 West,Mouse,210,4200
                 West,Screen,40,12000
+              </template>
+            </vt-table>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Cards, always</h3>
+            <p><code>layout="cards"</code> shows every row as a card; <code>layout="auto"</code> (default) does it under 560 px.</p>
+          </div>
+          <template>
+            <vt-table layout="cards" selectable="multiple" label="Team"
+              columns='[{"key":"name","display":"avatar","subtitle":"{role}"},{"key":"role","hidden":true},{"key":"skills","display":"tags"},{"key":"load","display":"progress"}]'>
+              <template>
+                [{"name":"Ada Lovelace","role":"Analyst","skills":["math","engines","notes"],"load":82},
+                 {"name":"Alan Turing","role":"Cryptanalyst","skills":["logic","machines"],"load":45},
+                 {"name":"Grace Hopper","role":"Admiral","skills":["compilers","COBOL","teaching","debugging"],"load":20}]
               </template>
             </vt-table>
           </template>
