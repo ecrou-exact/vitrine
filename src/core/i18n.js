@@ -24,7 +24,8 @@
  *   | keyof typeof import('../components/yaml/strings.js').en
  *   | keyof typeof import('../components/xml/strings.js').en
  *   | keyof typeof import('../components/cron/strings.js').en
- *   | keyof typeof import('../components/cert/strings.js').en} StringKey
+ *   | keyof typeof import('../components/cert/strings.js').en
+ *   | keyof typeof import('../components/table/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

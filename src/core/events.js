@@ -53,6 +53,14 @@ export const EVENTS = Object.freeze({
   JOB_CHANGE: 'vt-job-change',
   /** Regex: matching ran. Detail: `{ count, capped, timedOut }`. */
   MATCH: 'vt-match',
+  /** Table: a selection bar action was chosen. Detail: `{ action, keys, rows }`. */
+  BULK_ACTION: 'vt-bulk-action',
+  /** Table: a cell was edited (cancelable). Detail: `{ key, column, value, previous, row }`. */
+  CELL_EDIT: 'vt-cell-edit',
+  /** Table: columns shown, moved, resized or pinned. Detail: `{ columns }`. */
+  COLUMN_CHANGE: 'vt-column-change',
+  /** Table: Enter or double-click on a row. Detail: `{ key, row }`. */
+  ROW_ACTIVATE: 'vt-row-activate',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

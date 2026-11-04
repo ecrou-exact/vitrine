@@ -27,6 +27,7 @@ import { VtToml } from './components/toml/vt-toml.js';
 import { VtJwt } from './components/jwt/vt-jwt.js';
 import { VtXml } from './components/xml/vt-xml.js';
 import { VtCert } from './components/cert/vt-cert.js';
+import { VtTable } from './components/table/vt-table.js';
 import { VtYaml } from './components/yaml/vt-yaml.js';
 import { VtCron } from './components/cron/vt-cron.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
@@ -60,6 +61,7 @@ export {
   VtJwt,
   VtXml,
   VtCert,
+  VtTable,
   VtYaml,
   VtCron,
   configure,
@@ -112,6 +114,7 @@ export const registry = new Map(
     ['vt-jwt', VtJwt],
     ['vt-xml', VtXml],
     ['vt-cert', VtCert],
+    ['vt-table', VtTable],
     ['vt-yaml', VtYaml],
     ['vt-cron', VtCron],
   ]),
@@ -141,6 +144,7 @@ const TYPES = /** @type {const} */ ({
   jwt: 'vt-jwt',
   xml: 'vt-xml',
   cert: 'vt-cert',
+  table: 'vt-table',
   yaml: 'vt-yaml',
   cron: 'vt-cron',
 });
