@@ -360,9 +360,18 @@ mark.match.current {
   max-height: var(--_max-height, none);
   overflow: auto;
   background: var(--_code-bg);
-  overscroll-behavior: contain;
+  /*
+   * Without a height limit the page must keep scrolling: a body that only scrolls
+   * sideways (long lines) would otherwise swallow vertical wheel and touch scrolling.
+   */
+  overscroll-behavior: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--_border-strong) transparent;
+}
+
+:host([max-height]) .body,
+.vt[data-fullscreen] .body {
+  overscroll-behavior: contain;
 }
 
 .body:focus-visible {
