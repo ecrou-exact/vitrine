@@ -30,6 +30,9 @@ import { VtCert } from './components/cert/vt-cert.js';
 import { VtTable } from './components/table/vt-table.js';
 import { VtYaml } from './components/yaml/vt-yaml.js';
 import { VtCron } from './components/cron/vt-cron.js';
+import { VtStatus } from './components/status/vt-status.js';
+import { VtCalendar } from './components/calendar/vt-calendar.js';
+import { VtPricing } from './components/pricing/vt-pricing.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -64,6 +67,9 @@ export {
   VtTable,
   VtYaml,
   VtCron,
+  VtStatus,
+  VtCalendar,
+  VtPricing,
   configure,
   getConfig,
   EVENTS,
@@ -117,6 +123,9 @@ export const registry = new Map(
     ['vt-table', VtTable],
     ['vt-yaml', VtYaml],
     ['vt-cron', VtCron],
+    ['vt-status', VtStatus],
+    ['vt-calendar', VtCalendar],
+    ['vt-pricing', VtPricing],
   ]),
 );
 
@@ -147,6 +156,9 @@ const TYPES = /** @type {const} */ ({
   table: 'vt-table',
   yaml: 'vt-yaml',
   cron: 'vt-cron',
+  status: 'vt-status',
+  calendar: 'vt-calendar',
+  pricing: 'vt-pricing',
 });
 
 /**
