@@ -6,6 +6,7 @@
  */
 import { build } from 'esbuild';
 import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 const KB = 1024;
@@ -48,7 +49,7 @@ const rawCss = {
   /** @param {import('esbuild').PluginBuild} b */
   setup(b) {
     b.onResolve({ filter: /\.css\?raw$/ }, (a) => ({
-      path: new URL(a.path.replace(/\?raw$/, ''), `file://${a.resolveDir}/`).pathname,
+      path: resolve(a.resolveDir, a.path.replace(/\?raw$/, '')),
       namespace: 'raw-css',
     }));
     b.onLoad({ filter: /.*/, namespace: 'raw-css' }, async (a) => ({
