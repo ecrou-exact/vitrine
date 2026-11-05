@@ -5,6 +5,7 @@
 import { build, context } from 'esbuild';
 import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
 import { BUNDLED_LANGUAGES, listLanguages } from './languages.js';
 import { syntaxThemes } from './syntax-themes.js';
 import { thirdParty } from './third-party.js';
@@ -29,7 +30,7 @@ const rawCss = {
   /** @param {import('esbuild').PluginBuild} b */
   setup(b) {
     b.onResolve({ filter: /\.css\?raw$/ }, (args) => ({
-      path: new URL(args.path.replace(/\?raw$/, ''), `file://${args.resolveDir}/`).pathname,
+      path: resolve(args.resolveDir, args.path.replace(/\?raw$/, '')),
       namespace: 'raw-css',
     }));
     b.onLoad({ filter: /.*/, namespace: 'raw-css' }, async (args) => ({
