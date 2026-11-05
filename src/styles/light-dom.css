@@ -60,6 +60,9 @@ vt-jwt:not(:defined),
 vt-xml:not(:defined),
 vt-cert:not(:defined),
 vt-table:not(:defined),
+vt-status:not(:defined),
+vt-calendar:not(:defined),
+vt-pricing:not(:defined),
 vt-yaml:not(:defined) {
   position: relative;
   min-height: 96px;
@@ -83,6 +86,9 @@ vt-yaml:not(:defined) {
     vt-xml,
     vt-cert,
     vt-table,
+    vt-status,
+    vt-calendar,
+    vt-pricing,
     vt-timeline,
     vt-git,
     vt-job
@@ -116,6 +122,9 @@ vt-yaml:not(:defined) {
     vt-xml,
     vt-cert,
     vt-table,
+    vt-status,
+    vt-calendar,
+    vt-pricing,
     vt-timeline,
     vt-git,
     vt-job
@@ -164,6 +173,9 @@ vt-yaml:not(:defined) {
       vt-xml,
       vt-cert,
       vt-table,
+      vt-status,
+      vt-calendar,
+      vt-pricing,
       vt-timeline,
       vt-git,
       vt-job

@@ -25,7 +25,10 @@
  *   | keyof typeof import('../components/xml/strings.js').en
  *   | keyof typeof import('../components/cron/strings.js').en
  *   | keyof typeof import('../components/cert/strings.js').en
- *   | keyof typeof import('../components/table/strings.js').en} StringKey
+ *   | keyof typeof import('../components/table/strings.js').en
+ *   | keyof typeof import('../components/status/strings.js').en
+ *   | keyof typeof import('../components/calendar/strings.js').en
+ *   | keyof typeof import('../components/pricing/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

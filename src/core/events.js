@@ -61,6 +61,16 @@ export const EVENTS = Object.freeze({
   COLUMN_CHANGE: 'vt-column-change',
   /** Table: Enter or double-click on a row. Detail: `{ key, row }`. */
   ROW_ACTIVATE: 'vt-row-activate',
+  /** Status: the overall state changed. Detail: `{ status, previous }`. */
+  STATUS_CHANGE: 'vt-status-change',
+  /** Calendar: the period shown changed. Detail: `{ date, view }`. */
+  DATE_CHANGE: 'vt-date-change',
+  /** Calendar: an event was opened. Detail: `{ uid, title, start, end, allDay, url }`. */
+  EVENT_SELECT: 'vt-event-select',
+  /** Pricing: the period or currency changed. Detail: `{ period, currency }`. */
+  PRICING_CHANGE: 'vt-pricing-change',
+  /** Pricing: a plan button was pressed (cancelable). Detail: `{ plan, name, period, currency, amount, url }`. */
+  PLAN_SELECT: 'vt-plan-select',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

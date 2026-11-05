@@ -12,6 +12,18 @@ const SAMPLES = {
 };
 const THEMES = ['light', 'dark', 'dim', 'paper', 'high-contrast'];
 const MORE = {
+  'vt-status': [
+    '{"components":[{"name":"API","status":"degraded","since":"2026-10-01","group":"Core","url":"/api","history":{"2026-10-20":"major","2026-10-21":"partial","2026-10-22":"maintenance"}}],"incidents":[{"title":"Slow","status":"identified","impact":"minor","updates":[{"status":"identified","text":"Found"}]},{"title":"Old","status":"resolved","url":"/old"}],"maintenances":[{"title":"Upgrade","start":"2099-01-01T00:00:00Z"}]}',
+    { now: '2026-11-05T12:00:00Z' },
+  ],
+  'vt-calendar': [
+    '[{"title":"Lunch","start":"2026-11-05T12:00:00Z","url":"/lunch"},{"title":"Holiday","start":"2026-11-11"},{"title":"Off","start":"2026-11-06T12:00:00Z","cancelled":true}]',
+    { now: '2026-11-05T12:00:00Z', timezone: 'UTC' },
+  ],
+  'vt-pricing': [
+    '{"currencies":["EUR","USD"],"plans":[{"id":"a","name":"A","price":{"monthly":{"EUR":1,"USD":2},"yearly":{"EUR":10,"USD":20}},"features":["One",{"text":"Two","included":false}]},{"id":"b","name":"B","badge":"Best","highlight":true,"price":"Ask","cta":{"label":"Go","url":"/go"}}],"compare":[{"group":"G","name":"Row","description":"Note","values":{"a":true,"b":"Yes"}}]}',
+    {},
+  ],
   'vt-csv': ['name,score\nAda,98\nAlan,95', {}],
   'vt-tags': ['{"value":["design"],"options":["design","research","a11y"]}', { mode: 'edit' }],
   'vt-diff': ['--- a\n+++ b\n@@ -1,2 +1,2 @@\n same\n-old line\n+new line', {}],
