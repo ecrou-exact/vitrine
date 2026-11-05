@@ -121,6 +121,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-jwt>`      | `content`                                                                                |
 | `<vt-cron>`     | `content`                                                                                |
 | `<vt-cert>`     | `content`                                                                                |
+| `<vt-status>`   | `content`                                                                                |
+| `<vt-calendar>` | `content`                                                                                |
+| `<vt-pricing>`  | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 
