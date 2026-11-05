@@ -38,6 +38,9 @@ let aliases = null;
 /** @type {Map<string, Promise<boolean>>} */
 const pending = new Map();
 
+/** Longest line that gets syntax highlighting, in characters. */
+export const MAX_HIGHLIGHT_LINE = 10_000;
+
 /**
  * Maps a language name or alias to its canonical highlight.js name.
  *
@@ -125,6 +128,21 @@ export function detectLanguage(text) {
 }
 
 /**
+ * @param {string} text
+ * @returns {boolean} Whether a line is too long to highlight: on one long line, highlight.js can
+ *   take quadratic time and freeze the page, well under `highlightLimit`.
+ */
+function hasLongLine(text) {
+  for (let start = 0; start < text.length;) {
+    const end = text.indexOf('\n', start);
+    const stop = end === -1 ? text.length : end;
+    if (stop - start > MAX_HIGHLIGHT_LINE) return true;
+    start = stop + 1;
+  }
+  return false;
+}
+
+/**
  * Highlights text with a registered language and returns sanitized DOM nodes.
  * Falls back to plain text when the language is not registered.
  *
@@ -133,7 +151,7 @@ export function detectLanguage(text) {
  * @returns {DocumentFragment}
  */
 export function highlight(text, language) {
-  if (language === 'plaintext' || !isLanguageLoaded(language)) {
+  if (language === 'plaintext' || !isLanguageLoaded(language) || hasLongLine(text)) {
     const fragment = document.createDocumentFragment();
     fragment.append(document.createTextNode(text));
     return fragment;

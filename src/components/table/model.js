@@ -149,7 +149,7 @@ export function fromValue(value, columns = null) {
     const arrays = /** @type {unknown[][]} */ (list.filter(Array.isArray));
     const header = defs
       ? defs.map((d) => d.key)
-      : uniqueKeys(arrays[0].map((v, i) => String(v ?? '') || `column${i + 1}`));
+      : uniqueKeys(arrays[0].map((v, i) => toText(v) || `column${i + 1}`));
     const body = defs ? arrays : arrays.slice(1);
     list = body.map((cells) => Object.fromEntries(header.map((key, i) => [key, cells[i]])));
     if (!defs) defs = header.map((key) => ({ key }));
@@ -334,7 +334,8 @@ export function toText(value) {
     try {
       return JSON.stringify(value);
     } catch {
-      return String(value);
+      // Too deep, or a cycle: String() would overflow the stack too.
+      return '';
     }
   }
   return String(value);
@@ -536,17 +537,16 @@ export function serialize(rows, columns, format) {
     );
     return JSON.stringify(list, null, 2);
   }
-  const header = columns.map((c) => c.label);
-  const body = rows.map((row) => columns.map((c) => toText(row[c.key])));
+  // Cells starting with = + - @ are prefixed so spreadsheets do not run them as formulas.
+  const safe = [
+    columns.map((c) => c.label),
+    ...rows.map((row) => columns.map((c) => toText(row[c.key]))),
+  ].map((cells) => cells.map((c) => (/^[=+\-@\t\r]/.test(c) && !NUMBER.test(c) ? `'${c}` : c)));
   if (format === 'tsv')
-    return [header, ...body]
+    return safe
       .map((cells) => cells.map((c) => c.replace(/[\t\r\n]+/g, ' ')).join('\t'))
       .join('\n');
-  // Cells starting with = + - @ are prefixed so spreadsheets do not run them as formulas.
-  const safe = body.map((cells) =>
-    cells.map((c) => (/^[=+\-@\t\r]/.test(c) && !NUMBER.test(c) ? `'${c}` : c)),
-  );
-  return toCsv([header, ...safe], ',');
+  return toCsv(safe, ',');
 }
 
 /**

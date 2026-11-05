@@ -141,7 +141,7 @@ export function toLevel(value) {
   if (typeof value !== 'string') return null;
   const lower = value.trim().toLowerCase();
   if (/^\d+$/.test(lower)) return toLevel(Number(lower));
-  return ALIASES[lower] ?? null;
+  return Object.hasOwn(ALIASES, lower) ? ALIASES[lower] : null;
 }
 
 /**
