@@ -93,6 +93,91 @@ const PAYLOADS = [
 ];
 
 const MODES = [
+  {
+    tag: 'vt-status',
+    attrs: { variant: 'full', now: '2026-11-05T12:00:00Z' },
+    wrap: (p) =>
+      JSON.stringify({
+        message: p,
+        components: [
+          {
+            name: p,
+            description: p,
+            group: p,
+            url: p,
+            status: p,
+            since: '2026-11-01',
+            history: [{ date: '2026-11-02', status: 'major', note: p }],
+          },
+        ],
+        incidents: [
+          {
+            title: p,
+            status: p,
+            impact: p,
+            url: p,
+            components: [p],
+            updates: [{ status: p, text: p }],
+          },
+        ],
+        maintenances: [{ title: p, status: p, url: p }],
+      }),
+  },
+  {
+    tag: 'vt-calendar',
+    attrs: {
+      variant: 'full',
+      view: 'agenda',
+      date: '2026-11-01',
+      now: '2026-11-05T12:00:00Z',
+      timezone: 'UTC',
+    },
+    wrap: (p) =>
+      JSON.stringify([
+        { title: p, description: p, location: p, url: p, categories: [p], start: '2026-11-05' },
+      ]),
+  },
+  {
+    tag: 'vt-calendar',
+    attrs: { date: '2026-11', now: '2026-11-05T12:00:00Z', timezone: 'UTC' },
+    wrap: (p) => {
+      const line = p.replace(/\n/g, ' ');
+      return [
+        'BEGIN:VCALENDAR',
+        'BEGIN:VEVENT',
+        `SUMMARY:${line}`,
+        `DESCRIPTION:${line}`,
+        `LOCATION:${line}`,
+        `URL:${line}`,
+        'DTSTART:20261105T100000Z',
+        'END:VEVENT',
+        'END:VCALENDAR',
+      ].join('\n');
+    },
+  },
+  {
+    tag: 'vt-pricing',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        periods: [{ id: p, label: p, note: p }],
+        currency: p,
+        plans: [
+          {
+            id: p,
+            name: p,
+            description: p,
+            badge: p,
+            unit: p,
+            price: p,
+            cta: { label: p, url: p },
+            features: [p],
+          },
+        ],
+        compare: [{ name: p, group: p, description: p, values: { [p]: p } }],
+        note: p,
+      }),
+  },
   { tag: 'vt-markdown', attrs: {} },
   { tag: 'vt-markdown', attrs: { 'allow-html': '' } },
   { tag: 'vt-markdown', attrs: { 'allow-html': '', variant: 'full', 'default-tab': 'split' } },

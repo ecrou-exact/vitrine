@@ -1,0 +1,314 @@
+/*
+ * Status page: an overall banner, incidents, and components with a bar per day.
+ * States are always shown with a word and an icon, and the bars of a bad day are taller.
+ */
+.status-body {
+  display: grid;
+  gap: var(--_space-5);
+  padding: var(--_space-4) var(--_space-5);
+  background: var(--_surface);
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .status-body,
+.vt[data-fullscreen] .status-body {
+  overscroll-behavior: contain;
+}
+
+.data-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}
+
+/* ---------- Tones ---------- */
+
+.tone-operational {
+  --_tone: var(--_success);
+}
+
+.tone-degraded,
+.tone-partial {
+  --_tone: var(--_warning);
+}
+
+.tone-major {
+  --_tone: var(--_danger);
+}
+
+.tone-maintenance {
+  --_tone: var(--_info);
+}
+
+.tone-unknown,
+.tone-resolved,
+.tone-none {
+  --_tone: var(--_fg-muted);
+}
+
+/* ---------- Banner ---------- */
+
+.status-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-3);
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid color-mix(in srgb, var(--_tone) 45%, var(--_border));
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_tone) 9%, var(--_surface));
+  color: var(--_fg);
+}
+
+.status-banner > .icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--_tone);
+}
+
+.status-banner-text {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.status-banner-title {
+  margin: 0;
+  font: 600 16px / 1.3 var(--_font-ui);
+}
+
+.status-banner-text p {
+  margin: 2px 0 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-ui) / 1.45 var(--_font-ui);
+}
+
+.status-updated {
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.3 var(--_font-ui);
+}
+
+/* ---------- Sections ---------- */
+
+.status-section {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+}
+
+.status-group {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.status-title {
+  margin: 0;
+  color: var(--_fg-muted);
+  font: 600 var(--_font-size-small) / 1.3 var(--_font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-none {
+  margin: 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-ui) / 1.45 var(--_font-ui);
+}
+
+.status-more {
+  justify-self: start;
+}
+
+/* ---------- Components ---------- */
+
+.status-components {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  list-style: none;
+}
+
+.status-component {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  padding: var(--_space-3);
+}
+
+.status-component + .status-component {
+  border-top: 1px solid var(--_border);
+}
+
+.status-component-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.status-name {
+  min-width: 0;
+  color: var(--_fg);
+  font: 500 14px / 1.4 var(--_font-ui);
+  overflow-wrap: anywhere;
+}
+
+.status-name a,
+.status-link {
+  color: var(--_accent-fg);
+}
+
+.status-description {
+  margin: 2px 0 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.4 var(--_font-ui);
+}
+
+.status-state {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  color: var(--_tone);
+  font: 600 var(--_font-size-small) / 1.3 var(--_font-ui);
+}
+
+.status-state .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- Days ---------- */
+
+.status-days {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 28px;
+  border-radius: 2px;
+  cursor: default;
+  touch-action: pan-y;
+}
+
+.status-days:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.status-day {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--_tone);
+}
+
+.status-day.tone-operational {
+  height: 62%;
+}
+
+.status-day.tone-none {
+  height: 62%;
+  background: var(--_border-strong);
+}
+
+.status-day.current {
+  outline: 1px solid var(--_fg);
+}
+
+.status-days-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--_space-3);
+  margin-top: var(--_space-1);
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.4 var(--_font-ui);
+}
+
+.status-days-foot > span:first-child,
+.status-days-foot > span:last-child {
+  flex: none;
+}
+
+.status-day-info {
+  min-width: 0;
+  color: var(--_fg);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Incidents ---------- */
+
+.status-incident {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-left: 3px solid var(--_tone);
+  border-radius: var(--_radius-sm);
+}
+
+.status-incident-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.status-incident h4 {
+  margin: 0;
+  color: var(--_fg);
+  font: 600 14px / 1.4 var(--_font-ui);
+  overflow-wrap: anywhere;
+}
+
+.status-tag {
+  flex: none;
+  color: var(--_fg-muted);
+  font: 600 var(--_font-size-small) / 1.3 var(--_font-ui);
+}
+
+.status-facts {
+  margin: 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.45 var(--_font-ui);
+}
+
+.status-updates {
+  display: grid;
+  gap: var(--_space-2);
+  margin: 0;
+  padding: 0 0 0 var(--_space-3);
+  border-left: 1px solid var(--_border);
+  list-style: none;
+}
+
+.status-update-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-2);
+  color: var(--_fg);
+  font: 400 var(--_font-size-small) / 1.4 var(--_font-ui);
+}
+
+.status-update-head time {
+  color: var(--_fg-muted);
+}
+
+.status-update p {
+  margin: 2px 0 0;
+  color: var(--_fg);
+  font: 400 var(--_font-size-ui) / 1.5 var(--_font-ui);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.status-link {
+  justify-self: start;
+  font: 500 var(--_font-size-ui) / 1.4 var(--_font-ui);
+}
