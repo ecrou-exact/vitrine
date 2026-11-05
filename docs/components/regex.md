@@ -110,12 +110,14 @@ Flag buttons are toggle buttons (`aria-pressed`) with the flag's name as tooltip
 
 Patterns from untrusted sources can be slow: some take exponential time on text that almost matches (catastrophic backtracking). A single run of a regular expression cannot be interrupted in the browser, and running it in a worker would need a separate script that strict Content Security Policies may block, so `<vt-regex>` uses limits instead:
 
-| Limit                | Value         | What happens                                                                           |
-| -------------------- | ------------- | -------------------------------------------------------------------------------------- |
-| Pattern length       | 2,000 chars   | The rest of the pattern is ignored.                                                    |
-| Text tested          | 100,000 chars | The rest is shown but not tested; a notice says so.                                    |
-| Matches              | 1,000         | Matching stops; the badge shows `1,000+`.                                              |
-| Time                 | 100 ms        | Checked between matches; matching stops and a notice says so.                          |
-| Repeated repetitions | —             | Patterns such as `(a+)+` or `(\w*)*` are not run until the reader clicks "Run anyway". |
+| Limit          | Value         | What happens                                                                                                  |
+| -------------- | ------------- | ------------------------------------------------------------------------------------------------------------- |
+| Pattern length | 2,000 chars   | The rest of the pattern is ignored.                                                                           |
+| Text tested    | 100,000 chars | The rest is shown but not tested; a notice says so.                                                           |
+| Matches        | 1,000         | Matching stops; the badge shows `1,000+`.                                                                     |
+| Time           | 100 ms        | Checked between matches; matching stops and a notice says so.                                                 |
+| Risky patterns | —             | Patterns such as `(a+)+`, `(\w*)*`, `(a\|aa)+` or `a*a*a*b` are not run until the reader clicks "Run anyway". |
+
+This detection cannot catch everything: a pattern like `.*.*x` on a long line can still block the page for a while. Do not run patterns from people you do not trust on long texts without a limit of your own.
 
 Zero-length matches move one character on (one code point with `u` or `v`), so they never loop. The replacement is only computed when matching finished within these limits.
