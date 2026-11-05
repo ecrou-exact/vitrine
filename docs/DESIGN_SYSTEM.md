@@ -58,7 +58,7 @@ Teal `#14B8A6` on light backgrounds is **2.25:1** — never use it for text or t
 
 Rules:
 
-- Status colors are always paired with an icon or a word, never color alone.
+- Status colors are always paired with an icon or a word, never color alone. Where neither fits, as in the day bars of `<vt-status>`, shape carries the meaning too: the bar of a bad day is taller, and the day is written out on hover and on focus.
 - Diff colors: added = `--vt-accent-soft` background + `+` sign; removed = `rgba(178,56,79,0.12)` (light) / `rgba(255,143,115,0.14)` (dark) background + `−` sign.
 
 ### 2.3 Syntax highlighting theme ("Vitrine Light" / "Vitrine Dark")

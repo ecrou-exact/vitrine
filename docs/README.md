@@ -1,6 +1,6 @@
 # Vitrine documentation
 
-Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules and X.509 certificates on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>` and `<vt-table>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
+Vitrine is a library of framework-free web components to display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars and pricing plans on any web page: `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>` and `<vt-table>`. Add one script, write the elements in your HTML, and they render with syntax highlighting, search, copy and themes. Every component can switch to an editor, and `<vt-tags>` works as a form field. Content is displayed safely, even when it comes from untrusted sources.
 
 ## Guides
 
@@ -44,6 +44,9 @@ Vitrine is a library of framework-free web components to display and edit source
 | `<vt-jwt>`      | JSON Web Token decoded, with claims, status and warnings                                                                       | [components/jwt.md](components/jwt.md)           |
 | `<vt-cron>`     | Cron expression or crontab explained, with next runs                                                                           | [components/cron.md](components/cron.md)         |
 | `<vt-cert>`     | X.509 certificates and chains, read without verifying or fetching                                                              | [components/cert.md](components/cert.md)         |
+| `<vt-status>`   | Service status page: state, uptime bars, incidents and maintenance                                                             | [components/status.md](components/status.md)     |
+| `<vt-calendar>` | Events from iCalendar or JSON, with recurrence and time zones                                                                  | [components/calendar.md](components/calendar.md) |
+| `<vt-pricing>`  | Pricing plans, billing periods, currencies and a comparison table                                                              | [components/pricing.md](components/pricing.md)   |
 
 ## Quick example
 
