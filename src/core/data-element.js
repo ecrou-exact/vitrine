@@ -46,7 +46,7 @@ export class VtDataElement extends VtBase {
     const value = this.getAttribute('now')?.trim();
     if (value) {
       const time = /^\d+$/.test(value) ? Number(value) * 1000 : Date.parse(value);
-      if (Number.isFinite(time)) return time;
+      if (Math.abs(time) <= 8.64e15) return time;
     }
     return Date.now();
   }

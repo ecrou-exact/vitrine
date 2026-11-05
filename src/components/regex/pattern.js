@@ -300,8 +300,61 @@ export function parsePattern(pattern) {
 }
 
 /**
- * Whether a pattern repeats something that itself repeats, like `(a+)+`: such patterns can
- * take exponential time on text that almost matches.
+ * The characters a node can start with, in lower case.
+ *
+ * @param {RegexNode} node
+ * @returns {Set<string> | null} `null` when it cannot be told, or the node may match nothing.
+ */
+function firstChars(node) {
+  switch (node.type) {
+    case 'literal':
+      return new Set([node.text.charAt(0).toLowerCase()]);
+    case 'group':
+      return node.kind === 'capture' || node.kind === 'named' || node.kind === 'non-capture'
+        ? firstChars(node.body)
+        : null;
+    case 'seq':
+      return node.items.length ? firstChars(node.items[0]) : null;
+    case 'quant':
+      return node.min > 0 ? firstChars(node.target) : null;
+    case 'alt': {
+      const all = new Set();
+      for (const item of node.alternatives) {
+        const chars = firstChars(item);
+        if (!chars) return null;
+        for (const char of chars) all.add(char);
+      }
+      return all;
+    }
+    default:
+      return null;
+  }
+}
+
+/**
+ * @param {Extract<RegexNode, { type: 'alt' }>} node
+ * @returns {boolean} Whether several alternatives may match at the same place.
+ */
+function alternativesOverlap(node) {
+  const seen = new Set();
+  for (const item of node.alternatives) {
+    const chars = firstChars(item);
+    if (!chars) return true;
+    for (const char of chars) {
+      if (seen.has(char)) return true;
+      seen.add(char);
+    }
+  }
+  return false;
+}
+
+/** Unbounded repeats in a row from which the time taken grows too fast (`a*a*a*b`). */
+const MAX_UNBOUNDED_IN_A_ROW = 3;
+
+/**
+ * Whether a pattern can take very long on text that almost matches: it repeats something that
+ * itself repeats, like `(a+)+`, or alternatives that overlap, like `(a|aa)+`, or it has several
+ * unbounded repeats in a row, like `a*a*a*b`.
  *
  * @param {RegexNode} node
  * @param {boolean} [inside] - Inside a quantified node.
@@ -317,8 +370,14 @@ export function isRisky(node, inside = false) {
     case 'group':
       return isRisky(node.body, inside);
     case 'seq':
+      if (
+        node.items.filter((item) => item.type === 'quant' && item.max === Infinity).length >=
+        MAX_UNBOUNDED_IN_A_ROW
+      )
+        return true;
       return node.items.some((item) => isRisky(item, inside));
     case 'alt':
+      if (inside && alternativesOverlap(node)) return true;
       return node.alternatives.some((item) => isRisky(item, inside));
     default:
       return false;
