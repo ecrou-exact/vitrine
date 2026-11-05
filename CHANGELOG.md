@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-status>`: service status pages from JSON or an Atlassian Statuspage summary; overall state; components by group with uptime and a bar per day read with the keyboard; open incidents with their updates, scheduled maintenance and past incidents; `refresh` keeps the page up to date and keeps the last status when loading fails; `vt-status-change`.
+- `<vt-calendar>`: events from iCalendar or JSON as a month grid or an agenda; `RRULE`, `EXDATE` and `RECURRENCE-ID`, with wall-clock times kept across daylight saving; `timezone`; keyboard grid; Add to calendar writes an `.ics` file in which text cannot add properties; `vt-date-change` and `vt-event-select`.
+- `<vt-pricing>`: plans as cards; billing periods and currencies; prices per month and savings worked out; a table comparing the plans; `vt-pricing-change`, and a cancelable `vt-plan-select` for your own checkout.
+- Website: the three new elements on the home page, in the examples, the docs and the playground.
 - `<vt-table>`: data table from JSON, CSV or the `data` / `columns` properties, with typed
   sorting on several columns, per-column filters (`>10`, `1..5`, `=x`, `!x`, `empty`), global
   search, row selection (click, Shift, Ctrl, keyboard) with a bulk action bar (copy, CSV, JSON,

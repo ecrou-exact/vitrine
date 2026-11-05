@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules and X.509 certificates — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars and pricing plans — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -56,6 +56,9 @@
 - **`<vt-cron>`** — cron expressions and crontabs explained in words, with the next runs in a time zone, a week grid, Quartz extensions and errors at their field.
 - **`<vt-cert>`** — X.509 certificates, chains and CSRs from PEM or DER with a bounded DER reader: names, validity, keys, extensions, fingerprints and an ASN.1 view; nothing verified or fetched.
 - **`<vt-table>`** — a complete data table: sorting on several columns, filters per column, selection with bulk actions, grouping, expandable rows, a column chooser, resizing, reordering and pinning, footer totals, cell editing, virtual scrolling, keyboard navigation and a card layout on phones.
+- **`<vt-status>`** — service status pages from JSON or a Statuspage summary: overall state, uptime with a bar per day, incidents with their updates, scheduled maintenance and live refresh.
+- **`<vt-calendar>`** — events from iCalendar or JSON as a month grid or an agenda, with recurring events, time zones, keyboard navigation and Add to calendar.
+- **`<vt-pricing>`** — pricing plans as cards, with a billing period switch, several currencies, savings worked out, a table comparing the plans and an event for your checkout.
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
 - **Themable** — five built-in themes (all WCAG AA), CSS custom properties, `::part()` selectors and custom themes.
@@ -134,6 +137,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-jwt>`      | Decoded token, claims and status                    | Copy header, payload or token, masked signature, full screen                                            | [docs/components/jwt.md](docs/components/jwt.md)           |
 | `<vt-cron>`     | Schedule in words and next runs                     | Crontab table, search, week grid, copy, download                                                        | [docs/components/cron.md](docs/components/cron.md)         |
 | `<vt-cert>`     | Certificate cards and chain                         | Details / ASN.1 tabs, search, fingerprints copy, copy PEM, download                                     | [docs/components/cert.md](docs/components/cert.md)         |
+| `<vt-status>`   | Banner, services with uptime bars, incidents        | Copy, download, full screen, live refresh with `refresh`                                                | [docs/components/status.md](docs/components/status.md)     |
+| `<vt-calendar>` | Month grid, or agenda with `view`                   | Month / Agenda tabs, copy, download as `.ics`, full screen                                              | [docs/components/calendar.md](docs/components/calendar.md) |
+| `<vt-pricing>`  | Plan cards and comparison table                     | Copy, download, full screen                                                                             | [docs/components/pricing.md](docs/components/pricing.md)   |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 
