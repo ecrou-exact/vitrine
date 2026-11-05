@@ -3,6 +3,7 @@
  */
 import { readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 const hljs = require('highlight.js/lib/core');
@@ -30,7 +31,7 @@ export function listLanguages() {
     .filter((file) => file.endsWith('.js') && !file.endsWith('.js.js'))
     .map((file) => {
       const name = file.slice(0, -3);
-      const definition = require(new URL(file, dir).pathname)(hljs);
+      const definition = require(fileURLToPath(new URL(file, dir)))(hljs);
       const aliases = (definition.aliases ?? [])
         .map((alias) => String(alias).toLowerCase())
         .filter((alias) => alias !== name && /^[a-z0-9_+#.-]{1,40}$/.test(alias));
