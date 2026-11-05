@@ -225,6 +225,12 @@ If the language files are served from another origin than the page, add that ori
 
 Syntax themes are loaded with `fetch()`, so their origin must be allowed by `connect-src` (not `style-src`). With the files served from jsDelivr, add `https://cdn.jsdelivr.net` to `connect-src`. If a theme cannot load, the built-in colors are kept and a warning is logged.
 
+## Generated code and exports
+
+`<vt-http>` and `<vt-openapi>` write commands that readers may paste in a terminal, so content must not be able to change what they do. Values are quoted for their language, header names that are not valid HTTP tokens are left out, HTTPie header values starting with `=` or `@` are escaped so they cannot send a local file, and a URL cannot be read as an option.
+
+Tables copied or exported as CSV or TSV have cells starting with `=`, `+`, `-` or `@` prefixed, so that spreadsheets do not run them as formulas.
+
 ## What Vitrine cannot protect against
 
 - **Inline content written in your HTML.** Content written inside the element (element text, a `<template>`, a `<script type="text/plain">`) is parsed by the browser as part of your page before Vitrine runs. If it contains untrusted data, the damage is done before Vitrine sees it: a `</script>` closes a data script early, and markup in the element is parsed as page HTML. Always pass untrusted data through the `content` property, the `data` property or `src`. See [Getting started](getting-started.md#content-sources).
