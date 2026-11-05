@@ -85,7 +85,7 @@ export function normalizeStatus(value, fallback = 'queued') {
   const key = String(value ?? '')
     .trim()
     .toLowerCase();
-  return ALIASES[key] ?? fallback;
+  return Object.hasOwn(ALIASES, key) ? ALIASES[key] : fallback;
 }
 
 /**

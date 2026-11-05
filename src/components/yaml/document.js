@@ -27,8 +27,35 @@ import { parseJson } from '../json/parser.js';
  */
 export function documentsToTree(documents, maxDepth) {
   const value = documents.length === 1 ? documents[0] : documents;
+  assertExpandable(value);
   const json = JSON.stringify(value === undefined ? null : value, jsonValue, 2) ?? 'null';
   return { result: parseJson(json, { maxDepth }), documents: documents.length, json };
+}
+
+/**
+ * Aliases share their value, so a few lines can stand for billions of nodes ("billion laughs"),
+ * and writing them out would freeze the page. The size is counted before anything is expanded.
+ *
+ * @param {unknown} root
+ * @throws {Error} When the content expands beyond the limits.
+ */
+function assertExpandable(root) {
+  const stack = [root];
+  let nodes = 0;
+  let size = 0;
+  while (stack.length) {
+    const value = stack.pop();
+    nodes += 1;
+    if (typeof value === 'string') size += value.length;
+    if (nodes > MAX_EXPANDED_NODES || size > MAX_EXPANDED_SIZE)
+      throw new Error('The aliases of this document expand to too much content.');
+    if (value !== null && typeof value === 'object') {
+      const children = Object.values(value);
+      if (nodes + stack.length + children.length > MAX_EXPANDED_NODES)
+        throw new Error('The aliases of this document expand to too much content.');
+      for (const child of children) stack.push(child);
+    }
+  }
 }
 
 /**
@@ -62,6 +89,10 @@ export function yamlError(error) {
     tooDeep: false,
   };
 }
+
+/** Limits of a document with its aliases written out. */
+export const MAX_EXPANDED_NODES = 500_000;
+export const MAX_EXPANDED_SIZE = 32 * 1024 * 1024;
 
 const ANCHOR = /(^|[\s[{,:-])&([^\s[\]{},]+)/g;
 const ALIAS = /(^|[\s[{,:-])\*([^\s[\]{},]+)/g;

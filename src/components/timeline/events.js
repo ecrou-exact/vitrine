@@ -81,14 +81,18 @@ export function safeLink(value) {
   }
 }
 
+/** The largest time a Date holds, in milliseconds. */
+const MAX_TIME = 8.64e15;
+
 /**
  * @param {unknown} value
  * @returns {number | null}
  */
 export function parseDate(value) {
   if (typeof value === 'number' && Number.isFinite(value)) {
-    // Seconds or milliseconds since the epoch.
-    return value < 1e11 ? value * 1000 : value;
+    // Seconds or milliseconds since the epoch; beyond what a Date holds, there is no date.
+    const ms = Math.abs(value) < 1e11 ? value * 1000 : value;
+    return Math.abs(ms) <= MAX_TIME ? ms : null;
   }
   if (typeof value !== 'string' || !value.trim()) return null;
   const text = value.trim();

@@ -152,6 +152,8 @@ export class VtStatus extends VtDataElement {
   /** Starts or stops the timer that reloads `src`. */
   startRefresh() {
     clearInterval(this.refreshTimer);
+    // A refresh still running would bring back the status of the previous source.
+    this.refreshAbort?.abort();
     const seconds = parseInteger(this.getAttribute('refresh'), {
       min: MIN_REFRESH,
       max: 86400,

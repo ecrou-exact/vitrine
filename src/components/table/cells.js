@@ -482,7 +482,8 @@ export function listOf(value) {
  */
 export function fillTemplate(template, row, encode = false) {
   return template.replace(/\{([\w.-]+)\}/g, (_, key) => {
-    const text = toText(row[key]);
+    // Only the row's own values: `{constructor}` is not the source of a function.
+    const text = Object.hasOwn(row, key) ? toText(row[key]) : '';
     return encode ? encodeURIComponent(text) : text;
   });
 }

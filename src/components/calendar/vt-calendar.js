@@ -112,6 +112,12 @@ export class VtCalendar extends VtDataElement {
     this.parsed = null;
   }
 
+  contentChanged() {
+    // Occurrence ids depend on the position of the event in the source.
+    this.openId = null;
+    this.agendaLimit = 0;
+  }
+
   /** @returns {CalendarResult} The parsed source, kept while the text stays the same. */
   get result() {
     const text = this.text ?? '';

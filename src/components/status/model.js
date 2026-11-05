@@ -73,6 +73,8 @@ export const LIMITS = Object.freeze({
 });
 
 const DAY = 864e5;
+/** The largest time a Date holds, in milliseconds. */
+const MAX_TIME = 8.64e15;
 
 /** @type {Record<string, State>} */
 const ALIASES = {
@@ -143,8 +145,10 @@ function safeUrl(value) {
  * @returns {number | null}
  */
 export function toTime(value) {
-  if (typeof value === 'number' && Number.isFinite(value))
-    return value > 1e11 ? value : value * 1000;
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    const time = Math.abs(value) > 1e11 ? value : value * 1000;
+    return Math.abs(time) <= MAX_TIME ? time : null;
+  }
   if (typeof value !== 'string') return null;
   const time = Date.parse(value);
   return Number.isNaN(time) ? null : time;
@@ -164,8 +168,7 @@ export function dayKey(time) {
  */
 function dateOnly(value) {
   const time = toTime(value);
-  if (time === null || Math.abs(time) > 8.64e15) return null;
-  return dayKey(time);
+  return time === null ? null : dayKey(time);
 }
 
 /**

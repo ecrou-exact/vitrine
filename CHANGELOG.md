@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `<vt-http>`, `<vt-openapi>`: generated commands no longer pass on what a shell tool would act on. Invalid header names are left out, HTTPie headers starting with `=` or `@` are escaped (`x:=@/etc/passwd` and `x=@/etc/passwd` uploaded a local file of the person running the command), and a URL starting with a dash is not read as an option.
+- `<vt-table>`: rows copied as TSV and headers now get the same protection against spreadsheet formulas as CSV cells. Very deep arrays no longer crash the element, and `{constructor}` in a link template is empty.
+- `<vt-yaml>`: aliases that expand to too much content ("billion laughs") show an error instead of freezing the page. `vt-ready` now fires when js-yaml had to be loaded first, and `vt-error` when it cannot be loaded.
+- `<vt-regex>`: overlapping alternatives under a repeat, like `(a|aa)+`, and several unbounded repeats in a row, like `a*a*a*b`, are now flagged as risky and not run until confirmed. They froze the page.
+- `<vt-code>` and every view with highlighted code: a line over 10,000 characters is shown without highlighting. It could freeze the page.
+- `<vt-timeline>`: a date beyond what a `Date` holds no longer breaks the element.
+- `<vt-job>`, `<vt-log>`, `<vt-csv>`: a status, level or delimiter named like an `Object` member (`__proto__`, `constructor`) is treated as unknown. On `<vt-job>` it broke the element.
 - `<vt-openapi>`: the search no longer moves focus to the first match after each key, and the
   page scrolls again over the reference.
 

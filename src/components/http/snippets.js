@@ -31,6 +31,9 @@ export const SNIPPET_HIGHLIGHT = /** @type {Record<SnippetLanguage, string>} */ 
 /** Headers that tools set themselves (the host is in the URL). */
 const TOOL_HEADERS = new Set(['host', 'content-length', 'connection', 'transfer-encoding']);
 
+/** A header name as HTTP defines it: anything else is left out of the generated code. */
+const HEADER_NAME = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/;
+
 /** Headers browsers do not let `fetch` set. */
 const FORBIDDEN_FETCH = new Set([
   'accept-charset', 'accept-encoding', 'access-control-request-headers',
@@ -66,7 +69,34 @@ function stringLiteral(text) {
  * @returns {Header[]}
  */
 function headersFor(request) {
-  return request.headers.filter(([name]) => !TOOL_HEADERS.has(name.toLowerCase()));
+  return request.headers.filter(
+    ([name]) => HEADER_NAME.test(name) && !TOOL_HEADERS.has(name.toLowerCase()),
+  );
+}
+
+/**
+ * The URL as a command line argument. One starting with a dash would be read as an option
+ * (`-o/tmp/x` makes curl write a file), so it is kept as a path.
+ *
+ * @param {HttpRequest} request
+ * @returns {string}
+ */
+function urlArgument(request) {
+  const url = absoluteUrl(request);
+  return shellQuote(url.startsWith('-') ? `/${url}` : url);
+}
+
+/**
+ * A header as an HTTPie request item. After `:`, HTTPie reads `=` as JSON and `@` as a local
+ * file to send, so a header coming from the content could upload a file of the reader:
+ * these characters are escaped.
+ *
+ * @param {string} name
+ * @param {string} value
+ * @returns {string}
+ */
+function httpieHeader(name, value) {
+  return `${name}:${value.replace(/^[=@]/, '\\$&')}`;
 }
 
 /**
@@ -130,7 +160,7 @@ export function toCurl(request) {
   if (request.method === 'HEAD') head.push('--head');
   else if (!(request.method === 'GET' && !hasBody) && !(request.method === 'POST' && hasBody))
     head.push(`-X ${request.method}`);
-  head.push(shellQuote(absoluteUrl(request)));
+  head.push(urlArgument(request));
   const lines = [head.join(' ')];
   for (const [name, value] of headersFor(request))
     lines.push(`-H ${shellQuote(`${name}: ${value}`)}`);
@@ -210,8 +240,9 @@ export function toPython(request) {
  * @returns {string}
  */
 export function toHttpie(request) {
-  const lines = [`http ${request.method} ${shellQuote(absoluteUrl(request))}`];
-  for (const [name, value] of headersFor(request)) lines.push(shellQuote(`${name}:${value}`));
+  const lines = [`http ${request.method} ${urlArgument(request)}`];
+  for (const [name, value] of headersFor(request))
+    lines.push(shellQuote(httpieHeader(name, value)));
   // Options may follow the URL; the body is sent exactly as written.
   if (request.body) lines.push(`--raw ${shellQuote(request.body)}`);
   return lines.join(' \\\n  ');

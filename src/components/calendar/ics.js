@@ -71,7 +71,13 @@ import { daysInMonth, isTimeZone } from '../cron/cron.js';
 /** @typedef {{ ok: true, calendar: Calendar } | { ok: false, error: 'format' | 'json', message: string }} CalendarResult */
 
 /** Limits against oversized sources. */
-export const LIMITS = Object.freeze({ events: 5000, text: 10000, title: 500, interval: 10000 });
+export const LIMITS = Object.freeze({
+  events: 5000,
+  excluded: 2000,
+  text: 10000,
+  title: 500,
+  interval: 10000,
+});
 
 const WEEKDAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 const ICS_DATE = /^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?$/;
@@ -270,15 +276,21 @@ function unescapeText(value) {
 function parseLine(line) {
   let quoted = false;
   let colon = -1;
+  let start = 0;
+  /** @type {string[]} */
+  const head = [];
   for (let i = 0; i < line.length; i++) {
     if (line[i] === '"') quoted = !quoted;
-    else if (line[i] === ':' && !quoted) {
+    else if (!quoted && line[i] === ';') {
+      head.push(line.slice(start, i));
+      start = i + 1;
+    } else if (!quoted && line[i] === ':') {
       colon = i;
       break;
     }
   }
   if (colon < 1) return null;
-  const head = line.slice(0, colon).split(/;(?=[^"]*(?:"[^"]*"[^"]*)*$)/);
+  head.push(line.slice(start, colon));
   /** @type {Record<string, string>} */
   const params = Object.create(null);
   for (const param of head.slice(1)) {
@@ -315,14 +327,14 @@ function applyProperty(event, { name, params, value }) {
         .map((category) => clean(unescapeText(category), 100))
         .filter(Boolean),
     ];
-  else if (name === 'EXDATE')
-    event.excluded = [
-      ...(event.excluded ?? []),
-      ...value
-        .split(',')
-        .map((date) => parseIcsDate(date, params.TZID))
-        .filter((date) => date !== null),
-    ];
+  else if (name === 'EXDATE') {
+    event.excluded ??= [];
+    for (const date of value.split(',')) {
+      const parsed =
+        event.excluded.length < LIMITS.excluded ? parseIcsDate(date, params.TZID) : null;
+      if (parsed) event.excluded.push(parsed);
+    }
+  }
 }
 
 /**
@@ -424,7 +436,10 @@ function readJsonEvent(item, index) {
     end: parseIsoDate(item.end, zone),
     duration: typeof item.duration === 'string' ? parseDuration(item.duration) : null,
     rule: typeof item.rrule === 'string' ? parseRule(item.rrule) : null,
-    excluded: excluded.map((date) => parseIsoDate(date, zone)).filter((date) => date !== null),
+    excluded: excluded
+      .slice(0, LIMITS.excluded)
+      .map((date) => parseIsoDate(date, zone))
+      .filter((date) => date !== null),
     replaces: null,
   };
 }

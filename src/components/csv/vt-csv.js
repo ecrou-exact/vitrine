@@ -132,7 +132,9 @@ export class VtCsv extends VtBase {
   parse() {
     const text = this.text ?? '';
     const requested = (this.getAttribute('delimiter') ?? '').trim().toLowerCase();
-    const delimiter = DELIMITER_NAMES[requested];
+    const delimiter = Object.hasOwn(DELIMITER_NAMES, requested)
+      ? DELIMITER_NAMES[requested]
+      : undefined;
     const key = `${delimiter ?? 'auto'}`;
     if (!this.parsed || this.parsed.key !== key || this.parsedText !== text) {
       this.parsed = { key, result: parseCsv(text, delimiter ? { delimiter } : {}) };

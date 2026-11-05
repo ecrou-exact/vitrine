@@ -4,6 +4,7 @@ import { en as strings, fr as stringsFr } from './strings.js';
 import yamlCss from '../../styles/yaml.css?raw';
 import { getConfig } from '../../core/config.js';
 import { h } from '../../core/dom.js';
+import { EVENTS, emit } from '../../core/events.js';
 import { errorView, loadingView } from '../../core/ui.js';
 import { loadYaml } from '../../core/yaml-loader.js';
 import { VtJson } from '../json/vt-json.js';
@@ -105,12 +106,15 @@ export class VtYaml extends VtJson {
         reader.promise.then(
           () => {
             this.waiting = false;
+            // The content can be shown now: `vt-ready` was held back while the library loaded.
+            this._readyPending = true;
             this.requestRender();
           },
           (error) => {
             this.waiting = false;
             this.loadError = error instanceof Error ? error : new Error(String(error));
             this.requestRender();
+            emit(this, EVENTS.ERROR, { message: this.loadError.message, cause: error });
           },
         );
       }

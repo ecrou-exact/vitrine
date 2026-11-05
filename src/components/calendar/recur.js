@@ -25,8 +25,8 @@ import { civil, daysInMonth, instantOf } from '../cron/cron.js';
  */
 
 const DAY_MS = 864e5;
-/** Periods walked for one event before giving up. */
-const MAX_PERIODS = 40000;
+/** Periods walked for one range, all events together, so a hostile calendar cannot freeze the page. */
+const MAX_PERIODS = 200000;
 /** Occurrences returned for one range. */
 export const MAX_OCCURRENCES = 2000;
 
@@ -183,15 +183,27 @@ function periodDays(rule, start, index) {
 }
 
 /**
+ * @param {Rule} rule
+ * @returns {number} The most days one period of a rule can span.
+ */
+function longestPeriod(rule) {
+  const days = { DAILY: 1, WEEKLY: 7, MONTHLY: 31, YEARLY: 366 }[rule.freq];
+  return days * rule.interval;
+}
+
+/**
  * The days an event happens on, up to a last day. `COUNT` counts from the first occurrence,
  * including those excluded later, as RFC 5545 says.
  *
  * @param {CalendarEvent} event
  * @param {number} lastDay
  * @param {string} timeZone
+ * @param {{ fromDay?: number, budget?: { left: number } }} [options] - `fromDay`: days before it
+ *   are not needed, which saves walking the past of a rule without `COUNT`. `budget`: periods
+ *   that may still be walked.
  * @returns {number[]} Day numbers, ascending.
  */
-export function eventDays(event, lastDay, timeZone) {
+export function eventDays(event, lastDay, timeZone, options = {}) {
   const { start, rule } = event;
   const first = dayNumber(start.year, start.month, start.day);
   if (!rule) return first <= lastDay ? [first] : [];
@@ -202,7 +214,13 @@ export function eventDays(event, lastDay, timeZone) {
   /** @type {number[]} */
   const result = [];
   let count = 0;
-  for (let index = 0; index < MAX_PERIODS; index++) {
+  const budget = options.budget ?? { left: MAX_PERIODS };
+  const skip =
+    rule.count === null && options.fromDay !== undefined
+      ? Math.floor((options.fromDay - first) / longestPeriod(rule)) - 1
+      : 0;
+  for (let index = Math.max(0, skip); budget.left > 0; index++) {
+    budget.left -= 1;
     const { days, from } = periodDays(rule, first, index);
     if (from > lastDay) break;
     for (const day of days) {
@@ -256,9 +274,10 @@ function lengthOf(event, timeZone) {
  * @param {number} fromDay
  * @param {number} toDay
  * @param {string} timeZone
+ * @param {{ left: number }} budget
  * @returns {Occurrence[]}
  */
-function eventOccurrences(event, index, fromDay, toDay, timeZone) {
+function eventOccurrences(event, index, fromDay, toDay, timeZone, budget) {
   const length = lengthOf(event, timeZone);
   const lengthDays = event.start.allDay ? length : Math.ceil(length / DAY_MS);
   const excluded = new Set(event.excluded.map((date) => toInstant(date, timeZone)));
@@ -268,7 +287,11 @@ function eventOccurrences(event, index, fromDay, toDay, timeZone) {
   /** @type {Occurrence[]} */
   const result = [];
   // A time zone moves a day by at most one in either direction.
-  for (const day of eventDays(event, toDay + 1, timeZone)) {
+  const days = eventDays(event, toDay + 1, timeZone, {
+    fromDay: fromDay - lengthDays - 1,
+    budget,
+  });
+  for (const day of days) {
     // Long past occurrences are left out before the costly time zone work.
     if (day + lengthDays + 1 < fromDay) continue;
     const date = withDay(event.start, day);
@@ -295,8 +318,9 @@ function eventOccurrences(event, index, fromDay, toDay, timeZone) {
  * @returns {Occurrence[]}
  */
 export function occurrences(events, fromDay, toDay, timeZone) {
+  const budget = { left: MAX_PERIODS };
   return events
-    .flatMap((event, index) => eventOccurrences(event, index, fromDay, toDay, timeZone))
+    .flatMap((event, index) => eventOccurrences(event, index, fromDay, toDay, timeZone, budget))
     .sort(
       (a, b) =>
         a.startDay - b.startDay ||

@@ -220,6 +220,46 @@ test.describe('new elements', () => {
     await expect(el.locator('a[href^="javascript"]')).toHaveCount(0);
   });
 
+  test('a line too long to highlight is shown plain, and quickly', async ({ page }) => {
+    const started = Date.now();
+    await mount(page, 'vt-code', { language: 'markdown' }, '['.repeat(200000));
+    expect(Date.now() - started).toBeLessThan(5000);
+    await expect(page.locator('#el [class*="hljs-"]')).toHaveCount(0);
+    await mount(page, 'vt-code', { language: 'json' }, '{"a": 1}');
+    await expect(page.locator('#el [class*="hljs-"]').first()).toBeVisible();
+  });
+
+  test('<vt-yaml> is ready after loading its library, and refuses alias bombs', async ({
+    page,
+  }) => {
+    const { event } = await mount(page, 'vt-yaml', {}, 'a: 1');
+    expect(event).toBe('vt-ready');
+    let source = 'a0: &a0 [x, x, x, x, x, x, x, x, x]\n';
+    for (let i = 1; i < 12; i += 1) {
+      const alias = `*a${i - 1}`;
+      source += `a${i}: &a${i} [${Array(9).fill(alias).join(', ')}]\n`;
+    }
+    await mount(page, 'vt-yaml', {}, source);
+    await expect(page.locator('#el')).toContainText('expand to too much');
+  });
+
+  test('<vt-regex> asks before running what could freeze the page', async ({ page }) => {
+    await mount(page, 'vt-regex', { pattern: '(a|aa)+$' }, `${'a'.repeat(60)}!`);
+    await expect(page.locator('#el .notice').first()).toBeVisible();
+  });
+
+  test('<vt-job> and <vt-timeline> survive hostile values', async ({ page }) => {
+    await mount(
+      page,
+      'vt-job',
+      {},
+      '{"name":"deploy","status":"__proto__","steps":[{"name":"build","status":"constructor"}]}',
+    );
+    await expect(page.locator('#el')).toContainText('build');
+    await mount(page, 'vt-timeline', {}, '[{"title":"far away","date":1e30}]');
+    await expect(page.locator('#el')).toContainText('far away');
+  });
+
   for (const [tag, content] of [
     ['vt-status', STATUS],
     ['vt-calendar', CALENDAR],
