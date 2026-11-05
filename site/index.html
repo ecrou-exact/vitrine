@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Twenty-five elements, view or edit</h2>
+            <h2 id="components-title">Twenty-eight elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -475,6 +475,36 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
                 <template>[{"id":1,"name":"Ada","team":"Core","score":98,"active":true},{"id":2,"name":"Alan","team":"Infra","score":95,"active":true},{"id":3,"name":"Grace","team":"Core","score":91,"active":false},{"id":4,"name":"Linus","team":"Data","score":88,"active":true}]</template>
               </vt-table>
               <a href="examples.html#table">Table examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-status&gt;</h3>
+              <p>
+                A status page: overall state, uptime with a bar per day, incidents and maintenance. Reads Statuspage summaries too.
+              </p>
+              <vt-status class="preview" now="2026-11-05T12:00:00Z" days="45" incidents="false" lang-ui="en">
+                <template>{"components":[{"name":"API","status":"degraded","since":"2026-06-01","history":{"2026-11-02":"major","2026-10-16":"degraded","2026-09-19":"partial"}},{"name":"Dashboard","status":"operational","since":"2026-06-01"}]}</template>
+              </vt-status>
+              <a href="examples.html#status">Status examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-calendar&gt;</h3>
+              <p>
+                Events from an iCalendar file or JSON: month grid or agenda, recurring events, time zones and Add to calendar.
+              </p>
+              <vt-calendar class="preview" now="2026-11-05T12:00:00Z" timezone="Europe/Paris" lang-ui="en">
+                <template>[{"title":"Sprint planning","start":"2026-11-02T09:00:00","end":"2026-11-02T10:00:00","timezone":"Europe/Paris","rrule":"FREQ=WEEKLY;BYDAY=MO","location":"Room 3"},{"title":"Product launch","start":"2026-11-12T14:00:00Z","end":"2026-11-12T15:30:00Z","description":"Live stream, then questions.","url":"https://example.com/launch","categories":["Launch","Public"]},{"title":"Conference","start":"2026-11-18","end":"2026-11-21","location":"Lisbon"},{"title":"Armistice Day","start":"2026-11-11"},{"title":"Old meetup","start":"2026-11-05T18:00:00Z","cancelled":true}]</template>
+              </vt-calendar>
+              <a href="examples.html#calendar">Calendar examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-pricing&gt;</h3>
+              <p>
+                Pricing plans: billing period switch, currencies, savings worked out for you, and a table comparing the plans.
+              </p>
+              <vt-pricing class="preview" period="yearly" lang-ui="en">
+                <template>{"currency":"EUR","plans":[{"id":"free","name":"Starter","price":0,"features":["3 projects"]},{"id":"pro","name":"Pro","highlight":true,"price":{"monthly":12,"yearly":120},"features":["Unlimited projects"]}]}</template>
+              </vt-pricing>
+              <a href="examples.html#pricing">Pricing examples</a>
             </article>
           </div>
         </div>

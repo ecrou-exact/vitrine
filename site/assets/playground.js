@@ -42,6 +42,12 @@ const SAMPLES = {
       active: i % 3 !== 2,
     })),
   ),
+  status:
+    '{\n  "components": [\n    {\n      "name": "API",\n      "status": "degraded",\n      "since": "2026-06-01",\n      "history": {\n        "2026-11-02": "major",\n        "2026-10-16": "degraded",\n        "2026-09-19": "partial"\n      }\n    },\n    {\n      "name": "Dashboard",\n      "status": "operational",\n      "since": "2026-06-01"\n    }\n  ]\n}',
+  calendar:
+    '[\n  {\n    "title": "Sprint planning",\n    "start": "2026-11-02T09:00:00",\n    "end": "2026-11-02T10:00:00",\n    "timezone": "Europe/Paris",\n    "rrule": "FREQ=WEEKLY;BYDAY=MO",\n    "location": "Room 3"\n  },\n  {\n    "title": "Product launch",\n    "start": "2026-11-12T14:00:00Z",\n    "end": "2026-11-12T15:30:00Z",\n    "description": "Live stream, then questions.",\n    "url": "https://example.com/launch",\n    "categories": [\n      "Launch",\n      "Public"\n    ]\n  },\n  {\n    "title": "Conference",\n    "start": "2026-11-18",\n    "end": "2026-11-21",\n    "location": "Lisbon"\n  },\n  {\n    "title": "Armistice Day",\n    "start": "2026-11-11"\n  },\n  {\n    "title": "Old meetup",\n    "start": "2026-11-05T18:00:00Z",\n    "cancelled": true\n  }\n]',
+  pricing:
+    '{\n  "currencies": [\n    "EUR",\n    "USD"\n  ],\n  "periods": [\n    {\n      "id": "monthly"\n    },\n    {\n      "id": "yearly",\n      "note": "2 months free"\n    }\n  ],\n  "plans": [\n    {\n      "id": "free",\n      "name": "Starter",\n      "description": "For side projects.",\n      "price": 0,\n      "cta": {\n        "label": "Start free",\n        "url": "#signup"\n      },\n      "features": [\n        "3 projects",\n        "Community support",\n        {\n          "text": "Custom domain",\n          "included": false\n        }\n      ]\n    },\n    {\n      "id": "pro",\n      "name": "Pro",\n      "badge": "Most popular",\n      "highlight": true,\n      "description": "For growing teams.",\n      "unit": "per seat",\n      "price": {\n        "monthly": {\n          "EUR": 12,\n          "USD": 14\n        },\n        "yearly": {\n          "EUR": 120,\n          "USD": 140\n        }\n      },\n      "cta": {\n        "label": "Try Pro",\n        "url": "#signup"\n      },\n      "features": [\n        "Unlimited projects",\n        "Email support",\n        "Custom domain"\n      ]\n    },\n    {\n      "id": "corp",\n      "name": "Enterprise",\n      "description": "For large companies.",\n      "price": "Contact us",\n      "cta": {\n        "label": "Talk to us",\n        "url": "mailto:sales@example.com"\n      },\n      "features": [\n        "SSO and audit logs",\n        "Dedicated support",\n        "Custom contract"\n      ]\n    }\n  ],\n  "compare": [\n    {\n      "group": "Usage",\n      "name": "Projects",\n      "values": {\n        "free": "3",\n        "pro": "Unlimited",\n        "corp": "Unlimited"\n      }\n    },\n    {\n      "name": "Custom domain",\n      "description": "Your own address",\n      "values": {\n        "pro": true,\n        "corp": true\n      }\n    },\n    {\n      "group": "Security",\n      "name": "SSO",\n      "values": {\n        "corp": true\n      }\n    }\n  ],\n  "note": "Prices exclude VAT."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
 };
 
@@ -321,6 +327,38 @@ const SCHEMA = {
       { name: 'now', type: 'text', placeholder: 'now' },
     ],
   },
+  status: {
+    tag: 'vt-status',
+    flags: ['bars', 'incidents'],
+    fields: [
+      { name: 'days', type: 'number', placeholder: '90' },
+      { name: 'max-incidents', type: 'number', placeholder: '5' },
+      { name: 'now', type: 'text', placeholder: '2026-11-05T12:00:00Z' },
+    ],
+  },
+  calendar: {
+    tag: 'vt-calendar',
+    flags: ['views', 'add-to-calendar'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'month', 'agenda'] },
+      { name: 'date', type: 'text', placeholder: '2026-11' },
+      { name: 'timezone', type: 'text', placeholder: 'Europe/Paris' },
+      { name: 'first-day', type: 'number', placeholder: '1' },
+      { name: 'max-per-day', type: 'number', placeholder: '3' },
+      { name: 'limit', type: 'number', placeholder: '20' },
+      { name: 'now', type: 'text', placeholder: '2026-11-05T12:00:00Z' },
+    ],
+  },
+  pricing: {
+    tag: 'vt-pricing',
+    flags: ['compare'],
+    fields: [
+      { name: 'period', type: 'text', placeholder: 'yearly' },
+      { name: 'currency', type: 'text', placeholder: 'EUR' },
+      { name: 'display', type: 'select', options: ['', 'monthly', 'total'] },
+      { name: 'link-target', type: 'select', options: ['', '_self', '_blank'] },
+    ],
+  },
   table: {
     tag: 'vt-table',
     flags: [
@@ -545,6 +583,9 @@ function switchType(type) {
     cron: 'crontab',
     cert: 'root.pem',
     table: 'Team',
+    status: 'status.json',
+    calendar: 'events.json',
+    pricing: 'pricing.json',
   }[type];
   buildControls();
   render();

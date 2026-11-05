@@ -49,6 +49,9 @@
           <option value="cron">Cron</option>
           <option value="cert">Certificates</option>
           <option value="table">Tables</option>
+          <option value="status">Status</option>
+          <option value="calendar">Calendar</option>
+          <option value="pricing">Pricing</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -1844,6 +1847,386 @@ export { unit };</template>
                  {"name":"Grace Hopper","role":"Admiral","skills":["compilers","COBOL","teaching","debugging"],"load":20}]
               </template>
             </vt-table>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="status" aria-labelledby="status-title">
+        <h2 id="status-title">&lt;vt-status&gt;</h2>
+        <p class="muted prose">A status page from one JSON file. The dates below are fixed with <code>now</code> so the page does not change from one day to the next.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A full status page</h3>
+            <p>Open incidents, maintenance, groups of services and past incidents. Move over the bars, or focus them and press the arrows, to read a day. With <code>src</code>, <code>refresh="60"</code> keeps it up to date.</p>
+          </div>
+          <template>
+            <vt-status variant="full" label="Acme status" now="2026-11-05T12:00:00Z" lang-ui="en">
+              <template>
+                {
+                  "updated": "2026-11-05T11:52:00Z",
+                  "components": [
+                    {
+                      "name": "API",
+                      "group": "Platform",
+                      "status": "degraded",
+                      "since": "2026-06-01",
+                      "history": {
+                        "2026-11-02": {
+                          "status": "major",
+                          "minutes": 42,
+                          "note": "Database failover"
+                        },
+                        "2026-10-16": "degraded",
+                        "2026-09-19": "partial",
+                        "2026-08-27": "maintenance"
+                      }
+                    },
+                    {
+                      "name": "Dashboard",
+                      "group": "Platform",
+                      "status": "operational",
+                      "since": "2026-06-01"
+                    },
+                    {
+                      "name": "Webhooks",
+                      "group": "Delivery",
+                      "status": "operational",
+                      "since": "2026-09-15"
+                    }
+                  ],
+                  "incidents": [
+                    {
+                      "title": "Slow API responses",
+                      "status": "identified",
+                      "impact": "minor",
+                      "start": "2026-11-05T10:40:00Z",
+                      "components": [
+                        "API"
+                      ],
+                      "updates": [
+                        {
+                          "time": "2026-11-05T11:10:00Z",
+                          "status": "identified",
+                          "text": "A replica is behind. Failing over."
+                        },
+                        {
+                          "time": "2026-11-05T10:40:00Z",
+                          "status": "investigating",
+                          "text": "Looking into slow responses."
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Database failover",
+                      "status": "resolved",
+                      "impact": "critical",
+                      "start": "2026-11-02T08:00:00Z",
+                      "end": "2026-11-02T08:42:00Z"
+                    }
+                  ],
+                  "maintenances": [
+                    {
+                      "title": "Network upgrade",
+                      "status": "scheduled",
+                      "start": "2026-11-08T01:00:00Z",
+                      "end": "2026-11-08T03:00:00Z"
+                    }
+                  ]
+                }
+              </template>
+            </vt-status>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A Statuspage summary</h3>
+            <p>The JSON of <code>/api/v2/summary.json</code> works as it is. Add <code>allow-remote</code> to load it from another origin.</p>
+          </div>
+          <template>
+            <vt-status bars="false" now="2026-11-05T12:00:00Z" lang-ui="en">
+              <template>
+                {
+                  "page": {
+                    "name": "Acme",
+                    "updated_at": "2026-11-05T11:00:00Z"
+                  },
+                  "status": {
+                    "indicator": "minor",
+                    "description": "Partially degraded service"
+                  },
+                  "components": [
+                    {
+                      "id": "core",
+                      "name": "Core",
+                      "group": true
+                    },
+                    {
+                      "id": "a",
+                      "name": "Login",
+                      "status": "operational",
+                      "group_id": "core"
+                    },
+                    {
+                      "id": "b",
+                      "name": "Search",
+                      "status": "degraded_performance",
+                      "group_id": "core"
+                    }
+                  ],
+                  "incidents": [],
+                  "scheduled_maintenances": []
+                }
+              </template>
+            </vt-status>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="calendar" aria-labelledby="calendar-title">
+        <h2 id="calendar-title">&lt;vt-calendar&gt;</h2>
+        <p class="muted prose">Events from iCalendar or JSON. Select a day to list its events, and open an event to add it to your calendar.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A month of events</h3>
+            <p>A weekly meeting, all-day and multi-day events, and a cancelled one. On a narrow element, events become dots. The tabs switch to the agenda.</p>
+          </div>
+          <template>
+            <vt-calendar variant="full" label="Events" date="2026-11" now="2026-11-05T12:00:00Z" timezone="Europe/Paris" lang-ui="en">
+              <template>
+                [
+                  {
+                    "title": "Sprint planning",
+                    "start": "2026-11-02T09:00:00",
+                    "end": "2026-11-02T10:00:00",
+                    "timezone": "Europe/Paris",
+                    "rrule": "FREQ=WEEKLY;BYDAY=MO",
+                    "location": "Room 3"
+                  },
+                  {
+                    "title": "Product launch",
+                    "start": "2026-11-12T14:00:00Z",
+                    "end": "2026-11-12T15:30:00Z",
+                    "description": "Live stream, then questions.",
+                    "url": "https://example.com/launch",
+                    "categories": [
+                      "Launch",
+                      "Public"
+                    ]
+                  },
+                  {
+                    "title": "Conference",
+                    "start": "2026-11-18",
+                    "end": "2026-11-21",
+                    "location": "Lisbon"
+                  },
+                  {
+                    "title": "Armistice Day",
+                    "start": "2026-11-11"
+                  },
+                  {
+                    "title": "Old meetup",
+                    "start": "2026-11-05T18:00:00Z",
+                    "cancelled": true
+                  }
+                ]
+              </template>
+            </vt-calendar>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An agenda from an .ics file</h3>
+            <p>Recurrence with <code>RRULE</code> and <code>EXDATE</code>, in the time zone of the event, shown here in New York time.</p>
+          </div>
+          <template>
+            <vt-calendar view="agenda" date="2026-11-02" limit="5" now="2026-11-02T08:00:00Z" timezone="America/New_York" lang-ui="en">
+              <template>
+                BEGIN:VCALENDAR
+                VERSION:2.0
+                BEGIN:VEVENT
+                UID:standup@example.com
+                SUMMARY:Standup
+                DTSTART;TZID=Europe/Paris:20261102T093000
+                DTEND;TZID=Europe/Paris:20261102T094500
+                RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=9
+                EXDATE;TZID=Europe/Paris:20261104T093000
+                END:VEVENT
+                BEGIN:VEVENT
+                UID:release@example.com
+                SUMMARY:Release 2.0
+                LOCATION:Online
+                DESCRIPTION:Notes on the blog\, video after.
+                DTSTART:20261110T150000Z
+                DURATION:PT1H
+                END:VEVENT
+                END:VCALENDAR
+              </template>
+            </vt-calendar>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="pricing" aria-labelledby="pricing-title">
+        <h2 id="pricing-title">&lt;vt-pricing&gt;</h2>
+        <p class="muted prose">Plans as cards. The prices are displayed as you write them; compute the amount to charge on your server.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Periods, currencies and a comparison</h3>
+            <p>Savings and the price per month are worked out. Press a button and listen to <code>vt-plan-select</code> to open your own checkout.</p>
+          </div>
+          <template>
+            <vt-pricing period="yearly" lang-ui="en">
+              <template>
+                {
+                  "currencies": [
+                    "EUR",
+                    "USD"
+                  ],
+                  "periods": [
+                    {
+                      "id": "monthly"
+                    },
+                    {
+                      "id": "yearly",
+                      "note": "2 months free"
+                    }
+                  ],
+                  "plans": [
+                    {
+                      "id": "free",
+                      "name": "Starter",
+                      "description": "For side projects.",
+                      "price": 0,
+                      "cta": {
+                        "label": "Start free",
+                        "url": "#signup"
+                      },
+                      "features": [
+                        "3 projects",
+                        "Community support",
+                        {
+                          "text": "Custom domain",
+                          "included": false
+                        }
+                      ]
+                    },
+                    {
+                      "id": "pro",
+                      "name": "Pro",
+                      "badge": "Most popular",
+                      "highlight": true,
+                      "description": "For growing teams.",
+                      "unit": "per seat",
+                      "price": {
+                        "monthly": {
+                          "EUR": 12,
+                          "USD": 14
+                        },
+                        "yearly": {
+                          "EUR": 120,
+                          "USD": 140
+                        }
+                      },
+                      "cta": {
+                        "label": "Try Pro",
+                        "url": "#signup"
+                      },
+                      "features": [
+                        "Unlimited projects",
+                        "Email support",
+                        "Custom domain"
+                      ]
+                    },
+                    {
+                      "id": "corp",
+                      "name": "Enterprise",
+                      "description": "For large companies.",
+                      "price": "Contact us",
+                      "cta": {
+                        "label": "Talk to us",
+                        "url": "mailto:sales@example.com"
+                      },
+                      "features": [
+                        "SSO and audit logs",
+                        "Dedicated support",
+                        "Custom contract"
+                      ]
+                    }
+                  ],
+                  "compare": [
+                    {
+                      "group": "Usage",
+                      "name": "Projects",
+                      "values": {
+                        "free": "3",
+                        "pro": "Unlimited",
+                        "corp": "Unlimited"
+                      }
+                    },
+                    {
+                      "name": "Custom domain",
+                      "description": "Your own address",
+                      "values": {
+                        "pro": true,
+                        "corp": true
+                      }
+                    },
+                    {
+                      "group": "Security",
+                      "name": "SSO",
+                      "values": {
+                        "corp": true
+                      }
+                    }
+                  ],
+                  "note": "Prices exclude VAT."
+                }
+              </template>
+            </vt-pricing>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>One-time prices</h3>
+            <p>Without periods, a price is shown as it is.</p>
+          </div>
+          <template>
+            <vt-pricing lang-ui="en">
+              <template>
+                {
+                  "currency": "EUR",
+                  "plans": [
+                    {
+                      "id": "guide",
+                      "name": "The guide",
+                      "price": 29,
+                      "cta": "Buy the guide",
+                      "features": [
+                        "PDF and EPUB",
+                        "Free updates"
+                      ]
+                    },
+                    {
+                      "id": "course",
+                      "name": "The course",
+                      "highlight": true,
+                      "price": 149,
+                      "cta": "Join the course",
+                      "features": [
+                        "Everything in the guide",
+                        "12 video lessons"
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-pricing>
           </template>
         </article>
       </section>
