@@ -50,6 +50,7 @@ const COMPONENTS = {
   'vt-field': 66 * KB,
   'vt-board': 71 * KB,
   'vt-search': 64 * KB,
+  'vt-upload': 64 * KB,
   'vt-menu': 64 * KB,
   'vt-date-picker': 66 * KB,
 };
