@@ -32,9 +32,11 @@
  *   | keyof typeof import('../components/faq/strings.js').en
  *   | keyof typeof import('../components/gallery/strings.js').en
  *   | keyof typeof import('../components/stats/strings.js').en
- *   | keyof typeof import('../components/roadmap/strings.js').en
  *   | keyof typeof import('../components/testimonials/strings.js').en
- *   | keyof typeof import('../components/countdown/strings.js').en} StringKey
+ *   | keyof typeof import('../components/countdown/strings.js').en
+ *   | keyof typeof import('../components/field/strings.js').en
+ *   | keyof typeof import('../components/board/strings.js').en
+ *   | keyof typeof import('../components/search/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

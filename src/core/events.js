@@ -71,6 +71,14 @@ export const EVENTS = Object.freeze({
   PRICING_CHANGE: 'vt-pricing-change',
   /** Pricing: a plan button was pressed (cancelable). Detail: `{ plan, name, period, currency, amount, url }`. */
   PLAN_SELECT: 'vt-plan-select',
+  /** Board: a task is about to be added (cancelable). Detail: `{ task }`. */
+  TASK_ADD: 'vt-task-add',
+  /** Board: a task is about to move (cancelable). Detail: `{ task, from, to, index }`. */
+  TASK_MOVE: 'vt-task-move',
+  /** Board: a task is about to change (cancelable). Detail: `{ task, changes }`. */
+  TASK_EDIT: 'vt-task-edit',
+  /** Board: a task is about to be deleted (cancelable). Detail: `{ task }`. */
+  TASK_DELETE: 'vt-task-delete',
   /** Countdown: the date was reached while the page was open. Detail: `{ to }`. */
   COUNTDOWN_END: 'vt-countdown-end',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */

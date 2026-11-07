@@ -124,3 +124,16 @@ export function parseList(source, keys) {
     root: isObject(data) ? data : {},
   };
 }
+
+/**
+ * @param {string} name
+ * @returns {string} Up to two initials.
+ */
+export function initials(name) {
+  const words = name.split(/\s+/).filter(Boolean);
+  const letters = words.length > 1 ? [words[0], words[words.length - 1]] : words;
+  return letters
+    .map((word) => [...word][0] ?? '')
+    .join('')
+    .toUpperCase();
+}

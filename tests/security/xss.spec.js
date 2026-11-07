@@ -120,13 +120,59 @@ const MODES = [
       ]),
   },
   {
-    tag: 'vt-roadmap',
-    attrs: { variant: 'full' },
+    tag: 'vt-board',
+    attrs: { variant: 'full', views: '' },
     wrap: (p) =>
       JSON.stringify({
-        columns: [{ id: p, title: p }],
-        items: [{ title: p, description: p, status: p, tags: [p], when: p, url: p }],
+        columns: [{ id: p, title: p, limit: 1 }],
+        tasks: [
+          {
+            id: p,
+            title: p,
+            description: p,
+            column: p,
+            labels: [p],
+            assignee: p,
+            due: p,
+            url: p,
+            when: p,
+          },
+        ],
       }),
+  },
+  {
+    tag: 'vt-board',
+    attrs: { readonly: '', view: 'table' },
+    wrap: (p) => JSON.stringify([{ title: p, status: p, url: p, labels: [p] }]),
+  },
+  {
+    tag: 'vt-field',
+    attrs: { type: 'multiselect', open: '' },
+    wrap: (p) => JSON.stringify([{ value: p, label: p, description: p, group: p }, p]),
+  },
+  {
+    tag: 'vt-field',
+    attrs: { type: 'radio' },
+    wrap: (p) =>
+      JSON.stringify({
+        label: p,
+        hint: p,
+        tip: p,
+        prefix: p,
+        suffix: p,
+        error: p,
+        placeholder: p,
+        options: [p],
+      }),
+    data: true,
+  },
+  {
+    tag: 'vt-search',
+    attrs: { layout: 'inline', 'url-template': '/x/{id}' },
+    wrap: (p) =>
+      JSON.stringify([
+        { id: p, title: p, section: p, content: p, url: p, keywords: [p], featured: true },
+      ]),
   },
   {
     tag: 'vt-testimonials',
