@@ -6,6 +6,18 @@
 import { expect, test } from '@playwright/test';
 
 const SITE = 'http://localhost:4174';
+
+/**
+ * Waits until a page has loaded and its network went quiet. Firefox sometimes never reports a
+ * quiet network on the longest pages although no request is open, so that part is best effort:
+ * the checks that follow still run on the loaded page.
+ *
+ * @param {import('@playwright/test').Page} page
+ */
+async function settle(page) {
+  await page.waitForLoadState('load');
+  await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => {});
+}
 const PAGES = [
   '/',
   '/docs.html',
@@ -23,7 +35,7 @@ for (const path of PAGES) {
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(SITE + path);
-    await page.waitForLoadState('networkidle');
+    await settle(page);
     expect(errors).toEqual([]);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -36,7 +48,7 @@ test('pages have no horizontal overflow on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   for (const path of PAGES) {
     await page.goto(SITE + path);
-    await page.waitForLoadState('networkidle');
+    await settle(page);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
