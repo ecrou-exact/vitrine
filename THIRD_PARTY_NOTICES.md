@@ -8,7 +8,7 @@ changing a dependency.
 |---|---|---|---|---|
 | [highlight.js](https://github.com/highlightjs/highlight.js) | 11.12.0 | BSD-3-Clause | Syntax highlighting | Library bundle and dist/languages/ |
 | [marked](https://github.com/markedjs/marked) | 18.1.0 | MIT | Markdown parsing (GFM) | Library bundle |
-| [DOMPurify](https://github.com/cure53/DOMPurify) | 3.4.16 | Apache-2.0 OR MPL-2.0 | HTML sanitization | Library bundle |
+| [DOMPurify](https://github.com/cure53/DOMPurify) | 3.4.17 | Apache-2.0 OR MPL-2.0 | HTML sanitization | Library bundle |
 | [Lucide](https://lucide.dev) | 1.52.0 | ISC; icons derived from Feather: MIT | Interface icons | Library bundle (src/core/icons.js) |
 | [Apache ECharts](https://github.com/apache/echarts) | 6.1.0 | Apache-2.0 | Charts drawn by `<vt-chart>` | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
 | [ZRender](https://github.com/ecomfe/zrender) | 6.1.0 | BSD-3-Clause | Canvas rendering engine of Apache ECharts | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
@@ -112,7 +112,7 @@ This software is provided by the copyright holders and contributors “as is” 
 
 ---
 
-## DOMPurify 3.4.16
+## DOMPurify 3.4.17
 
 License: Apache-2.0 OR MPL-2.0. Source: https://github.com/cure53/DOMPurify
 
