@@ -60,9 +60,7 @@
 /* The tint is laid on the surface: on a page of another theme the text stays readable. */
 .menu-trigger:hover,
 .menu-trigger[aria-expanded='true'] {
-  background:
-    linear-gradient(var(--_accent-soft), var(--_accent-soft)),
-    var(--_surface);
+  background: linear-gradient(var(--_accent-soft), var(--_accent-soft)), var(--_surface);
 }
 
 .menu-trigger:focus-visible {
