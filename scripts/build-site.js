@@ -175,12 +175,7 @@ async function searchIndex() {
         if (!heading) {
           // Plain sentences only: tables, lists of links, HTML and quotes add noise.
           if (open && /^[A-Za-z`*_[(]/.test(line.trim()) && !/^\s*\|/.test(line))
-            prose.push(
-              line
-                .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-                .replace(/<[^<>]*>/g, '')
-                .replace(/[`*_]/g, ''),
-            );
+            prose.push(text(line.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')).replace(/[`*_]/g, ''));
           continue;
         }
         flush();
