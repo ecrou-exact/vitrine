@@ -81,6 +81,18 @@ export const EVENTS = Object.freeze({
   TASK_DELETE: 'vt-task-delete',
   /** Countdown: the date was reached while the page was open. Detail: `{ to }`. */
   COUNTDOWN_END: 'vt-countdown-end',
+  /** Upload: a file is about to be added (cancelable). Detail: `{ file }`. */
+  FILE_ADD: 'vt-file-add',
+  /** Upload: a file was removed. Detail: `{ file }`. */
+  FILE_REMOVE: 'vt-file-remove',
+  /** Upload: a file is about to be sent (cancelable). Detail: `{ file, request }`. */
+  UPLOAD_START: 'vt-upload-start',
+  /** Upload: part of a file was sent. Detail: `{ file, loaded, total }`. */
+  UPLOAD_PROGRESS: 'vt-upload-progress',
+  /** Upload: a file was sent. Detail: `{ file, status, response }`. */
+  UPLOAD_DONE: 'vt-upload-done',
+  /** Upload: a file could not be sent. Detail: `{ file, status }`. */
+  UPLOAD_ERROR: 'vt-upload-error',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

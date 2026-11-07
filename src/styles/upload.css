@@ -1,0 +1,223 @@
+/*
+ * Upload: the label (from field.css), a zone where files are dropped, and the list of files
+ * with their thumbnail, size, state and progress.
+ */
+:host {
+  margin-block: var(--vt-margin, 0 var(--_space-4));
+}
+
+.vt {
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+:host([theme]:not([theme='auto'])) .vt {
+  padding: var(--_space-2);
+  background: var(--_surface);
+  border-radius: var(--_radius-sm);
+}
+
+/* ---------- Zone ---------- */
+
+.upload-zone {
+  display: grid;
+  justify-items: center;
+  gap: var(--_space-1);
+  padding: var(--_space-5, 24px) var(--_space-4);
+  border: 2px dashed var(--_border-strong);
+  border-radius: var(--_radius);
+  background: var(--_surface);
+  color: var(--_fg);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.upload-zone:hover,
+.upload-zone:focus-within {
+  border-color: var(--_accent);
+}
+
+.upload-zone.dragging {
+  border-style: solid;
+  border-color: var(--_accent);
+  background: linear-gradient(var(--_accent-soft), var(--_accent-soft)), var(--_surface);
+}
+
+.upload-zone.invalid {
+  border-color: var(--_danger);
+}
+
+.disabled .upload-zone {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.upload-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--_radius-full);
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+}
+
+.upload-icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.upload-prompt {
+  margin: 0;
+}
+
+.upload-browse {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--_accent-fg);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.upload-browse:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.upload-browse:disabled {
+  cursor: default;
+}
+
+.upload-rules {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+/* ---------- Files ---------- */
+
+.upload-list,
+.upload-refused {
+  display: grid;
+  gap: var(--_space-2);
+  margin: var(--_space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.upload-file {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-3);
+  min-width: 0;
+  padding: var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+}
+
+.upload-file.error {
+  border-color: var(--_danger);
+}
+
+.upload-thumb {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  object-fit: cover;
+}
+
+.upload-thumb .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.upload-info {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.upload-name {
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-meta {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.upload-file.done .upload-state {
+  color: var(--_accent-fg);
+}
+
+.upload-file.error .upload-state {
+  color: var(--_danger);
+}
+
+.upload-progress {
+  display: block;
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+}
+
+.upload-bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--_accent);
+  transition: width 0.2s;
+}
+
+.upload-refused li {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  padding: var(--_space-1) var(--_space-2);
+  border-left: 3px solid var(--_danger);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-raised);
+  color: var(--_fg);
+  font-size: var(--_font-size-ui);
+}
+
+.upload-refused li > .icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--_danger);
+}
+
+.upload-refused li > span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-zone,
+  .upload-bar {
+    transition: none;
+  }
+}

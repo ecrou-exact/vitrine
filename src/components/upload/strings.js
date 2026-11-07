@@ -1,0 +1,73 @@
+// @ts-check
+/**
+ * Interface strings of <vt-upload>, registered by its module with `defineStrings()`
+ * so other modules do not carry them.
+ *
+ * @module components/upload/strings
+ */
+
+export const en = Object.freeze({
+  uploadRequired: 'required',
+  uploadDrop: 'Drag and drop files here, or',
+  uploadDropOne: 'Drag and drop a file here, or',
+  uploadBrowse: 'choose files',
+  uploadBrowseOne: 'choose a file',
+  uploadDropNow: 'Drop to add',
+  uploadTypes: '{types}',
+  uploadMaxSize: 'up to {size}',
+  uploadMaxFiles: '{count} files at most',
+  uploadRemove: 'Remove {name}',
+  uploadRetry: 'Try again',
+  uploadCancel: 'Cancel the upload of {name}',
+  uploadWaiting: 'Waiting',
+  uploadUploading: 'Uploading… {percent}%',
+  uploadDone: 'Uploaded',
+  uploadFailed: 'Upload failed',
+  uploadAdded: '{name} added.',
+  uploadRemoved: '{name} removed.',
+  uploadRefused: '{name} was not added: {reason}',
+  uploadReason_type: 'this type of file is not accepted.',
+  uploadReason_tooLarge: 'it is larger than {size}.',
+  uploadReason_tooSmall: 'it is smaller than {size}.',
+  uploadReason_empty: 'it is empty.',
+  uploadReason_tooMany: 'only {count} files can be added.',
+  uploadReason_refused: 'it was refused.',
+  uploadDismiss: 'Dismiss',
+  uploadFileCount: '{count} files',
+  uploadValueMissing: 'Add a file.',
+  uploadPending: 'Wait until the files are uploaded.',
+  uploadHasErrors: 'A file could not be uploaded: try again or remove it.',
+});
+
+export const fr = Object.freeze({
+  uploadRequired: 'obligatoire',
+  uploadDrop: 'Glissez-déposez des fichiers ici, ou',
+  uploadDropOne: 'Glissez-déposez un fichier ici, ou',
+  uploadBrowse: 'choisissez des fichiers',
+  uploadBrowseOne: 'choisissez un fichier',
+  uploadDropNow: 'Déposez pour ajouter',
+  uploadTypes: '{types}',
+  uploadMaxSize: 'jusqu’à {size}',
+  uploadMaxFiles: '{count} fichiers au plus',
+  uploadRemove: 'Retirer {name}',
+  uploadRetry: 'Réessayer',
+  uploadCancel: 'Annuler l’envoi de {name}',
+  uploadWaiting: 'En attente',
+  uploadUploading: 'Envoi… {percent} %',
+  uploadDone: 'Envoyé',
+  uploadFailed: 'Échec de l’envoi',
+  uploadAdded: '{name} ajouté.',
+  uploadRemoved: '{name} retiré.',
+  uploadRefused: '{name} n’a pas été ajouté : {reason}',
+  uploadReason_type: 'ce type de fichier n’est pas accepté.',
+  uploadReason_tooLarge: 'il dépasse {size}.',
+  uploadReason_tooSmall: 'il fait moins de {size}.',
+  uploadReason_empty: 'il est vide.',
+  uploadReason_tooMany: 'seuls {count} fichiers peuvent être ajoutés.',
+  uploadReason_refused: 'il a été refusé.',
+  uploadDismiss: 'Fermer',
+  uploadFileCount: '{count} fichiers',
+  uploadValueMissing: 'Ajoutez un fichier.',
+  uploadPending: 'Attendez la fin de l’envoi des fichiers.',
+  uploadHasErrors: 'Un fichier n’a pas pu être envoyé : réessayez ou retirez-le.',
+});
