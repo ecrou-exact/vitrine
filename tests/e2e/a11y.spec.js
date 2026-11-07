@@ -37,11 +37,16 @@ const MORE = {
     ]),
     {},
   ],
-  'vt-roadmap': [
-    JSON.stringify([
-      { title: 'A', status: 'done', tags: ['x'], progress: 100, url: '/a' },
-      { title: 'B', status: 'planned', votes: 3 },
-    ]),
+  'vt-board': [
+    '{"columns":[{"id":"todo"},{"id":"done","limit":1}],"tasks":[{"id":"a","title":"A","column":"todo","labels":["x"],"priority":"urgent","due":"2026-01-01","assignee":"Ada Lovelace","progress":40},{"id":"b","title":"B","column":"done","url":"/b"},{"id":"c","title":"C","column":"done"}]}',
+    { views: '', now: '2026-11-07T12:00:00Z' },
+  ],
+  'vt-field': [
+    '["France","Germany",{"value":"lu","label":"Luxembourg","description":"Grand Duchy"}]',
+    { type: 'select', required: '', hint: 'Where you live.', tip: 'Sets the currency.' },
+  ],
+  'vt-search': [
+    '[{"id":"a","title":"Getting started","section":"Guides","content":"Install it.","featured":true},{"id":"b","title":"Board","section":"Components","content":"Drag and drop.","featured":true}]',
     {},
   ],
   'vt-testimonials': [
@@ -125,6 +130,41 @@ test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {
         ).toEqual([]);
       });
     }
+  }
+
+  for (const theme of ['light', 'dark']) {
+    test(`vt-search dialog and vt-field list open, ${theme} theme`, async ({ page }) => {
+      await page.goto(STRICT);
+      await mount(
+        page,
+        'vt-field',
+        { theme, type: 'multiselect', label: 'Topics', value: 'a' },
+        '[{"group":"G","options":["a","b"]}]',
+      );
+      await page.locator('#el .field-trigger').click();
+      const field = await new AxeBuilder({ page })
+        .include('#el')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      expect(field.violations.map((v) => v.id)).toEqual([]);
+      await mount(
+        page,
+        'vt-search',
+        { theme },
+        '[{"id":"a","title":"Getting started","section":"Guides","content":"Install it.","featured":true},{"id":"b","title":"Board","section":"Components","content":"Drag and drop.","featured":true}]',
+      );
+      await page.locator('#el .search-trigger').click();
+      await page.locator('#el input').fill('board');
+      const search = await new AxeBuilder({ page })
+        .include('#el')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      expect(
+        search.violations.map(
+          (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`,
+        ),
+      ).toEqual([]);
+    });
   }
 
   test('editors are accessible', async ({ page }) => {

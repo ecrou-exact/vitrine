@@ -4,7 +4,17 @@ import codeCss from '../../styles/code.css?raw';
 import dataCss from '../../styles/data.css?raw';
 import testimonialsCss from '../../styles/testimonials.css?raw';
 import { parseEnum, parseInteger } from '../../core/attributes.js';
-import { firstText, parseList, safeImage, safeLink, toNumber, toTime } from '../../core/data.js';
+import {
+  firstText,
+  initials,
+  parseList,
+  safeImage,
+  safeLink,
+  toNumber,
+  toTime,
+} from '../../core/data.js';
+
+export { initials };
 import { VtDataElement } from '../../core/data-element.js';
 import { h, uid } from '../../core/dom.js';
 import { defineStrings } from '../../core/i18n.js';
@@ -64,16 +74,6 @@ export function averageRating(items) {
   const ratings = items.map((item) => item.rating).filter((rating) => rating !== null);
   if (!ratings.length) return null;
   return { rating: ratings.reduce((sum, r) => sum + r, 0) / ratings.length, count: ratings.length };
-}
-
-/**
- * @param {string} name
- * @returns {string} Up to two initials.
- */
-export function initials(name) {
-  const words = name.split(/\s+/).filter(Boolean);
-  const letters = words.length > 1 ? [words[0], words[words.length - 1]] : words;
-  return letters.map((word) => [...word][0] ?? '').join('').toUpperCase(); // prettier-ignore
 }
 
 /**

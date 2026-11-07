@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { parseCountdown, splitTime } from '../../src/components/countdown/vt-countdown.js';
 import { faqStructuredData, filterFaq, parseFaq, slug } from '../../src/components/faq/model.js';
 import { parseGallery } from '../../src/components/gallery/vt-gallery.js';
-import { parseRoadmap, statusKey } from '../../src/components/roadmap/model.js';
 import {
   changeTone,
   parseStats,
@@ -153,38 +152,6 @@ describe('<vt-stats>', () => {
       { x: 4, y: 36 },
       { x: 96, y: 4 },
     ]);
-  });
-});
-
-describe('<vt-roadmap>', () => {
-  it('puts items in columns, known statuses in their usual order', () => {
-    const result = parseRoadmap(
-      JSON.stringify([
-        { title: 'Shipped thing', status: 'released' },
-        { title: 'Odd', status: 'Research' },
-        { title: 'Working', status: 'in progress', progress: 140, votes: 12.7, tags: ['api', 3] },
-        { title: 'Later', status: 'backlog' },
-      ]),
-    );
-    if (!result.ok) throw new Error('not read');
-    expect(result.columns.map((column) => column.id)).toEqual([
-      'planned',
-      'in-progress',
-      'done',
-      'research',
-    ]);
-    expect(result.items[2]).toMatchObject({ progress: 100, votes: 12, tags: ['api', '3'] });
-  });
-
-  it('keeps declared columns first', () => {
-    const result = parseRoadmap(
-      '{"columns":[{"id":"done","title":"Shipped"}],"items":[{"title":"A","status":"planned"}]}',
-    );
-    expect(result.ok && result.columns).toEqual([
-      { id: 'done', title: 'Shipped' },
-      { id: 'planned', title: '' },
-    ]);
-    expect(statusKey('constructor')).toBe('constructor');
   });
 });
 

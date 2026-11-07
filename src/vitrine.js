@@ -36,7 +36,9 @@ import { VtPricing } from './components/pricing/vt-pricing.js';
 import { VtFaq } from './components/faq/vt-faq.js';
 import { VtGallery } from './components/gallery/vt-gallery.js';
 import { VtStats } from './components/stats/vt-stats.js';
-import { VtRoadmap } from './components/roadmap/vt-roadmap.js';
+import { VtField } from './components/field/vt-field.js';
+import { VtBoard } from './components/board/vt-board.js';
+import { VtSearch } from './components/search/vt-search.js';
 import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
 import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
@@ -79,7 +81,9 @@ export {
   VtFaq,
   VtGallery,
   VtStats,
-  VtRoadmap,
+  VtField,
+  VtBoard,
+  VtSearch,
   VtTestimonials,
   VtCountdown,
   configure,
@@ -141,7 +145,9 @@ export const registry = new Map(
     ['vt-faq', VtFaq],
     ['vt-gallery', VtGallery],
     ['vt-stats', VtStats],
-    ['vt-roadmap', VtRoadmap],
+    ['vt-field', VtField],
+    ['vt-board', VtBoard],
+    ['vt-search', VtSearch],
     ['vt-testimonials', VtTestimonials],
     ['vt-countdown', VtCountdown],
   ]),
@@ -180,7 +186,9 @@ const TYPES = /** @type {const} */ ({
   faq: 'vt-faq',
   gallery: 'vt-gallery',
   stats: 'vt-stats',
-  roadmap: 'vt-roadmap',
+  field: 'vt-field',
+  board: 'vt-board',
+  search: 'vt-search',
   testimonials: 'vt-testimonials',
   countdown: 'vt-countdown',
 });
