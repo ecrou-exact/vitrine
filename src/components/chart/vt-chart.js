@@ -167,6 +167,11 @@ export class VtChart extends VtBase {
     return this.parsed;
   }
 
+  /** @param {unknown} value - Content as a value, read like JSON. */
+  set data(value) {
+    super.data = value;
+  }
+
   /** @returns {ChartData} */
   get data() {
     const data = this.parse().data;

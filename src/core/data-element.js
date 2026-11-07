@@ -12,6 +12,7 @@ import { getConfig } from './config.js';
 import { h } from './dom.js';
 import { CodeEditor } from './editor.js';
 import { EVENTS, emit } from './events.js';
+import { noticeView } from './ui.js';
 
 /** Delay before an edited text updates the preview, in milliseconds. */
 const PREVIEW_DELAY = 200;
@@ -111,6 +112,52 @@ export class VtDataElement extends VtBase {
       body,
     );
     return { panel, history: this.historyButtons(editor) };
+  }
+
+  /**
+   * Puts the header and the preview in the frame, with the usual actions.
+   *
+   * @param {HTMLElement} frame
+   * @param {HTMLElement} body
+   * @param {string} panelId
+   * @param {{ file: string, download?: boolean, badge?: string }} options
+   */
+  frameWith(frame, body, panelId, { file, download = true, badge = 'JSON' }) {
+    const { panel, history } = this.previewPanel(body, panelId);
+    frame.append(
+      ...this.chrome({
+        badge,
+        actions: [
+          ...history,
+          this.editToggleButton(),
+          this.fullscreenButton(),
+          download && this.feature('download')
+            ? this.downloadButton(
+                () => this.text ?? '',
+                this.downloadName(file),
+                'application/json',
+              )
+            : null,
+          this.feature('copy') ? this.copyButton(() => this.text ?? '') : null,
+        ],
+      }),
+      panel,
+    );
+    this.editor?.align();
+  }
+
+  /**
+   * Why JSON could not be read.
+   *
+   * @param {{ error: 'json' | 'shape', message: string }} result
+   * @returns {HTMLElement}
+   */
+  dataNotice(result) {
+    return noticeView(
+      result.error === 'json'
+        ? this.t('jsonInvalid', { message: result.message })
+        : this.t('dataNoList', { keys: result.message }),
+    );
   }
 
   /** @returns {CodeEditor} */

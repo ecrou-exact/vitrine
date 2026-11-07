@@ -1,4 +1,5 @@
 // @ts-check
+import { logFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import ansiCss from '../../styles/ansi.css?raw';
@@ -78,6 +79,10 @@ const LABELS = /** @type {Record<LevelKey, string>} */ ({
  */
 export class VtLog extends VtBase {
   static type = 'log';
+
+  static fromData = logFromData;
+
+  static dataAttributes = Object.freeze(['label']);
 
   static componentAttributes = Object.freeze([
     'levels', 'level-filter', 'follow', 'time', 'fields', 'colors', 'line-numbers', 'wrap',

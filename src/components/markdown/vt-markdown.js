@@ -1,4 +1,5 @@
 // @ts-check
+import { markdownFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import markdownCss from '../../styles/markdown.css?raw';
@@ -91,6 +92,10 @@ const ROTATED = /** @type {const} */ ({
  */
 export class VtMarkdown extends VtBase {
   static type = 'markdown';
+
+  static fromData = markdownFromData;
+
+  static dataAttributes = Object.freeze(['label', 'toc', 'anchors']);
 
   static componentAttributes = Object.freeze([
     'tabs', 'default-tab', 'toc', 'anchors', 'allow-html', 'external-links', 'images', 'line-numbers',

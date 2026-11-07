@@ -1,4 +1,5 @@
 // @ts-check
+import { xmlFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
@@ -75,6 +76,10 @@ const VIEWS = /** @type {const} */ (['tree', 'raw']);
  */
 export class VtXml extends VtBase {
   static type = 'xml';
+
+  static fromData = xmlFromData;
+
+  static dataAttributes = Object.freeze(['label']);
 
   static componentAttributes = Object.freeze([
     'view', 'tabs', 'depth', 'indent', 'pretty', 'expand-controls', 'path', 'line-numbers', 'on-invalid',

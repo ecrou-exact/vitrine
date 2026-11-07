@@ -1,4 +1,5 @@
 // @ts-check
+import { cronFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
@@ -77,6 +78,10 @@ const WEEK = [1, 2, 3, 4, 5, 6, 0];
  */
 export class VtCron extends VtBase {
   static type = 'cron';
+
+  static fromData = cronFromData;
+
+  static dataAttributes = Object.freeze(['timezone', 'count', 'label']);
 
   static componentAttributes = Object.freeze([
     'expression', 'count', 'timezone', 'now', 'system', 'grid', 'fields',

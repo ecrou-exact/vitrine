@@ -1,4 +1,5 @@
 // @ts-check
+import { codeFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import { parseInteger, parseRanges } from '../../core/attributes.js';
@@ -70,6 +71,18 @@ const EXTENSIONS = /** @type {Record<string, string>} */ ({
  */
 export class VtCode extends VtBase {
   static type = 'code';
+
+  static fromData = codeFromData;
+
+  static dataAttributes = Object.freeze([
+    'language',
+    'label',
+    'highlight-lines',
+    'start-line',
+    'line-numbers',
+    'wrap',
+    'tab-size',
+  ]);
 
   static componentAttributes = Object.freeze([
     'language', 'line-numbers', 'start-line', 'highlight-lines', 'wrap', 'wrap-toggle', 'collapsible', 'diff', 'tab-size',

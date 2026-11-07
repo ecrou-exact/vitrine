@@ -1,4 +1,5 @@
 // @ts-check
+import { tomlFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import jsonCss from '../../styles/json.css?raw';
@@ -85,6 +86,10 @@ const VIEWS = /** @type {const} */ (['tree', 'raw']);
 export class VtToml extends VtBase {
   static type = 'toml';
 
+  static fromData = tomlFromData;
+
+  static dataAttributes = Object.freeze(/** @type {string[]} */ ([]));
+
   static componentAttributes = Object.freeze([
     'view', 'tabs', 'depth', 'sort-keys', 'show-types', 'expand-controls', 'path', 'line-numbers', 'copy-json', 'on-invalid',
   ]); // prettier-ignore
@@ -120,6 +125,11 @@ export class VtToml extends VtBase {
     this.errorLine = 0;
     /** @type {ReturnType<typeof setTimeout> | undefined} */
     this.validateTimer = undefined;
+  }
+
+  /** @param {unknown} value - Content as a value, read like JSON. */
+  set data(value) {
+    super.data = value;
   }
 
   /**

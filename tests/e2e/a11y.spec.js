@@ -12,6 +12,49 @@ const SAMPLES = {
 };
 const THEMES = ['light', 'dark', 'dim', 'paper', 'high-contrast'];
 const MORE = {
+  'vt-faq': [
+    JSON.stringify([
+      { question: 'Q one?', answer: 'A *one*', category: 'X' },
+      { question: 'Q two?', answer: 'A two', category: 'Y' },
+    ]),
+    { open: 'first' },
+  ],
+  'vt-gallery': [
+    JSON.stringify([
+      {
+        src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+        alt: 'One',
+        caption: 'First',
+      },
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+    ]),
+    {},
+  ],
+  'vt-stats': [
+    JSON.stringify([
+      { label: 'Visitors', value: 120, previous: 100, series: [1, 3, 2] },
+      { label: 'Errors', value: 3, previous: 5, good: 'down' },
+    ]),
+    {},
+  ],
+  'vt-roadmap': [
+    JSON.stringify([
+      { title: 'A', status: 'done', tags: ['x'], progress: 100, url: '/a' },
+      { title: 'B', status: 'planned', votes: 3 },
+    ]),
+    {},
+  ],
+  'vt-testimonials': [
+    JSON.stringify([
+      { quote: 'Great', author: 'Ada Lovelace', role: 'CTO', rating: 5, url: '/r' },
+      { quote: 'Good', author: 'Alan', rating: 4 },
+    ]),
+    {},
+  ],
+  'vt-countdown': [
+    JSON.stringify({ to: '2027-01-01T00:00:00Z', title: 'Launch', url: '/l', cta: 'More' }),
+    { now: '2026-11-07T12:00:00Z' },
+  ],
   'vt-status': [
     '{"components":[{"name":"API","status":"degraded","since":"2026-10-01","group":"Core","url":"/api","history":{"2026-10-20":"major","2026-10-21":"partial","2026-10-22":"maintenance"}}],"incidents":[{"title":"Slow","status":"identified","impact":"minor","updates":[{"status":"identified","text":"Found"}]},{"title":"Old","status":"resolved","url":"/old"}],"maintenances":[{"title":"Upgrade","start":"2099-01-01T00:00:00Z"}]}',
     { now: '2026-11-05T12:00:00Z' },
