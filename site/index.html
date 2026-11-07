@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Thirty-four elements, view or edit</h2>
+            <h2 id="components-title">Thirty-six elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -531,12 +531,28 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <a href="examples.html#stats">Stats examples</a>
             </article>
             <article class="component">
-              <h3>&lt;vt-roadmap&gt;</h3>
+              <h3>&lt;vt-board&gt;</h3>
               <p>
-                A public roadmap by status, with progress, votes and tag filters.
+                A task board with drag and drop, filters, a list and a table.
               </p>
-              <vt-roadmap class="preview" lang-ui="en" layout="list" json='[{"title":"Dark mode for the editor","status":"done","tags":["editor"],"when":"October 2026"},{"title":"Offline sync","status":"in-progress","progress":60,"tags":["mobile"],"votes":128,"description":"Edit without a connection."},{"title":"Public API v2","status":"in-progress","progress":25,"tags":["api"],"when":"Q1 2027"},{"title":"SSO with SAML","status":"planned","tags":["security"],"votes":87}]'></vt-roadmap>
-              <a href="examples.html#roadmap">Roadmap examples</a>
+              <vt-board class="preview" lang-ui="en" views="" json='{"columns":[{"id":"todo","title":"To do"},{"id":"in-progress","title":"Doing"},{"id":"done","title":"Done"}],"tasks":[{"id":"a","title":"SSO with SAML","column":"todo","priority":"high","labels":["security"]},{"id":"b","title":"Offline sync","column":"in-progress","progress":60,"labels":["mobile"]},{"id":"c","title":"Dark mode","column":"done","labels":["editor"]}]}'></vt-board>
+              <a href="examples.html#board">Board examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-field&gt;</h3>
+              <p>
+                A form field with its required mark, hint, tip and lists you can search.
+              </p>
+              <vt-field class="preview" lang-ui="en" json='{"type":"multiselect","label":"Topics","required":true,"hint":"Pick up to three.","tip":"Used to suggest articles.","value":["CSS"],"options":["HTML","CSS","JavaScript","Go","Rust"]}'></vt-field>
+              <a href="examples.html#field">Field examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-search&gt;</h3>
+              <p>
+                Site search for a menu, with a shortcut and results by id.
+              </p>
+              <vt-search class="preview" lang-ui="en" layout="inline" shortcut="none" json='[{"id":"getting-started","title":"Getting started","section":"Guides","content":"Install Vitrine from a CDN or npm and add your first element.","url":"docs.html?page=getting-started","featured":true},{"id":"theming","title":"Theming","section":"Guides","content":"Colours, fonts and spacing with CSS custom properties, in light and dark.","url":"docs.html?page=theming","featured":true},{"id":"security","title":"Security","section":"Guides","content":"Sanitized Markdown, safe links and Trusted Types.","url":"docs.html?page=security"},{"id":"board","title":"<vt-board>","section":"Components","content":"A task board with drag and drop, a list and a table.","keywords":["kanban","tasks"],"url":"docs.html?page=components/board"}]'></vt-search>
+              <a href="examples.html#search">Search examples</a>
             </article>
             <article class="component">
               <h3>&lt;vt-testimonials&gt;</h3>

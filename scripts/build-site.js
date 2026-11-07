@@ -54,14 +54,39 @@ await writeFile(`${out}/assets/search-index.json`, JSON.stringify(await searchIn
 console.log(`Website assembled in ${out}/`);
 
 /**
- * Search index for the site-wide search: page titles and section headings of the site
- * pages, and every heading of the docs (with the same anchors as <vt-markdown>).
+ * Search index for the <vt-search> of the site header: page titles and section headings
+ * of the site pages, and every heading of the docs (with the same anchors as <vt-markdown>)
+ * with the text under it.
  *
- * @returns {Promise<{ t: string, p: string, u: string }[]>} Title, page, URL.
+ * @typedef {{ id: string, title: string, section: string, url: string, content?: string, featured?: boolean }} Entry
+ * @returns {Promise<Entry[]>}
  */
 async function searchIndex() {
-  /** @type {{ t: string, p: string, u: string }[]} */
+  /** @type {Entry[]} */
   const entries = [];
+  /** @type {Set<string>} */
+  const ids = new Set();
+  // Suggested before anything is typed.
+  const FEATURED = new Set([
+    'Getting started',
+    '<vt-code>',
+    '<vt-board>',
+    '<vt-search>',
+    'Theming',
+    'Security',
+  ]);
+  /** @param {string} title @param {string} section @param {string} url @param {string} [content] */
+  const add = (title, section, url, content) => {
+    // The id is the address itself, unique and stable between builds.
+    let id = url;
+    for (let n = 2; ids.has(id); n += 1) id = `${url}~${n}`;
+    ids.add(id);
+    /** @type {Entry} */
+    const entry = { id, title, section, url };
+    if (content) entry.content = content.length > 400 ? `${content.slice(0, 400)}…` : content;
+    if (FEATURED.has(title) && (section === 'Docs' || section === 'Page')) entry.featured = true;
+    entries.push(entry);
+  };
   // Titles become plain text. Tags are removed until none is left (a single pass would
   // turn "<scr<b>ipt>" into "<script>"); the index is only ever shown with textContent.
   const text = (/** @type {string} */ html) => {
@@ -90,7 +115,7 @@ async function searchIndex() {
   };
   for (const [file, page] of Object.entries(PAGES)) {
     const html = await readFile(`site/${file}`, 'utf8');
-    entries.push({ t: page, p: 'Page', u: file });
+    add(page, 'Page', file);
     // Headings in order, with the id of the nearest section or element before them.
     let anchor = '';
     for (const match of html.matchAll(/<(section|article|h2|h3)\b([^>]*)>([\s\S]*?)(?=<)/g)) {
@@ -103,7 +128,7 @@ async function searchIndex() {
       const end = html.indexOf(`</${tag}>`, match.index);
       const title = text(html.slice(match.index, end));
       if (!title || title.length > 90) continue;
-      entries.push({ t: title, p: page, u: `${file}#${id ?? anchor}`.replace(/#$/, '') });
+      add(title, page, `${file}#${id ?? anchor}`.replace(/#$/, ''));
     }
   }
 
@@ -133,11 +158,32 @@ async function searchIndex() {
       const used = new Map();
       let fenced = false;
       let pageTitle = page;
+      // Headings wait for the prose under them, read up to the next heading.
+      /** @type {[string, string, string] | null} */
+      let open = null;
+      /** @type {string[]} */
+      let prose = [];
+      const flush = () => {
+        if (open) add(...open, prose.join(' ').replace(/\s+/g, ' ').trim());
+        open = null;
+        prose = [];
+      };
       for (const line of markdown.split('\n')) {
         if (/^\s*(```|~~~)/.test(line)) fenced = !fenced;
         if (fenced) continue;
         const heading = /^(#{1,3})\s+(.+?)\s*#*$/.exec(line);
-        if (!heading) continue;
+        if (!heading) {
+          // Plain sentences only: tables, lists of links, HTML and quotes add noise.
+          if (open && /^[A-Za-z`*_[(]/.test(line.trim()) && !/^\s*\|/.test(line))
+            prose.push(
+              line
+                .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+                .replace(/<[^<>]*>/g, '')
+                .replace(/[`*_]/g, ''),
+            );
+          continue;
+        }
+        flush();
         // Visible heading text: inline code, links and emphasis without their syntax.
         const title = heading[2]
           .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
@@ -146,9 +192,10 @@ async function searchIndex() {
         const id = slug(title, used);
         if (heading[1] === '#') {
           pageTitle = title;
-          entries.push({ t: title, p: 'Docs', u: `docs.html?page=${page}` });
-        } else entries.push({ t: title, p: pageTitle, u: `docs.html?page=${page}#${id}` });
+          open = [title, 'Docs', `docs.html?page=${page}`];
+        } else open = [title, pageTitle, `docs.html?page=${page}#${id}`];
       }
+      flush();
     }
   }
   return entries;
