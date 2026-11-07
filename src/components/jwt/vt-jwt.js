@@ -1,4 +1,5 @@
 // @ts-check
+import { jwtFromData } from '../../core/data-formats.js';
 import jsonCss from '../../styles/json.css?raw';
 import jwtCss from '../../styles/jwt.css?raw';
 import { parseBoolean, parseInteger } from '../../core/attributes.js';
@@ -68,6 +69,10 @@ defineStrings({ en: strings, fr: stringsFr });
  */
 export class VtJwt extends VtBase {
   static type = 'jwt';
+
+  static fromData = jwtFromData;
+
+  static dataAttributes = Object.freeze(['now']);
 
   static componentAttributes = Object.freeze([
     'now',
