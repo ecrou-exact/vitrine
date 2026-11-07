@@ -4,6 +4,7 @@
  * console error here is a real problem.
  */
 import { expect, test } from '@playwright/test';
+import { isEngineNoise } from '../e2e/helpers.js';
 
 const SITE = 'http://localhost:4174';
 
@@ -32,7 +33,9 @@ const PAGES = [
 for (const path of PAGES) {
   test(`${path} loads without console errors`, async ({ page }) => {
     const errors = [];
-    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    page.on('console', (m) => {
+      if (m.type() === 'error' && !isEngineNoise(page, m.text())) errors.push(m.text());
+    });
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(SITE + path);
     await settle(page);

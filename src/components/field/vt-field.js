@@ -179,6 +179,8 @@ export class VtField extends VtDataElement {
     this.typeahead = { text: '', at: 0 };
     /** @type {((event: Event) => void) | null} */
     this.outside = null;
+    /** @type {((event: KeyboardEvent) => void) | null} */
+    this.tipEscape = null;
     this.addEventListener('invalid', (event) => {
       // The message is written under the field: the browser bubble would repeat it.
       event.preventDefault();
@@ -340,6 +342,8 @@ export class VtField extends VtDataElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.stopOutside();
+    this.tipOpen = false;
+    this.watchTipEscape();
   }
 
   // ---------------------------------------------------------------- validity
@@ -474,6 +478,26 @@ export class VtField extends VtDataElement {
     this.refreshState();
     if (this.open) this.watchOutside();
     else this.stopOutside();
+    this.watchTipEscape();
+  }
+
+  /**
+   * Escape closes an open tip wherever the focus is: Safari does not focus a button on click,
+   * so the key would not reach the "?" button.
+   */
+  watchTipEscape() {
+    if (this.tipOpen && !this.tipEscape) {
+      this.tipEscape = (event) => {
+        if (event.key === 'Escape' && this.tipOpen && !event.defaultPrevented) {
+          event.preventDefault();
+          this.closeTip();
+        }
+      };
+      document.addEventListener('keydown', this.tipEscape);
+    } else if (!this.tipOpen && this.tipEscape) {
+      document.removeEventListener('keydown', this.tipEscape);
+      this.tipEscape = null;
+    }
   }
 
   /** @returns {string} Ids that describe the control. */
@@ -537,8 +561,10 @@ export class VtField extends VtDataElement {
             this.render();
           },
           keydown: (event) => {
-            if (/** @type {KeyboardEvent} */ (event).key === 'Escape' && this.tipOpen)
+            if (/** @type {KeyboardEvent} */ (event).key === 'Escape' && this.tipOpen) {
+              event.preventDefault();
               this.closeTip();
+            }
           },
         },
       },
@@ -556,7 +582,10 @@ export class VtField extends VtDataElement {
         attrs: { id: this.ids.tip, role: 'status' },
         on: {
           keydown: (event) => {
-            if (/** @type {KeyboardEvent} */ (event).key === 'Escape') this.closeTip();
+            if (/** @type {KeyboardEvent} */ (event).key === 'Escape') {
+              event.preventDefault();
+              this.closeTip();
+            }
           },
         },
       },

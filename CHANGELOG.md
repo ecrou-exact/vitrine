@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `<vt-field>`: Escape closes the "?" tip wherever the focus is. In Safari a click does not focus the button, so the key never reached it.
 - No more Content Security Policy report on every page in recent Chromium: the check that the HTML sanitizer works no longer parses an event handler attribute, which Chromium now reports as soon as it is parsed, even in a detached document.
 - `<vt-calendar>`: a day is named from its content (the full date, then the events as shown), so its name holds everything visible in it (WCAG 2.5.3, Label in Name).
 - `<vt-git>`: JSON from the GitHub API showed `[object Object]` as the author, and no date or message.
