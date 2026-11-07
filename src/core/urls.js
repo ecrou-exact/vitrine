@@ -26,8 +26,12 @@ const SAFE_DATA_IMAGE = /^data:image\/(?:png|gif|jpe?g|webp|avif);base64,[a-z0-9
 export function isSafeUrl(url, options = {}) {
   if (typeof url !== 'string') return false;
   // Browsers strip leading/trailing C0 controls and spaces, and remove tabs/newlines anywhere.
-  // eslint-disable-next-line no-control-regex
-  const normalized = url.replace(/^[\u0000- ]+|[\u0000- ]+$/g, '').replace(/[\t\n\r]/g, '');
+  // Trimmed with indexes: a regular expression anchored at the end is slow on long runs.
+  let start = 0;
+  let end = url.length;
+  while (start < end && url.charCodeAt(start) <= 32) start += 1;
+  while (end > start && url.charCodeAt(end - 1) <= 32) end -= 1;
+  const normalized = url.slice(start, end).replace(/[\t\n\r]/g, '');
   if (normalized === '') return true;
   if (options.allowDataImage && SAFE_DATA_IMAGE.test(normalized)) return true;
   const scheme = /^([a-z][a-z0-9+.-]*):/i.exec(normalized);
