@@ -21,6 +21,8 @@ export const en = Object.freeze({
   gitAuthor: 'Author',
   gitDate: 'Date',
   gitRefs: 'Refs',
+  gitPage: 'Page',
+  gitOpenPage: 'Open the commit',
 });
 
 /** @type {Partial<Record<keyof typeof en, string>>} */
@@ -39,4 +41,6 @@ export const fr = {
   gitAuthor: 'Auteur',
   gitDate: 'Date',
   gitRefs: 'Références',
+  gitPage: 'Page',
+  gitOpenPage: 'Ouvrir le commit',
 };

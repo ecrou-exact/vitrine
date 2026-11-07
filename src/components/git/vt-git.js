@@ -13,7 +13,15 @@ import { EVENTS, emit } from '../../core/events.js';
 import { formatNumber } from '../../core/i18n.js';
 import { MAX_MATCHES, MAX_QUERY_LENGTH } from '../../core/search.js';
 import { iconButton, noticeView } from '../../core/ui.js';
-import { GitError, findCommit, layoutGraph, listRefs, reachable, readCommits } from './history.js';
+import {
+  GitError,
+  commitUrl,
+  findCommit,
+  layoutGraph,
+  listRefs,
+  reachable,
+  readCommits,
+} from './history.js';
 
 defineStrings({ en: strings, fr: stringsFr });
 
@@ -35,10 +43,12 @@ const COLORS = 8;
  * Shows a commit history as a graph: one lane per branch, merges and branch points drawn
  * as curves, branch and tag labels, and the hash, subject, author and date of each commit.
  *
- * Reads `git log --pretty=format:'%H|%P|%an|%ad|%D|%s'`, `git log --graph --oneline
- * --decorate`, or JSON (`[{ hash, parents, author, date, subject, refs, body }]`). The lanes
- * are computed from the parents. A commit opens a details panel; branch buttons show only
- * the commits a branch contains.
+ * Reads `git log` in its default format or with `--graph`, `--oneline`, `--parents` or
+ * `--pretty=format:'%H|%P|%an|%ad|%D|%s'`, and JSON: its own
+ * (`[{ hash, parents, author, date, subject, refs, body, url }]`) or what the GitHub, GitLab
+ * and Bitbucket APIs return, with branches and tags beside the commits. The lanes are computed
+ * from the parents, after putting commits in `git log` order when the source did not. A commit
+ * opens a details panel; branch buttons show only the commits a branch contains.
  *
  * @element vt-git
  * @since 0.9.0
@@ -50,6 +60,8 @@ const COLORS = 8;
  * @attr {"relative"|"absolute"} date-format - Dates as "3 days ago" or in full (default `relative`).
  * @attr {number} hash-length - Characters of the hash shown (default 7).
  * @attr {string} selected - Hash (or prefix) of the commit selected at first.
+ * @attr {string} commit-url - Address of a commit page, with `{hash}`, such as
+ *   `https://github.com/owner/repo/commit/{hash}`. A `url` given by the source comes first.
  *
  * @prop {string} content - The history, as `git log` output or JSON.
  * @prop {Commit[]} commits - Commits read from the content (read-only copies).
@@ -76,6 +88,7 @@ export class VtGit extends VtBase {
 
   static componentAttributes = Object.freeze([
     'branch-filter', 'branch', 'author', 'date', 'date-format', 'hash-length', 'selected',
+    'commit-url',
   ]); // prettier-ignore
 
   static presets = {
@@ -492,6 +505,12 @@ export class VtGit extends VtBase {
     if (commit.author) fact(t('gitAuthor'), commit.author);
     if (commit.date) fact(t('gitDate'), this.dateElement(commit, 'git-full-date'));
     if (commit.refs.length) fact(t('gitRefs'), ...commit.refs.map((ref) => refLabel(ref)));
+    const url = commitUrl(commit, this.getAttribute('commit-url'));
+    if (url)
+      fact(
+        t('gitPage'),
+        h('a', { text: t('gitOpenPage'), attrs: { href: url, rel: 'noopener noreferrer' } }),
+      );
     const panel = h(
       'section',
       { class: 'git-details', part: 'details', attrs: { 'aria-label': t('gitDetails') } },

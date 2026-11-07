@@ -1,0 +1,32 @@
+commit d9f7810e7d903e9dcf16ef44b09ddbe669757a62 344980da3f4c6ba0988476b301eae6e063431b68 (HEAD -> main)
+Author: Ada <ada@example.com>
+Date:   Sat Nov 7 10:08:01 2026 +0100
+
+    After the merge
+
+commit 344980da3f4c6ba0988476b301eae6e063431b68 ed52ca3b7f53ff617f2557d732cba27ed5206481 b8a88b79dad4d78715fca02aa4e4191d520a4543 (tag: v1.0)
+Merge: ed52ca3 b8a88b7
+Author: Ada <ada@example.com>
+Date:   Sat Nov 7 10:08:01 2026 +0100
+
+    Merge branch 'feature'
+
+commit ed52ca3b7f53ff617f2557d732cba27ed5206481 84f5fbf359c21caefeb297aa77bdbe4000c2a41d
+Author: Ada <ada@example.com>
+Date:   Sat Nov 7 10:08:01 2026 +0100
+
+    Fix on main
+
+commit b8a88b79dad4d78715fca02aa4e4191d520a4543 84f5fbf359c21caefeb297aa77bdbe4000c2a41d (feature)
+Author: Ada <ada@example.com>
+Date:   Sat Nov 7 10:08:00 2026 +0100
+
+    Add feature
+    
+    With a body line.
+
+commit 84f5fbf359c21caefeb297aa77bdbe4000c2a41d
+Author: Ada <ada@example.com>
+Date:   Sat Nov 7 10:08:00 2026 +0100
+
+    Initial commit
