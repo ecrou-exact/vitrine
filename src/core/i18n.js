@@ -37,7 +37,8 @@
  *   | keyof typeof import('../components/field/strings.js').en
  *   | keyof typeof import('../components/board/strings.js').en
  *   | keyof typeof import('../components/search/strings.js').en
- *   | keyof typeof import('../components/date-picker/strings.js').en} StringKey
+ *   | keyof typeof import('../components/date-picker/strings.js').en
+ *   | keyof typeof import('../components/menu/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 
