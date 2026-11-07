@@ -56,7 +56,9 @@
           <option value="faq">FAQ</option>
           <option value="gallery">Gallery</option>
           <option value="stats">Stats</option>
-          <option value="roadmap">Roadmap</option>
+          <option value="board">Board</option>
+          <option value="field">Field</option>
+          <option value="search">Search</option>
           <option value="testimonials">Testimonials</option>
           <option value="countdown">Countdown</option>
           <option value="api">JavaScript</option>
@@ -2576,23 +2578,121 @@ export { unit };</template>
         </article>
       </section>
 
-      <section class="example-group" id="roadmap" aria-labelledby="roadmap-title">
-        <h2 id="roadmap-title">&lt;vt-roadmap&gt;</h2>
-        <p class="muted prose">Known statuses come in their usual order; others get a column of their own.</p>
+      <section class="example-group" id="board" aria-labelledby="board-title">
+        <h2 id="board-title">&lt;vt-board&gt;</h2>
+        <p class="muted prose">Drag cards with the mouse, by the handle on touch screens, or with Space and the arrow keys. A double click or Enter opens a card.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A sprint board</h3>
+            <p>Priorities, labels, people, due dates and a limit on the work in progress. Filters and three views.</p>
+          </div>
+          <template>
+            <vt-board label="Sprint 42" now="2026-11-07T12:00:00Z" lang-ui="en">
+              <template data-json>
+                {
+                  "columns": [
+                    {
+                      "id": "todo",
+                      "title": "To do"
+                    },
+                    {
+                      "id": "in-progress",
+                      "title": "In progress",
+                      "limit": 3
+                    },
+                    {
+                      "id": "review",
+                      "title": "Review"
+                    },
+                    {
+                      "id": "done",
+                      "title": "Done"
+                    }
+                  ],
+                  "tasks": [
+                    {
+                      "id": "T-12",
+                      "title": "Offline sync",
+                      "column": "in-progress",
+                      "priority": "high",
+                      "labels": [
+                        "mobile"
+                      ],
+                      "assignee": "Ada Lovelace",
+                      "progress": 60,
+                      "due": "2026-11-20",
+                      "description": "Edit without a connection."
+                    },
+                    {
+                      "id": "T-14",
+                      "title": "Public API v2",
+                      "column": "in-progress",
+                      "priority": "medium",
+                      "labels": [
+                        "api"
+                      ],
+                      "assignee": "Alan Turing",
+                      "progress": 25
+                    },
+                    {
+                      "id": "T-15",
+                      "title": "SSO with SAML",
+                      "column": "todo",
+                      "priority": "urgent",
+                      "labels": [
+                        "security"
+                      ],
+                      "due": "2026-11-12"
+                    },
+                    {
+                      "id": "T-16",
+                      "title": "Export to CSV",
+                      "column": "todo",
+                      "priority": "low",
+                      "labels": [
+                        "data"
+                      ]
+                    },
+                    {
+                      "id": "T-10",
+                      "title": "Audit log page",
+                      "column": "review",
+                      "priority": "medium",
+                      "labels": [
+                        "security"
+                      ],
+                      "assignee": "Grace Hopper"
+                    },
+                    {
+                      "id": "T-08",
+                      "title": "Dark mode for the editor",
+                      "column": "done",
+                      "labels": [
+                        "editor"
+                      ],
+                      "assignee": "Ada Lovelace"
+                    }
+                  ]
+                }
+              </template>
+            </vt-board>
+          </template>
+        </article>
 
         <article class="example">
           <div class="example-text">
             <h3>A public roadmap</h3>
-            <p>Progress, votes, dates and tag filters.</p>
+            <p>Read only, from a list of items with a status: the columns come from the statuses.</p>
           </div>
           <template>
-            <vt-roadmap lang-ui="en">
+            <vt-board readonly view="list" lang-ui="en">
               <template data-json>
                 [
                   {
                     "title": "Dark mode for the editor",
                     "status": "done",
-                    "tags": [
+                    "labels": [
                       "editor"
                     ],
                     "when": "October 2026"
@@ -2601,17 +2701,16 @@ export { unit };</template>
                     "title": "Offline sync",
                     "status": "in-progress",
                     "progress": 60,
-                    "tags": [
+                    "labels": [
                       "mobile"
                     ],
-                    "votes": 128,
-                    "description": "Edit without a connection."
+                    "votes": 128
                   },
                   {
                     "title": "Public API v2",
                     "status": "in-progress",
                     "progress": 25,
-                    "tags": [
+                    "labels": [
                       "api"
                     ],
                     "when": "Q1 2027"
@@ -2619,14 +2718,150 @@ export { unit };</template>
                   {
                     "title": "SSO with SAML",
                     "status": "planned",
-                    "tags": [
+                    "labels": [
                       "security"
                     ],
                     "votes": 87
                   }
                 ]
               </template>
-            </vt-roadmap>
+            </vt-board>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="field" aria-labelledby="field-title">
+        <h2 id="field-title">&lt;vt-field&gt;</h2>
+        <p class="muted prose">Fields take part in their form like native ones: their value is sent, the form waits for required ones, and errors are read in words.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A list with groups and a search</h3>
+            <p>Required, with a hint, a tip behind the “?” button and at most three choices.</p>
+          </div>
+          <template>
+            <vt-field type="multiselect" name="topics" label="Topics" required max-selected="3" searchable hint="Pick up to three." tip="We use your topics to suggest articles. You can change them at any time." lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "group": "Front end",
+                    "options": [
+                      "HTML",
+                      "CSS",
+                      {
+                        "value": "js",
+                        "label": "JavaScript",
+                        "description": "Browsers and Node.js"
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Back end",
+                    "options": [
+                      "Go",
+                      "Python",
+                      "Rust",
+                      {
+                        "value": "cobol",
+                        "label": "COBOL",
+                        "disabled": true
+                      }
+                    ]
+                  }
+                ]
+              </template>
+            </vt-field>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Text, numbers and switches</h3>
+            <p>A counter, a password that can be shown, a unit and a switch.</p>
+          </div>
+          <template>
+            <div>
+              <vt-field type="text" name="name" label="Display name" required maxlength="40" counter lang-ui="en"></vt-field>
+              <vt-field type="password" name="password" label="Password" minlength="8" hint="At least 8 characters." lang-ui="en"></vt-field>
+              <vt-field type="number" name="seats" label="Seats" min="1" max="500" suffix="seats" value="5" optional lang-ui="en"></vt-field>
+              <vt-field type="switch" name="news" label="Monthly newsletter" lang-ui="en"></vt-field>
+            </div>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="search" aria-labelledby="search-title">
+        <h2 id="search-title">&lt;vt-search&gt;</h2>
+        <p class="muted prose">The search at the top of this site is a &lt;vt-search&gt;: press <kbd>Ctrl</kbd> <kbd>K</kbd>, <kbd>⌘</kbd> <kbd>K</kbd> or <kbd>/</kbd>.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A field with its results</h3>
+            <p>Accents, case and one typo are forgiven. Results go to their address, or to one built from their id.</p>
+          </div>
+          <template>
+            <vt-search layout="inline" shortcut="none" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "id": "getting-started",
+                    "title": "Getting started",
+                    "section": "Guides",
+                    "content": "Install Vitrine from a CDN or npm and add your first element.",
+                    "url": "docs.html?page=getting-started",
+                    "featured": true
+                  },
+                  {
+                    "id": "theming",
+                    "title": "Theming",
+                    "section": "Guides",
+                    "content": "Colours, fonts and spacing with CSS custom properties, in light and dark.",
+                    "url": "docs.html?page=theming",
+                    "featured": true
+                  },
+                  {
+                    "id": "security",
+                    "title": "Security",
+                    "section": "Guides",
+                    "content": "Sanitized Markdown, safe links and Trusted Types.",
+                    "url": "docs.html?page=security"
+                  },
+                  {
+                    "id": "board",
+                    "title": "<vt-board>",
+                    "section": "Components",
+                    "content": "A task board with drag and drop, a list and a table.",
+                    "keywords": [
+                      "kanban",
+                      "tasks"
+                    ],
+                    "url": "docs.html?page=components/board"
+                  },
+                  {
+                    "id": "field",
+                    "title": "<vt-field>",
+                    "section": "Components",
+                    "content": "A form field with its label, hint, tip and lists.",
+                    "keywords": [
+                      "form",
+                      "input",
+                      "select"
+                    ],
+                    "url": "docs.html?page=components/field"
+                  },
+                  {
+                    "id": "search",
+                    "title": "<vt-search>",
+                    "section": "Components",
+                    "content": "Site search with a keyboard shortcut and results by id.",
+                    "keywords": [
+                      "find"
+                    ],
+                    "url": "docs.html?page=components/search"
+                  }
+                ]
+              </template>
+            </vt-search>
           </template>
         </article>
       </section>
