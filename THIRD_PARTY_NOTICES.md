@@ -7,12 +7,12 @@ changing a dependency.
 | Component | Version | License | Used for | Shipped in |
 |---|---|---|---|---|
 | [highlight.js](https://github.com/highlightjs/highlight.js) | 11.12.0 | BSD-3-Clause | Syntax highlighting | Library bundle and dist/languages/ |
-| [marked](https://github.com/markedjs/marked) | 18.1.0 | MIT | Markdown parsing (GFM) | Library bundle |
+| [marked](https://github.com/markedjs/marked) | 18.1.3 | MIT | Markdown parsing (GFM) | Library bundle |
 | [DOMPurify](https://github.com/cure53/DOMPurify) | 3.4.17 | Apache-2.0 OR MPL-2.0 | HTML sanitization | Library bundle |
 | [Lucide](https://lucide.dev) | 1.52.0 | ISC; icons derived from Feather: MIT | Interface icons | Library bundle (src/core/icons.js) |
 | [Apache ECharts](https://github.com/apache/echarts) | 6.1.0 | Apache-2.0 | Charts drawn by `<vt-chart>` | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
 | [ZRender](https://github.com/ecomfe/zrender) | 6.1.0 | BSD-3-Clause | Canvas rendering engine of Apache ECharts | dist/vendor/echarts.js, loaded by `<vt-chart>` only |
-| [js-yaml](https://github.com/nodeca/js-yaml) | 4.3.2 | MIT | YAML reading for `<vt-openapi>` | dist/vendor/yaml.js, loaded by `<vt-openapi>` for YAML only |
+| [js-yaml](https://github.com/nodeca/js-yaml) | 5.5.0 | MIT | YAML reading for `<vt-openapi>` | dist/vendor/yaml.js, loaded by `<vt-openapi>` for YAML only |
 | [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | 5.3.0 | OFL-1.1 | Website font and outlined logo wordmark | Website and brand/ only (not in the library) |
 | [IBM Plex Sans](https://github.com/IBM/plex) | 5.3.0 | OFL-1.1 | Website font | Website only (not in the library) |
 
@@ -59,7 +59,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---
 
-## marked 18.1.0
+## marked 18.1.3
 
 License: MIT. Source: https://github.com/markedjs/marked
 
@@ -652,7 +652,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---
 
-## js-yaml 4.3.2
+## js-yaml 5.5.0
 
 License: MIT. Source: https://github.com/nodeca/js-yaml
 

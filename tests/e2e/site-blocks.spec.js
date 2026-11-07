@@ -56,10 +56,14 @@ test.describe('site blocks', () => {
     await expect(el.locator('dialog[open]')).toContainText('3 of 3');
     await page.keyboard.press('Escape');
     await expect(el.locator('dialog[open]')).toHaveCount(0);
-    const focused = await page.evaluate(() =>
-      document.getElementById('el')?.shadowRoot?.activeElement?.getAttribute('data-focus-key'),
-    );
-    expect(focused).toBe('image-2');
+    // The focus comes back on the dialog's close event, just after it loses its open attribute.
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          document.getElementById('el')?.shadowRoot?.activeElement?.getAttribute('data-focus-key'),
+        ),
+      )
+      .toBe('image-2');
   });
 
   test('<vt-stats> writes changes in words and reads the history', async ({ page }) => {

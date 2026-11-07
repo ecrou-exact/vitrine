@@ -8,16 +8,10 @@
  *
  * @module vendor/yaml
  */
-import * as jsYaml from 'js-yaml';
-
-const { CORE_SCHEMA, load, loadAll } = jsYaml;
-// `types` is exported by js-yaml but missing from its type definitions.
-const { types } = /** @type {{ types: { merge: jsYaml.Type } }} */ (
-  /** @type {unknown} */ (jsYaml)
-);
+import { CORE_SCHEMA, load, loadAll, mergeTag } from 'js-yaml';
 
 /** The core schema, plus merge keys (`<<: *base`), which only combine plain mappings. */
-const SCHEMA = CORE_SCHEMA.extend({ implicit: [types.merge] });
+const SCHEMA = CORE_SCHEMA.withTags(mergeTag);
 
 /**
  * @param {string} text

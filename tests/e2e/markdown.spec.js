@@ -72,6 +72,11 @@ test.describe('<vt-markdown>', () => {
     await expect(md.locator('b')).toHaveText('world');
     await expect(md.locator('kbd')).toHaveText('Ctrl');
     expect(await md.locator('u').getAttribute('onclick')).toBe(null);
+    // Chromium reports a handler under a strict CSP as soon as it is parsed, even by the
+    // sanitizer in a detached document where it never runs: that report is expected here.
+    const blocked = errors.filter((e) => /inline event handler/.test(e));
+    expect(blocked.length).toBeLessThanOrEqual(1);
+    errors.splice(0, errors.length, ...errors.filter((e) => !blocked.includes(e)));
   });
 
   test('external links open in a new tab without opener or referrer', async ({ page }) => {

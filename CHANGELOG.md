@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- No more Content Security Policy report on every page in recent Chromium: the check that the HTML sanitizer works no longer parses an event handler attribute, which Chromium now reports as soon as it is parsed, even in a detached document.
+- `<vt-calendar>`: a day is named from its content (the full date, then the events as shown), so its name holds everything visible in it (WCAG 2.5.3, Label in Name).
 - `<vt-git>`: JSON from the GitHub API showed `[object Object]` as the author, and no date or message.
 - `<vt-faq>` could not be created at all: a field shadowed the read-only `Element.prefix`.
 - `<vt-http>`, `<vt-openapi>`: generated commands no longer pass on what a shell tool would act on. Invalid header names are left out, HTTPie headers starting with `=` or `@` are escaped (`x:=@/etc/passwd` and `x=@/etc/passwd` uploaded a local file of the person running the command), and a URL starting with a dash is not read as an option.
@@ -20,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-job>`, `<vt-log>`, `<vt-csv>`: a status, level or delimiter named like an `Object` member (`__proto__`, `constructor`) is treated as unknown. On `<vt-job>` it broke the element.
 - `<vt-openapi>`: the search no longer moves focus to the first match after each key, and the
   page scrolls again over the reference.
+
+### Changed
+
+- js-yaml 5 reads YAML for `<vt-yaml>` and `<vt-openapi>`, with the same core schema and merge keys.
 
 ### Added
 

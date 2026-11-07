@@ -296,12 +296,12 @@
         <article class="example">
           <div class="example-text">
             <h3>Raw HTML</h3>
-            <p>By default raw HTML is shown as text. With <code>allow-html</code> it is rendered, but sanitized: the event handler below is removed.</p>
+            <p>By default raw HTML is shown as text. With <code>allow-html</code> it is rendered, but sanitized: the unsafe link below loses its address.</p>
           </div>
           <template>
             <vt-markdown allow-html>
               <template>
-                Press <kbd>Ctrl</kbd> + <kbd>K</kbd>. <span onclick="steal()">Handlers are removed.</span>
+                Press <kbd>Ctrl</kbd> + <kbd>K</kbd>. <a href="javascript:steal()">Unsafe links are removed.</a>
 
                 <details><summary>More</summary>Native details elements are allowed.</details>
               </template>
