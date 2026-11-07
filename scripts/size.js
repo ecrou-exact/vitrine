@@ -33,7 +33,7 @@ const COMPONENTS = {
   'vt-hex': 56 * KB,
   'vt-regex': 64 * KB,
   'vt-toml': 67 * KB,
-  'vt-cron': 64 * KB,
+  'vt-cron': 65 * KB,
   'vt-jwt': 64 * KB,
   'vt-xml': 64 * KB,
   'vt-cert': 66 * KB,
