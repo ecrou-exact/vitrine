@@ -1,6 +1,6 @@
 # Common attributes and events
 
-The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-roadmap>`, `<vt-testimonials>` and `<vt-countdown>`. Component-specific attributes are described in each component reference.
+The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-board>`, `<vt-field>`, `<vt-search>`, `<vt-testimonials>` and `<vt-countdown>`. Component-specific attributes are described in each component reference.
 
 ## How attribute values are read
 
