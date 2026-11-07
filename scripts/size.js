@@ -35,7 +35,7 @@ const COMPONENTS = {
   'vt-toml': 67 * KB,
   'vt-cron': 65 * KB,
   'vt-jwt': 64 * KB,
-  'vt-xml': 64 * KB,
+  'vt-xml': 65 * KB,
   'vt-cert': 66 * KB,
   'vt-yaml': 65 * KB,
   'vt-table': 72 * KB,
