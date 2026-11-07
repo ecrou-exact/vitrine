@@ -59,6 +59,9 @@
           <option value="board">Board</option>
           <option value="field">Field</option>
           <option value="search">Search</option>
+          <option value="date-picker">Date picker</option>
+          <option value="menu">Menu</option>
+          <option value="upload">Upload</option>
           <option value="testimonials">Testimonials</option>
           <option value="countdown">Countdown</option>
           <option value="api">JavaScript</option>
@@ -2862,6 +2865,115 @@ export { unit };</template>
                 ]
               </template>
             </vt-search>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="date-picker" aria-labelledby="date-picker-title">
+        <h2 id="date-picker-title">&lt;vt-date-picker&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A period, with usual periods</h3>
+            <p>Click a first day, then a last one: the days between are shown as you move. Sundays and the holidays are blocked, and the stay lasts two nights or more.</p>
+          </div>
+          <template>
+            <vt-date-picker name="stay" mode="range" label="Your stay" required min="today" disabled-dates="sun 2026-12-24/2026-12-26" min-days="2" hint="Check-in and check-out." lang-ui="en"></vt-date-picker>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>One date, typed or chosen</h3>
+            <p>Type <kbd>3/2/27</kbd> or open the calendar: arrows, <kbd>Page Up</kbd> and <kbd>Page Down</kbd> for months, with <kbd>Shift</kbd> for years. The format follows the language, here French.</p>
+          </div>
+          <template>
+            <vt-date-picker name="birthday" label="Date de naissance" value="1990-05-14" max="today" clearable lang-ui="fr"></vt-date-picker>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Always shown</h3>
+            <p><code>inline</code> keeps the calendar under the field, for a booking page.</p>
+          </div>
+          <template>
+            <vt-date-picker label="Delivery day" inline min="today" disabled-dates="sat sun" lang-ui="en"></vt-date-picker>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="menu" aria-labelledby="menu-title">
+        <h2 id="menu-title">&lt;vt-menu&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A button that opens a menu</h3>
+            <p>Arrows, letters, <kbd>→</kbd> for the submenu, <kbd>Escape</kbd> to close. Check boxes and radio items keep the menu open.</p>
+          </div>
+          <template>
+            <vt-menu label="File" lang-ui="en">
+              <template data-json>
+                [{"label":"Rename","icon":"pencil","shortcut":"F2"},{"label":"Duplicate","icon":"copy","shortcut":"Ctrl+D"},{"label":"Share","items":["Copy link",{"label":"Email","description":"Send to a teammate"}]},"---",{"type":"radio","label":"Sort by","group":"sort","items":[{"label":"Name","checked":true},"Date","Size"]},{"type":"checkbox","label":"Show hidden files"},"---",{"label":"Delete","icon":"trash","danger":true,"shortcut":"Del"}]
+              </template>
+            </vt-menu>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Actions of a row, from lines of text</h3>
+            <p>A "⋮" button, lined up with its end. Two spaces put a line in a submenu, <code>|</code> gives a shortcut, <code>[x]</code> a check box.</p>
+          </div>
+          <template>
+            <vt-menu trigger="icon" label="Actions for invoice 2026-114" align="end" lang-ui="en">
+              Open | Enter
+              Download
+                PDF
+                CSV
+              ---
+              [x] Paid
+              Archive
+            </vt-menu>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A right click</h3>
+            <p>Right click in the box, or focus it and press <kbd>Shift</kbd> + <kbd>F10</kbd>. The menu opens where the pointer is.</p>
+          </div>
+          <template>
+            <div class="context-demo" tabindex="0">
+              Right click here
+              <vt-menu trigger="context" label="Canvas" lang-ui="en">
+                <template data-json>["Cut", "Copy", "Paste", "---", "Select all"]</template>
+              </vt-menu>
+            </div>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="upload" aria-labelledby="upload-title">
+        <h2 id="upload-title">&lt;vt-upload&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Several files, with limits</h3>
+            <p>Drop images or a PDF, or paste a screenshot. A file of another type, too large, or one too many is refused with its reason.</p>
+          </div>
+          <template>
+            <vt-upload name="attachments" label="Attachments" multiple max-files="3" max-size="5MB" accept="image/*,.pdf" hint="Screenshots or a PDF." lang-ui="en"></vt-upload>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>One file, required</h3>
+            <p>A new file replaces the one there. In a form, it is submitted like <code>&lt;input type="file"&gt;</code>.</p>
+          </div>
+          <template>
+            <vt-upload name="avatar" label="Profile picture" accept="image/png,image/jpeg" max-size="2MB" required lang-ui="en"></vt-upload>
           </template>
         </article>
       </section>

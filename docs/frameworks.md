@@ -574,6 +574,9 @@ vt-stats:not(:defined),
 vt-board:not(:defined),
 vt-field:not(:defined),
 vt-search:not(:defined),
+vt-date-picker:not(:defined),
+vt-menu:not(:defined),
+vt-upload:not(:defined),
 vt-testimonials:not(:defined),
 vt-countdown:not(:defined) {
   display: block;

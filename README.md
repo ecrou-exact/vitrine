@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, testimonials and countdowns — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials and countdowns — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -64,6 +64,9 @@
 - **`<vt-stats>`** — key figures as tiles: values written for the reader's language, changes in words and a small history read with the keyboard.
 - **`<vt-board>`** — a task board with real drag and drop (mouse, touch and keyboard), board, list and table views, tasks added and edited in place, filters, limits per column and cancelable events to save to your server. Read-only, it is a public roadmap.
 - **`<vt-field>`** — a complete form field: required mark, "?" tip, hint, counter, clear errors, and lists with search, groups and several choices. It takes part in `<form>` like a native field.
+- **`<vt-date-picker>`** — a date or period field: typed in the order of the reader's language or chosen in an accessible calendar, usual periods such as "Last 7 days", blocked days, `min` / `max`, submitted in ISO 8601.
+- **`<vt-menu>`** — a dropdown, "⋮" or right-click menu of actions: links, check boxes, radio groups, shortcuts, icons and submenus, with the full keyboard of WAI-ARIA, always inside the window.
+- **`<vt-upload>`** — a file field with a drop zone, thumbnails, reasons for refused files, and uploads with progress to your server.
 - **`<vt-search>`** — a site search for your menu: Ctrl K / ⌘ K / `/`, a JSON index or your API, typo-tolerant ranking, results by id (UUID) with `url-template`, recent searches, fully accessible.
 - **`<vt-testimonials>`** — testimonials and reviews as a grid, a list or a carousel, with ratings and their average.
 - **`<vt-countdown>`** — a countdown to a date in a time zone, in the words of the reader's language.
@@ -154,6 +157,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-stats>`        | Tiles of key figures                                | Copy, download, full screen                                                                             | [docs/components/stats.md](docs/components/stats.md)               |
 | `<vt-board>`        | Columns of cards, list or table                     | View tabs, filters, add and edit tasks, drag and drop, copy, download, full screen                      | [docs/components/board.md](docs/components/board.md)               |
 | `<vt-field>`        | A form field with label, help and errors            | Tip, counter, clear, password reveal, list search                                                       | [docs/components/field.md](docs/components/field.md)               |
+| `<vt-date-picker>`  | A date field and a calendar, one date or a period   | Usual periods, blocked days, clear button                                                               | [docs/components/date-picker.md](docs/components/date-picker.md)   |
+| `<vt-menu>`         | A button, a "⋮" or a right click that opens a menu  | Submenus, check boxes, radio groups, shortcuts                                                          | [docs/components/menu.md](docs/components/menu.md)                 |
+| `<vt-upload>`       | A drop zone and the list of files                   | Thumbnails, progress, retry, remove                                                                     | [docs/components/upload.md](docs/components/upload.md)             |
 | `<vt-search>`       | A search button and dialog, or a search field       | Shortcut, recent searches, grouped results                                                              | [docs/components/search.md](docs/components/search.md)             |
 | `<vt-testimonials>` | Quotes with ratings                                 | Copy, download, full screen                                                                             | [docs/components/testimonials.md](docs/components/testimonials.md) |
 | `<vt-countdown>`    | Time left to a date                                 | Copy, full screen                                                                                       | [docs/components/countdown.md](docs/components/countdown.md)       |

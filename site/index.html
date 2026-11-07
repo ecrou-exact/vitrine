@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Thirty-six elements, view or edit</h2>
+            <h2 id="components-title">Thirty-nine elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -553,6 +553,30 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               </p>
               <vt-search class="preview" lang-ui="en" layout="inline" shortcut="none" json='[{"id":"getting-started","title":"Getting started","section":"Guides","content":"Install Vitrine from a CDN or npm and add your first element.","url":"docs.html?page=getting-started","featured":true},{"id":"theming","title":"Theming","section":"Guides","content":"Colours, fonts and spacing with CSS custom properties, in light and dark.","url":"docs.html?page=theming","featured":true},{"id":"security","title":"Security","section":"Guides","content":"Sanitized Markdown, safe links and Trusted Types.","url":"docs.html?page=security"},{"id":"board","title":"<vt-board>","section":"Components","content":"A task board with drag and drop, a list and a table.","keywords":["kanban","tasks"],"url":"docs.html?page=components/board"}]'></vt-search>
               <a href="examples.html#search">Search examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-date-picker&gt;</h3>
+              <p>
+                A date or a period, typed or chosen in a calendar, with usual periods and blocked days.
+              </p>
+              <vt-date-picker class="preview" lang-ui="en" json='{"label":"Your stay","mode":"range","inline":true,"months":1,"presets":false,"min":"today","disabledDates":["sun"]}'></vt-date-picker>
+              <a href="examples.html#date-picker">Date picker examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-menu&gt;</h3>
+              <p>
+                Menus of actions: a button, a "⋮" or a right click, with submenus and check boxes.
+              </p>
+              <vt-menu class="preview" lang-ui="en" label="File" json='[{"label":"Rename","icon":"pencil","shortcut":"F2"},{"label":"Duplicate","icon":"copy","shortcut":"Ctrl+D"},{"label":"Share","items":["Copy link",{"label":"Email","description":"Send to a teammate"}]},"---",{"type":"radio","label":"Sort by","group":"sort","items":[{"label":"Name","checked":true},"Date","Size"]},{"type":"checkbox","label":"Show hidden files"},"---",{"label":"Delete","icon":"trash","danger":true,"shortcut":"Del"}]'></vt-menu>
+              <a href="examples.html#menu">Menu examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-upload&gt;</h3>
+              <p>
+                A drop zone for files, with thumbnails, limits and uploads with progress.
+              </p>
+              <vt-upload class="preview" lang-ui="en" json='{"label":"Attachments","multiple":true,"maxFiles":3,"maxSize":"5MB","accept":"image/*,.pdf"}'></vt-upload>
+              <a href="examples.html#upload">Upload examples</a>
             </article>
             <article class="component">
               <h3>&lt;vt-testimonials&gt;</h3>
