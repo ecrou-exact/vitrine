@@ -52,6 +52,13 @@
           <option value="status">Status</option>
           <option value="calendar">Calendar</option>
           <option value="pricing">Pricing</option>
+          <option value="json-input">JSON as input</option>
+          <option value="faq">FAQ</option>
+          <option value="gallery">Gallery</option>
+          <option value="stats">Stats</option>
+          <option value="roadmap">Roadmap</option>
+          <option value="testimonials">Testimonials</option>
+          <option value="countdown">Countdown</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -2227,6 +2234,506 @@ export { unit };</template>
                 }
               </template>
             </vt-pricing>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="json-input" aria-labelledby="json-input-title">
+        <h2 id="json-input-title">JSON as input</h2>
+        <p class="muted prose">Every element reads JSON: from <code>json-src</code> (an API, with <code>json-path</code>), from a <code>json</code> attribute, from a JSON script, or from the <code>data</code> property. Elements whose content is not JSON turn the value into their own format.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Code from JSON</h3>
+            <p>The value sets the language and the label; an attribute written on the element would win.</p>
+          </div>
+          <template>
+            <vt-code variant="full">
+              <template data-json>
+                {
+                  "code": "def hello(name):\n    return f\"Hello {name}\"",
+                  "language": "python",
+                  "label": "hello.py"
+                }
+              </template>
+            </vt-code>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A terminal session from a list</h3>
+            <p>Commands with their output.</p>
+          </div>
+          <template>
+            <vt-terminal>
+              <template data-json>
+                [
+                  {
+                    "command": "npm install vitrine",
+                    "output": "added 1 package in 1s"
+                  },
+                  {
+                    "command": "npm test",
+                    "output": [
+                      "✓ 622 tests passed"
+                    ]
+                  }
+                ]
+              </template>
+            </vt-terminal>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A .env file from an object</h3>
+            <p>Values that need quotes get them; secrets stay masked.</p>
+          </div>
+          <template>
+            <vt-env variant="full">
+              <template data-json>
+                {
+                  "APP_NAME": "Shop",
+                  "PORT": 8080,
+                  "DATABASE_URL": "postgres://shop@localhost/shop",
+                  "API_KEY": "sk_live_51H8xY2eZvKYlo2C"
+                }
+              </template>
+            </vt-env>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A Git history from the GitHub API</h3>
+            <p>The answer of <code>GET /repos/{owner}/{repo}/commits</code>, with branches and tags beside it. <code>json-src</code> could load it straight from the API.</p>
+          </div>
+          <template>
+            <vt-git variant="full" commit-url="https://github.com/ecrou-exact/vitrine/commit/{hash}">
+              <template data-json>
+                {
+                  "head": "main",
+                  "commits": [
+                    {
+                      "sha": "c7f3a91e2b4d5f60718293a4b5c6d7e8f9012345",
+                      "html_url": "https://github.com/ecrou-exact/vitrine",
+                      "commit": {
+                        "author": {
+                          "name": "Ada Lovelace",
+                          "date": "2026-11-05T10:00:00Z"
+                        },
+                        "message": "Merge pull request #23 from feature\n\nAdd status, calendar and pricing"
+                      },
+                      "parents": [
+                        {
+                          "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
+                        },
+                        {
+                          "sha": "b2c3d4e5f60718293a4b5c6d7e8f901234567890"
+                        }
+                      ]
+                    },
+                    {
+                      "sha": "b2c3d4e5f60718293a4b5c6d7e8f901234567890",
+                      "commit": {
+                        "author": {
+                          "name": "Alan Turing",
+                          "date": "2026-11-04T10:00:00Z"
+                        },
+                        "message": "Add the calendar"
+                      },
+                      "parents": [
+                        {
+                          "sha": "d4e5f60718293a4b5c6d7e8f9012345678901234"
+                        }
+                      ]
+                    },
+                    {
+                      "sha": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+                      "commit": {
+                        "author": {
+                          "name": "Grace Hopper",
+                          "date": "2026-11-03T10:00:00Z"
+                        },
+                        "message": "Fix the build on Windows"
+                      },
+                      "parents": [
+                        {
+                          "sha": "d4e5f60718293a4b5c6d7e8f9012345678901234"
+                        }
+                      ]
+                    },
+                    {
+                      "sha": "d4e5f60718293a4b5c6d7e8f9012345678901234",
+                      "commit": {
+                        "author": {
+                          "name": "Ada Lovelace",
+                          "date": "2026-11-01T10:00:00Z"
+                        },
+                        "message": "Initial commit"
+                      },
+                      "parents": []
+                    }
+                  ],
+                  "branches": [
+                    {
+                      "name": "main",
+                      "commit": {
+                        "sha": "c7f3a91e2b4d5f60718293a4b5c6d7e8f9012345"
+                      }
+                    },
+                    {
+                      "name": "calendar",
+                      "commit": {
+                        "sha": "b2c3d4e5f60718293a4b5c6d7e8f901234567890"
+                      }
+                    }
+                  ],
+                  "tags": [
+                    {
+                      "name": "v1.0",
+                      "commit": {
+                        "sha": "d4e5f60718293a4b5c6d7e8f9012345678901234"
+                      }
+                    }
+                  ]
+                }
+              </template>
+            </vt-git>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">&lt;vt-faq&gt;</h2>
+        <p class="muted prose">Questions open one by one; the address <code>#data</code> opens the question with that id.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Questions by category</h3>
+            <p>Search from six questions on, categories, Markdown answers.</p>
+          </div>
+          <template>
+            <vt-faq open="first" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "question": "Is there a free plan?",
+                    "answer": "Yes. The **Starter** plan is free forever, with 3 projects.",
+                    "category": "Billing"
+                  },
+                  {
+                    "question": "Can I change plans later?",
+                    "answer": "At any time, from your settings.",
+                    "category": "Billing"
+                  },
+                  {
+                    "question": "Where is my data stored?",
+                    "answer": "In the European Union, encrypted at rest.",
+                    "category": "Security",
+                    "id": "data"
+                  },
+                  {
+                    "question": "Do you have an API?",
+                    "answer": "Yes, with JSON everywhere.",
+                    "category": "Developers"
+                  },
+                  {
+                    "question": "How do I export my data?",
+                    "answer": "Settings → Export: a ZIP with JSON and CSV files.",
+                    "category": "Security"
+                  },
+                  {
+                    "question": "Do you offer discounts for schools?",
+                    "answer": "Yes, 50% off.",
+                    "category": "Billing"
+                  }
+                ]
+              </template>
+            </vt-faq>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="gallery" aria-labelledby="gallery-title">
+        <h2 id="gallery-title">&lt;vt-gallery&gt;</h2>
+        <p class="muted prose">Press an image, then use the arrows and Escape.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A grid with captions</h3>
+            <p>Thumbnails keep their shape with <code>aspect</code>.</p>
+          </div>
+          <template>
+            <vt-gallery aspect="square" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "src": "brand/social-preview.png",
+                    "alt": "Vitrine brand asset 1",
+                    "caption": "social-preview.png"
+                  },
+                  {
+                    "src": "brand/icon-512.png",
+                    "alt": "Vitrine brand asset 2",
+                    "caption": "icon-512.png"
+                  },
+                  {
+                    "src": "brand/logo-stacked.svg",
+                    "alt": "Vitrine brand asset 3",
+                    "caption": "logo-stacked.svg"
+                  },
+                  {
+                    "src": "brand/icon-accent.svg",
+                    "alt": "Vitrine brand asset 4",
+                    "caption": "icon-accent.svg"
+                  },
+                  {
+                    "src": "brand/logo-horizontal.svg",
+                    "alt": "Vitrine brand asset 5",
+                    "caption": "logo-horizontal.svg"
+                  },
+                  {
+                    "src": "brand/icon-paper.svg",
+                    "alt": "Vitrine brand asset 6",
+                    "caption": "icon-paper.svg"
+                  }
+                ]
+              </template>
+            </vt-gallery>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="stats" aria-labelledby="stats-title">
+        <h2 id="stats-title">&lt;vt-stats&gt;</h2>
+        <p class="muted prose">Focus a small line and press the arrows to read its points.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Key figures</h3>
+            <p>Compact numbers, currencies, percents where down is good news, and a text value.</p>
+          </div>
+          <template>
+            <vt-stats lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "label": "Visitors",
+                    "value": 48210,
+                    "previous": 41200,
+                    "format": "compact",
+                    "against": "vs last month",
+                    "series": [
+                      31,
+                      35,
+                      33,
+                      38,
+                      41,
+                      39,
+                      44,
+                      48
+                    ]
+                  },
+                  {
+                    "label": "Revenue",
+                    "value": 12840.5,
+                    "previous": 13420,
+                    "format": "currency",
+                    "currency": "EUR",
+                    "series": [
+                      10,
+                      12,
+                      11,
+                      13.4,
+                      12.8
+                    ]
+                  },
+                  {
+                    "label": "Error rate",
+                    "value": 0.42,
+                    "previous": 0.61,
+                    "format": "percent",
+                    "good": "down",
+                    "series": [
+                      0.9,
+                      0.8,
+                      0.61,
+                      0.5,
+                      0.42
+                    ]
+                  },
+                  {
+                    "label": "Uptime",
+                    "value": "99.98%",
+                    "description": "Last 90 days"
+                  }
+                ]
+              </template>
+            </vt-stats>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="roadmap" aria-labelledby="roadmap-title">
+        <h2 id="roadmap-title">&lt;vt-roadmap&gt;</h2>
+        <p class="muted prose">Known statuses come in their usual order; others get a column of their own.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A public roadmap</h3>
+            <p>Progress, votes, dates and tag filters.</p>
+          </div>
+          <template>
+            <vt-roadmap lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "title": "Dark mode for the editor",
+                    "status": "done",
+                    "tags": [
+                      "editor"
+                    ],
+                    "when": "October 2026"
+                  },
+                  {
+                    "title": "Offline sync",
+                    "status": "in-progress",
+                    "progress": 60,
+                    "tags": [
+                      "mobile"
+                    ],
+                    "votes": 128,
+                    "description": "Edit without a connection."
+                  },
+                  {
+                    "title": "Public API v2",
+                    "status": "in-progress",
+                    "progress": 25,
+                    "tags": [
+                      "api"
+                    ],
+                    "when": "Q1 2027"
+                  },
+                  {
+                    "title": "SSO with SAML",
+                    "status": "planned",
+                    "tags": [
+                      "security"
+                    ],
+                    "votes": 87
+                  }
+                ]
+              </template>
+            </vt-roadmap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="testimonials" aria-labelledby="testimonials-title">
+        <h2 id="testimonials-title">&lt;vt-testimonials&gt;</h2>
+        <p class="muted prose">A carousel only moves by itself with <code>interval</code>, and never when the reader prefers reduced motion.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A grid with the average rating</h3>
+            <p>Initials stand in for missing pictures.</p>
+          </div>
+          <template>
+            <vt-testimonials lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "quote": "We replaced three tools with this one. Setup took an afternoon.",
+                    "author": "Ada Lovelace",
+                    "role": "CTO",
+                    "company": "Analytical Engines",
+                    "rating": 5
+                  },
+                  {
+                    "quote": "Support answered within the hour, every single time.",
+                    "author": "Alan Turing",
+                    "role": "Engineer",
+                    "rating": 4.5
+                  },
+                  {
+                    "quote": "Clean, fast, and it just works on every page we tried.",
+                    "author": "Grace Hopper",
+                    "company": "Compilers Inc.",
+                    "rating": 4
+                  }
+                ]
+              </template>
+            </vt-testimonials>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A carousel</h3>
+            <p>Previous and next buttons, and the position.</p>
+          </div>
+          <template>
+            <vt-testimonials layout="carousel" summary="false" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "quote": "We replaced three tools with this one. Setup took an afternoon.",
+                    "author": "Ada Lovelace",
+                    "role": "CTO",
+                    "company": "Analytical Engines",
+                    "rating": 5
+                  },
+                  {
+                    "quote": "Support answered within the hour, every single time.",
+                    "author": "Alan Turing",
+                    "role": "Engineer",
+                    "rating": 4.5
+                  },
+                  {
+                    "quote": "Clean, fast, and it just works on every page we tried.",
+                    "author": "Grace Hopper",
+                    "company": "Compilers Inc.",
+                    "rating": 4
+                  }
+                ]
+              </template>
+            </vt-testimonials>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="countdown" aria-labelledby="countdown-title">
+        <h2 id="countdown-title">&lt;vt-countdown&gt;</h2>
+        <p class="muted prose">Units are written in the words of the reader’s language.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Until a date in a time zone</h3>
+            <p>Midnight in Paris, wherever the reader is.</p>
+          </div>
+          <template>
+            <vt-countdown lang-ui="en">
+              <template data-json>
+                {
+                  "to": "2027-01-01T00:00:00",
+                  "timezone": "Europe/Paris",
+                  "title": "Happy new year",
+                  "description": "Midnight in Paris."
+                }
+              </template>
+            </vt-countdown>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Hours and minutes only</h3>
+            <p><code>units</code> picks the units; the last one takes the rest.</p>
+          </div>
+          <template>
+            <vt-countdown to="2027-01-01T00:00:00Z" units="hours minutes" lang-ui="en"></vt-countdown>
           </template>
         </article>
       </section>
