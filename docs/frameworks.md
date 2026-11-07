@@ -567,7 +567,13 @@ vt-cron:not(:defined),
 vt-cert:not(:defined),
 vt-status:not(:defined),
 vt-calendar:not(:defined),
-vt-pricing:not(:defined) {
+vt-pricing:not(:defined),
+vt-faq:not(:defined),
+vt-gallery:not(:defined),
+vt-stats:not(:defined),
+vt-roadmap:not(:defined),
+vt-testimonials:not(:defined),
+vt-countdown:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

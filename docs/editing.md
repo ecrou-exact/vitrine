@@ -95,35 +95,41 @@ editor.addEventListener('vt-change', (event) => {
 
 Edits update the `content` property without re-rendering the element (the caret stays in place), so reading `content` returns the edited text at any time:
 
-| Component       | Read                                                                                     |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| `<vt-code>`     | `content`                                                                                |
-| `<vt-markdown>` | `content`                                                                                |
-| `<vt-json>`     | `content` (the text, valid or not), or `data` (the parsed value, `undefined` if invalid) |
-| `<vt-csv>`      | `content`, or `rows` (the parsed rows)                                                   |
-| `<vt-diff>`     | `original`, `modified` and `patch`; `content` for a patch                                |
-| `<vt-tags>`     | `value` (selected values) or `tags` (selected tags with details)                         |
-| `<vt-terminal>` | `content`                                                                                |
-| `<vt-tree>`     | `content`                                                                                |
-| `<vt-http>`     | `content`                                                                                |
-| `<vt-log>`      | `content`                                                                                |
-| `<vt-chart>`    | `content`                                                                                |
-| `<vt-openapi>`  | `content`                                                                                |
-| `<vt-env>`      | `content`                                                                                |
-| `<vt-hex>`      | `content`                                                                                |
-| `<vt-timeline>` | `content`                                                                                |
-| `<vt-job>`      | `content`                                                                                |
-| `<vt-git>`      | `content`                                                                                |
-| `<vt-regex>`    | `content`                                                                                |
-| `<vt-yaml>`     | `content`                                                                                |
-| `<vt-xml>`      | `content`                                                                                |
-| `<vt-toml>`     | `content`                                                                                |
-| `<vt-jwt>`      | `content`                                                                                |
-| `<vt-cron>`     | `content`                                                                                |
-| `<vt-cert>`     | `content`                                                                                |
-| `<vt-status>`   | `content`                                                                                |
-| `<vt-calendar>` | `content`                                                                                |
-| `<vt-pricing>`  | `content`                                                                                |
+| Component           | Read                                                                                     |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| `<vt-code>`         | `content`                                                                                |
+| `<vt-markdown>`     | `content`                                                                                |
+| `<vt-json>`         | `content` (the text, valid or not), or `data` (the parsed value, `undefined` if invalid) |
+| `<vt-csv>`          | `content`, or `rows` (the parsed rows)                                                   |
+| `<vt-diff>`         | `original`, `modified` and `patch`; `content` for a patch                                |
+| `<vt-tags>`         | `value` (selected values) or `tags` (selected tags with details)                         |
+| `<vt-terminal>`     | `content`                                                                                |
+| `<vt-tree>`         | `content`                                                                                |
+| `<vt-http>`         | `content`                                                                                |
+| `<vt-log>`          | `content`                                                                                |
+| `<vt-chart>`        | `content`                                                                                |
+| `<vt-openapi>`      | `content`                                                                                |
+| `<vt-env>`          | `content`                                                                                |
+| `<vt-hex>`          | `content`                                                                                |
+| `<vt-timeline>`     | `content`                                                                                |
+| `<vt-job>`          | `content`                                                                                |
+| `<vt-git>`          | `content`                                                                                |
+| `<vt-regex>`        | `content`                                                                                |
+| `<vt-yaml>`         | `content`                                                                                |
+| `<vt-xml>`          | `content`                                                                                |
+| `<vt-toml>`         | `content`                                                                                |
+| `<vt-jwt>`          | `content`                                                                                |
+| `<vt-cron>`         | `content`                                                                                |
+| `<vt-cert>`         | `content`                                                                                |
+| `<vt-status>`       | `content`                                                                                |
+| `<vt-calendar>`     | `content`                                                                                |
+| `<vt-pricing>`      | `content`                                                                                |
+| `<vt-faq>`          | `content`                                                                                |
+| `<vt-gallery>`      | `content`                                                                                |
+| `<vt-stats>`        | `content`                                                                                |
+| `<vt-roadmap>`      | `content`                                                                                |
+| `<vt-testimonials>` | `content`                                                                                |
+| `<vt-countdown>`    | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

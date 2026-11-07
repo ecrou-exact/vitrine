@@ -1,6 +1,6 @@
 # Common attributes and events
 
-The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-status>`, `<vt-calendar>` and `<vt-pricing>`. Component-specific attributes are described in each component reference.
+The attributes and events on this page work the same way on `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-roadmap>`, `<vt-testimonials>` and `<vt-countdown>`. Component-specific attributes are described in each component reference.
 
 ## How attribute values are read
 
@@ -37,6 +37,9 @@ Attributes are observed: changing one after the element is on the page updates i
 | `syntax-theme-dark` | syntax theme name    | configured `syntaxThemeDark` | Syntax theme used when the interface theme is dark.                       |
 | `badge`             | boolean              | on                           | Shows the badge in the header.                                            |
 | `fullscreen`        | boolean              | preset                       | Shows a full screen button.                                               |
+| `json`              | JSON                 | none                         | The content as JSON. See [JSON as input](json.md).                        |
+| `json-src`          | URL                  | none                         | Loads JSON, under the rules of `src`. See [JSON as input](json.md).       |
+| `json-path`         | path                 | none                         | Where the value is in that JSON, such as `data.items`.                    |
 
 ## Presets are shortcuts
 
@@ -280,6 +283,7 @@ Every event is a `CustomEvent` that bubbles and crosses the shadow DOM boundary 
 | `vt-event-select`      | `EVENT_SELECT`      | `<vt-calendar>`                                                                  | An event was opened                                                                                                         | `{ uid, title, start, end, allDay, url }`                                                                                                                                                                                                                        |
 | `vt-pricing-change`    | `PRICING_CHANGE`    | `<vt-pricing>`                                                                   | The period or currency changed                                                                                              | `{ period, currency }`                                                                                                                                                                                                                                           |
 | `vt-plan-select`       | `PLAN_SELECT`       | `<vt-pricing>`                                                                   | A plan button was pressed (cancelable)                                                                                      | `{ plan, name, period, currency, amount, url }`                                                                                                                                                                                                                  |
+| `vt-countdown-end`     | `COUNTDOWN_END`     | `<vt-countdown>`                                                                 | The date was reached while the page was open                                                                                | `{ to }`                                                                                                                                                                                                                                                         |
 | `vt-error`             | `ERROR`             | all                                                                              | Content could not be loaded or displayed                                                                                    | `{ message, cause }`: a translated message and the original error                                                                                                                                                                                                |
 
 `<vt-tags>` also dispatches `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click` (`EVENTS.TAG_ADD`, `TAG_REMOVE`, `TAG_CREATE` and `TAG_CLICK`); see [`<vt-tags>` events](components/tags.md#events).
