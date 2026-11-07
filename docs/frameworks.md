@@ -571,7 +571,9 @@ vt-pricing:not(:defined),
 vt-faq:not(:defined),
 vt-gallery:not(:defined),
 vt-stats:not(:defined),
-vt-roadmap:not(:defined),
+vt-board:not(:defined),
+vt-field:not(:defined),
+vt-search:not(:defined),
 vt-testimonials:not(:defined),
 vt-countdown:not(:defined) {
   display: block;
