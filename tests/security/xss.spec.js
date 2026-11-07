@@ -167,6 +167,22 @@ const MODES = [
     data: true,
   },
   {
+    tag: 'vt-date-picker',
+    attrs: { mode: 'range', inline: '' },
+    wrap: (p) =>
+      JSON.stringify({
+        label: p,
+        hint: p,
+        placeholder: p,
+        value: p,
+        min: p,
+        max: p,
+        presets: p,
+        disabledDates: [p],
+      }),
+    data: true,
+  },
+  {
     tag: 'vt-search',
     attrs: { layout: 'inline', 'url-template': '/x/{id}' },
     wrap: (p) =>
