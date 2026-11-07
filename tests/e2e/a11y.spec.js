@@ -62,6 +62,10 @@ const MORE = {
       min: 'today',
     },
   ],
+  'vt-menu': [
+    '[{"label":"Rename","shortcut":"F2","icon":"pencil"},{"label":"Share","items":["Link"]},"---",{"type":"radio","label":"Sort","items":[{"label":"Name","checked":true},"Date"]},{"type":"checkbox","label":"Wrap"},{"label":"Archived","disabled":true},{"label":"Delete","danger":true}]',
+    { trigger: 'inline' },
+  ],
   'vt-testimonials': [
     JSON.stringify([
       { quote: 'Great', author: 'Ada Lovelace', role: 'CTO', rating: 5, url: '/r' },

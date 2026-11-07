@@ -183,6 +183,16 @@ const MODES = [
     data: true,
   },
   {
+    tag: 'vt-menu',
+    attrs: { trigger: 'inline' },
+    wrap: (p) =>
+      JSON.stringify([
+        { label: p, description: p, shortcut: p, icon: p, href: p, id: p },
+        { type: 'radio', label: p, group: p, items: [{ label: p, value: p }] },
+        { label: p, items: [p] },
+      ]),
+  },
+  {
     tag: 'vt-search',
     attrs: { layout: 'inline', 'url-template': '/x/{id}' },
     wrap: (p) =>

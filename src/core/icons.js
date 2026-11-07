@@ -276,6 +276,16 @@ const ICONS = {
     ['path', { d: 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6' }],
     ['path', { d: 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2' }],
   ],
+  'dots-vertical': [
+    ['circle', { cx: '12', cy: '12', r: '1' }],
+    ['circle', { cx: '12', cy: '5', r: '1' }],
+    ['circle', { cx: '12', cy: '19', r: '1' }],
+  ],
+  upload: [
+    ['path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }],
+    ['path', { d: 'm17 8-5-5-5 5' }],
+    ['path', { d: 'M12 3v12' }],
+  ],
   help: [
     ['circle', { cx: '12', cy: '12', r: '10' }],
     ['path', { d: 'M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3' }],
@@ -311,6 +321,14 @@ const ICONS = {
 };
 
 /** @typedef {keyof typeof ICONS} IconName */
+
+/**
+ * @param {string} name
+ * @returns {boolean} Whether the set has this icon.
+ */
+export function hasIcon(name) {
+  return Object.hasOwn(ICONS, name);
+}
 
 /**
  * Creates a decorative SVG icon (`aria-hidden`); the surrounding control carries the label.
