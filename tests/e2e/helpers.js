@@ -42,10 +42,28 @@ export async function mount(page, tag, attrs = {}, content = null) {
 export function collectErrors(page) {
   const errors = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
+    if (message.type() === 'error' && !isEngineNoise(page, message.text()))
+      errors.push(message.text());
   });
   page.on('pageerror', (error) => errors.push(error.message));
   return errors;
+}
+
+/**
+ * WebKit 27 reports its own built-in stylesheet of every `<select>` under a strict
+ * `style-src`, although no page style is involved. Only that exact message is left out, and
+ * only in WebKit.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} text
+ * @returns {boolean}
+ */
+export function isEngineNoise(page, text) {
+  return (
+    page.context().browser()?.browserType().name() === 'webkit' &&
+    text ===
+      "Refused to apply a stylesheet because its hash, its nonce, or 'unsafe-inline' does not appear in the style-src directive of the Content Security Policy."
+  );
 }
 
 /**
