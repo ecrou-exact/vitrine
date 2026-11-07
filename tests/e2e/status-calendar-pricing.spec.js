@@ -148,8 +148,10 @@ test.describe('new elements', () => {
     await el.locator('[aria-current="date"]').focus();
     await page.keyboard.press('ArrowDown');
     const focused = () =>
-      page.evaluate(() =>
-        document.getElementById('el')?.shadowRoot?.activeElement?.getAttribute('aria-label'),
+      page.evaluate(
+        () =>
+          document.getElementById('el')?.shadowRoot?.activeElement?.querySelector('.sr-only')
+            ?.textContent,
       );
     expect(await focused()).toContain('November 12, 2026');
     await page.keyboard.press('Enter');

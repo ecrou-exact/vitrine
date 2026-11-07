@@ -156,6 +156,9 @@ let sanitizerOk;
  * sanitized and inspected; if anything dangerous survives, every later call falls back
  * to plain text.
  *
+ * The payload holds no event handler attribute: browsers report one under a strict CSP as
+ * soon as it is parsed, even in a detached document, and this check runs on every page.
+ *
  * @returns {boolean}
  */
 export function sanitizerWorks() {
@@ -163,20 +166,15 @@ export function sanitizerWorks() {
   sanitizerOk = false;
   try {
     if (!DOMPurify.isSupported) return false;
-    const probe = DOMPurify.sanitize(
-      '<img src="x" onerror="1"><script>1</script><a href="javascript:1">a</a>',
-      {
-        RETURN_DOM_FRAGMENT: true,
-        ...(getTrustedTypesPolicy()
-          ? { TRUSTED_TYPES_POLICY: /** @type {TrustedTypePolicy} */ (getTrustedTypesPolicy()) }
-          : {}),
-      },
-    );
-    const img = probe.querySelector('img');
+    const probe = DOMPurify.sanitize('<b>1</b><script>1</script><a href="javascript:1">a</a>', {
+      RETURN_DOM_FRAGMENT: true,
+      ...(getTrustedTypesPolicy()
+        ? { TRUSTED_TYPES_POLICY: /** @type {TrustedTypePolicy} */ (getTrustedTypesPolicy()) }
+        : {}),
+    });
     sanitizerOk =
       probe instanceof DocumentFragment &&
-      img !== null &&
-      !img.hasAttribute('onerror') &&
+      probe.querySelector('b') !== null &&
       probe.querySelector('script') === null &&
       !probe.querySelector('a')?.hasAttribute('href');
   } catch {
