@@ -33,6 +33,12 @@ import { VtCron } from './components/cron/vt-cron.js';
 import { VtStatus } from './components/status/vt-status.js';
 import { VtCalendar } from './components/calendar/vt-calendar.js';
 import { VtPricing } from './components/pricing/vt-pricing.js';
+import { VtFaq } from './components/faq/vt-faq.js';
+import { VtGallery } from './components/gallery/vt-gallery.js';
+import { VtStats } from './components/stats/vt-stats.js';
+import { VtRoadmap } from './components/roadmap/vt-roadmap.js';
+import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
+import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { configure, getConfig } from './core/config.js';
@@ -70,6 +76,12 @@ export {
   VtStatus,
   VtCalendar,
   VtPricing,
+  VtFaq,
+  VtGallery,
+  VtStats,
+  VtRoadmap,
+  VtTestimonials,
+  VtCountdown,
   configure,
   getConfig,
   EVENTS,
@@ -126,6 +138,12 @@ export const registry = new Map(
     ['vt-status', VtStatus],
     ['vt-calendar', VtCalendar],
     ['vt-pricing', VtPricing],
+    ['vt-faq', VtFaq],
+    ['vt-gallery', VtGallery],
+    ['vt-stats', VtStats],
+    ['vt-roadmap', VtRoadmap],
+    ['vt-testimonials', VtTestimonials],
+    ['vt-countdown', VtCountdown],
   ]),
 );
 
@@ -159,6 +177,12 @@ const TYPES = /** @type {const} */ ({
   status: 'vt-status',
   calendar: 'vt-calendar',
   pricing: 'vt-pricing',
+  faq: 'vt-faq',
+  gallery: 'vt-gallery',
+  stats: 'vt-stats',
+  roadmap: 'vt-roadmap',
+  testimonials: 'vt-testimonials',
+  countdown: 'vt-countdown',
 });
 
 /**
@@ -189,6 +213,7 @@ export function defineAll() {
  * @typedef {object} RenderOptions
  * @property {keyof typeof TYPES} type - Component type.
  * @property {string} [content] - Content to display (set as a property, never parsed as HTML).
+ * @property {unknown} [data] - Content as a value (an object, a list…), like the `data` property.
  * @property {"simple"|"full"} [variant] - Feature preset.
  * @property {Record<string, string | number | boolean | null | undefined>} [options] -
  *   Attributes, in camelCase or kebab-case (`lineNumbers` or `line-numbers`).
@@ -229,6 +254,7 @@ export function render(target, options) {
     element.setAttribute(name, value === true ? '' : String(value));
   }
   if (options.content !== undefined) /** @type {any} */ (element).content = options.content;
+  else if (options.data !== undefined) /** @type {any} */ (element).data = options.data;
   target.replaceChildren(element);
   return element;
 }

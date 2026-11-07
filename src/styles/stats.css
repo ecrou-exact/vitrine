@@ -1,0 +1,130 @@
+/*
+ * Key figures: tiles with a value, a change and a small line. Text stays in text colors, and a
+ * change carries an arrow and a word as well as its color.
+ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--_columns, auto-fit), minmax(min(100%, 180px), 1fr));
+  gap: var(--_space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_space-1);
+  min-width: 0;
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.stats-tile a {
+  color: var(--_accent-fg);
+}
+
+.stats-label {
+  color: var(--_fg-muted);
+  font: 500 var(--_font-size-ui) / 1.4 var(--_font-ui);
+  overflow-wrap: anywhere;
+}
+
+.stats-tile a .stats-label {
+  color: inherit;
+}
+
+.stats-value {
+  color: var(--_fg);
+  font: 700 28px / 1.2 var(--_font-ui);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.stats-change {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2px;
+  color: var(--_fg-muted);
+  font: 500 var(--_font-size-small) / 1.4 var(--_font-ui);
+}
+
+.stats-change .icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+}
+
+.stats-change.good {
+  color: var(--_success);
+}
+
+.stats-change.bad {
+  color: var(--_danger);
+}
+
+.stats-note {
+  margin: 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.45 var(--_font-ui);
+}
+
+/* ---------- Small line ---------- */
+
+.stats-history {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--_space-1);
+}
+
+.stats-trend {
+  border-radius: 2px;
+  touch-action: pan-y;
+}
+
+.stats-trend:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.stats-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.stats-line {
+  fill: none;
+  stroke: var(--_accent-fg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.stats-marker {
+  fill: var(--_accent-fg);
+  stroke: var(--_surface);
+  stroke-width: 2;
+}
+
+.stats-guide {
+  display: none;
+  stroke: var(--_border-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.stats-trend.active .stats-guide {
+  display: inline;
+}
+
+.stats-point {
+  min-height: 1.4em;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.4 var(--_font-ui);
+  overflow-wrap: anywhere;
+}

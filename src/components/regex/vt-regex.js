@@ -1,4 +1,5 @@
 // @ts-check
+import { regexFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
@@ -85,6 +86,10 @@ const MAX_GROUP_COLUMNS = 12;
  */
 export class VtRegex extends VtBase {
   static type = 'regex';
+
+  static fromData = regexFromData;
+
+  static dataAttributes = Object.freeze(['pattern', 'flags', 'replace']);
 
   static componentAttributes = Object.freeze([
     'pattern', 'flags', 'replace', 'flag-buttons', 'explain', 'table',

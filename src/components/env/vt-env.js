@@ -1,4 +1,5 @@
 // @ts-check
+import { envFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
@@ -67,6 +68,10 @@ const BADGES = { dotenv: '.env', ini: 'INI', properties: 'PROPERTIES' };
  */
 export class VtEnv extends VtBase {
   static type = 'env';
+
+  static fromData = envFromData;
+
+  static dataAttributes = Object.freeze(/** @type {string[]} */ ([]));
 
   static componentAttributes = Object.freeze([
     'format', 'mask-secrets', 'secret-keys', 'tabs', 'view', 'comments', 'line-numbers',

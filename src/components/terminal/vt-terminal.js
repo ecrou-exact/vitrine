@@ -1,4 +1,5 @@
 // @ts-check
+import { terminalFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import ansiCss from '../../styles/ansi.css?raw';
@@ -71,6 +72,10 @@ const HIGHLIGHT_COMMAND = 2000;
  */
 export class VtTerminal extends VtBase {
   static type = 'terminal';
+
+  static fromData = terminalFromData;
+
+  static dataAttributes = Object.freeze(['prompt', 'label']);
 
   static componentAttributes = Object.freeze([
     'prompt', 'escapes', 'colors', 'command-copy', 'collapse-output', 'typing', 'typing-speed',

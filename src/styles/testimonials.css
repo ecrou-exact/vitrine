@@ -1,0 +1,128 @@
+/*
+ * Testimonials: quotes with their author, in a grid, a list or a carousel.
+ */
+.testimonials-list {
+  display: grid;
+  gap: var(--_space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.testimonials-list.grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+.testimonials-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_space-3);
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--_space-4);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.testimonials-quote {
+  flex: 1;
+  margin: 0;
+  color: var(--_fg);
+  font: 400 15px / 1.55 var(--_font-ui);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.testimonials-author {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-3);
+  min-width: 0;
+}
+
+.testimonials-avatar {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: var(--_radius-full);
+  background: var(--_accent-soft);
+  color: var(--_fg);
+  font: 600 var(--_font-size-ui) / 1 var(--_font-ui);
+  object-fit: cover;
+}
+
+.testimonials-who {
+  display: grid;
+  min-width: 0;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.45 var(--_font-ui);
+  overflow-wrap: anywhere;
+}
+
+.testimonials-who strong {
+  color: var(--_fg);
+  font-size: var(--_font-size-ui);
+  font-weight: 600;
+}
+
+.testimonials-who a {
+  color: var(--_accent-fg);
+}
+
+/* ---------- Ratings ---------- */
+
+.testimonials-stars {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  font: 400 16px / 1 var(--_font-ui);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.testimonials-empty {
+  color: var(--_border-strong);
+}
+
+.testimonials-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--_value, 0);
+  overflow: hidden;
+  color: var(--_warning);
+}
+
+.testimonials-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+  margin: 0;
+  color: var(--_fg);
+  font: 500 var(--_font-size-ui) / 1.4 var(--_font-ui);
+}
+
+/* ---------- Carousel ---------- */
+
+.testimonials-carousel {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.testimonials-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_space-2);
+}
+
+.testimonials-position {
+  color: var(--_fg-muted);
+  font: 500 var(--_font-size-small) / 1.3 var(--_font-ui);
+  font-variant-numeric: tabular-nums;
+}

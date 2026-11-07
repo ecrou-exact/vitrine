@@ -28,7 +28,13 @@
  *   | keyof typeof import('../components/table/strings.js').en
  *   | keyof typeof import('../components/status/strings.js').en
  *   | keyof typeof import('../components/calendar/strings.js').en
- *   | keyof typeof import('../components/pricing/strings.js').en} StringKey
+ *   | keyof typeof import('../components/pricing/strings.js').en
+ *   | keyof typeof import('../components/faq/strings.js').en
+ *   | keyof typeof import('../components/gallery/strings.js').en
+ *   | keyof typeof import('../components/stats/strings.js').en
+ *   | keyof typeof import('../components/roadmap/strings.js').en
+ *   | keyof typeof import('../components/testimonials/strings.js').en
+ *   | keyof typeof import('../components/countdown/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 
@@ -80,6 +86,10 @@ const en = Object.freeze({
   invalidJsonRaw: 'Invalid JSON at line {line}, column {column} — showing raw text.',
   empty: 'Nothing to display',
   tooLarge: 'Content is too large ({size} characters, limit {limit}).',
+  jsonInvalid: 'This JSON could not be read: {message}',
+  jsonPathMissing: 'Nothing was found at "{path}" in this JSON.',
+  jsonUnusable: 'This data cannot be shown by this element.',
+  dataNoList: 'Expected a list, or an object with a list under {keys}.',
   tooDeep: 'Nesting is too deep (limit {limit}).',
   tooComplex: 'This document is nested too deeply to display.',
   unserializable: 'This value cannot be converted to JSON (circular reference or BigInt).',
@@ -272,6 +282,10 @@ const fr = Object.freeze({
   invalidJsonRaw: 'JSON invalide à la ligne {line}, colonne {column} — affichage du texte brut.',
   empty: 'Rien à afficher',
   tooLarge: 'Contenu trop volumineux ({size} caractères, limite {limit}).',
+  jsonInvalid: "Ce JSON n'a pas pu être lu : {message}",
+  jsonPathMissing: 'Rien n’a été trouvé à « {path} » dans ce JSON.',
+  jsonUnusable: 'Ces données ne peuvent pas être affichées par cet élément.',
+  dataNoList: 'Une liste était attendue, ou un objet avec une liste sous {keys}.',
   tooDeep: 'Imbrication trop profonde (limite {limit}).',
   tooComplex: 'Ce document est trop imbriqué pour être affiché.',
   unserializable:

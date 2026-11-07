@@ -1,4 +1,5 @@
 // @ts-check
+import { hexFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import hexCss from '../../styles/hex.css?raw';
@@ -70,6 +71,10 @@ const CHUNK_ROWS = 128;
 export class VtHex extends VtBase {
   static type = 'hex';
 
+  static fromData = hexFromData;
+
+  static dataAttributes = Object.freeze(['format', 'label']);
+
   static componentAttributes = Object.freeze([
     'columns', 'group', 'format', 'ascii', 'uppercase', 'offset',
   ]); // prettier-ignore
@@ -95,7 +100,7 @@ export class VtHex extends VtBase {
     /** @type {Uint8Array | null} Bytes fetched from `src`. */
     this.fetched = null;
     /** @type {Uint8Array} */
-    this.data = new Uint8Array(0);
+    this.byteData = new Uint8Array(0);
     /** @type {string | null} */
     this.decodeError = null;
     this.cursor = -1;
@@ -110,7 +115,7 @@ export class VtHex extends VtBase {
 
   /** @type {Uint8Array} */
   get bytes() {
-    return this.data.slice();
+    return this.byteData.slice();
   }
 
   set bytes(value) {
@@ -119,7 +124,7 @@ export class VtHex extends VtBase {
   }
 
   get fileType() {
-    return detectType(this.data);
+    return detectType(this.byteData);
   }
 
   /** Cancels a request still running (the base class keeps its controller). */
@@ -166,16 +171,16 @@ export class VtHex extends VtBase {
     this.decodeError = null;
     this.cursor = -1;
     this.hits = [];
-    if (this._bytes) this.data = this._bytes;
-    else if (this.fetched) this.data = this.fetched;
+    if (this._bytes) this.byteData = this._bytes;
+    else if (this.fetched) this.byteData = this.fetched;
     else {
       try {
-        this.data = decodeText(
+        this.byteData = decodeText(
           this.text ?? '',
           parseEnum(this.getAttribute('format'), FORMATS, 'auto'),
         );
       } catch (error) {
-        this.data = new Uint8Array(0);
+        this.byteData = new Uint8Array(0);
         this.decodeError = error instanceof Error ? error.message : String(error);
       }
     }
@@ -208,7 +213,7 @@ export class VtHex extends VtBase {
   /** @param {HTMLElement} frame */
   renderContent(frame) {
     const t = this.t;
-    const data = this.data;
+    const data = this.byteData;
     const body = h('div', {
       class: 'body hex-body',
       part: 'body',
@@ -226,10 +231,10 @@ export class VtHex extends VtBase {
       this.fullscreenButton(),
       this.feature('download') && data.length ? this.binaryDownload(type?.mime) : null,
       this.feature('copy') && data.length
-        ? this.copyButton(() => formatBase64(this.data), t('hexCopyBase64'), 'copy-base64')
+        ? this.copyButton(() => formatBase64(this.byteData), t('hexCopyBase64'), 'copy-base64')
         : null,
       this.feature('copy') && data.length
-        ? this.copyButton(() => formatHex(this.data, this.columns), t('hexCopyHex'))
+        ? this.copyButton(() => formatHex(this.byteData, this.columns), t('hexCopyHex'))
         : null,
     ];
     frame.append(...this.chrome({ badge: type ? `${type.name} · ${size}` : size, actions }), body);
@@ -237,7 +242,7 @@ export class VtHex extends VtBase {
 
   /** @returns {HTMLElement} */
   buildDump() {
-    const data = this.data;
+    const data = this.byteData;
     const columns = this.columns;
     const rows = Math.ceil(data.length / columns);
     const digits = Math.max(8, toHex(this.base + data.length).length);
@@ -279,7 +284,7 @@ export class VtHex extends VtBase {
     });
     dump.addEventListener('keydown', (event) => this.onKey(event));
     dump.addEventListener('focus', () => {
-      if (this.cursor < 0 && this.data.length) this.select(0, false);
+      if (this.cursor < 0 && this.byteData.length) this.select(0, false);
     });
     return dump;
   }
@@ -294,13 +299,13 @@ export class VtHex extends VtBase {
     const columns = this.columns;
     const group = parseInteger(this.getAttribute('group'), { min: 0, max: 64, fallback: 8 });
     const start = row * columns;
-    const end = Math.min(this.data.length, start + columns);
+    const end = Math.min(this.byteData.length, start + columns);
     const hexCells = h('span', { class: 'hex', part: 'hex', attrs: { role: 'gridcell' } });
     const asciiCells = ascii
       ? h('span', { class: 'ascii', part: 'ascii', attrs: { role: 'gridcell' } })
       : null;
     for (let i = start; i < end; i += 1) {
-      const value = this.data[i];
+      const value = this.byteData[i];
       const kind = byteClass(value);
       const cell = h('span', { class: `b ${kind}`, text: this.hex(value) });
       cell.dataset.i = String(i);
@@ -351,13 +356,13 @@ export class VtHex extends VtBase {
    * @param {boolean} [notify]
    */
   select(offset, notify = true) {
-    if (!this.dump || offset < 0 || offset >= this.data.length) return;
+    if (!this.dump || offset < 0 || offset >= this.byteData.length) return;
     for (const cell of this.dump.querySelectorAll('.selected')) cell.classList.remove('selected');
     this.cursor = offset;
     const cells = this.cells(offset);
     for (const cell of cells) cell.classList.add('selected');
     cells[0]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    const value = this.data[offset];
+    const value = this.byteData[offset];
     this.announce(
       this.t('hexByte', {
         offset: this.hex(this.base + offset, 1),
@@ -386,10 +391,10 @@ export class VtHex extends VtBase {
     if (event.key in moves) next += moves[event.key];
     else if (event.key === 'Home') next = event.ctrlKey ? 0 : next - (next % columns);
     else if (event.key === 'End')
-      next = event.ctrlKey ? this.data.length - 1 : next - (next % columns) + columns - 1;
+      next = event.ctrlKey ? this.byteData.length - 1 : next - (next % columns) + columns - 1;
     else return;
     event.preventDefault();
-    this.select(Math.max(0, Math.min(this.data.length - 1, next)));
+    this.select(Math.max(0, Math.min(this.byteData.length - 1, next)));
   }
 
   // ------------------------------------------------------------------ search
@@ -400,7 +405,7 @@ export class VtHex extends VtBase {
       run: (query) => {
         const needle = queryBytes(query.slice(0, MAX_QUERY_LENGTH).trim());
         const text = !/^(?:[0-9a-fA-F]{2}|[\s,]|0x)+$/i.test(query.trim());
-        this.hits = findBytes(this.data, needle, { limit: MAX_MATCHES, ignoreCase: text });
+        this.hits = findBytes(this.byteData, needle, { limit: MAX_MATCHES, ignoreCase: text });
         this.matchLength = needle.length;
         this.repaintMarks();
         return { total: this.hits.length, capped: this.hits.length >= MAX_MATCHES };
@@ -425,7 +430,7 @@ export class VtHex extends VtBase {
   repaintMarks() {
     for (const cell of this.dump?.querySelectorAll('.match, .current') ?? [])
       cell.classList.remove('match', 'current');
-    this.paintMarks(0, this.data.length);
+    this.paintMarks(0, this.byteData.length);
   }
 
   /**
@@ -458,7 +463,9 @@ export class VtHex extends VtBase {
       key: 'download',
       part: 'download-button',
       onClick: () => {
-        const blob = new Blob([this.data.slice()], { type: mime ?? 'application/octet-stream' });
+        const blob = new Blob([this.byteData.slice()], {
+          type: mime ?? 'application/octet-stream',
+        });
         const url = URL.createObjectURL(blob);
         const link = h('a', {
           attrs: { href: url, download: this.downloadName('data.bin'), rel: 'noopener' },

@@ -12,7 +12,7 @@ import { isSameOrigin } from './urls.js';
  */
 export class VitrineError extends Error {
   /**
-   * @param {"tooLarge"|"tooComplex"|"tooDeep"|"remoteBlocked"|"unsafeUrl"|"timeout"|"loadFailed"|"invalidJson"} code
+   * @param {"tooLarge"|"tooComplex"|"tooDeep"|"remoteBlocked"|"unsafeUrl"|"timeout"|"loadFailed"|"invalidJson"|"jsonInvalid"|"jsonPathMissing"|"jsonUnusable"} code
    * @param {Record<string, string | number>} [params]
    * @param {unknown} [cause]
    */
@@ -50,6 +50,7 @@ const DATA_SCRIPT_TYPES = new Set([
  */
 export function readInlineContent(host) {
   for (const child of Array.from(host.children)) {
+    if (child.hasAttribute('data-json')) continue;
     const text = readContainer(child);
     if (text !== null) return text;
   }
@@ -57,7 +58,10 @@ export function readInlineContent(host) {
   for (const node of Array.from(host.childNodes)) {
     if (node.nodeType === Node.TEXT_NODE || node.nodeType === Node.CDATA_SECTION_NODE) {
       text += node.nodeValue ?? '';
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
+    } else if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      !(/** @type {Element} */ (node).hasAttribute('data-json'))
+    ) {
       text += node.textContent ?? '';
     }
   }

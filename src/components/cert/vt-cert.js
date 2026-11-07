@@ -1,4 +1,5 @@
 // @ts-check
+import { certFromData } from '../../core/data-formats.js';
 import { defineStrings } from '../../core/i18n.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import syntaxCss from '../../styles/syntax.css?raw';
@@ -65,6 +66,10 @@ const MAX_TREE_ROWS = 5000;
  */
 export class VtCert extends VtBase {
   static type = 'cert';
+
+  static fromData = certFromData;
+
+  static dataAttributes = Object.freeze(['label', 'now']);
 
   static componentAttributes = Object.freeze([
     'now', 'tabs', 'view', 'fingerprints', 'extensions',

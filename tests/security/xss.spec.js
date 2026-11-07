@@ -94,6 +94,59 @@ const PAYLOADS = [
 
 const MODES = [
   {
+    tag: 'vt-faq',
+    attrs: { variant: 'full', open: 'all' },
+    wrap: (p) => JSON.stringify([{ question: p, answer: p, category: p, id: p }]),
+  },
+  {
+    tag: 'vt-gallery',
+    attrs: { variant: 'full' },
+    wrap: (p) => JSON.stringify([{ src: p, thumb: p, alt: p, caption: p, href: p }, p]),
+  },
+  {
+    tag: 'vt-stats',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify([
+        {
+          label: p,
+          value: p,
+          unit: p,
+          against: p,
+          description: p,
+          url: p,
+          series: [{ label: p, value: 1 }, 2],
+        },
+      ]),
+  },
+  {
+    tag: 'vt-roadmap',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        columns: [{ id: p, title: p }],
+        items: [{ title: p, description: p, status: p, tags: [p], when: p, url: p }],
+      }),
+  },
+  {
+    tag: 'vt-testimonials',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify([{ quote: p, author: p, role: p, company: p, avatar: p, url: p, rating: 3 }]),
+  },
+  {
+    tag: 'vt-countdown',
+    attrs: { variant: 'full', now: '2026-11-07T12:00:00Z' },
+    wrap: (p) =>
+      JSON.stringify({ to: '2027-01-01T00:00:00Z', title: p, description: p, url: p, cta: p }),
+  },
+  {
+    tag: 'vt-code',
+    attrs: { variant: 'full' },
+    wrap: (p) => JSON.stringify({ code: p, language: p, label: p }),
+    data: true,
+  },
+  {
     tag: 'vt-status',
     attrs: { variant: 'full', now: '2026-11-05T12:00:00Z' },
     wrap: (p) =>
@@ -318,7 +371,9 @@ test.describe('XSS payloads', () => {
     }) => {
       for (const payload of PAYLOADS) {
         const content = mode.wrap ? mode.wrap(payload) : payload;
-        await mount(page, mode.tag, mode.attrs, content);
+        // `data` modes go through the json attribute, so the JSON layer is tested too.
+        if (mode.data) await mount(page, mode.tag, { ...mode.attrs, json: content });
+        else await mount(page, mode.tag, mode.attrs, content);
         // Exercise interactive paths too: hover, focus and the search bar.
         await page.locator('#el').hover();
         await page.waitForTimeout(30);

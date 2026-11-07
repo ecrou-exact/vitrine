@@ -1,0 +1,74 @@
+/*
+ * Questions and answers: an accordion with hairlines between the questions.
+ */
+.faq-list {
+  min-width: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.faq-item + .faq-item {
+  border-top: 1px solid var(--_border);
+}
+
+.faq-heading {
+  margin: 0;
+  font: inherit;
+}
+
+.faq-question {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--_space-3);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--_space-3);
+  border: 0;
+  background: transparent;
+  color: var(--_fg);
+  font: 600 14px / 1.45 var(--_font-ui);
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.faq-question:hover {
+  background: var(--_accent-soft);
+}
+
+.faq-question:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.faq-question .icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--_fg-muted);
+}
+
+.faq-answer {
+  padding: 0 var(--_space-3) var(--_space-3);
+  color: var(--_fg);
+  font: 400 14px / 1.55 var(--_font-ui);
+}
+
+.faq-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+/* The answer reads as part of the item, not as a second frame. */
+.faq-answer vt-markdown::part(container) {
+  border: 0;
+  background: transparent;
+}
+
+.faq-answer vt-markdown::part(body) {
+  padding: 0;
+  background: transparent;
+}

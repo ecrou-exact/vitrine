@@ -86,6 +86,8 @@ const VIEWS = /** @type {const} */ (['split', 'unified']);
 export class VtDiff extends VtBase {
   static type = 'diff';
 
+  static dataAttributes = Object.freeze(['language', 'original-label', 'modified-label']);
+
   static componentAttributes = Object.freeze([
     'language', 'view', 'tabs', 'context', 'line-numbers', 'wrap', 'original-src', 'modified-src',
     'original-label', 'modified-label', 'navigation', 'sync-scroll',
@@ -159,6 +161,33 @@ export class VtDiff extends VtBase {
   set original(value) {
     this._original = value === null || value === undefined ? undefined : String(value);
     this.sidesChanged();
+  }
+
+  /**
+   * `{ original, modified, language, originalLabel, modifiedLabel }`, or `{ patch }`, or a patch.
+   *
+   * @param {unknown} value
+   */
+  applyData(value) {
+    const item = value !== null && typeof value === 'object' && !Array.isArray(value) ? /** @type {Record<string, unknown>} */ (value) : null; // prettier-ignore
+    if (!item || (typeof item.original !== 'string' && typeof item.modified !== 'string')) {
+      super.applyData(
+        item && typeof item.patch === 'string'
+          ? item.patch
+          : typeof value === 'string'
+            ? value
+            : '',
+      );
+      return;
+    }
+    this._data = value;
+    this.applyDataAttributes({
+      language: item.language,
+      'original-label': item.originalLabel,
+      'modified-label': item.modifiedLabel,
+    });
+    this.original = typeof item.original === 'string' ? item.original : '';
+    this.modified = typeof item.modified === 'string' ? item.modified : '';
   }
 
   /** @returns {string} */

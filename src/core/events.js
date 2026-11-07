@@ -71,6 +71,8 @@ export const EVENTS = Object.freeze({
   PRICING_CHANGE: 'vt-pricing-change',
   /** Pricing: a plan button was pressed (cancelable). Detail: `{ plan, name, period, currency, amount, url }`. */
   PLAN_SELECT: 'vt-plan-select',
+  /** Countdown: the date was reached while the page was open. Detail: `{ to }`. */
+  COUNTDOWN_END: 'vt-countdown-end',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

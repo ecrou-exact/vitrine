@@ -1,4 +1,5 @@
 // @ts-check
+import { csvFromData } from '../../core/data-formats.js';
 import syntaxCss from '../../styles/syntax.css?raw';
 import codeCss from '../../styles/code.css?raw';
 import csvCss from '../../styles/csv.css?raw';
@@ -65,6 +66,10 @@ const CELL_PREVIEW = 1000;
  */
 export class VtCsv extends VtBase {
   static type = 'csv';
+
+  static fromData = csvFromData;
+
+  static dataAttributes = Object.freeze(/** @type {string[]} */ ([]));
 
   static componentAttributes = Object.freeze([
     'delimiter', 'header-row', 'page-size', 'sortable', 'line-numbers', 'tabs', 'view',

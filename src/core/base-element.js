@@ -31,6 +31,7 @@ import {
   isAbortError,
   readInlineContent,
 } from './content.js';
+import { jsonText, pickPath } from './data-input.js';
 import { h } from './dom.js';
 import { EVENTS, emit } from './events.js';
 import { formatNumber, onLocaleChange, translator } from './i18n.js';
@@ -64,9 +65,20 @@ export const COMMON_ATTRIBUTES = Object.freeze([
   'variant', 'theme', 'src', 'allow-remote', 'max-height', 'copy', 'search', 'download',
   'header', 'dot', 'title', 'label', 'lang-ui', 'mode', 'edit-toggle', 'placeholder',
   'syntax-theme', 'syntax-theme-dark', 'badge', 'history', 'fullscreen', 'status',
+  'json', 'json-src', 'json-path',
 ]); // prettier-ignore
 
 /** @typedef {Record<string, boolean>} Preset */
+
+/**
+ * @param {Element} holder - A `<script data-json>` or `<template data-json>`.
+ * @returns {string}
+ */
+function readJsonHolder(holder) {
+  return holder instanceof HTMLTemplateElement
+    ? (holder.content.textContent ?? '')
+    : (holder.textContent ?? '');
+}
 /** @typedef {import('./ui.js').Translate} Translate */
 
 /**
@@ -96,6 +108,9 @@ export const COMMON_ATTRIBUTES = Object.freeze([
  * @attr {boolean} history - Shows undo and redo buttons in edit mode (default on).
  * @attr {boolean} fullscreen - Shows a full screen button. Full variant: on.
  * @attr {boolean} status - Shows the status bar under editors that validate (default on).
+ * @attr {string} json - The content as JSON, read like the `data` property.
+ * @attr {string} json-src - URL of JSON to read like the `data` property (same rules as `src`).
+ * @attr {string} json-path - Where the value is in that JSON, such as `data.items` or `results[0]`.
  *
  * @fires vt-ready - Content rendered. Detail: `{ type }`.
  * @fires vt-copy - Text copied. Detail: `{ text }`.
@@ -182,6 +197,25 @@ export class VtBase extends HTMLElement {
    */
   static keepCarriageReturns = false;
 
+  /**
+   * Attributes a JSON value may set (`{ language: "python" }` sets `language`). Attributes the
+   * page sets itself are never changed.
+   *
+   * @type {readonly string[]}
+   */
+  static dataAttributes = [];
+
+  /**
+   * Turns a JSON value into the content of the element: by default the value as JSON, or a
+   * string as it is. Elements whose content is not JSON map values to their own format.
+   *
+   * @param {unknown} value
+   * @returns {string | import('./data-input.js').DataResult}
+   */
+  static fromData(value) {
+    return typeof value === 'string' ? value : jsonText(value);
+  }
+
   /** Properties that may be set before the element is defined. */
   /** @type {readonly string[]} */
   static upgradeProperties = ['content'];
@@ -209,6 +243,12 @@ export class VtBase extends HTMLElement {
 
     /** @type {string | undefined} Content set through the `content` property. */
     this._content = undefined;
+    /** @type {unknown} Value set through `data`, `json` or `json-src`. */
+    this._data = undefined;
+    /** Whether the content came from `json`, `json-src` or a JSON script. */
+    this._fromJson = false;
+    /** @type {Set<string>} Attributes set from JSON. */
+    this._dataAttributes = new Set();
     /** @type {string | null} Current text, once loaded. */
     this.text = null;
     /** @type {unknown} */
@@ -257,7 +297,137 @@ export class VtBase extends HTMLElement {
     // (`:content.prop` + `@vt-input`) must not reset the editor, its caret or its history.
     if (next !== undefined && next === this._content && next === this.text) return;
     this._content = next;
+    this._fromJson = false;
     if (this._connected) this.reload();
+  }
+
+  /**
+   * The content as a value: an object, a list or a string, turned into the element's own
+   * format (see each element's reference). Setting it overrides `src`, `json` and inline
+   * content, like `content`.
+   *
+   * @type {unknown}
+   */
+  get data() {
+    return this._data;
+  }
+
+  set data(value) {
+    this._fromJson = false;
+    this.applyData(value);
+  }
+
+  /**
+   * Shows a JSON value: its content, and the attributes it may set.
+   *
+   * @param {unknown} value
+   */
+  applyData(value) {
+    this._data = value;
+    const ctor = /** @type {typeof VtBase} */ (this.constructor);
+    /** @type {string | import('./data-input.js').DataResult | undefined} */
+    let result;
+    try {
+      result = ctor.fromData(value);
+    } catch (error) {
+      this._content = '';
+      this.setError(new VitrineError('jsonUnusable', {}, error));
+      return;
+    }
+    const { content, attributes = {} } = typeof result === 'string' ? { content: result } : result;
+    this.applyDataAttributes(attributes);
+    this._content = content;
+    if (this._connected) this.setText(content);
+  }
+
+  /**
+   * @param {Record<string, unknown>} attributes
+   */
+  applyDataAttributes(attributes) {
+    const allowed = /** @type {typeof VtBase} */ (this.constructor).dataAttributes;
+    const before = this._dataAttributes;
+    this._dataAttributes = new Set();
+    for (const [name, value] of Object.entries(attributes)) {
+      if (!allowed.includes(name) || value === null || value === undefined) continue;
+      // The page's own attributes win over the data.
+      if (this.hasAttribute(name) && !before.has(name)) continue;
+      const text = value === true ? '' : value === false ? 'false' : String(value).slice(0, 2000);
+      if (this.getAttribute(name) !== text) this.setAttribute(name, text);
+      this._dataAttributes.add(name);
+    }
+    for (const name of before) if (!this._dataAttributes.has(name)) this.removeAttribute(name);
+  }
+
+  /**
+   * Reads `json-src`, `json` or a JSON script, when the element has one.
+   *
+   * @returns {boolean} Whether there was JSON to read.
+   */
+  loadJson() {
+    const src = this.getAttribute('json-src')?.trim();
+    const inline = this.getAttribute('json');
+    const holder = this.querySelector(':scope > script[data-json], :scope > template[data-json]');
+    if (!src && inline === null && !holder) {
+      if (this._fromJson) {
+        this._fromJson = false;
+        this._content = undefined;
+      }
+      return false;
+    }
+    const token = ++this._loadToken;
+    this._abort?.abort();
+    this._abort = null;
+    if (!src) {
+      this.useJson(inline ?? readJsonHolder(/** @type {Element} */ (holder)));
+      return true;
+    }
+    const config = getConfig();
+    this.loading = true;
+    this.error = null;
+    this.requestRender();
+    const controller = new AbortController();
+    this._abort = controller;
+    fetchContent(src, {
+      allowRemote: parseBoolean(this.getAttribute('allow-remote')) === true,
+      maxSize: config.maxSize,
+      timeout: config.fetchTimeout,
+      signal: controller.signal,
+    }).then(
+      (text) => token === this._loadToken && this.useJson(text),
+      (error) => token === this._loadToken && !isAbortError(error) && this.setError(error),
+    );
+    return true;
+  }
+
+  /**
+   * @param {string} text
+   */
+  useJson(text) {
+    this.loading = false;
+    /** @type {unknown} */
+    let value;
+    try {
+      assertSize(text, getConfig().maxSize);
+      value = JSON.parse(text);
+    } catch (error) {
+      this.setError(
+        error instanceof VitrineError
+          ? error
+          : new VitrineError('jsonInvalid', { message: error instanceof Error ? error.message : '' }, error), // prettier-ignore
+      );
+      return;
+    }
+    const path = this.getAttribute('json-path')?.trim();
+    if (path) {
+      const found = pickPath(value, path);
+      if (!found.ok) {
+        this.setError(new VitrineError('jsonPathMissing', { path: path.slice(0, 100) }));
+        return;
+      }
+      value = found.value;
+    }
+    this._fromJson = true;
+    this.applyData(value);
   }
 
   /**
@@ -275,7 +445,11 @@ export class VtBase extends HTMLElement {
   }
 
   connectedCallback() {
-    for (const name of /** @type {typeof VtBase} */ (this.constructor).upgradeProperties)
+    for (const name of new Set([
+      .../** @type {typeof VtBase} */ (this.constructor).upgradeProperties,
+      'data',
+    ]))
+      // prettier-ignore
       this.upgradeProperty(name);
     this._cleanups.push(
       onConfigChange((changed) => (changed.has('maxSize') ? this.reload() : this.requestRender())),
@@ -283,7 +457,8 @@ export class VtBase extends HTMLElement {
       onLocaleChange(() => this.requestRender()),
     );
     this._observer = new MutationObserver(() => {
-      if (this._content === undefined && !this.hasAttribute('src')) this.reload();
+      if ((this._content === undefined || this._fromJson) && !this.hasAttribute('src'))
+        this.reload();
     });
     this._observer.observe(this, { childList: true, characterData: true, subtree: true });
     const onFullscreen = () => {
@@ -313,7 +488,7 @@ export class VtBase extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue || !this.isConnected) return;
     if (name === 'mode') this.modeState = null;
-    if (name === 'src' || name === 'allow-remote') this.reload();
+    if (['src', 'allow-remote', 'json', 'json-src', 'json-path'].includes(name)) this.reload();
     else if (name === 'theme') this.applyTheme();
     else this.requestRender();
   }
@@ -322,6 +497,7 @@ export class VtBase extends HTMLElement {
 
   /** Reloads the content from its source and re-renders. */
   reload() {
+    if ((this._content === undefined || this._fromJson) && this.loadJson()) return;
     const token = ++this._loadToken;
     this._abort?.abort();
     this._abort = null;
