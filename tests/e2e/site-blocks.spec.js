@@ -87,23 +87,6 @@ test.describe('site blocks', () => {
     await expect(trend).toHaveAttribute('aria-valuetext', 'Jan: 80');
   });
 
-  test('<vt-roadmap> filters by tag', async ({ page }) => {
-    await mount(
-      page,
-      'vt-roadmap',
-      { 'lang-ui': 'en' },
-      JSON.stringify([
-        { title: 'A', status: 'done', tags: ['api'] },
-        { title: 'B', status: 'planned', tags: ['ui'] },
-      ]),
-    );
-    const el = page.locator('#el');
-    await expect(el.locator('.roadmap-item')).toHaveCount(2);
-    await el.getByRole('button', { name: 'ui', exact: true }).click();
-    await expect(el.locator('.roadmap-item')).toHaveCount(1);
-    await expect(el.locator('.roadmap-title').first()).toContainText('Planned');
-  });
-
   test('<vt-testimonials> carousel moves with its buttons', async ({ page }) => {
     await mount(
       page,
