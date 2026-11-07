@@ -39,6 +39,7 @@ import { VtStats } from './components/stats/vt-stats.js';
 import { VtField } from './components/field/vt-field.js';
 import { VtBoard } from './components/board/vt-board.js';
 import { VtSearch } from './components/search/vt-search.js';
+import { VtDatePicker } from './components/date-picker/vt-date-picker.js';
 import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
 import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
@@ -84,6 +85,7 @@ export {
   VtField,
   VtBoard,
   VtSearch,
+  VtDatePicker,
   VtTestimonials,
   VtCountdown,
   configure,
@@ -148,6 +150,7 @@ export const registry = new Map(
     ['vt-field', VtField],
     ['vt-board', VtBoard],
     ['vt-search', VtSearch],
+    ['vt-date-picker', VtDatePicker],
     ['vt-testimonials', VtTestimonials],
     ['vt-countdown', VtCountdown],
   ]),
@@ -189,6 +192,7 @@ const TYPES = /** @type {const} */ ({
   field: 'vt-field',
   board: 'vt-board',
   search: 'vt-search',
+  'date-picker': 'vt-date-picker',
   testimonials: 'vt-testimonials',
   countdown: 'vt-countdown',
 });

@@ -1,0 +1,289 @@
+/*
+ * Date picker: the field (from field.css), a calendar under it, and the usual periods on its
+ * side. Days are a grid of 40px cells, so a finger can choose them.
+ */
+.date-anchor {
+  position: relative;
+}
+
+.date-box {
+  gap: var(--_space-1);
+  padding-right: var(--_space-1);
+}
+
+.date-side {
+  display: contents;
+}
+
+.date-input {
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.range .date-input {
+  flex: 1 1 8ch;
+}
+
+.date-dash {
+  flex: none;
+  color: var(--_fg-muted);
+}
+
+.date-toggle[aria-expanded='true'] {
+  background: var(--_accent-soft);
+  color: var(--_fg);
+}
+
+.date-format {
+  color: var(--_fg-muted);
+}
+
+/* ---------- Calendar ---------- */
+
+.date-popup {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  gap: var(--_space-3);
+  max-width: min(100vw - 32px, 100%);
+  width: max-content;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius);
+  background: var(--_surface-raised);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+  color: var(--_fg);
+}
+
+.date-popup.inline {
+  position: static;
+  max-width: 100%;
+  box-shadow: none;
+}
+
+.date-main {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--_space-2);
+}
+
+.date-title {
+  margin: 0;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.date-move:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.date-months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-4);
+}
+
+.date-month-name {
+  margin: 0 0 var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+/* With one month the title above says it already. */
+.date-months > .date-month:only-child .date-month-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.date-grid {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.date-grid th {
+  width: 40px;
+  height: 28px;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 500;
+  text-align: center;
+}
+
+.date-grid td {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  text-align: center;
+}
+
+.date-day {
+  position: relative;
+  border-radius: var(--_radius-sm);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.date-day:hover {
+  background: var(--_accent-soft);
+}
+
+.date-day:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.date-day.today .date-number {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.date-day.in-range,
+.date-day.preview {
+  border-radius: 0;
+  background: var(--_accent-soft);
+}
+
+.date-day.in-range.week-start,
+.date-day.preview.week-start {
+  border-top-left-radius: var(--_radius-sm);
+  border-bottom-left-radius: var(--_radius-sm);
+}
+
+.date-day.in-range.week-end,
+.date-day.preview.week-end {
+  border-top-right-radius: var(--_radius-sm);
+  border-bottom-right-radius: var(--_radius-sm);
+}
+
+.date-day.start,
+.date-day.end {
+  background: var(--_accent);
+  color: var(--_on-accent);
+}
+
+.date-day.blocked {
+  color: var(--_fg-muted);
+  cursor: not-allowed;
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.date-day.blocked:hover {
+  background: transparent;
+}
+
+.date-day[aria-disabled='true']:not(.blocked) {
+  cursor: default;
+}
+
+.date-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--_space-2);
+}
+
+.date-status {
+  flex: 1 1 12em;
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+/* ---------- Usual periods ---------- */
+
+.date-presets {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-width: 10em;
+  margin: 0;
+  padding: 0 var(--_space-3) 0 0;
+  border-right: 1px solid var(--_border);
+  list-style: none;
+}
+
+.date-preset {
+  width: 100%;
+  padding: var(--_space-1) var(--_space-2);
+  border: 0;
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.date-preset:hover,
+.date-preset[aria-pressed='true'] {
+  background: var(--_accent-soft);
+}
+
+.date-preset[aria-pressed='true'] {
+  font-weight: 600;
+}
+
+.date-preset:disabled {
+  background: transparent;
+  color: var(--_fg-muted);
+  cursor: default;
+  text-decoration: line-through;
+}
+
+.date-preset:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 600px) {
+  .date-popup {
+    flex-direction: column;
+  }
+
+  .date-presets {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 0 var(--_space-2);
+    border-right: 0;
+    border-bottom: 1px solid var(--_border);
+  }
+
+  .date-preset {
+    width: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .date-day.start,
+  .date-day.end {
+    outline: 2px solid Highlight;
+  }
+
+  .date-day.in-range,
+  .date-day.preview {
+    outline: 1px dashed Highlight;
+  }
+}

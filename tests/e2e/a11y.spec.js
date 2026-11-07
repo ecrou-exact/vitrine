@@ -49,6 +49,19 @@ const MORE = {
     '[{"id":"a","title":"Getting started","section":"Guides","content":"Install it.","featured":true},{"id":"b","title":"Board","section":"Components","content":"Drag and drop.","featured":true}]',
     {},
   ],
+  'vt-date-picker': [
+    '',
+    {
+      mode: 'range',
+      inline: '',
+      required: '',
+      hint: 'Your stay.',
+      now: '2026-11-18',
+      value: '2026-11-20/2026-11-24',
+      'disabled-dates': '2026-11-26 sun',
+      min: 'today',
+    },
+  ],
   'vt-testimonials': [
     JSON.stringify([
       { quote: 'Great', author: 'Ada Lovelace', role: 'CTO', rating: 5, url: '/r' },
