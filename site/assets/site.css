@@ -2804,3 +2804,18 @@ h3 {
 .section-menu select:hover {
   border-color: var(--site-accent);
 }
+
+/* The box that opens the right-click menu of the menu examples. */
+.context-demo {
+  display: grid;
+  place-items: center;
+  min-height: 140px;
+  border: 2px dashed var(--site-border);
+  border-radius: var(--radius);
+  user-select: none;
+}
+
+.context-demo:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
