@@ -376,7 +376,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar` and `vt-pricing` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar`, `vt-pricing`, `vt-faq`, `vt-gallery`, `vt-stats`, `vt-roadmap`, `vt-testimonials` and `vt-countdown` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 
@@ -433,6 +433,7 @@ The event names, as a frozen object:
 | `EVENT_SELECT`      | `vt-event-select`      |
 | `PRICING_CHANGE`    | `vt-pricing-change`    |
 | `PLAN_SELECT`       | `vt-plan-select`       |
+| `COUNTDOWN_END`     | `vt-countdown-end`     |
 | `ERROR`             | `vt-error`             |
 
 The `<vt-tags>` events `vt-tag-add`, `vt-tag-remove`, `vt-tag-create` and `vt-tag-click` are `EVENTS.TAG_ADD`, `TAG_REMOVE`, `TAG_CREATE` and `TAG_CLICK`.

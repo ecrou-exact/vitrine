@@ -26,7 +26,7 @@ Every feature can be turned on or off individually, whatever the variant.
 
 ## Formats
 
-The lanes are always computed from the parents of each commit, so the three formats are drawn the same way.
+The lanes are always computed from the parents of each commit, so every format is drawn the same way.
 
 **`git log` with parents** (recommended): one commit per line, fields separated by `|`. The subject is last and may itself contain `|`.
 
@@ -54,6 +54,17 @@ git log --all --date-order --pretty=format:'%H|%P|%an|%ad|%D|%s' --date=iso-stri
 * 9f8e7d6 (tag: v1.0) Initial commit
 ```
 
+**`git log` in its default format**, with or without `--graph`, `--parents` and `--decorate`: the `commit`, `Merge:`, `Author:` and `Date:` lines and the message are read. Parents come from the drawing, from `--parents`, or from the `Merge:` line; without any of them, each commit is taken as the parent of the one before.
+
+```text
+*   commit 344980da3f4c6ba0988476b301eae6e063431b68 (tag: v1.0)
+|\  Merge: ed52ca3 b8a88b7
+| | Author: Ada <ada@example.com>
+| | Date:   Sat Nov 7 10:08:01 2026 +0100
+| |
+| |     Merge branch 'feature'
+```
+
 **JSON**: an array of commits, or an object with a `commits` array.
 
 ```json
@@ -72,7 +83,25 @@ git log --all --date-order --pretty=format:'%H|%P|%an|%ad|%D|%s' --date=iso-stri
 
 `sha` and `id` are read as `hash`, `message` (subject, blank line, body) as `subject` and `body`, and `author` may be an object with a `name`. `parents` may be objects with a `hash` or `sha` (the GitHub API format).
 
-Commits are listed in the order given: newest first, children before their parents, as `git log` writes them. Parents that are not in the history are left out of the drawing.
+**JSON from hosting services** works as it is, so a page can draw the history of a repository straight from an API:
+
+| Service        | Endpoint                                       | Read as                                                                                                                                |
+| -------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| GitHub REST    | `GET /repos/{owner}/{repo}/commits`            | `sha`, `parents[].sha`, `commit.author.name` and `.date`, `commit.message`, `html_url`                                                 |
+| GitHub GraphQL | `history(first: 100) { nodes { … } }`          | `oid`, `parents.nodes[].oid`, `author.name`, `committedDate`, `messageHeadline`, `messageBody`, `url`; the list is found in the answer |
+| GitLab         | `GET /projects/{id}/repository/commits`        | `id`, `parent_ids`, `author_name`, `committed_date`, `title`, `message`, `web_url`                                                     |
+| Bitbucket      | `GET /repositories/{workspace}/{repo}/commits` | `values[]`, `hash`, `parents[].hash`, `author.raw`, `date`, `message`, `links.html.href`                                               |
+
+Branches and tags can be given beside the commits, as the APIs list them: `{ "commits": [...], "branches": [{ "name": "main", "commit": { "sha": "…" } }], "tags": { "v1.0": "…" }, "head": "main" }`. A ref may name a commit by a prefix of its hash.
+
+```html
+<vt-git json-src="https://api.github.com/repos/owner/repo/commits?per_page=100" allow-remote
+        commit-url="https://github.com/owner/repo/commit/{hash}"></vt-git>
+```
+
+Commits are drawn in `git log` order, children before their parents. When a source lists them otherwise (oldest first, or by date only), they are put in that order first, newest first among those that can come next. Parents that are not in the history are left out of the drawing.
+
+A commit links to its page: the `url` the source gives (`html_url`, `web_url`…), else `commit-url` with `{hash}` replaced. Links keep `http(s)` only.
 
 ## Graph
 
@@ -117,15 +146,16 @@ With `mode="edit"`, an editor holds the history and the graph is updated under i
 
 This table lists the attributes specific to `<vt-git>`. The shared attributes are described in [Common attributes](../common-attributes.md).
 
-| Attribute       | Type                     | Default    | Description                     |
-| --------------- | ------------------------ | ---------- | ------------------------------- |
-| `branch-filter` | boolean                  | preset     | Branch buttons with counts.     |
-| `branch`        | branch name              | all        | Branch shown at first.          |
-| `author`        | boolean                  | on         | Author column.                  |
-| `date`          | boolean                  | on         | Date column.                    |
-| `date-format`   | `relative` or `absolute` | `relative` | "3 days ago", or the full date. |
-| `hash-length`   | integer (4 to 64)        | `7`        | Characters of the hash shown.   |
-| `selected`      | hash or prefix           |            | Commit selected at first.       |
+| Attribute       | Type                     | Default    | Description                                                                                   |
+| --------------- | ------------------------ | ---------- | --------------------------------------------------------------------------------------------- |
+| `branch-filter` | boolean                  | preset     | Branch buttons with counts.                                                                   |
+| `branch`        | branch name              | all        | Branch shown at first.                                                                        |
+| `author`        | boolean                  | on         | Author column.                                                                                |
+| `date`          | boolean                  | on         | Date column.                                                                                  |
+| `date-format`   | `relative` or `absolute` | `relative` | "3 days ago", or the full date.                                                               |
+| `hash-length`   | integer (4 to 64)        | `7`        | Characters of the hash shown.                                                                 |
+| `selected`      | hash or prefix           |            | Commit selected at first.                                                                     |
+| `commit-url`    | string                   | none       | Address of a commit page with `{hash}`, such as `https://github.com/owner/repo/commit/{hash}` |
 
 ## Properties
 

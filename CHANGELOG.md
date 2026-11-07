@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `<vt-git>`: JSON from the GitHub API showed `[object Object]` as the author, and no date or message.
+- `<vt-faq>` could not be created at all: a field shadowed the read-only `Element.prefix`.
 - `<vt-http>`, `<vt-openapi>`: generated commands no longer pass on what a shell tool would act on. Invalid header names are left out, HTTPie headers starting with `=` or `@` are escaped (`x:=@/etc/passwd` and `x=@/etc/passwd` uploaded a local file of the person running the command), and a URL starting with a dash is not read as an option.
 - `<vt-table>`: rows copied as TSV and headers now get the same protection against spreadsheet formulas as CSV cells. Very deep arrays no longer crash the element, and `{constructor}` in a link template is empty.
 - `<vt-yaml>`: aliases that expand to too much content ("billion laughs") show an error instead of freezing the page. `vt-ready` now fires when js-yaml had to be loaded first, and `vt-error` when it cannot be loaded.
@@ -21,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- JSON as input for every element: a `data` property, `json` and `json-src` attributes with `json-path`, and `<script type="application/json" data-json>`. Elements whose content is not JSON turn a value into their format (code, Markdown, CSV, diff, terminal, logs, `.env`, hex, regex, XML, TOML, JWT, cron, certificates), and may set a few attributes from it; the page's own attributes always win. `Vitrine.render()` takes `data`.
+- `<vt-git>`: the answers of the GitHub (REST and GraphQL), GitLab and Bitbucket APIs, with branches and tags beside the commits; `git log` in its default format, with or without `--graph` and `--parents`; commits put in `git log` order when the source lists them otherwise; links to commit pages with `commit-url`.
+- `<vt-faq>`: questions and answers as an accordion, with a search, categories, links to a question and schema.org data.
+- `<vt-gallery>`: images as a grid, with a modal viewer that moves with the keyboard.
+- `<vt-stats>`: key figures with changes written in words and a small history read with the keyboard.
+- `<vt-roadmap>`: a public roadmap as columns, with progress, votes and tag filters.
+- `<vt-testimonials>`: testimonials as a grid, a list or a carousel that only moves when asked, with ratings and their average.
+- `<vt-countdown>`: a countdown to a date in a time zone, in the words of the reader's language.
 - `<vt-status>`: service status pages from JSON or an Atlassian Statuspage summary; overall state; components by group with uptime and a bar per day read with the keyboard; open incidents with their updates, scheduled maintenance and past incidents; `refresh` keeps the page up to date and keeps the last status when loading fails; `vt-status-change`.
 - `<vt-calendar>`: events from iCalendar or JSON as a month grid or an agenda; `RRULE`, `EXDATE` and `RECURRENCE-ID`, with wall-clock times kept across daylight saving; `timezone`; keyboard grid; Add to calendar writes an `.ics` file in which text cannot add properties; `vt-date-change` and `vt-event-select`.
 - `<vt-pricing>`: plans as cards; billing periods and currencies; prices per month and savings worked out; a table comparing the plans; `vt-pricing-change`, and a cancelable `vt-plan-select` for your own checkout.
