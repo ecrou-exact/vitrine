@@ -477,10 +477,16 @@ export class VtCalendar extends VtDataElement {
           'data-focus-key': `day-${day}`,
           'aria-selected': String(day === this.selectedDay),
           'aria-current': day === today ? 'date' : null,
-          'aria-label': `${this.dayName(day, 'full')}, ${count}`,
         },
       },
-      h('span', { class: 'calendar-number', text: String(fromDayNumber(day).day) }),
+      // The name comes from the content (the full date, then the events as shown), so
+      // everything visible in the cell is in its name.
+      h('span', {
+        class: 'calendar-number',
+        text: String(fromDayNumber(day).day),
+        attrs: { 'aria-hidden': 'true' },
+      }),
+      h('span', { class: 'sr-only', text: `${this.dayName(day, 'full')}, ${count}` }),
       events.length
         ? h(
             'div',
