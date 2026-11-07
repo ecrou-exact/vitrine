@@ -66,6 +66,17 @@ const MORE = {
     '[{"label":"Rename","shortcut":"F2","icon":"pencil"},{"label":"Share","items":["Link"]},"---",{"type":"radio","label":"Sort","items":[{"label":"Name","checked":true},"Date"]},{"type":"checkbox","label":"Wrap"},{"label":"Archived","disabled":true},{"label":"Delete","danger":true}]',
     { trigger: 'inline' },
   ],
+  'vt-upload': [
+    '',
+    {
+      required: '',
+      multiple: '',
+      accept: 'image/*,.pdf',
+      'max-size': '5MB',
+      'max-files': '3',
+      hint: 'Screenshots or a PDF.',
+    },
+  ],
   'vt-testimonials': [
     JSON.stringify([
       { quote: 'Great', author: 'Ada Lovelace', role: 'CTO', rating: 5, url: '/r' },

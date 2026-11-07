@@ -71,7 +71,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {

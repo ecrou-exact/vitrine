@@ -193,6 +193,13 @@ const MODES = [
       ]),
   },
   {
+    tag: 'vt-upload',
+    attrs: { multiple: '' },
+    wrap: (p) =>
+      JSON.stringify({ label: p, hint: p, accept: p, maxSize: p, uploadUrl: p, uploadField: p }),
+    data: true,
+  },
+  {
     tag: 'vt-search',
     attrs: { layout: 'inline', 'url-template': '/x/{id}' },
     wrap: (p) =>
