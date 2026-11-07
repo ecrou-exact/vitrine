@@ -312,7 +312,12 @@ export function parseValue(value, range) {
       return { start: null, end: null };
     }
   }
-  const [a, b] = text.split(/\s*[/,]\s*|\s+[–—-]\s+/);
+  // One character on each side of a dash, and the parts trimmed after: no pattern that could
+  // backtrack on long runs of spaces. A value is never longer than two dates.
+  const [a, b] = text
+    .slice(0, 100)
+    .split(/[/,]|\s[–—-]\s/)
+    .map((part) => part.trim());
   const start = parseIso(a);
   return order(start, range ? parseIso(b) : null);
 }
