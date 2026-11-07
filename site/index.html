@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Twenty-eight elements, view or edit</h2>
+            <h2 id="components-title">Thirty-four elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -505,6 +505,54 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
                 <template>{"currency":"EUR","plans":[{"id":"free","name":"Starter","price":0,"features":["3 projects"]},{"id":"pro","name":"Pro","highlight":true,"price":{"monthly":12,"yearly":120},"features":["Unlimited projects"]}]}</template>
               </vt-pricing>
               <a href="examples.html#pricing">Pricing examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-faq&gt;</h3>
+              <p>
+                Questions and answers as an accordion, with a search, categories and links to a question.
+              </p>
+              <vt-faq class="preview" lang-ui="en" json='[{"question":"Is there a free plan?","answer":"Yes. The **Starter** plan is free forever, with 3 projects.","category":"Billing"},{"question":"Can I change plans later?","answer":"At any time, from your settings.","category":"Billing"},{"question":"Where is my data stored?","answer":"In the European Union, encrypted at rest.","category":"Security","id":"data"}]'></vt-faq>
+              <a href="examples.html#faq">FAQ examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-gallery&gt;</h3>
+              <p>
+                Images as a grid, with a viewer that moves with the keyboard.
+              </p>
+              <vt-gallery class="preview" lang-ui="en" aspect="square" json='[{"src":"brand/social-preview.png","alt":"Vitrine brand asset 1","caption":"social-preview.png"},{"src":"brand/icon-512.png","alt":"Vitrine brand asset 2","caption":"icon-512.png"},{"src":"brand/logo-stacked.svg","alt":"Vitrine brand asset 3","caption":"logo-stacked.svg"},{"src":"brand/icon-accent.svg","alt":"Vitrine brand asset 4","caption":"icon-accent.svg"},{"src":"brand/logo-horizontal.svg","alt":"Vitrine brand asset 5","caption":"logo-horizontal.svg"},{"src":"brand/icon-paper.svg","alt":"Vitrine brand asset 6","caption":"icon-paper.svg"}]'></vt-gallery>
+              <a href="examples.html#gallery">Gallery examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-stats&gt;</h3>
+              <p>
+                Key figures with changes written in words and a small history.
+              </p>
+              <vt-stats class="preview" lang-ui="en" json='[{"label":"Visitors","value":48210,"previous":41200,"format":"compact","against":"vs last month","series":[31,35,33,38,41,39,44,48]},{"label":"Revenue","value":12840.5,"previous":13420,"format":"currency","currency":"EUR","series":[10,12,11,13.4,12.8]}]'></vt-stats>
+              <a href="examples.html#stats">Stats examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-roadmap&gt;</h3>
+              <p>
+                A public roadmap by status, with progress, votes and tag filters.
+              </p>
+              <vt-roadmap class="preview" lang-ui="en" layout="list" json='[{"title":"Dark mode for the editor","status":"done","tags":["editor"],"when":"October 2026"},{"title":"Offline sync","status":"in-progress","progress":60,"tags":["mobile"],"votes":128,"description":"Edit without a connection."},{"title":"Public API v2","status":"in-progress","progress":25,"tags":["api"],"when":"Q1 2027"},{"title":"SSO with SAML","status":"planned","tags":["security"],"votes":87}]'></vt-roadmap>
+              <a href="examples.html#roadmap">Roadmap examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-testimonials&gt;</h3>
+              <p>
+                Testimonials and reviews, with ratings and their average.
+              </p>
+              <vt-testimonials class="preview" lang-ui="en" layout="carousel" json='[{"quote":"We replaced three tools with this one. Setup took an afternoon.","author":"Ada Lovelace","role":"CTO","company":"Analytical Engines","rating":5},{"quote":"Support answered within the hour, every single time.","author":"Alan Turing","role":"Engineer","rating":4.5},{"quote":"Clean, fast, and it just works on every page we tried.","author":"Grace Hopper","company":"Compilers Inc.","rating":4}]'></vt-testimonials>
+              <a href="examples.html#testimonials">Testimonials examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-countdown&gt;</h3>
+              <p>
+                A countdown to a date in a time zone, in the words of the reader’s language.
+              </p>
+              <vt-countdown class="preview" lang-ui="en" json='{"to":"2027-01-01T00:00:00","timezone":"Europe/Paris","title":"Happy new year","description":"Midnight in Paris."}'></vt-countdown>
+              <a href="examples.html#countdown">Countdown examples</a>
             </article>
           </div>
         </div>

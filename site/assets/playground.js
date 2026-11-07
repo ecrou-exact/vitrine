@@ -48,6 +48,17 @@ const SAMPLES = {
     '[\n  {\n    "title": "Sprint planning",\n    "start": "2026-11-02T09:00:00",\n    "end": "2026-11-02T10:00:00",\n    "timezone": "Europe/Paris",\n    "rrule": "FREQ=WEEKLY;BYDAY=MO",\n    "location": "Room 3"\n  },\n  {\n    "title": "Product launch",\n    "start": "2026-11-12T14:00:00Z",\n    "end": "2026-11-12T15:30:00Z",\n    "description": "Live stream, then questions.",\n    "url": "https://example.com/launch",\n    "categories": [\n      "Launch",\n      "Public"\n    ]\n  },\n  {\n    "title": "Conference",\n    "start": "2026-11-18",\n    "end": "2026-11-21",\n    "location": "Lisbon"\n  },\n  {\n    "title": "Armistice Day",\n    "start": "2026-11-11"\n  },\n  {\n    "title": "Old meetup",\n    "start": "2026-11-05T18:00:00Z",\n    "cancelled": true\n  }\n]',
   pricing:
     '{\n  "currencies": [\n    "EUR",\n    "USD"\n  ],\n  "periods": [\n    {\n      "id": "monthly"\n    },\n    {\n      "id": "yearly",\n      "note": "2 months free"\n    }\n  ],\n  "plans": [\n    {\n      "id": "free",\n      "name": "Starter",\n      "description": "For side projects.",\n      "price": 0,\n      "cta": {\n        "label": "Start free",\n        "url": "#signup"\n      },\n      "features": [\n        "3 projects",\n        "Community support",\n        {\n          "text": "Custom domain",\n          "included": false\n        }\n      ]\n    },\n    {\n      "id": "pro",\n      "name": "Pro",\n      "badge": "Most popular",\n      "highlight": true,\n      "description": "For growing teams.",\n      "unit": "per seat",\n      "price": {\n        "monthly": {\n          "EUR": 12,\n          "USD": 14\n        },\n        "yearly": {\n          "EUR": 120,\n          "USD": 140\n        }\n      },\n      "cta": {\n        "label": "Try Pro",\n        "url": "#signup"\n      },\n      "features": [\n        "Unlimited projects",\n        "Email support",\n        "Custom domain"\n      ]\n    },\n    {\n      "id": "corp",\n      "name": "Enterprise",\n      "description": "For large companies.",\n      "price": "Contact us",\n      "cta": {\n        "label": "Talk to us",\n        "url": "mailto:sales@example.com"\n      },\n      "features": [\n        "SSO and audit logs",\n        "Dedicated support",\n        "Custom contract"\n      ]\n    }\n  ],\n  "compare": [\n    {\n      "group": "Usage",\n      "name": "Projects",\n      "values": {\n        "free": "3",\n        "pro": "Unlimited",\n        "corp": "Unlimited"\n      }\n    },\n    {\n      "name": "Custom domain",\n      "description": "Your own address",\n      "values": {\n        "pro": true,\n        "corp": true\n      }\n    },\n    {\n      "group": "Security",\n      "name": "SSO",\n      "values": {\n        "corp": true\n      }\n    }\n  ],\n  "note": "Prices exclude VAT."\n}',
+  faq: '[\n  {\n    "question": "Is there a free plan?",\n    "answer": "Yes. The **Starter** plan is free forever, with 3 projects.",\n    "category": "Billing"\n  },\n  {\n    "question": "Can I change plans later?",\n    "answer": "At any time, from your settings.",\n    "category": "Billing"\n  },\n  {\n    "question": "Where is my data stored?",\n    "answer": "In the European Union, encrypted at rest.",\n    "category": "Security",\n    "id": "data"\n  },\n  {\n    "question": "Do you have an API?",\n    "answer": "Yes, with JSON everywhere.",\n    "category": "Developers"\n  },\n  {\n    "question": "How do I export my data?",\n    "answer": "Settings → Export: a ZIP with JSON and CSV files.",\n    "category": "Security"\n  },\n  {\n    "question": "Do you offer discounts for schools?",\n    "answer": "Yes, 50% off.",\n    "category": "Billing"\n  }\n]',
+  gallery:
+    '[\n  {\n    "src": "brand/social-preview.png",\n    "alt": "Vitrine brand asset 1",\n    "caption": "social-preview.png"\n  },\n  {\n    "src": "brand/icon-512.png",\n    "alt": "Vitrine brand asset 2",\n    "caption": "icon-512.png"\n  },\n  {\n    "src": "brand/logo-stacked.svg",\n    "alt": "Vitrine brand asset 3",\n    "caption": "logo-stacked.svg"\n  },\n  {\n    "src": "brand/icon-accent.svg",\n    "alt": "Vitrine brand asset 4",\n    "caption": "icon-accent.svg"\n  },\n  {\n    "src": "brand/logo-horizontal.svg",\n    "alt": "Vitrine brand asset 5",\n    "caption": "logo-horizontal.svg"\n  },\n  {\n    "src": "brand/icon-paper.svg",\n    "alt": "Vitrine brand asset 6",\n    "caption": "icon-paper.svg"\n  }\n]',
+  stats:
+    '[\n  {\n    "label": "Visitors",\n    "value": 48210,\n    "previous": 41200,\n    "format": "compact",\n    "against": "vs last month",\n    "series": [\n      31,\n      35,\n      33,\n      38,\n      41,\n      39,\n      44,\n      48\n    ]\n  },\n  {\n    "label": "Revenue",\n    "value": 12840.5,\n    "previous": 13420,\n    "format": "currency",\n    "currency": "EUR",\n    "series": [\n      10,\n      12,\n      11,\n      13.4,\n      12.8\n    ]\n  },\n  {\n    "label": "Error rate",\n    "value": 0.42,\n    "previous": 0.61,\n    "format": "percent",\n    "good": "down",\n    "series": [\n      0.9,\n      0.8,\n      0.61,\n      0.5,\n      0.42\n    ]\n  },\n  {\n    "label": "Uptime",\n    "value": "99.98%",\n    "description": "Last 90 days"\n  }\n]',
+  roadmap:
+    '[\n  {\n    "title": "Dark mode for the editor",\n    "status": "done",\n    "tags": [\n      "editor"\n    ],\n    "when": "October 2026"\n  },\n  {\n    "title": "Offline sync",\n    "status": "in-progress",\n    "progress": 60,\n    "tags": [\n      "mobile"\n    ],\n    "votes": 128,\n    "description": "Edit without a connection."\n  },\n  {\n    "title": "Public API v2",\n    "status": "in-progress",\n    "progress": 25,\n    "tags": [\n      "api"\n    ],\n    "when": "Q1 2027"\n  },\n  {\n    "title": "SSO with SAML",\n    "status": "planned",\n    "tags": [\n      "security"\n    ],\n    "votes": 87\n  }\n]',
+  testimonials:
+    '[\n  {\n    "quote": "We replaced three tools with this one. Setup took an afternoon.",\n    "author": "Ada Lovelace",\n    "role": "CTO",\n    "company": "Analytical Engines",\n    "rating": 5\n  },\n  {\n    "quote": "Support answered within the hour, every single time.",\n    "author": "Alan Turing",\n    "role": "Engineer",\n    "rating": 4.5\n  },\n  {\n    "quote": "Clean, fast, and it just works on every page we tried.",\n    "author": "Grace Hopper",\n    "company": "Compilers Inc.",\n    "rating": 4\n  }\n]',
+  countdown:
+    '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
 };
 
@@ -359,6 +370,47 @@ const SCHEMA = {
       { name: 'link-target', type: 'select', options: ['', '_self', '_blank'] },
     ],
   },
+  faq: {
+    tag: 'vt-faq',
+    flags: ['filter', 'categories', 'single', 'markdown', 'links'],
+    fields: [{ name: 'open', type: 'text', placeholder: 'first' }],
+  },
+  gallery: {
+    tag: 'vt-gallery',
+    flags: ['viewer', 'captions'],
+    fields: [
+      { name: 'columns', type: 'number', placeholder: 'auto' },
+      { name: 'aspect', type: 'select', options: ['', 'square', 'photo', 'wide', 'natural'] },
+      { name: 'images', type: 'select', options: ['', 'allow', 'same-origin'] },
+    ],
+  },
+  stats: {
+    tag: 'vt-stats',
+    flags: ['trend', 'changes'],
+    fields: [{ name: 'columns', type: 'number', placeholder: 'auto' }],
+  },
+  roadmap: {
+    tag: 'vt-roadmap',
+    flags: ['tag-filter'],
+    fields: [{ name: 'layout', type: 'select', options: ['', 'board', 'list'] }],
+  },
+  testimonials: {
+    tag: 'vt-testimonials',
+    flags: ['summary'],
+    fields: [
+      { name: 'layout', type: 'select', options: ['', 'grid', 'list', 'carousel'] },
+      { name: 'interval', type: 'number', placeholder: '6' },
+    ],
+  },
+  countdown: {
+    tag: 'vt-countdown',
+    flags: [],
+    fields: [
+      { name: 'timezone', type: 'text', placeholder: 'Europe/Paris' },
+      { name: 'units', type: 'text', placeholder: 'days hours minutes seconds' },
+      { name: 'now', type: 'text', placeholder: '2026-11-07T12:00:00Z' },
+    ],
+  },
   table: {
     tag: 'vt-table',
     flags: [
@@ -586,6 +638,12 @@ function switchType(type) {
     status: 'status.json',
     calendar: 'events.json',
     pricing: 'pricing.json',
+    faq: 'faq.json',
+    gallery: 'gallery.json',
+    stats: 'stats.json',
+    roadmap: 'roadmap.json',
+    testimonials: 'testimonials.json',
+    countdown: 'countdown.json',
   }[type];
   buildControls();
   render();
