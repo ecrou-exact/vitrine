@@ -129,6 +129,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-stats>`        | `content`                                                                                |
 | `<vt-board>`        | `content`, `board`; `addTask()`, `updateTask()`, `moveTask()`, `removeTask()`            |
 | `<vt-field>`        | `value`                                                                                  |
+| `<vt-date-picker>`  | `value`, `startDate`, `endDate`                                                          |
+| `<vt-menu>`         | `content`                                                                                |
+| `<vt-upload>`       | `files`; `clear()`, `upload()`                                                           |
 | `<vt-search>`       | `content`                                                                                |
 | `<vt-testimonials>` | `content`                                                                                |
 | `<vt-countdown>`    | `content`                                                                                |
