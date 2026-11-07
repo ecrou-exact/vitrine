@@ -2574,180 +2574,18 @@ h3 {
 
 /* ---------- Search ---------- */
 
-.search-btn {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 8px;
-  height: var(--control);
-  margin-left: auto;
-  padding: 0 8px 0 12px;
-  border: 1px solid var(--site-border);
-  border-radius: var(--radius);
-  background: var(--site-surface);
-  color: var(--site-fg-muted);
-  font: 500 0.875rem/1 var(--font-body);
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition:
-    border-color var(--duration-fast) var(--easing),
-    color var(--duration-fast) var(--easing);
-}
-
-.search-btn:hover {
-  border-color: var(--site-accent);
-  color: var(--site-fg);
-}
-
-.search-btn svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.1;
-  stroke-linecap: round;
-}
-
-.search-btn .search-label {
-  min-width: 7ch;
-  text-align: left;
-}
-
-.search-btn kbd,
-.search-hint {
-  font: 500 0.6875rem/1 var(--font-display);
-}
-
-.search-btn kbd {
-  padding: 4px 6px;
-  border: 1px solid var(--site-border);
-  border-radius: 6px;
-  background: var(--site-surface-sunken);
-  color: var(--site-fg-muted);
-}
-
+/* The header search is a <vt-search>; it sits between the menu and the theme button. */
 .site-header .site-nav {
   margin-left: auto;
 }
 
-.site-header .search-btn + .theme-btn,
-.site-nav + .search-btn {
-  margin-left: 0;
-}
-
-@media (max-width: 1100px) {
-  .search-btn .search-label,
-  .search-btn kbd {
-    display: none;
-  }
-
-  .search-btn {
-    width: var(--control);
-    padding: 0;
-    justify-content: center;
-  }
-}
-
-.search-dialog {
-  width: min(640px, calc(100vw - 24px));
-  max-height: min(560px, calc(100svh - 120px));
-  margin: 12vh auto auto;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid var(--site-border);
-  border-radius: var(--radius-lg);
-  background: var(--site-surface);
-  color: var(--site-fg);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-}
-
-.search-dialog::backdrop {
-  background: color-mix(in srgb, var(--ink) 45%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.motion .search-dialog[open] {
-  animation: dialog-in 260ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes dialog-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-  }
-}
-
-.search-box {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  max-height: inherit;
-}
-
-.search-box input {
-  width: 100%;
-  height: 58px;
-  padding: 0 20px 0 52px;
-  border: 0;
-  border-bottom: 1px solid var(--site-border);
-  background: transparent
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M21 21l-4.3-4.3M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z'/%3E%3C/svg%3E")
-    20px 50% / 18px no-repeat;
-  color: var(--site-fg);
-  font: 400 1.0625rem/1 var(--font-body);
-}
-
-.search-box input:focus-visible {
-  outline: none;
-}
-
-.search-results {
-  margin: 0;
-  padding: 8px;
-  overflow-y: auto;
-  list-style: none;
-}
-
-.search-results a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  color: var(--site-fg);
-  text-decoration: none;
-}
-
-.search-results [aria-selected='true'] a {
-  background: var(--site-accent-soft);
-  box-shadow: inset 3px 0 0 var(--site-accent);
-}
-
-.search-title {
-  overflow: hidden;
-  font-weight: 500;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.search-where {
+.site-header .site-search {
   flex: none;
-  color: var(--site-fg-muted);
-  font: 500 0.75rem/1 var(--font-display);
+  margin-left: auto;
 }
 
-.search-empty {
-  padding: 24px 12px;
-  color: var(--site-fg-muted);
-  text-align: center;
-}
-
-.search-hint {
-  margin: 0;
-  padding: 10px 16px;
-  border-top: 1px solid var(--site-border);
-  color: var(--site-fg-muted);
+.site-nav + .site-search {
+  margin-left: 0;
 }
 
 /* ---------- Back to top ---------- */
@@ -2828,10 +2666,6 @@ h3 {
   background: inherit;
   -webkit-background-clip: text;
   background-clip: text;
-}
-
-.search-box input::-webkit-search-cancel-button {
-  -webkit-appearance: none;
 }
 
 /* ---------- Legal page ---------- */

@@ -53,8 +53,12 @@ const SAMPLES = {
     '[\n  {\n    "src": "brand/social-preview.png",\n    "alt": "Vitrine brand asset 1",\n    "caption": "social-preview.png"\n  },\n  {\n    "src": "brand/icon-512.png",\n    "alt": "Vitrine brand asset 2",\n    "caption": "icon-512.png"\n  },\n  {\n    "src": "brand/logo-stacked.svg",\n    "alt": "Vitrine brand asset 3",\n    "caption": "logo-stacked.svg"\n  },\n  {\n    "src": "brand/icon-accent.svg",\n    "alt": "Vitrine brand asset 4",\n    "caption": "icon-accent.svg"\n  },\n  {\n    "src": "brand/logo-horizontal.svg",\n    "alt": "Vitrine brand asset 5",\n    "caption": "logo-horizontal.svg"\n  },\n  {\n    "src": "brand/icon-paper.svg",\n    "alt": "Vitrine brand asset 6",\n    "caption": "icon-paper.svg"\n  }\n]',
   stats:
     '[\n  {\n    "label": "Visitors",\n    "value": 48210,\n    "previous": 41200,\n    "format": "compact",\n    "against": "vs last month",\n    "series": [\n      31,\n      35,\n      33,\n      38,\n      41,\n      39,\n      44,\n      48\n    ]\n  },\n  {\n    "label": "Revenue",\n    "value": 12840.5,\n    "previous": 13420,\n    "format": "currency",\n    "currency": "EUR",\n    "series": [\n      10,\n      12,\n      11,\n      13.4,\n      12.8\n    ]\n  },\n  {\n    "label": "Error rate",\n    "value": 0.42,\n    "previous": 0.61,\n    "format": "percent",\n    "good": "down",\n    "series": [\n      0.9,\n      0.8,\n      0.61,\n      0.5,\n      0.42\n    ]\n  },\n  {\n    "label": "Uptime",\n    "value": "99.98%",\n    "description": "Last 90 days"\n  }\n]',
-  roadmap:
-    '[\n  {\n    "title": "Dark mode for the editor",\n    "status": "done",\n    "tags": [\n      "editor"\n    ],\n    "when": "October 2026"\n  },\n  {\n    "title": "Offline sync",\n    "status": "in-progress",\n    "progress": 60,\n    "tags": [\n      "mobile"\n    ],\n    "votes": 128,\n    "description": "Edit without a connection."\n  },\n  {\n    "title": "Public API v2",\n    "status": "in-progress",\n    "progress": 25,\n    "tags": [\n      "api"\n    ],\n    "when": "Q1 2027"\n  },\n  {\n    "title": "SSO with SAML",\n    "status": "planned",\n    "tags": [\n      "security"\n    ],\n    "votes": 87\n  }\n]',
+  board:
+    '{\n  "columns": [\n    {\n      "id": "todo",\n      "title": "To do"\n    },\n    {\n      "id": "in-progress",\n      "title": "In progress",\n      "limit": 3\n    },\n    {\n      "id": "review",\n      "title": "Review"\n    },\n    {\n      "id": "done",\n      "title": "Done"\n    }\n  ],\n  "tasks": [\n    {\n      "id": "T-12",\n      "title": "Offline sync",\n      "column": "in-progress",\n      "priority": "high",\n      "labels": [\n        "mobile"\n      ],\n      "assignee": "Ada Lovelace",\n      "progress": 60,\n      "due": "2026-11-20",\n      "description": "Edit without a connection."\n    },\n    {\n      "id": "T-14",\n      "title": "Public API v2",\n      "column": "in-progress",\n      "priority": "medium",\n      "labels": [\n        "api"\n      ],\n      "assignee": "Alan Turing",\n      "progress": 25\n    },\n    {\n      "id": "T-15",\n      "title": "SSO with SAML",\n      "column": "todo",\n      "priority": "urgent",\n      "labels": [\n        "security"\n      ],\n      "due": "2026-11-12"\n    },\n    {\n      "id": "T-16",\n      "title": "Export to CSV",\n      "column": "todo",\n      "priority": "low",\n      "labels": [\n        "data"\n      ]\n    },\n    {\n      "id": "T-10",\n      "title": "Audit log page",\n      "column": "review",\n      "priority": "medium",\n      "labels": [\n        "security"\n      ],\n      "assignee": "Grace Hopper"\n    },\n    {\n      "id": "T-08",\n      "title": "Dark mode for the editor",\n      "column": "done",\n      "labels": [\n        "editor"\n      ],\n      "assignee": "Ada Lovelace"\n    }\n  ]\n}',
+  field:
+    '[\n  {\n    "group": "Front end",\n    "options": [\n      "HTML",\n      "CSS",\n      {\n        "value": "js",\n        "label": "JavaScript",\n        "description": "Browsers and Node.js"\n      }\n    ]\n  },\n  {\n    "group": "Back end",\n    "options": [\n      "Go",\n      "Python",\n      "Rust",\n      {\n        "value": "cobol",\n        "label": "COBOL",\n        "disabled": true\n      }\n    ]\n  }\n]',
+  search:
+    '[\n  {\n    "id": "getting-started",\n    "title": "Getting started",\n    "section": "Guides",\n    "content": "Install Vitrine from a CDN or npm and add your first element.",\n    "url": "docs.html?page=getting-started",\n    "featured": true\n  },\n  {\n    "id": "theming",\n    "title": "Theming",\n    "section": "Guides",\n    "content": "Colours, fonts and spacing with CSS custom properties, in light and dark.",\n    "url": "docs.html?page=theming",\n    "featured": true\n  },\n  {\n    "id": "security",\n    "title": "Security",\n    "section": "Guides",\n    "content": "Sanitized Markdown, safe links and Trusted Types.",\n    "url": "docs.html?page=security"\n  },\n  {\n    "id": "board",\n    "title": "<vt-board>",\n    "section": "Components",\n    "content": "A task board with drag and drop, a list and a table.",\n    "keywords": [\n      "kanban",\n      "tasks"\n    ],\n    "url": "docs.html?page=components/board"\n  },\n  {\n    "id": "field",\n    "title": "<vt-field>",\n    "section": "Components",\n    "content": "A form field with its label, hint, tip and lists.",\n    "keywords": [\n      "form",\n      "input",\n      "select"\n    ],\n    "url": "docs.html?page=components/field"\n  },\n  {\n    "id": "search",\n    "title": "<vt-search>",\n    "section": "Components",\n    "content": "Site search with a keyboard shortcut and results by id.",\n    "keywords": [\n      "find"\n    ],\n    "url": "docs.html?page=components/search"\n  }\n]',
   testimonials:
     '[\n  {\n    "quote": "We replaced three tools with this one. Setup took an afternoon.",\n    "author": "Ada Lovelace",\n    "role": "CTO",\n    "company": "Analytical Engines",\n    "rating": 5\n  },\n  {\n    "quote": "Support answered within the hour, every single time.",\n    "author": "Alan Turing",\n    "role": "Engineer",\n    "rating": 4.5\n  },\n  {\n    "quote": "Clean, fast, and it just works on every page we tried.",\n    "author": "Grace Hopper",\n    "company": "Compilers Inc.",\n    "rating": 4\n  }\n]',
   countdown:
@@ -389,10 +393,56 @@ const SCHEMA = {
     flags: ['trend', 'changes'],
     fields: [{ name: 'columns', type: 'number', placeholder: 'auto' }],
   },
-  roadmap: {
-    tag: 'vt-roadmap',
-    flags: ['tag-filter'],
-    fields: [{ name: 'layout', type: 'select', options: ['', 'board', 'list'] }],
+  board: {
+    tag: 'vt-board',
+    flags: ['filters'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'board', 'list', 'table'] },
+      { name: 'views', type: 'text', placeholder: 'board list table' },
+      { name: 'readonly', type: 'select', options: ['', 'readonly'] },
+      { name: 'persist', type: 'text', placeholder: 'my-board' },
+    ],
+  },
+  field: {
+    tag: 'vt-field',
+    flags: [],
+    fields: [
+      {
+        name: 'type',
+        type: 'select',
+        options: [
+          'select',
+          'multiselect',
+          'radio',
+          'checkboxes',
+          'text',
+          'email',
+          'password',
+          'number',
+          'range',
+          'date',
+          'textarea',
+          'checkbox',
+          'switch',
+        ],
+      },
+      { name: 'required', type: 'select', options: ['', 'required'] },
+      { name: 'hint', type: 'text', placeholder: 'Shown under the field' },
+      { name: 'tip', type: 'text', placeholder: 'Behind the ? button' },
+      { name: 'searchable', type: 'select', options: ['', 'searchable'] },
+      { name: 'max-selected', type: 'number', placeholder: '3' },
+      { name: 'placeholder', type: 'text', placeholder: 'Choose…' },
+    ],
+  },
+  search: {
+    tag: 'vt-search',
+    flags: ['recent', 'group'],
+    fields: [
+      { name: 'layout', type: 'select', options: ['', 'dialog', 'inline'] },
+      { name: 'shortcut', type: 'text', placeholder: 'mod+k /' },
+      { name: 'url-template', type: 'text', placeholder: 'docs.html?page={id}' },
+      { name: 'limit', type: 'number', placeholder: '20' },
+    ],
   },
   testimonials: {
     tag: 'vt-testimonials',
@@ -607,6 +657,8 @@ function switchType(type) {
       diff: { language: 'python' },
       chart: { type: 'line' },
       regex: { pattern: '(?<user>[\\w.]+)@(?<host>[\\w.-]+)' },
+      field: { type: 'multiselect', hint: 'Pick up to three.', tip: 'Used to suggest articles.' },
+      search: { layout: 'inline' },
     }[type] ?? {};
   state.content = SAMPLES[type];
   state.attrs.label = {
@@ -641,7 +693,9 @@ function switchType(type) {
     faq: 'faq.json',
     gallery: 'gallery.json',
     stats: 'stats.json',
-    roadmap: 'roadmap.json',
+    board: 'Sprint 42',
+    field: 'Topics',
+    search: 'Search the docs',
     testimonials: 'testimonials.json',
     countdown: 'countdown.json',
   }[type];
