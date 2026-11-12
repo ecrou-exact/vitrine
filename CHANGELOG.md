@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Docs: a sticky, independently scrollable table of contents beside the article, with current-section highlighting, direct heading links and browser history navigation. Every component page also has a closed-by-default live preview reused from the Examples page.
 - `<vt-date-picker>`: a date field for forms. Dates are typed in the order of the reader's language or chosen in a calendar that follows the date picker pattern of WAI-ARIA. `mode="range"` chooses a period, with a preview while its end is chosen and usual periods such as "Last 7 days". Days can be blocked (dates, periods, days of the week, `min`, `max`), the first day of the week follows the language, and the value is submitted in ISO 8601.
 - `<vt-menu>`: a menu of actions opened by a button, a "⋮" button or a right click on an element, or always shown. Items come from JSON or lines of text: actions, links, check boxes, radio groups, headings, separators, shortcuts, icons and submenus. It follows the menu button pattern of WAI-ARIA, stays inside the window, and `vt-select` can be canceled so a link is not followed.
 - `<vt-upload>`: a file field with a drop zone, paste, thumbnails of images and the reason of each file refused (`accept`, `max-size`, `max-files`). It is submitted with its form like `<input type="file">`. With `upload-url`, each file is sent as it is added, with progress, cancel and retry, and the form submits the id the server answered.
