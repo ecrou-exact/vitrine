@@ -4,6 +4,7 @@
  * self-hosted fonts. Run `npm run site`, then `node scripts/serve.js _site 4174`.
  */
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { Window } from 'happy-dom';
 
 const out = '_site';
 const FONTS = {
@@ -42,6 +43,7 @@ for (const [dir, files] of Object.entries(FONTS)) {
 const partials = {};
 for (const name of ['head', 'header', 'footer'])
   partials[name] = (await readFile(`site/partials/${name}.html`, 'utf8')).trimEnd();
+partials.previews = await componentPreviews();
 await rm(`${out}/partials`, { recursive: true, force: true });
 for (const file of (await readdir(out)).filter((f) => f.endsWith('.html'))) {
   let html = await readFile(`${out}/${file}`, 'utf8');
@@ -52,6 +54,37 @@ for (const file of (await readdir(out)).filter((f) => f.endsWith('.html'))) {
 }
 await writeFile(`${out}/assets/search-index.json`, JSON.stringify(await searchIndex()));
 console.log(`Website assembled in ${out}/`);
+
+/** Reuse the Examples page's real demos as inert, lazily mounted docs previews. */
+async function componentPreviews() {
+  const window = new Window({
+    settings: {
+      disableJavaScriptEvaluation: true,
+      disableJavaScriptFileLoading: true,
+      disableCSSFileLoading: true,
+    },
+  });
+  try {
+    const document = window.document;
+    document.write(await readFile('site/examples.html', 'utf8'));
+    const previews = [];
+    for (const file of (await readdir('docs/components')).filter((file) => file.endsWith('.md'))) {
+      const name = file.slice(0, -3);
+      const section = document.getElementById(name);
+      const source = section?.querySelector('.example > template');
+      if (!source?.content.querySelector(`vt-${name}`)) {
+        throw new Error(`Missing component preview in examples.html: ${name}`);
+      }
+      const template = source.cloneNode(true);
+      template.id = `doc-preview-${name}`;
+      template.dataset.title = source.parentElement.querySelector('h3')?.textContent ?? 'Result';
+      previews.push(template.outerHTML);
+    }
+    return previews.join('\n');
+  } finally {
+    await window.happyDOM.close();
+  }
+}
 
 /**
  * Search index for the <vt-search> of the site header: page titles and section headings

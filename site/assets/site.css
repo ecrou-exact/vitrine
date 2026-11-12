@@ -857,9 +857,132 @@ kbd {
   font-weight: 600;
 }
 
+.docs-content {
+  min-width: 0;
+}
+
 .docs-content vt-markdown {
   --vt-font-size-body: 1rem;
   max-width: 80ch;
+}
+
+.doc-preview {
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius);
+  background: var(--site-surface);
+}
+
+.doc-preview > summary {
+  padding: var(--space-4) var(--space-5);
+  color: var(--site-fg);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.doc-preview > summary:hover {
+  color: var(--site-accent-fg);
+}
+
+.doc-preview > summary span {
+  margin-left: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--vt-text-small);
+  color: var(--site-fg-muted);
+}
+
+.doc-preview .demo {
+  margin: 0 var(--space-4);
+  box-shadow: none;
+}
+
+.doc-preview .demo-canvas {
+  min-width: 0;
+  max-height: min(70dvh, 640px);
+  overflow: auto;
+  align-content: start;
+}
+
+.doc-preview-more {
+  margin: var(--space-4);
+  font-size: var(--vt-text-small);
+}
+
+.docs-toc {
+  display: none;
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  max-height: calc(100dvh - 104px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  border-left: 1px solid var(--site-border);
+  font-size: var(--vt-text-small);
+}
+
+.docs-toc .group {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-3);
+  color: var(--site-fg-muted);
+  font-weight: 600;
+}
+
+.docs-toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docs-toc a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-left: 2px solid transparent;
+  color: var(--site-fg-muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.docs-toc a:hover,
+.docs-toc a[aria-current='location'] {
+  background: var(--site-accent-soft);
+  color: var(--site-accent-fg);
+}
+
+.docs-toc a[aria-current='location'] {
+  border-left-color: var(--site-accent);
+}
+
+.docs-toc .toc-level-1 a {
+  padding-left: var(--space-5);
+}
+
+.docs-toc .toc-level-2 a {
+  padding-left: var(--space-6);
+}
+
+.docs-toc .toc-level-3 a {
+  padding-left: var(--space-7);
+}
+
+@media (min-width: 1200px) {
+  .docs {
+    max-width: 1440px;
+    grid-template-columns: 240px minmax(0, 1fr) 220px;
+    gap: var(--space-6);
+  }
+
+  .docs-content vt-markdown {
+    max-width: none;
+  }
+
+  .docs-content vt-markdown::part(toc) {
+    display: none;
+  }
+
+  .docs-toc:not([hidden]) {
+    display: block;
+  }
 }
 
 @media (max-width: 960px) {

@@ -166,6 +166,17 @@
         </ul>
       </nav>
       <div class="docs-content">
+        <details id="doc-preview" class="doc-preview" hidden>
+          <summary>Preview <span id="doc-preview-name"></span></summary>
+          <div class="demo">
+            <div class="demo-bar">
+              <span class="demo-dots" aria-hidden="true"></span>
+              <span id="doc-preview-title">Result</span>
+            </div>
+            <div id="doc-preview-canvas" class="demo-canvas"></div>
+          </div>
+          <p class="doc-preview-more"><a id="doc-preview-link" href="examples.html">See all examples</a></p>
+        </details>
         <vt-markdown
           id="doc"
           toc
@@ -175,8 +186,13 @@
           images="same-origin"
         ></vt-markdown>
       </div>
+      <nav id="doc-toc" class="docs-toc" aria-label="Table of contents" tabindex="0" hidden>
+        <p class="group">Table of contents</p>
+        <ol></ol>
+      </nav>
     </main>
 
+    <!-- @previews -->
     <!-- @footer -->
   </body>
 </html>
