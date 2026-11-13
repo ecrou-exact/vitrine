@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-csv.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-csv> (dist/esm/vt-csv.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-csv.js\"></script>\n */\nimport { VtCsv } from '../components/csv/vt-csv.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-csv')) customElements.define('vt-csv', VtCsv);\n\nexport { VtCsv };\nexport * from './api.js';\n"],
+  "mappings": ";;;kZAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,QAAQ,GAAG,eAAe,OAAO,SAAUC,CAAK",
+  "names": ["useAssetsFrom", "VtCsv"]
+}

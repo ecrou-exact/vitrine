@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-openapi.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-openapi> (dist/esm/vt-openapi.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-openapi.js\"></script>\n */\nimport { VtOpenapi } from '../components/openapi/vt-openapi.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-openapi')) customElements.define('vt-openapi', VtOpenapi);\n\nexport { VtOpenapi };\nexport * from './api.js';\n"],
+  "mappings": ";;;iVAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,YAAY,GAAG,eAAe,OAAO,aAAcC,CAAS",
+  "names": ["useAssetsFrom", "VtOpenapi"]
+}

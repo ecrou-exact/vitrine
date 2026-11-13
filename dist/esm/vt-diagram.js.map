@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-diagram.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-diagram> (dist/esm/vt-diagram.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-diagram.js\"></script>\n */\nimport { VtDiagram } from '../components/diagram/vt-diagram.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-diagram')) customElements.define('vt-diagram', VtDiagram);\n\nexport { VtDiagram };\nexport * from './api.js';\n"],
+  "mappings": ";;;ySAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,YAAY,GAAG,eAAe,OAAO,aAAcC,CAAS",
+  "names": ["useAssetsFrom", "VtDiagram"]
+}

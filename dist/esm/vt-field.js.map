@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-field.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-field> (dist/esm/vt-field.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-field.js\"></script>\n */\nimport { VtField } from '../components/field/vt-field.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-field')) customElements.define('vt-field', VtField);\n\nexport { VtField };\nexport * from './api.js';\n"],
+  "mappings": ";;;+WAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,UAAU,GAAG,eAAe,OAAO,WAAYC,CAAO",
+  "names": ["useAssetsFrom", "VtField"]
+}

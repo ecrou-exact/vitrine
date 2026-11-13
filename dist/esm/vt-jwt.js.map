@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-jwt.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-jwt> (dist/esm/vt-jwt.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-jwt.js\"></script>\n */\nimport { VtJwt } from '../components/jwt/vt-jwt.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-jwt')) customElements.define('vt-jwt', VtJwt);\n\nexport { VtJwt };\nexport * from './api.js';\n"],
+  "mappings": ";;;uZAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,QAAQ,GAAG,eAAe,OAAO,SAAUC,CAAK",
+  "names": ["useAssetsFrom", "VtJwt"]
+}

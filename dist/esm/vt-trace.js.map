@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-trace.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-trace> (dist/esm/vt-trace.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-trace.js\"></script>\n */\nimport { VtTrace } from '../components/trace/vt-trace.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-trace')) customElements.define('vt-trace', VtTrace);\n\nexport { VtTrace };\nexport * from './api.js';\n"],
+  "mappings": ";;;2QAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,UAAU,GAAG,eAAe,OAAO,WAAYC,CAAO",
+  "names": ["useAssetsFrom", "VtTrace"]
+}

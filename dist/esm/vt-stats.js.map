@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-stats.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-stats> (dist/esm/vt-stats.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-stats.js\"></script>\n */\nimport { VtStats } from '../components/stats/vt-stats.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-stats')) customElements.define('vt-stats', VtStats);\n\nexport { VtStats };\nexport * from './api.js';\n"],
+  "mappings": ";;;oXAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,UAAU,GAAG,eAAe,OAAO,WAAYC,CAAO",
+  "names": ["useAssetsFrom", "VtStats"]
+}
