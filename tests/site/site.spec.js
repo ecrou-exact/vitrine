@@ -134,14 +134,16 @@ test('docs table of contents stays beside the article and follows the current se
   await toc.getByRole('link', { name: 'Installation', exact: true }).click();
   await expect(active).toHaveAttribute('href', '#installation');
   await expect
-    .poll(async () => Math.round((await page.locator('#doc #installation').boundingBox()).y))
-    .toBe(104);
+    .poll(async () => Math.abs((await page.locator('#doc #installation').boundingBox()).y - 104))
+    // Below the fixed header. Scroll offsets are whole pixels in WebKit, title positions not.
+    .toBeLessThan(1);
   await expect(page).toHaveURL(/#installation$/);
   await page.reload();
   await expect(active).toHaveAttribute('href', '#installation');
   await expect
-    .poll(async () => Math.round((await page.locator('#doc #installation').boundingBox()).y))
-    .toBe(104);
+    .poll(async () => Math.abs((await page.locator('#doc #installation').boundingBox()).y - 104))
+    // Below the fixed header. Scroll offsets are whole pixels in WebKit, title positions not.
+    .toBeLessThan(1);
 
   await page.locator('.docs-nav a[data-page="security"]').click();
   await expect(toc.locator('a').first()).toHaveText('Security');
@@ -170,8 +172,9 @@ test('docs title links navigate to nested headings and support Back and Forward'
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
     await expect(active).toHaveAttribute('href', `#${id}`);
     await expect
-      .poll(async () => Math.round((await page.locator(`#doc #${id}`).boundingBox()).y))
-      .toBe(104);
+      .poll(async () => Math.abs((await page.locator(`#doc #${id}`).boundingBox()).y - 104))
+      // Below the fixed header. Scroll offsets are whole pixels in WebKit, title positions not.
+      .toBeLessThan(1);
   };
 
   await toc.getByRole('link', { name: 'CDN (ES module)', exact: true }).click();
