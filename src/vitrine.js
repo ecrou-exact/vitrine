@@ -46,6 +46,12 @@ import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
 import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
+import { VtDiagram } from './components/diagram/vt-diagram.js';
+import { VtMath } from './components/math/vt-math.js';
+import { VtNotebook } from './components/notebook/vt-notebook.js';
+import { VtTrace } from './components/trace/vt-trace.js';
+import { VtTestReport } from './components/test-report/vt-test-report.js';
+import { VtSql } from './components/sql/vt-sql.js';
 import { configure, getConfig } from './core/config.js';
 import { EVENTS } from './core/events.js';
 import { registerLocale } from './core/i18n.js';
@@ -92,6 +98,12 @@ export {
   VtUpload,
   VtTestimonials,
   VtCountdown,
+  VtSql,
+  VtTestReport,
+  VtTrace,
+  VtNotebook,
+  VtMath,
+  VtDiagram,
   configure,
   getConfig,
   EVENTS,
@@ -159,6 +171,12 @@ export const registry = new Map(
     ['vt-upload', VtUpload],
     ['vt-testimonials', VtTestimonials],
     ['vt-countdown', VtCountdown],
+    ['vt-sql', VtSql],
+    ['vt-test-report', VtTestReport],
+    ['vt-trace', VtTrace],
+    ['vt-notebook', VtNotebook],
+    ['vt-math', VtMath],
+    ['vt-diagram', VtDiagram],
   ]),
 );
 
@@ -203,6 +221,12 @@ const TYPES = /** @type {const} */ ({
   upload: 'vt-upload',
   testimonials: 'vt-testimonials',
   countdown: 'vt-countdown',
+  sql: 'vt-sql',
+  'test-report': 'vt-test-report',
+  trace: 'vt-trace',
+  notebook: 'vt-notebook',
+  math: 'vt-math',
+  diagram: 'vt-diagram',
 });
 
 /**

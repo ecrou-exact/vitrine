@@ -1,0 +1,157 @@
+/*
+ * SQL: each statement with its query, parameters, error and result table.
+ */
+.sql-body {
+  padding: 0;
+  background: var(--_surface);
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .sql-body,
+.vt[data-fullscreen] .sql-body {
+  overscroll-behavior: contain;
+}
+
+.sql-statement + .sql-statement {
+  border-top: 1px solid var(--_border);
+}
+
+.sql-query {
+  overflow-x: auto;
+  background: var(--_code-bg);
+}
+
+.sql-query .code {
+  padding-inline: var(--_space-4);
+}
+
+.sql-query .line .gutter {
+  margin-inline-start: calc(-1 * var(--_space-2));
+}
+
+.sql-params-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-2) var(--_space-3);
+  padding: var(--_space-2) var(--_space-4);
+  border-top: 1px solid var(--_border);
+  font: 400 var(--_font-size-ui) / 1.5 var(--_font-ui);
+}
+
+.sql-label {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sql-params {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+}
+
+.sql-params dt {
+  color: var(--_syntax-attr);
+  font-family: var(--_font-mono);
+}
+
+.sql-params dd {
+  margin: 0 0 0 calc(-1 * var(--_space-2));
+}
+
+.sql-params dd::before {
+  content: '= ';
+  color: var(--_fg-muted);
+}
+
+.sql-params code {
+  color: var(--_syntax-string);
+  font-family: var(--_font-mono);
+}
+
+.sql-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  padding: var(--_space-3) var(--_space-4);
+  border-top: 1px solid var(--_border);
+  background: color-mix(in srgb, var(--_danger) 8%, transparent);
+  color: var(--_danger);
+}
+
+.sql-error .icon {
+  flex: none;
+  margin-top: 2px;
+}
+
+.sql-error pre {
+  margin: 0;
+  color: var(--_fg);
+  font: 400 var(--_font-size) / var(--_line-height) var(--_font-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sql-result {
+  border-top: 1px solid var(--_border);
+}
+
+.sql-summary,
+.sql-more-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-3);
+  min-height: 36px;
+  padding: var(--_space-1) var(--_space-4);
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.sql-summary .spacer {
+  flex: 1 1 auto;
+}
+
+.sql-summary + .sql-table,
+.sql-summary + div > .sql-table {
+  border-top: 1px solid var(--_border);
+}
+
+.sql-table {
+  overflow: auto;
+  max-height: 420px;
+}
+
+.sql-table:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.sql-table .grid td {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.grid .sql-null {
+  color: var(--_fg-muted);
+  font-style: italic;
+}
+
+.sql-more-bar {
+  border-top: 1px solid var(--_border);
+}
+
+.sql-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}
+
+/* With a height limit on the element, the element scrolls, not each table. */
+:host([max-height]) .sql-table,
+.vt[data-fullscreen] .sql-table {
+  max-height: none;
+}

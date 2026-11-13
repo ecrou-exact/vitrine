@@ -39,7 +39,13 @@
  *   | keyof typeof import('../components/search/strings.js').en
  *   | keyof typeof import('../components/date-picker/strings.js').en
  *   | keyof typeof import('../components/menu/strings.js').en
- *   | keyof typeof import('../components/upload/strings.js').en} StringKey
+ *   | keyof typeof import('../components/upload/strings.js').en
+ *   | keyof typeof import('../components/sql/strings.js').en
+ *   | keyof typeof import('../components/test-report/strings.js').en
+ *   | keyof typeof import('../components/trace/strings.js').en
+ *   | keyof typeof import('../components/notebook/strings.js').en
+ *   | keyof typeof import('../components/math/strings.js').en
+ *   | keyof typeof import('../components/diagram/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 
