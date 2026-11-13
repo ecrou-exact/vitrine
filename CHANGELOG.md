@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-13
+
 ### Fixed
 
 - `package.json` declared no side effects, so a bundler could drop `import 'vitrine/code'`, which defines the element. Every file of `dist/` is now marked as having side effects.

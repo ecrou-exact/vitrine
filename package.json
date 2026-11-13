@@ -1,6 +1,6 @@
 {
   "name": "vitrine",
-  "version": "0.0.0",
+  "version": "0.14.0",
   "private": true,
   "description": "Framework-free web components to display code, Markdown and JSON on any website.",
   "license": "MIT",
