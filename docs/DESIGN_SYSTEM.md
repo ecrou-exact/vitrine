@@ -196,7 +196,7 @@ Visible on every interactive element, keyboard only (`:focus-visible`).
 
 ## 6. Component anatomy
 
-All three components share the same frame — it mirrors the logo: **a window with a title bar**.
+Every component shares the same frame — it mirrors the logo: **a window with a title bar**.
 
 ```
 ┌─────────────────────────────────────────────────────┐
