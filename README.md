@@ -157,7 +157,17 @@
 
 ## Quick start
 
-### CDN (classic script)
+### Only the elements you use (loader)
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"></script>
+
+<vt-sql dialect="postgresql">SELECT * FROM users;</vt-sql>
+```
+
+A 1.2 KB script finds the elements of the page and loads only their modules. The [Integrations page](https://ecrou-exact.github.io/vitrine/integrations.html#pick) tells what a set of elements weighs.
+
+### Every element (classic script)
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"
@@ -170,6 +180,19 @@ def hello(name):
 ```
 
 The exact `integrity` value of each release is published in its [release notes](https://github.com/ecrou-exact/vitrine/releases).
+
+### npm and bundlers
+
+```bash
+npm install github:ecrou-exact/vitrine#vX.Y.Z   # release tags hold dist/
+```
+
+```js
+import 'vitrine/code'; // defines <vt-code>: bundlers keep only what you import
+import 'vitrine/sql';
+```
+
+Plugins for [markdown-it and remark](docs/frameworks.md#markdown-pipelines) turn fenced code blocks into elements: a `sql` block becomes `<vt-sql>`, a `mermaid` block `<vt-diagram>`.
 
 ### ES module
 

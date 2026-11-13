@@ -123,6 +123,10 @@ DOMPurify returns its input unchanged when it considers the environment unsuppor
 
 `vt-tag-create` lets the page refuse a tag before it is added, but validation in the browser is never a substitute for validating the submitted value on the server.
 
+## The loader
+
+`dist/vitrine-loader.js` only imports the modules of Vitrine's own elements, from the `esm/` folder next to it (or `data-base`): a `vt-*` name that is not one of them is never turned into a URL. `data-config` is read as JSON and only handed to `configure()`, which checks every option. It needs no `unsafe-*` keyword; `script-src` must allow the origin of `dist/`, as for the other files.
+
 ## Loading content with `src`
 
 - Only `http:` and `https:` URLs. Others show "URL blocked: only http(s) URLs can be loaded."

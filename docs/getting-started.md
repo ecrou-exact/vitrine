@@ -10,13 +10,44 @@ The `dist/` folder contains:
 
 | File                       | Format         | Behavior                                                                                                                                                                                                                                                            |
 | -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dist/vitrine-loader.js`   | Classic script | Loads only the elements a page uses, from `dist/esm/`. See [Loader](#loader-only-the-elements-a-page-uses).                                                                                                                                                         |
 | `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the forty-five elements automatically and exposes a global `Vitrine` object.                                                                                                                                                   |
 | `dist/vitrine.esm.js`      | ES module      | Every component in one file. Defines nothing by itself: import `defineAll()` and call it.                                                                                                                                                                           |
 | `dist/esm/vt-<name>.js`    | ES modules     | One module per component, which defines its element when imported. Code shared between components is in `dist/esm/chunks/`. See [Per-component modules](#per-component-modules).                                                                                    |
 | `dist/esm/vitrine.js`      | ES module      | Every component, built from the same shared chunks as the per-component modules. Call `defineAll()`.                                                                                                                                                                |
+| `dist/esm/api.js`          | ES module      | `configure`, `registerLocale`, `registerTheme`… without any element, sharing the configuration of the modules.                                                                                                                                                      |
+| `dist/integrations/*.js`   | ES modules     | Plugins for [markdown-it and remark](frameworks.md#markdown-pipelines): fenced code blocks become elements.                                                                                                                                                         |
 | `dist/languages/*.js`      | ES modules     | Syntax highlighting languages loaded on demand (see [Languages](#syntax-highlighting-languages)).                                                                                                                                                                   |
 | `dist/syntax-themes/*.css` | CSS            | Syntax themes loaded on demand, and `index.json` listing them (see [Syntax themes](theming.md#syntax-themes)).                                                                                                                                                      |
 | `dist/vendor/*.js`         | ES modules     | Libraries loaded on demand: `echarts.js` (Apache ECharts) by `<vt-chart>`, `yaml.js` (js-yaml) by `<vt-openapi>` and `<vt-yaml>`, `temml.js` (Temml) by `<vt-math>`, and `mermaid.js` (Mermaid, with one file per type of diagram in `mermaid/`) by `<vt-diagram>`. |
+
+### Loader: only the elements a page uses
+
+One small script (about 1.2 KB gzipped) finds the `vt-*` elements of the page, now and whenever some are added later, and imports only their modules from `dist/esm/`. Code shared by several elements is downloaded once:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"
+        data-config='{"theme": "auto", "lang": "fr"}'></script>
+
+<vt-sql dialect="postgresql">SELECT * FROM users;</vt-sql>
+```
+
+A page with `<vt-code>` and `<vt-markdown>` downloads about 90 KB instead of the 380 KB of `vitrine.min.js`. The [Integrations page](https://ecrou-exact.github.io/vitrine/integrations.html#pick) of the website gives the size for any set of elements. When a site uses most elements, `vitrine.min.js` is smaller in all.
+
+| Attribute     | Description                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------------- |
+| `data-config` | Options of [`configure()`](configuration.md#configureoptions) as JSON, applied before any element is drawn |
+| `data-lazy`   | An element is loaded when it comes near the screen (400 px before)                                         |
+| `data-base`   | URL of the `dist/` folder, when the loader is not served from it                                           |
+
+Only the names of Vitrine's elements are ever turned into URLs: `<vt-anything>` is ignored. It works under a strict Content Security Policy with Trusted Types. From JavaScript, `window.VitrineLoader` has `load(tag)` (resolves with the class once the element is defined), `configure(options)` and `ready()` (resolves once every element requested so far is defined):
+
+```js
+await VitrineLoader.load('vt-diagram');
+VitrineLoader.configure({ theme: 'dim' });
+```
+
+Do not load the loader and `vitrine.min.js` on the same page.
 
 ### CDN (classic script)
 
@@ -75,6 +106,7 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 | ----------------------------- | ----------- |
 | `dist/vitrine.min.js`         | 379.2 KB    |
 | `dist/vitrine.esm.js`         | 379.1 KB    |
+| `dist/vitrine-loader.js`      | 1.2 KB      |
 | `dist/esm/vt-code.js`         | 60.0 KB     |
 | `dist/esm/vt-markdown.js`     | 79.4 KB     |
 | `dist/esm/vt-json.js`         | 64.1 KB     |
@@ -121,7 +153,7 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 | `dist/esm/vt-math.js`         | 61.0 KB     |
 | `dist/esm/vt-diagram.js`      | 59.6 KB     |
 
-These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (390 KB for the full bundles; 62, 80, 66, 63, 34, 68, 64, 64, 69, 66, 62, 64, 66, 64, 66, 66, 58, 66, 69, 67, 66, 67, 68, 67, 74, 64, 69, 63, 61, 62, 62, 62, 62, 66, 71, 64, 66, 64, 68, 70, 70, 66, 86, 63 and 62 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
+These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (390 KB for the full bundles; 2 KB for the loader; 62, 80, 66, 63, 34, 68, 64, 64, 69, 66, 62, 64, 66, 64, 66, 66, 58, 66, 69, 67, 66, 67, 68, 67, 74, 64, 69, 63, 61, 62, 62, 62, 62, 66, 71, 64, 66, 64, 68, 70, 70, 66, 86, 63 and 62 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
 
 ### Git submodule
 

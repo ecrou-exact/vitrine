@@ -23,6 +23,9 @@
       </header>
 
       <nav class="jump subnav" aria-label="Integrations">
+        <a href="#pick">Pick your elements</a>
+        <a href="#bundlers">npm and bundlers</a>
+        <a href="#markdown">Markdown</a>
         <a href="#live">Live binding</a>
         <a href="#html">Plain HTML</a>
         <a href="#modules">ES modules</a>
@@ -34,6 +37,82 @@
         <a href="#backend">Backend suggestions</a>
         <a href="#server">PHP and Django</a>
       </nav>
+
+      <section class="integration" id="pick" aria-labelledby="pick-title">
+        <h2 id="pick-title">Pick your elements</h2>
+        <p>
+          Check the elements your pages use: you get the tags to copy and what a visitor
+          downloads, gzipped. Code shared by several elements is counted once.
+        </p>
+        <fieldset class="picker">
+          <legend>Elements</legend>
+          <div class="picker-actions">
+            <button type="button" class="btn btn-secondary" id="picker-none">Clear</button>
+            <button type="button" class="btn btn-secondary" id="picker-all">Select all</button>
+          </div>
+          <div class="picker-list" id="picker-list"></div>
+        </fieldset>
+        <p class="picker-total" id="picker-total" role="status"></p>
+        <vt-code
+          class="snippet"
+          id="picker-loader"
+          language="html"
+          variant="full"
+          label="With the loader (recommended)"
+        ></vt-code>
+        <p>
+          The loader finds the elements of each page, now and when some are added later, and
+          imports only their modules. <code>data-config</code> sets the options before the first
+          element is drawn, and <code>data-lazy</code> waits until an element comes near the screen.
+        </p>
+        <vt-code
+          class="snippet"
+          id="picker-modules"
+          language="html"
+          variant="full"
+          label="With one module per element"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="bundlers" aria-labelledby="bundlers-title">
+        <h2 id="bundlers-title">npm and bundlers</h2>
+        <p>
+          Install a release from GitHub (its tag holds the built files). Each element is an entry
+          of the package: Vite, webpack, esbuild or Rollup keep only the ones you import.
+        </p>
+        <vt-code
+          class="snippet"
+          id="picker-bundler"
+          language="js"
+          variant="full"
+          label="main.js"
+        ></vt-code>
+      </section>
+
+      <section class="integration" id="markdown" aria-labelledby="markdown-title">
+        <h2 id="markdown-title">Markdown pipelines</h2>
+        <p>
+          Fenced code blocks become elements: <code>```sql</code> a <code>&lt;vt-sql&gt;</code>,
+          <code>```mermaid</code> a <code>&lt;vt-diagram&gt;</code>, <code>```math</code> a
+          <code>&lt;vt-math&gt;</code>, any other language a <code>&lt;vt-code&gt;</code>. The code is
+          escaped, never parsed as markup. Add the loader to the pages and each one loads what its
+          Markdown uses.
+        </p>
+        <vt-code
+          class="snippet"
+          data-snippet="markdownIt"
+          language="js"
+          variant="full"
+          label="markdown-it (VitePress, Eleventy, Docsify…)"
+        ></vt-code>
+        <vt-code
+          class="snippet"
+          data-snippet="remark"
+          language="js"
+          variant="full"
+          label="remark (unified, MDX, Astro, Docusaurus)"
+        ></vt-code>
+      </section>
 
       <section class="integration" id="live" aria-labelledby="live-title">
         <h2 id="live-title">Live binding</h2>
