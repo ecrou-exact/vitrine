@@ -104,8 +104,14 @@ doc.addEventListener('vt-ready', () => {
   activeLink = null;
   toc.scrollTop = 0;
   if (pendingHash !== null) {
-    revealSection(pendingHash);
+    const hash = pendingHash;
     pendingHash = null;
+    revealSection(hash);
+    // Text above the title can wrap differently once the web fonts have loaded: place the
+    // title again then, unless the reader went elsewhere meanwhile.
+    document.fonts?.ready.then(() => {
+      if (hash && location.hash === hash) revealSection(hash);
+    });
   }
   scheduleCurrentSection();
 });
