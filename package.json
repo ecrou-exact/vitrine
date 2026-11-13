@@ -18,7 +18,14 @@
   "module": "./dist/vitrine.esm.js",
   "exports": {
     ".": "./dist/vitrine.esm.js",
-    "./custom-elements.json": "./dist/custom-elements.json"
+    "./all": "./dist/esm/vitrine.js",
+    "./api": "./dist/esm/api.js",
+    "./loader": "./dist/vitrine-loader.js",
+    "./vitrine.css": "./dist/vitrine.css",
+    "./custom-elements.json": "./dist/custom-elements.json",
+    "./markdown-it": "./dist/integrations/markdown-it.js",
+    "./remark": "./dist/integrations/remark.js",
+    "./*": "./dist/esm/vt-*.js"
   },
   "customElements": "dist/custom-elements.json",
   "files": [
@@ -27,7 +34,10 @@
     "LICENSE",
     "THIRD_PARTY_NOTICES.md"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/**/*.js",
+    "*.css"
+  ],
   "engines": {
     "node": ">=20"
   },

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- The loader under the strictest policy Vitrine supports. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types vitrine"
+    />
+    <title>Vitrine test page (loader)</title>
+    <link rel="stylesheet" href="fixture.css" />
+    <script src="../../../dist/vitrine-loader.js" data-config='{"lang": "fr"}'></script>
+  </head>
+  <body>
+    <main id="root">
+      <vt-sql id="sql" variant="full">SELECT 1;</vt-sql>
+      <vt-nope id="nope"></vt-nope>
+    </main>
+  </body>
+</html>

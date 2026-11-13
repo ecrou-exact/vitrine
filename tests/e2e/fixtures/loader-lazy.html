@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types vitrine"
+    />
+    <title>Vitrine test page (lazy loader)</title>
+    <link rel="stylesheet" href="fixture.css" />
+    <script src="../../../dist/vitrine-loader.js" data-lazy></script>
+  </head>
+  <body>
+    <main id="root">
+      <vt-code id="near" language="js">const a = 1;</vt-code>
+      <div class="spacer"></div>
+      <vt-json id="far">{"far": true}</vt-json>
+    </main>
+  </body>
+</html>
