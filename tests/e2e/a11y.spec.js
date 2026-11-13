@@ -100,6 +100,53 @@ const MORE = {
     '{"currencies":["EUR","USD"],"plans":[{"id":"a","name":"A","price":{"monthly":{"EUR":1,"USD":2},"yearly":{"EUR":10,"USD":20}},"features":["One",{"text":"Two","included":false}]},{"id":"b","name":"B","badge":"Best","highlight":true,"price":"Ask","cta":{"label":"Go","url":"/go"}}],"compare":[{"group":"G","name":"Row","description":"Note","values":{"a":true,"b":"Yes"}}]}',
     {},
   ],
+  'vt-sql': [
+    'app=# SELECT id, name FROM users;\n id | name\n----+------\n  1 | Ada\n  2 |\n(2 rows)\n\napp=# SELECT * FROM nope;\nERROR:  relation "nope" does not exist',
+    { dialect: 'postgresql' },
+  ],
+  'vt-test-report': [
+    '<testsuites><testsuite name="api"><testcase name="ok" time="0.1"/><testcase name="bad" time="0.2"><failure message="boom">trace</failure></testcase><testcase name="later"><skipped/></testcase></testsuite></testsuites>',
+    {},
+  ],
+  'vt-trace': [
+    JSON.stringify([
+      { id: 'a', name: 'GET /', service: 'web', start: 0, duration: 100 },
+      {
+        id: 'b',
+        parent: 'a',
+        name: 'query',
+        service: 'db',
+        start: 10,
+        duration: 50,
+        error: 'slow',
+      },
+    ]),
+    { selected: 'b' },
+  ],
+  'vt-notebook': [
+    JSON.stringify({
+      cells: [
+        { cell_type: 'markdown', source: '# Title\n\nSome *text*.' },
+        {
+          cell_type: 'code',
+          execution_count: 1,
+          source: 'print(1)\n1 + 1',
+          outputs: [
+            { output_type: 'stream', name: 'stdout', text: '1\n' },
+            { output_type: 'execute_result', execution_count: 1, data: { 'text/plain': '2' } },
+            { output_type: 'display_data', data: { 'text/html': '<table><tr><th>a</th></tr><tr><td>1</td></tr></table>' } }, // prettier-ignore
+            {
+              output_type: 'error',
+              ename: 'E',
+              evalue: 'v',
+              traceback: ['\u001b[31mE\u001b[0m: v'],
+            },
+          ],
+        },
+      ],
+    }),
+    {},
+  ],
   'vt-csv': ['name,score\nAda,98\nAlan,95', {}],
   'vt-tags': ['{"value":["design"],"options":["design","research","a11y"]}', { mode: 'edit' }],
   'vt-diff': ['--- a\n+++ b\n@@ -1,2 +1,2 @@\n same\n-old line\n+new line', {}],

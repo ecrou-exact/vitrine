@@ -1,0 +1,86 @@
+// @ts-check
+/**
+ * Interface strings of <vt-trace>, registered by its module with `defineStrings()`
+ * so other modules do not carry them.
+ *
+ * @module components/trace/strings
+ */
+
+export const en = Object.freeze({
+  traceSpans: '{count} spans',
+  traceSpan: '1 span',
+  traceServices: 'Services',
+  traceErrors: '{count} errors',
+  traceError: '1 error',
+  traceId: 'Trace ID',
+  traceChoose: 'Trace',
+  traceStarted: 'Started',
+  traceDuration: 'Duration',
+  traceWaterfall: 'Spans of the trace',
+  traceDetails: 'Span details',
+  traceName: 'Name',
+  traceService: 'Service',
+  traceKind: 'Kind',
+  traceStart: 'Start',
+  traceStatus: 'Status',
+  traceSpanId: 'Span ID',
+  traceParentId: 'Parent ID',
+  traceAttributes: 'Attributes',
+  traceEvents: 'Events',
+  traceLinks: 'Links',
+  traceOrphan: 'Its parent span is not in this trace.',
+  traceStatusError: 'Error',
+  traceStatusOk: 'OK',
+  traceStatusUnset: 'Unset',
+  traceAt: 'at {time}',
+  traceCopyId: 'Copy trace ID',
+  traceCopyJson: 'Copy spans as JSON',
+  traceClose: 'Close details',
+  traceNoMatch: 'No spans match.',
+  traceShowMore: 'Show {count} more spans',
+  traceInvalidEmpty: 'No trace.',
+  traceInvalidFormat:
+    'This is not a trace: expected OpenTelemetry (OTLP JSON), Jaeger, Zipkin or a list of spans.',
+  traceInvalidNoSpans: 'This trace has no spans with a start time.',
+  traceInvalid: 'The trace could not be read: {message}',
+});
+
+/** @type {Partial<Record<keyof typeof en, string>>} */
+export const fr = {
+  traceSpans: '{count} spans',
+  traceSpan: '1 span',
+  traceServices: 'Services',
+  traceErrors: '{count} erreurs',
+  traceError: '1 erreur',
+  traceId: 'ID de la trace',
+  traceChoose: 'Trace',
+  traceStarted: 'Début',
+  traceDuration: 'Durée',
+  traceWaterfall: 'Spans de la trace',
+  traceDetails: 'Détails du span',
+  traceName: 'Nom',
+  traceService: 'Service',
+  traceKind: 'Type',
+  traceStart: 'Début',
+  traceStatus: 'État',
+  traceSpanId: 'ID du span',
+  traceParentId: 'ID du parent',
+  traceAttributes: 'Attributs',
+  traceEvents: 'Événements',
+  traceLinks: 'Liens',
+  traceOrphan: 'Son span parent n’est pas dans cette trace.',
+  traceStatusError: 'Erreur',
+  traceStatusOk: 'OK',
+  traceStatusUnset: 'Non défini',
+  traceAt: 'à {time}',
+  traceCopyId: 'Copier l’ID de la trace',
+  traceCopyJson: 'Copier les spans en JSON',
+  traceClose: 'Fermer les détails',
+  traceNoMatch: 'Aucun span ne correspond.',
+  traceShowMore: 'Afficher {count} spans de plus',
+  traceInvalidEmpty: 'Aucune trace.',
+  traceInvalidFormat:
+    'Ce n’est pas une trace : OpenTelemetry (OTLP JSON), Jaeger, Zipkin ou une liste de spans attendu.',
+  traceInvalidNoSpans: 'Cette trace n’a aucun span avec une heure de début.',
+  traceInvalid: 'La trace n’a pas pu être lue : {message}',
+};

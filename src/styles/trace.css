@@ -1,0 +1,427 @@
+/*
+ * Trace: summary and services, the waterfall of spans with a time ruler, and the
+ * details of the selected span. Each service has a color, always next to its name.
+ */
+.tc-body {
+  display: grid;
+  align-content: start;
+  padding: 0;
+  background: var(--_surface);
+  font: 400 var(--_font-size-ui) / 1.5 var(--_font-ui);
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .tc-body,
+.vt[data-fullscreen] .tc-body {
+  overscroll-behavior: contain;
+}
+
+.svc-0 {
+  --_svc: var(--_accent);
+}
+
+.svc-1 {
+  --_svc: var(--_info);
+}
+
+.svc-2 {
+  --_svc: var(--_warning);
+}
+
+.svc-3 {
+  --_svc: var(--_syntax-keyword);
+}
+
+.svc-4 {
+  --_svc: var(--_syntax-type);
+}
+
+.svc-5 {
+  --_svc: var(--_syntax-string);
+}
+
+.svc-6 {
+  --_svc: var(--_syntax-number);
+}
+
+.svc-7 {
+  --_svc: var(--_fg-muted);
+}
+
+.tc-swatch {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--_svc, var(--_accent));
+}
+
+/* ---------- Summary ---------- */
+
+.tc-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2) var(--_space-4);
+  padding: var(--_space-3) var(--_space-4);
+  border-bottom: 1px solid var(--_border);
+}
+
+.tc-fact {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--_space-2);
+  color: var(--_fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-key {
+  color: var(--_fg-muted);
+}
+
+.tc-id {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.tc-errors {
+  align-items: center;
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.tc-errors .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.tc-select {
+  max-width: 28ch;
+  height: 28px;
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: inherit;
+}
+
+.tc-select:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.tc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-4);
+  margin: 0;
+  padding: var(--_space-2) var(--_space-4);
+  border-bottom: 1px solid var(--_border);
+  color: var(--_fg-muted);
+  list-style: none;
+}
+
+.tc-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------- Waterfall ---------- */
+
+.tc-waterfall {
+  --_label: minmax(160px, 36%);
+  overflow-x: auto;
+}
+
+.tc-ruler,
+.tc-row {
+  display: grid;
+  grid-template-columns: var(--_label) minmax(240px, 1fr);
+  min-width: 520px;
+}
+
+.tc-ruler {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 28px;
+  border-bottom: 1px solid var(--_border);
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-ruler-lane,
+.tc-lane {
+  position: relative;
+  margin-inline-end: var(--_space-5);
+}
+
+.tc-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding-inline-start: 4px;
+  border-inline-start: 1px solid var(--_border);
+  white-space: nowrap;
+}
+
+.tc-rows {
+  display: grid;
+}
+
+.tc-row {
+  min-height: 30px;
+  border-bottom: 1px solid color-mix(in srgb, var(--_border) 60%, transparent);
+  cursor: pointer;
+}
+
+.tc-row:hover {
+  background: color-mix(in srgb, var(--_accent-soft) 60%, transparent);
+}
+
+.tc-row:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.tc-row.selected {
+  background: var(--_accent-soft);
+}
+
+.tc-row.current {
+  background: var(--_highlight);
+}
+
+.tc-row.dimmed {
+  opacity: 0.55;
+}
+
+.tc-row.match .tc-name {
+  font-weight: 600;
+}
+
+.tc-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding-inline: calc(var(--_depth, 0) * 14px + var(--_space-2)) var(--_space-3);
+  border-inline-end: 1px solid var(--_border);
+}
+
+.tc-toggle {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--_fg-muted);
+}
+
+.tc-toggle .icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--_duration) var(--_easing);
+}
+
+.tc-toggle.open .icon {
+  transform: rotate(90deg);
+}
+
+.tc-label > .icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--_danger);
+}
+
+.tc-name {
+  overflow: hidden;
+  color: var(--_fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tc-service {
+  flex: none;
+  overflow: hidden;
+  max-width: 14ch;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tc-bar {
+  position: absolute;
+  top: 50%;
+  min-width: 2px;
+  height: 12px;
+  transform: translateY(-50%);
+  border-radius: 3px;
+  background: var(--_svc, var(--_accent));
+}
+
+.error .tc-bar {
+  outline: 2px solid var(--_danger);
+  outline-offset: 1px;
+}
+
+.tc-event {
+  position: absolute;
+  top: calc(50% + 7px);
+  width: 2px;
+  height: 6px;
+  margin-inline-start: -1px;
+  background: var(--_fg);
+}
+
+.tc-time {
+  position: absolute;
+  top: 50%;
+  padding-inline-start: 6px;
+  transform: translateY(-50%);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tc-time.before {
+  padding-inline: 0 6px;
+  transform: translate(-100%, -50%);
+}
+
+:host(:dir(rtl)) .tc-time.before {
+  transform: translate(100%, -50%);
+}
+
+.tc-none {
+  margin: 0;
+  padding: var(--_space-3) var(--_space-4);
+  color: var(--_fg-muted);
+}
+
+.tc-more {
+  justify-self: start;
+  margin: var(--_space-2) var(--_space-4);
+}
+
+/* ---------- Details ---------- */
+
+.tc-details {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-3) var(--_space-4) var(--_space-4);
+  border-top: 1px solid var(--_border);
+}
+
+.tc-details-head {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.tc-details-title {
+  flex: 1 1 auto;
+  margin: 0;
+  color: var(--_fg);
+  font-size: calc(var(--_font-size-ui) + 1px);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tc-note {
+  margin: 0;
+  color: var(--_warning);
+}
+
+.tc-facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px var(--_space-4);
+  margin: 0;
+}
+
+.tc-facts dt {
+  color: var(--_fg-muted);
+}
+
+.tc-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.tc-facts code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.tc-details h4 {
+  margin: var(--_space-2) 0 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tc-attrs {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.tc-attrs th,
+.tc-attrs td {
+  padding: 3px var(--_space-2);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.tc-attrs th {
+  width: 35%;
+  color: var(--_syntax-attr);
+  font-weight: 400;
+}
+
+.tc-events {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tc-events li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+}
+
+.tc-event-time {
+  color: var(--_fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-event-attrs {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.tc-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

@@ -375,6 +375,80 @@ const MODES = [
     wrap: (p) =>
       JSON.stringify({ request: { method: 'POST', url: `https://x.dev/${p}`, body: p } }),
   },
+  {
+    tag: 'vt-sql',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        query: p,
+        params: [p, { [p]: p }],
+        columns: [p, { name: p, type: p }],
+        rows: [[p, p], { [p]: p }],
+        message: p,
+        error: p,
+      }),
+  },
+  {
+    tag: 'vt-sql',
+    attrs: { format: '' },
+    wrap: (p) => `app=# SELECT '${p}';\n ${p} | b\n----+---\n ${p} | 2\n(1 row)\nERROR:  ${p}`,
+  },
+  {
+    tag: 'vt-test-report',
+    attrs: { variant: 'full', open: 'all' },
+    wrap: (p) =>
+      JSON.stringify([
+        { name: p, suite: p, classname: p, status: 'failed', message: p, details: p, output: p },
+        { name: p, suite: p, status: p },
+      ]),
+  },
+  {
+    tag: 'vt-test-report',
+    attrs: { open: 'all' },
+    wrap: (p) => {
+      const x = p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      return `<testsuites name="${x}"><testsuite name="${x}" file="${x}"><testcase name="${x}" classname="${x}"><failure message="${x}" type="${x}">${x}</failure><system-out>${x}</system-out></testcase></testsuite></testsuites>`;
+    },
+  },
+  {
+    tag: 'vt-trace',
+    attrs: { variant: 'full', selected: 'a' },
+    wrap: (p) =>
+      JSON.stringify([
+        { id: 'a', name: p, service: p, kind: p, start: 0, duration: 5, attributes: { [p]: p }, error: p, events: [{ name: p, time: 1 }] }, // prettier-ignore
+        { id: p, parent: 'a', name: p, service: p, start: 1, duration: 2 },
+      ]),
+  },
+  {
+    tag: 'vt-notebook',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        metadata: { kernelspec: { display_name: p }, language_info: { name: p } },
+        cells: [
+          { cell_type: 'markdown', source: p, attachments: { [p]: { 'image/png': p } } },
+          { cell_type: 'raw', source: p },
+          {
+            cell_type: 'code',
+            source: p,
+            outputs: [
+              { output_type: 'stream', name: 'stdout', text: p },
+              { output_type: 'display_data', data: { 'text/html': p, 'text/plain': p } },
+              { output_type: 'display_data', data: { 'text/markdown': p } },
+              { output_type: 'display_data', data: { 'image/png': p, 'text/plain': p } },
+              { output_type: 'execute_result', data: { 'application/json': p } },
+              { output_type: 'error', ename: p, evalue: p, traceback: [p] },
+            ],
+          },
+        ],
+      }),
+  },
+  {
+    tag: 'vt-math',
+    attrs: { delimiters: '', variant: 'full' },
+    wrap: (p) =>
+      `Text ${p} then $${p}$ and $$\\text{${p}}$$ and \\(\\href{javascript:alert(1)}{x}\\)`,
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

@@ -1,0 +1,218 @@
+/*
+ * Notebook: Markdown cells, code cells with their prompts, and outputs (text, errors,
+ * images, HTML tables). Prompts sit in a column on wide screens and above the cell on
+ * narrow ones.
+ */
+.nb-body {
+  --_prompt: 11ch;
+  display: grid;
+  align-content: start;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  overscroll-behavior: auto;
+}
+
+:host([max-height]) .nb-body,
+.vt[data-fullscreen] .nb-body {
+  overscroll-behavior: contain;
+}
+
+.nb-cell {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.nb-markdown,
+.nb-raw {
+  padding-inline-start: calc(var(--_prompt) + var(--_space-3));
+}
+
+.nb-input,
+.nb-output {
+  display: grid;
+  grid-template-columns: var(--_prompt) minmax(0, 1fr);
+  gap: var(--_space-3);
+  align-items: start;
+}
+
+.nb-prompt {
+  padding-top: var(--_space-2);
+  color: var(--_accent-fg);
+  font: 400 var(--_font-size-small) / var(--_line-height) var(--_font-mono);
+  text-align: end;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.nb-prompt.out {
+  color: var(--_syntax-type);
+}
+
+.nb-source {
+  position: relative;
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+}
+
+.nb-source .code {
+  padding-inline: var(--_space-3);
+}
+
+.nb-source > .btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0;
+  background: var(--_surface);
+  transition: opacity var(--_duration-fast) var(--_easing);
+}
+
+.nb-source:hover > .btn,
+.nb-source > .btn:focus-visible,
+.nb-source > .btn.done {
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  .nb-source > .btn {
+    opacity: 1;
+  }
+}
+
+.nb-outputs {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.nb-pre {
+  max-height: 480px;
+  margin: 0;
+  padding: var(--_space-2) 0;
+  overflow: auto;
+  color: var(--_fg);
+  font: 400 var(--_font-size) / var(--_line-height) var(--_font-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.nb-pre.stderr {
+  padding-inline: var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_danger) 8%, transparent);
+}
+
+.nb-error .nb-pre {
+  padding: var(--_space-2) var(--_space-3);
+  border-inline-start: 3px solid var(--_danger);
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_danger) 6%, transparent);
+  white-space: pre;
+}
+
+.nb-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-block: var(--_space-1);
+  border-radius: var(--_radius-sm);
+  /* Plots are drawn for a white page, often with a transparent background: they keep it
+     in dark themes, or their black axes and labels could not be read. */
+  background: #fff;
+}
+
+.nb-html {
+  min-width: 0;
+  padding-block: var(--_space-1);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+/* Tables of outputs (pandas DataFrames) are data, not Markdown tables: compact, names kept
+   as written, numbers aligned to the end. */
+.nb-html .table-wrap {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.nb-html table {
+  width: auto;
+  border-collapse: collapse;
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.nb-html :is(th, td) {
+  padding: 4px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  background: none;
+  color: var(--_fg);
+  font-size: inherit;
+  letter-spacing: normal;
+  text-align: end;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.nb-html thead th {
+  border-bottom-color: var(--_border-strong);
+  font-weight: 600;
+}
+
+.nb-html tbody th {
+  font-weight: 600;
+}
+
+.nb-html tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--_surface-sunken) 60%, transparent);
+}
+
+.nb-hidden {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px dashed var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+}
+
+.nb-none {
+  margin: 0;
+  padding-block: var(--_space-2);
+  color: var(--_fg-muted);
+  font: italic 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+}
+
+.nb-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@container (max-width: 560px) {
+  .nb-markdown,
+  .nb-raw {
+    padding-inline-start: 0;
+  }
+
+  .nb-input,
+  .nb-output {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .nb-prompt {
+    padding-top: 0;
+    text-align: start;
+  }
+
+  .nb-prompt:empty {
+    display: none;
+  }
+}

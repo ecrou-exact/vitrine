@@ -262,6 +262,144 @@ export function sanitizeHighlight(html) {
   return fragment;
 }
 
+/** SVG elements never kept from a drawing: scripts, embedded documents, external resources. */
+const SVG_FORBIDDEN = Object.freeze([
+  'script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea',
+  'select', 'link', 'meta', 'base', 'img', 'image', 'video', 'audio', 'source', 'animate',
+  'animateMotion', 'animateTransform', 'set', 'feImage',
+]); // prettier-ignore
+
+/**
+ * Removes from CSS what could reach outside the drawing: imports, external `url()` (local
+ * `url(#id)` references stay), escapes that could spell them, and old script hooks.
+ *
+ * @param {string} css
+ * @returns {string}
+ */
+export function cleanCss(css) {
+  return String(css)
+    .replace(/\\/g, '')
+    .replace(/@import[^;]*;?/gi, '')
+    .replace(/url\s*\(\s*(['"]?)(?!#)[^)]*\)/gi, 'none')
+    .replace(/expression\s*\(|behavior\s*:|-moz-binding/gi, '');
+}
+
+/**
+ * Renames `style` attributes and `<style>` elements in markup before it is parsed.
+ *
+ * Under a strict `style-src`, browsers report every inline style they parse, even in the
+ * inert document of the sanitizer. Inside tags, `style=` becomes `data-vt-style=`, and
+ * `<style>` becomes `<vt-style>`, so nothing is reported; the sanitizer then removes them
+ * or hands their (cleaned) CSS back. Text between tags is left as it is.
+ *
+ * @param {string} markup
+ * @returns {string}
+ */
+function neutralizeStyles(markup) {
+  return String(markup).replace(/<(\/?)([a-zA-Z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*)>/g, (_, close, name, rest) => {
+    const tag = name.toLowerCase() === 'style' ? 'vt-style' : name;
+    const attrs = rest.replace(/(^|[\s"'])style(\s*=)/gi, '$1data-vt-style$2');
+    return `<${close}${tag}${attrs}>`;
+  }); // prettier-ignore
+}
+
+/**
+ * Sanitizes a drawing or markup written by a library from content Vitrine does not trust
+ * (Mermaid), and returns it as DOM, with the CSS of its `<style>` elements apart.
+ *
+ * Inline styles are moved to CSSOM (which a strict `style-src` allows) after the same
+ * cleaning as stylesheets; links keep only local `#id` targets; scripts, embedded
+ * documents, external resources and attribute animations are removed.
+ *
+ * @param {string} markup
+ * @returns {{ fragment: DocumentFragment, css: string }}
+ */
+export function sanitizeDrawing(markup) {
+  if (!sanitizerWorks()) return { fragment: textFallback(''), css: '' };
+  const tt = getTrustedTypesPolicy();
+  /** @type {string[]} */
+  const css = [];
+  /** @param {Element} node @param {{ tagName: string }} data */
+  const keepStyle = (node, data) => {
+    if (data.tagName === 'vt-style') css.push(node.textContent ?? '');
+  };
+  /** @param {Element} node */
+  const keepLocalLinks = (node) => {
+    for (const name of ['href', 'xlink:href']) {
+      const value = node.getAttribute?.(name);
+      if (value !== null && value !== undefined && !/^#[\w:.-]{1,200}$/.test(value.trim()))
+        node.removeAttribute(name);
+    }
+  };
+  /** @type {import('dompurify').Config & { RETURN_DOM_FRAGMENT: true }} */
+  const config = {
+    USE_PROFILES: { svg: true, svgFilters: true, html: true },
+    ADD_TAGS: ['foreignObject'],
+    ADD_ATTR: ['data-vt-style'],
+    FORBID_TAGS: [...SVG_FORBIDDEN, 'vt-style'],
+    FORBID_ATTR: ['style', 'srcset', 'action', 'formaction'],
+    ALLOW_DATA_ATTR: false,
+    RETURN_DOM_FRAGMENT: true,
+    KEEP_CONTENT: false,
+  };
+  if (tt) config.TRUSTED_TYPES_POLICY = tt;
+  DOMPurify.addHook('uponSanitizeElement', /** @type {any} */ (keepStyle));
+  DOMPurify.addHook('afterSanitizeAttributes', /** @type {any} */ (keepLocalLinks));
+  /** @type {DocumentFragment} */
+  let fragment;
+  try {
+    fragment = DOMPurify.sanitize(neutralizeStyles(markup), config);
+  } finally {
+    DOMPurify.removeHook('uponSanitizeElement', /** @type {any} */ (keepStyle));
+    DOMPurify.removeHook('afterSanitizeAttributes', /** @type {any} */ (keepLocalLinks));
+  }
+  for (const el of Array.from(fragment.querySelectorAll('[data-vt-style]'))) {
+    const value = cleanCss(el.getAttribute('data-vt-style') ?? '').slice(0, 4000);
+    el.removeAttribute('data-vt-style');
+    const style = /** @type {any} */ (el).style;
+    if (style) style.cssText = value;
+  }
+  return { fragment, css: cleanCss(css.join('\n')) };
+}
+
+/**
+ * Sanitizes an SVG drawing and returns its root element, with its CSS apart (for a
+ * constructable stylesheet). See {@link sanitizeDrawing}.
+ *
+ * @param {string} markup
+ * @returns {{ svg: SVGSVGElement | null, css: string }}
+ */
+export function sanitizeSvg(markup) {
+  const { fragment, css } = sanitizeDrawing(markup);
+  const svg = fragment.querySelector('svg');
+  return { svg: /** @type {SVGSVGElement | null} */ (svg), css: svg ? css : '' };
+}
+
+/**
+ * Sanitized markup ready for an `innerHTML` sink: a `TrustedHTML` from the `vitrine`
+ * policy when Trusted Types are on, a string otherwise, without inline styles. Given as
+ * the Trusted Types policy of the DOMPurify that Mermaid uses inside.
+ *
+ * @param {string} html
+ * @returns {string}
+ */
+export function trustedMarkup(html) {
+  if (!sanitizerWorks()) return '';
+  const tt = getTrustedTypesPolicy();
+  /** @type {import('dompurify').Config} */
+  const config = {
+    USE_PROFILES: { html: true, svg: true, svgFilters: true },
+    ADD_TAGS: ['foreignObject'],
+    FORBID_TAGS: [...SVG_FORBIDDEN, 'vt-style'],
+    FORBID_ATTR: ['style'],
+  };
+  if (tt) {
+    config.TRUSTED_TYPES_POLICY = tt;
+    config.RETURN_TRUSTED_TYPE = true;
+  }
+  return /** @type {string} */ (/** @type {unknown} */ (DOMPurify.sanitize(neutralizeStyles(html), config))); // prettier-ignore
+}
+
 /**
  * Applies the URL, link, image, class and input rules to sanitized nodes.
  *
