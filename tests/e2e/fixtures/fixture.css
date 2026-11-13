@@ -10,3 +10,8 @@ body {
 body > * + * {
   margin-top: 16px;
 }
+
+/* Pushes an element far below the screen (lazy loading tests). */
+.spacer {
+  height: 4000px;
+}

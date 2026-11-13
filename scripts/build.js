@@ -78,6 +78,8 @@ const split = {
   ...shared,
   entryPoints: {
     vitrine: 'src/entries/all.js',
+    // configure(), locales and themes alone, shared with the elements (used by the loader).
+    api: 'src/entries/api.js',
     ...Object.fromEntries(components.map((name) => [`vt-${name}`, `src/entries/vt-${name}.js`])),
   },
   format: 'esm',
@@ -87,6 +89,34 @@ const split = {
   chunkNames: 'chunks/[name]-[hash]',
 };
 builds.push(split);
+
+// One small classic script that loads only the elements a page uses (dist/esm/vt-*.js).
+builds.push({
+  ...shared,
+  entryPoints: ['src/loader.js'],
+  format: 'iife',
+  outfile: 'dist/vitrine-loader.js',
+  minify: true,
+  banner: {
+    js: `/*! Vitrine v${pkg.version} | MIT License | https://github.com/ecrou-exact/vitrine */`,
+  },
+  define: { ...shared.define, __VITRINE_ELEMENTS__: JSON.stringify(components) },
+});
+
+// Plugins for Markdown pipelines: fenced code blocks become elements. No dependencies.
+builds.push({
+  ...shared,
+  entryPoints: {
+    'markdown-it': 'src/integrations/markdown-it.js',
+    remark: 'src/integrations/remark.js',
+  },
+  format: 'esm',
+  outdir: 'dist/integrations',
+  minify: false,
+  banner: {
+    js: `/*! Vitrine v${pkg.version} | MIT License | https://github.com/ecrou-exact/vitrine */`,
+  },
+});
 
 const lazy = listLanguages()
   .map(({ name }) => name)
