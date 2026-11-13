@@ -19,41 +19,97 @@ Vitrine elements are standard custom elements, so they work in any framework tha
 
 ### Loading Vitrine in a bundled application
 
-Either load the classic script in your HTML template:
+Either load a script in your HTML template, the loader (which imports only the elements a page uses) or every element at once:
 
 ```html
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"></script>
+<!-- or -->
 <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
 ```
 
-or import the ES modules from a local copy of `dist/` (for example a git submodule) at the start of your entry file. Import only the components you use:
+or install a release and import the elements you use. Release tags hold the built `dist/` folder, so npm can install one from GitHub:
 
-```js
-import './vendor/vitrine/dist/esm/vt-code.js';
-import './vendor/vitrine/dist/esm/vt-tags.js';
+```bash
+npm install github:ecrou-exact/vitrine#vX.Y.Z
 ```
 
-or every component:
+Each element is an entry of the package, named after its tag without `vt-`. Importing one defines it; a bundler (Vite, webpack, esbuild, Rollup) keeps only the elements you import, and the code they share once:
 
 ```js
-import { configure, defineAll } from './vendor/vitrine/dist/esm/vitrine.js';
+import 'vitrine/code';
+import 'vitrine/sql';
+import { configure } from 'vitrine/api';
 
 configure({ theme: 'auto', syntaxTheme: 'github', syntaxThemeDark: 'github-dark' });
-defineAll();
 ```
 
-The modules find `languages/`, `syntax-themes/` and `vendor/` relative to their own URL. When a bundler rewrites or inlines them, that location changes: serve the `languages/`, `syntax-themes/` and `vendor/` folders yourself and set `languagesUrl`, `syntaxThemesUrl` and `vendorUrl` (`vendor/` holds Apache ECharts for `<vt-chart>` and the YAML reader for `<vt-openapi>`):
+| Entry                                                     | File                                                                                                  |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `vitrine/<name>` (`vitrine/code`, `vitrine/date-picker`…) | `dist/esm/vt-<name>.js`: defines `<vt-<name>>`, exports its class and the API                         |
+| `vitrine/api`                                             | `configure`, `registerLocale`, `registerTheme`… without any element                                   |
+| `vitrine/all`                                             | Every element, sharing code with the entries above; call `defineAll()`                                |
+| `vitrine`                                                 | Every element in one file (`dist/vitrine.esm.js`); call `defineAll()`                                 |
+| `vitrine/markdown-it`, `vitrine/remark`                   | [Markdown plugins](#markdown-pipelines)                                                               |
+| `vitrine/vitrine.css`, `vitrine/custom-elements.json`     | The page stylesheet and the [Custom Elements Manifest](https://custom-elements-manifest.open-wc.org/) |
+
+Do not mix `vitrine` (one file) with the other entries: they are separate builds that do not share their configuration.
+
+The modules find `languages/`, `syntax-themes/` and `vendor/` relative to their own URL. When a bundler rewrites or inlines them, that location changes: serve the `languages/`, `syntax-themes/` and `vendor/` folders yourself and set `languagesUrl`, `syntaxThemesUrl` and `vendorUrl` (`vendor/` holds Apache ECharts for `<vt-chart>`, the YAML reader for `<vt-openapi>` and `<vt-yaml>`, Temml for `<vt-math>` and Mermaid for `<vt-diagram>`):
 
 ```js
-import { configure } from './vendor/vitrine/dist/esm/vt-code.js';
+import { configure } from 'vitrine/api';
 
 configure({
-  languagesUrl: '/vendor/vitrine/languages/',
-  syntaxThemesUrl: '/vendor/vitrine/syntax-themes/',
-  vendorUrl: '/vendor/vitrine/vendor/',
+  languagesUrl: '/vitrine/languages/',
+  syntaxThemesUrl: '/vitrine/syntax-themes/',
+  vendorUrl: '/vitrine/vendor/',
 });
 ```
 
+`<vt-math>` and `<vt-diagram>` can also use a Temml or a Mermaid your build already bundles: see `VtMath.useEngine()` and `VtDiagram.useEngine()`.
+
 See [Per-component modules](getting-started.md#per-component-modules).
+
+## Markdown pipelines
+
+Two plugins turn the fenced code blocks of Markdown into elements, for static site generators and documentation tools. ` ```sql ` becomes `<vt-sql>`, ` ```mermaid ` `<vt-diagram>`, ` ```math ` `<vt-math>`, ` ```json ` `<vt-json>`, ` ```diff ` `<vt-diff>`, ` ```console ` `<vt-terminal>`, and any other language `<vt-code>`. They have no dependencies. The code is escaped and written in a `<template>`, so nothing in it is parsed as markup; `title="…"` in the info string becomes the `label`.
+
+With [markdown-it](https://github.com/markdown-it/markdown-it) (VitePress, Eleventy, Docsify…):
+
+```js
+import MarkdownIt from 'markdown-it';
+import vitrine from 'vitrine/markdown-it';
+
+const md = new MarkdownIt().use(vitrine, { variant: 'full' });
+```
+
+With [remark](https://github.com/remarkjs/remark) (unified, MDX, Astro, Docusaurus), the elements are `html` nodes: let them through to the HTML.
+
+```js
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
+import rehypeStringify from 'rehype-stringify';
+import remarkVitrine from 'vitrine/remark';
+
+const html = await unified()
+  .use(remarkParse)
+  .use(remarkVitrine, { variant: 'full' })
+  .use(remarkRehype, { allowDangerousHtml: true })
+  .use(rehypeRaw)
+  .use(rehypeStringify)
+  .process(markdown);
+```
+
+| Option       | Description                                                                                          |
+| ------------ | ---------------------------------------------------------------------------------------------------- |
+| `variant`    | `simple` or `full`, for every element                                                                |
+| `elements`   | Languages to add or change: `{ "sql": "vt-code" }`, or `false` to leave a language to the renderer   |
+| `attributes` | Attributes by element: `{ "vt-code": { "line-numbers": "" } }`                                       |
+| `code`       | `false` leaves the languages without an element of their own to the renderer, instead of `<vt-code>` |
+
+Then add [the loader](getting-started.md#loader-only-the-elements-a-page-uses) to the pages: each one loads the elements its Markdown uses.
 
 ## Plain HTML
 

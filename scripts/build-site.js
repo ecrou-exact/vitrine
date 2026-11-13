@@ -4,6 +4,7 @@
  * self-hosted fonts. Run `npm run site`, then `node scripts/serve.js _site 4174`.
  */
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { gzipSync } from 'node:zlib';
 import { Window } from 'happy-dom';
 
 const out = '_site';
@@ -53,7 +54,34 @@ for (const file of (await readdir(out)).filter((f) => f.endsWith('.html'))) {
   await writeFile(`${out}/${file}`, html);
 }
 await writeFile(`${out}/assets/search-index.json`, JSON.stringify(await searchIndex()));
+await writeFile(`${out}/assets/modules.json`, JSON.stringify(await moduleSizes()));
 console.log(`Website assembled in ${out}/`);
+
+/**
+ * Download size of each per-component module, for the picker of the Integrations page: the
+ * gzipped size of each file of dist/esm/ and the chunks it imports. A set of elements
+ * downloads each shared chunk once.
+ */
+async function moduleSizes() {
+  /** @type {Record<string, { size: number, imports: string[] }>} */
+  const files = {};
+  const read = async (/** @type {string} */ name) => {
+    if (files[name]) return;
+    const code = await readFile(`dist/esm/${name}`, 'utf8');
+    const dir = name.includes('/') ? name.slice(0, name.lastIndexOf('/') + 1) : '';
+    const imports = [...code.matchAll(/(?:from|import)\s*"\.\/([\w./-]+\.js)"/g)].map(
+      (m) => dir + m[1],
+    );
+    files[name] = { size: gzipSync(code).length, imports };
+    for (const file of imports) await read(file);
+  };
+  const elements = (await readdir('dist/esm')).filter((f) => /^vt-[\w-]+\.js$/.test(f));
+  for (const file of elements) await read(file);
+  await read('api.js');
+  const loader = gzipSync(await readFile('dist/vitrine-loader.js')).length;
+  const full = gzipSync(await readFile('dist/vitrine.min.js')).length;
+  return { files, elements: elements.map((f) => f.slice(3, -3)), loader, full };
+}
 
 /** Reuse the Examples page's real demos as inert, lazily mounted docs previews. */
 async function componentPreviews() {

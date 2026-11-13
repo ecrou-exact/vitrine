@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `package.json` declared no side effects, so a bundler could drop `import 'vitrine/code'`, which defines the element. Every file of `dist/` is now marked as having side effects.
+
 - `<vt-field>`: Escape closes the "?" tip wherever the focus is. In Safari a click does not focus the button, so the key never reached it.
 - No more Content Security Policy report on every page in recent Chromium: the check that the HTML sanitizer works no longer parses an event handler attribute, which Chromium now reports as soon as it is parsed, even in a detached document.
 - `<vt-calendar>`: a day is named from its content (the full date, then the events as shown), so its name holds everything visible in it (WCAG 2.5.3, Label in Name).
@@ -31,6 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `dist/vitrine-loader.js`: one script of 1.2 KB that loads only the elements a page uses, from `dist/esm/`, including those added later. `data-config` applies options before the first element is drawn, `data-lazy` waits until an element comes near the screen, and `window.VitrineLoader` has `load()`, `configure()` and `ready()`. Only Vitrine's own element names become URLs; it works under a strict CSP with Trusted Types.
+- Package entries for bundlers: `vitrine/<name>` for each element (`vitrine/code`, `vitrine/sql`…), `vitrine/api`, `vitrine/all`, `vitrine/markdown-it`, `vitrine/remark` and `vitrine/vitrine.css`. A release can be installed with `npm install github:ecrou-exact/vitrine#vX.Y.Z`.
+- Plugins for markdown-it and remark (`dist/integrations/`): fenced code blocks become elements (` ```sql ` a `<vt-sql>`, ` ```mermaid ` a `<vt-diagram>`, ` ```math ` a `<vt-math>`, any other language a `<vt-code>`), with the code escaped. No dependencies.
+- Website: "Pick your elements" on the Integrations page gives the tags to copy and the exact download size of any set of elements.
 - `<vt-sql>`: SQL queries and their results. Reads a query alone, a `psql`, `mysql`, MariaDB, `sqlite3` or DuckDB session with its tables, row counts, timings, command tags and errors (columns follow the borders, so a `|` inside a value stays in its cell), or JSON, node-postgres results included. Results sort by a click on a column, `NULL` is told apart from an empty string, each result copies as CSV, and a button lays the query out (keywords in capitals, one clause per line, subqueries indented). Nothing is ever run.
 - `<vt-test-report>`: test reports from JUnit XML (pytest, Maven, Gradle, Go, PHPUnit, .NET…), TAP 12 to 14 with subtests (`node --test`), and the JSON of Jest, Vitest and Mocha. The result of the run with a bar, status buttons with counts, suites with failures open, failures with their message, stack trace and output in color, flaky tests, the slowest first, a search and "Copy failures" to paste in an issue.
 - `<vt-trace>`: distributed traces as a waterfall, from OpenTelemetry (OTLP JSON, also one document per line), Jaeger, Zipkin v2 or a plain list. Spans indented under their parents with a time ruler, a color per service always next to its name, errors with an icon, orphan spans, several traces in a file, the tree view keys of WAI-ARIA, a search that opens the parents of what it finds, and the attributes, events and ids of a span. Nanosecond timestamps keep their precision.

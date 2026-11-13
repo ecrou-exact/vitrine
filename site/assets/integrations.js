@@ -200,10 +200,129 @@ tags.suggest = async (query, signal) => {
 </script>`,
 };
 
+SNIPPETS.markdownIt = `import MarkdownIt from 'markdown-it';
+import vitrine from 'vitrine/markdown-it';
+
+const md = new MarkdownIt().use(vitrine, {
+  variant: 'full', // or leave it out for the simple variant
+  elements: { chart: false }, // a language left to markdown-it
+  attributes: { 'vt-code': { 'line-numbers': '' } },
+});
+
+md.render('\`\`\`sql title="Active users"\\nSELECT * FROM users WHERE active;\\n\`\`\`');
+// <vt-sql variant="full" label="Active users"><template>SELECT * FROM users…</template></vt-sql>`;
+
+SNIPPETS.remark = `import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
+import rehypeStringify from 'rehype-stringify';
+import remarkVitrine from 'vitrine/remark';
+
+const html = await unified()
+  .use(remarkParse)
+  .use(remarkVitrine, { variant: 'full' })
+  .use(remarkRehype, { allowDangerousHtml: true })
+  .use(rehypeRaw)
+  .use(rehypeStringify)
+  .process(markdown);`;
+
 for (const element of document.querySelectorAll('vt-code.snippet')) {
   const snippet = SNIPPETS[element.dataset.snippet];
   if (snippet) element.content = snippet;
 }
+
+// Pick your elements: the tags to copy, and what a visitor downloads.
+const picker = document.getElementById('picker-list');
+const total = document.getElementById('picker-total');
+const KB = 1024;
+const kb = (bytes) => `${(bytes / KB).toFixed(bytes < 10 * KB ? 1 : 0)} KB`;
+
+/** @param {{ files: Record<string, { size: number, imports: string[] }>, elements: string[], loader: number, full: number }} sizes */
+function setUpPicker(sizes) {
+  const chosen = new Set(['code', 'markdown']);
+  const boxes = sizes.elements.sort().map((name) => {
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.value = name;
+    box.checked = chosen.has(name);
+    const label = document.createElement('label');
+    label.append(box, `<vt-${name}>`);
+    picker.append(label);
+    return box;
+  });
+
+  /** Gzipped bytes of the modules of the chosen elements, each shared chunk once. */
+  const download = (names) => {
+    const seen = new Set();
+    const visit = (file) => {
+      if (seen.has(file) || !sizes.files[file]) return;
+      seen.add(file);
+      for (const next of sizes.files[file].imports) visit(next);
+    };
+    for (const name of names) visit(`vt-${name}.js`);
+    return [...seen].reduce((sum, file) => sum + sizes.files[file].size, 0);
+  };
+
+  const update = () => {
+    const names = boxes.filter((box) => box.checked).map((box) => box.value);
+    const bytes = download(names);
+    total.replaceChildren();
+    if (!names.length) {
+      total.append('Check at least one element.');
+    } else if (bytes + sizes.loader >= sizes.full) {
+      total.append(
+        `${kb(bytes)} with modules: more than the full bundle (${kb(sizes.full)}). `,
+        Object.assign(document.createElement('span'), {
+          className: 'muted',
+          textContent: 'Use dist/vitrine.min.js, one file with every element.',
+        }),
+      );
+    } else {
+      total.append(
+        `${kb(sizes.loader + bytes)} with the loader`,
+        Object.assign(document.createElement('span'), {
+          className: 'muted',
+          textContent: ` — ${kb(sizes.loader)} for the loader, ${kb(bytes)} for ${names.length === 1 ? 'the element' : `${names.length} elements`}, instead of ${kb(sizes.full)} for the full bundle.`,
+        }),
+      );
+    }
+    const list = names.length ? names : ['code'];
+    document.getElementById('picker-loader').content =
+      `<!-- Loads ${list.map((n) => `<vt-${n}>`).join(', ')} only when a page has them. -->
+<script src="${CDN}/vitrine-loader.js"
+        data-config='{"theme": "auto"}'></script>
+
+<vt-${list[0]}>…</vt-${list[0]}>`;
+    document.getElementById('picker-modules').content = list
+      .map((n) => `<script type="module" src="${CDN}/esm/vt-${n}.js"></script>`)
+      .join('\n');
+    document.getElementById('picker-bundler').content =
+      `// npm install github:ecrou-exact/vitrine#v1.0.0
+${list.map((n) => `import 'vitrine/${n}';`).join('\n')}
+import { configure } from 'vitrine/api';
+
+configure({ theme: 'auto' });`;
+  };
+
+  picker.addEventListener('change', update);
+  document.getElementById('picker-none').addEventListener('click', () => {
+    for (const box of boxes) box.checked = false;
+    update();
+  });
+  document.getElementById('picker-all').addEventListener('click', () => {
+    for (const box of boxes) box.checked = true;
+    update();
+  });
+  update();
+}
+
+fetch('assets/modules.json')
+  .then((response) => response.json())
+  .then(setUpPicker)
+  .catch(() => {
+    total.textContent = 'Sizes are not available.';
+  });
 
 // Live binding demo.
 const tags = document.getElementById('demo-tags');

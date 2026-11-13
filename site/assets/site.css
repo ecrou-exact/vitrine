@@ -2942,3 +2942,59 @@ h3 {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+/* ---------- Integrations: pick your elements ---------- */
+
+.picker {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--site-border);
+  border-radius: var(--radius);
+  background: var(--site-surface);
+}
+
+.picker legend {
+  padding: 0 var(--space-2);
+  font-weight: 600;
+}
+
+.picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.picker-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--space-1) var(--space-4);
+}
+
+.picker-list label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.picker-list input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--site-accent);
+}
+
+.picker-total {
+  margin: 0;
+  font-weight: 600;
+}
+
+.picker-total .muted {
+  color: var(--site-fg-muted);
+  font-weight: 400;
+}
