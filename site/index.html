@@ -594,6 +594,57 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <vt-countdown class="preview" lang-ui="en" json='{"to":"2027-01-01T00:00:00","timezone":"Europe/Paris","title":"Happy new year","description":"Midnight in Paris."}'></vt-countdown>
               <a href="examples.html#countdown">Countdown examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-sql&gt;</h3>
+              <p>
+                SQL queries and their results from a psql or mysql session, sortable, with NULL told apart.
+              </p>
+              <vt-sql class="preview" lang-ui="en" dialect="postgresql" json='{"query":"SELECT name, team FROM people ORDER BY name","columns":["name","team"],"rows":[["Ada","core"],["Alan",null],["Grace","compilers"]],"rowCount":3,"duration":0.8}'></vt-sql>
+              <a href="examples.html#sql">SQL examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-test-report&gt;</h3>
+              <p>
+                Test reports from JUnit, TAP, Jest, Vitest or Mocha, with the failures first.
+              </p>
+              <vt-test-report class="preview" lang-ui="en" json='[{"name":"creates a user","suite":"users","status":"passed","duration":41},{"name":"deletes a user","suite":"users","status":"failed","duration":72,"message":"Expected 200, received 404"},{"name":"exports","suite":"users","status":"skipped"}]'></vt-test-report>
+              <a href="examples.html#test-report">Test report examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-trace&gt;</h3>
+              <p>
+                Distributed traces from OpenTelemetry, Jaeger or Zipkin, as a waterfall of spans.
+              </p>
+              <vt-trace class="preview" lang-ui="en" details="false" json='[{"id":"a","name":"GET /cart","service":"web","start":0,"duration":120},{"id":"b","parent":"a","name":"SELECT items","service":"postgres","start":20,"duration":70},{"id":"c","parent":"a","name":"render","service":"web","start":95,"duration":20}]'></vt-trace>
+              <a href="examples.html#trace">Trace examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-notebook&gt;</h3>
+              <p>
+                Jupyter notebooks with their outputs, sanitized and never run.
+              </p>
+              <vt-notebook class="preview" lang-ui="en" json='{"cells":[{"cell_type":"markdown","source":"Mean of the **scores**:"},{"cell_type":"code","execution_count":1,"source":"sum(scores) / len(scores)","outputs":[{"output_type":"execute_result","execution_count":1,"data":{"text/plain":"86.5"}}]}]}'></vt-notebook>
+              <a href="examples.html#notebook">Notebook examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-math&gt;</h3>
+              <p>
+                TeX drawn as native MathML, numbered, inline or in text.
+              </p>
+              <vt-math class="preview">\int_0^\infty e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}</vt-math>
+              <a href="examples.html#math">Math examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-diagram&gt;</h3>
+              <p>
+                Mermaid diagrams in the colors of the theme, under a strict CSP.
+              </p>
+              <vt-diagram class="preview" lang-ui="en">flowchart LR
+                A[Order] --> B{Paid?}
+                B -- yes --> C[Ship]
+                B -- no --> D[Remind]</vt-diagram>
+              <a href="examples.html#diagram">Diagram examples</a>
+            </article>
           </div>
         </div>
       </section>

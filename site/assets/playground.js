@@ -65,6 +65,15 @@ const SAMPLES = {
   upload: '',
   testimonials:
     '[\n  {\n    "quote": "We replaced three tools with this one. Setup took an afternoon.",\n    "author": "Ada Lovelace",\n    "role": "CTO",\n    "company": "Analytical Engines",\n    "rating": 5\n  },\n  {\n    "quote": "Support answered within the hour, every single time.",\n    "author": "Alan Turing",\n    "role": "Engineer",\n    "rating": 4.5\n  },\n  {\n    "quote": "Clean, fast, and it just works on every page we tried.",\n    "author": "Grace Hopper",\n    "company": "Compilers Inc.",\n    "rating": 4\n  }\n]',
+  sql: 'app=# SELECT id, name, email FROM users ORDER BY id LIMIT 3;\n id | name  |      email\n----+-------+------------------\n  1 | Ada   | ada@example.com\n  2 | Alan  | alan@example.com\n  3 | Grace |\n(3 rows)\n\nTime: 0.512 ms',
+  'test-report':
+    '<testsuite name="api" time="1.3">\n  <testcase classname="users" name="creates a user" time="0.4"/>\n  <testcase classname="users" name="deletes a user" time="0.7">\n    <failure message="Expected 200, received 404">at deleteUser (users.test.js:31)</failure>\n  </testcase>\n  <testcase classname="users" name="exports"><skipped message="needs S3"/></testcase>\n</testsuite>',
+  trace:
+    '[\n  {\n    "id": "a",\n    "name": "GET /cart",\n    "service": "web",\n    "start": 0,\n    "duration": 120\n  },\n  {\n    "id": "b",\n    "parent": "a",\n    "name": "SELECT items",\n    "service": "postgres",\n    "start": 20,\n    "duration": 70\n  },\n  {\n    "id": "c",\n    "parent": "a",\n    "name": "render",\n    "service": "web",\n    "start": 95,\n    "duration": 20,\n    "error": "template missing"\n  }\n]',
+  notebook:
+    '{\n  "cells": [\n    {\n      "cell_type": "markdown",\n      "source": "# Scores\\nThe mean of the class."\n    },\n    {\n      "cell_type": "code",\n      "execution_count": 1,\n      "source": "scores = [91, 82, 87]\\nsum(scores) / len(scores)",\n      "outputs": [\n        {\n          "output_type": "execute_result",\n          "execution_count": 1,\n          "data": {\n            "text/plain": "86.666"\n          }\n        }\n      ]\n    }\n  ]\n}',
+  math: '\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n\n\\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}',
+  diagram: 'flowchart LR\n  A[Order] --> B{Paid?}\n  B -- yes --> C[Ship]\n  B -- no --> D[Remind]',
   countdown:
     '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
@@ -486,6 +495,50 @@ const SCHEMA = {
       { name: 'interval', type: 'number', placeholder: '6' },
     ],
   },
+  sql: {
+    tag: 'vt-sql',
+    flags: ['format', 'line-numbers', 'sortable'],
+    fields: [
+      {
+        name: 'dialect',
+        type: 'select',
+        options: ['', 'sql', 'postgresql', 'mysql', 'sqlite', 'mssql', 'oracle'],
+      },
+      { name: 'max-rows', type: 'number', placeholder: '200' },
+    ],
+  },
+  'test-report': {
+    tag: 'vt-test-report',
+    flags: ['status-filter', 'output'],
+    fields: [
+      { name: 'status', type: 'select', options: ['', 'all', 'failed', 'passed', 'skipped'] },
+      { name: 'open', type: 'select', options: ['', 'failed', 'all', 'none'] },
+      { name: 'sort', type: 'select', options: ['', 'order', 'duration', 'name'] },
+    ],
+  },
+  trace: {
+    tag: 'vt-trace',
+    flags: ['details', 'legend'],
+    fields: [
+      { name: 'depth', type: 'number', placeholder: '3' },
+      { name: 'selected', type: 'text', placeholder: 'b' },
+    ],
+  },
+  notebook: {
+    tag: 'vt-notebook',
+    flags: ['code', 'outputs', 'prompts', 'line-numbers'],
+    fields: [{ name: 'images', type: 'select', options: ['', 'allow', 'block', 'same-origin'] }],
+  },
+  math: {
+    tag: 'vt-math',
+    flags: ['numbered', 'delimiters', 'inline'],
+    fields: [{ name: 'macros', type: 'text', placeholder: '{"\\\\R": "\\\\mathbb{R}"}' }],
+  },
+  diagram: {
+    tag: 'vt-diagram',
+    flags: ['tabs', 'line-numbers'],
+    fields: [{ name: 'look', type: 'select', options: ['', 'classic', 'handDrawn'] }],
+  },
   countdown: {
     tag: 'vt-countdown',
     flags: [],
@@ -736,6 +789,12 @@ function switchType(type) {
     menu: 'File',
     upload: 'Attachments',
     testimonials: 'testimonials.json',
+    sql: 'users.sql',
+    'test-report': 'junit.xml',
+    trace: 'trace.json',
+    notebook: 'scores.ipynb',
+    math: 'Formulas',
+    diagram: 'Orders',
     countdown: 'countdown.json',
   }[type];
   buildControls();

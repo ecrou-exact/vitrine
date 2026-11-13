@@ -578,7 +578,13 @@ vt-date-picker:not(:defined),
 vt-menu:not(:defined),
 vt-upload:not(:defined),
 vt-testimonials:not(:defined),
-vt-countdown:not(:defined) {
+vt-countdown:not(:defined),
+vt-sql:not(:defined),
+vt-test-report:not(:defined),
+vt-trace:not(:defined),
+vt-notebook:not(:defined),
+vt-math:not(:defined),
+vt-diagram:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;
