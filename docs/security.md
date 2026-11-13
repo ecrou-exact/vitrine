@@ -1,3 +1,7 @@
+| `<vt-treemap>` | Names, paths and sizes as text; rectangles placed through CSSOM from numbers. Metafiles and stats are only read: nothing is run or fetched. Paths copied as CSV that start with `=`, `+`, `-` or `@` are prefixed for spreadsheets. |
+| `<vt-describe>` | Column names and values as text; bars sized through CSSOM from numbers. Values copied or downloaded that start with `=`, `+`, `-` or `@` are prefixed for spreadsheets. |
+| `<vt-compare>` | Column names and values as text, in `del` and `ins` elements. Each side is fetched with the same rules as `src`. Values copied or downloaded that start with `=`, `+`, `-` or `@` are prefixed for spreadsheets. |
+
 # Security
 
 Vitrine is built to display content you do not control: user comments in Markdown, API responses, uploaded code. This page explains what Vitrine guarantees, how it does it, how to configure a Content Security Policy, and what it cannot protect you from.

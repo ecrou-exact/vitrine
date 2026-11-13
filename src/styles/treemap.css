@@ -1,0 +1,203 @@
+/*
+ * Treemap: rectangles placed through CSSOM in a map of fixed aspect ratio, colored by group
+ * with the chart colors of the theme, lighter at each level, with the path of the zoom.
+ */
+.vt {
+  --_chart-1: var(--vt-chart-1, var(--_accent));
+  --_chart-2: var(--vt-chart-2, var(--_info));
+  --_chart-3: var(--vt-chart-3, var(--_warning));
+  --_chart-4: var(--vt-chart-4, var(--_syntax-keyword));
+  --_chart-5: var(--vt-chart-5, var(--_danger));
+  --_chart-6: var(--vt-chart-6, var(--_syntax-string));
+  --_chart-7: var(--vt-chart-7, var(--_syntax-number));
+  --_chart-8: var(--vt-chart-8, var(--_fg-muted));
+}
+
+.tm-body {
+  padding: 0;
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+  overscroll-behavior: auto;
+}
+
+.tm-host {
+  display: grid;
+}
+
+.tm-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: var(--_space-2) var(--_space-4);
+  border-bottom: 1px solid var(--_border);
+}
+
+.tm-crumbs .text-btn + .text-btn::before {
+  content: '›';
+  margin-inline-end: 6px;
+  color: var(--_fg-muted);
+}
+
+.tm-crumbs .text-btn[aria-current='true'] {
+  color: var(--_fg);
+  font-weight: 600;
+}
+
+.tm-scroll {
+  padding: var(--_space-3) var(--_space-4);
+}
+
+.tm-map {
+  position: relative;
+  width: 100%;
+  max-height: 560px;
+  aspect-ratio: 1000 / 560;
+  overflow: hidden;
+  direction: ltr;
+}
+
+.vt[data-fullscreen] .tm-map {
+  max-height: none;
+}
+
+.c0 {
+  --_c: var(--_chart-1);
+}
+
+.c1 {
+  --_c: var(--_chart-2);
+}
+
+.c2 {
+  --_c: var(--_chart-3);
+}
+
+.c3 {
+  --_c: var(--_chart-4);
+}
+
+.c4 {
+  --_c: var(--_chart-5);
+}
+
+.c5 {
+  --_c: var(--_chart-6);
+}
+
+.c6 {
+  --_c: var(--_chart-7);
+}
+
+.c7 {
+  --_c: var(--_chart-8);
+}
+
+.tm-item {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 2px 5px;
+  overflow: hidden;
+  border: 1px solid var(--_surface);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--_c) calc(40% - var(--_level, 1) * 8%), var(--_surface));
+  color: var(--_fg);
+  font-size: var(--_font-size-small);
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.tm-group {
+  background: color-mix(in srgb, var(--_c) 14%, var(--_surface));
+}
+
+.tm-item:hover {
+  background: color-mix(in srgb, var(--_c) 50%, var(--_surface));
+}
+
+.tm-group:hover {
+  background: color-mix(in srgb, var(--_c) 24%, var(--_surface));
+}
+
+.tm-item:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--_fg);
+  outline-offset: -2px;
+}
+
+.tm-item.match {
+  background: color-mix(in srgb, var(--_accent) 50%, var(--_surface));
+  font-weight: 600;
+}
+
+.tm-item.dim {
+  opacity: 0.45;
+}
+
+.tm-name,
+.tm-size {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tm-group > .tm-name {
+  font-weight: 600;
+}
+
+.tm-size {
+  color: var(--_fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tm-details,
+.tm-match {
+  min-height: 1.4em;
+  margin: 0;
+  padding: var(--_space-2) var(--_space-4);
+  border-top: 1px solid var(--_border);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.tm-match {
+  color: var(--_fg-muted);
+}
+
+.tm-table {
+  overflow: auto;
+  max-height: 560px;
+}
+
+.tm-table:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.tm-table tr.match th,
+.tm-table tr.match td {
+  background: var(--_accent-soft);
+}
+
+.tm-row-name {
+  max-width: 60ch;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.tm-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-inline-end: 8px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--_c) 60%, var(--_surface));
+}
+
+.tm-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

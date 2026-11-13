@@ -48,7 +48,10 @@
  *   | keyof typeof import('../components/diagram/strings.js').en
  *   | keyof typeof import('../components/pivot/strings.js').en
  *   | keyof typeof import('../components/heatmap/strings.js').en
- *   | keyof typeof import('../components/flame/strings.js').en} StringKey
+ *   | keyof typeof import('../components/flame/strings.js').en
+ *   | keyof typeof import('../components/treemap/strings.js').en
+ *   | keyof typeof import('../components/describe/strings.js').en
+ *   | keyof typeof import('../components/compare/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

@@ -3,12 +3,16 @@ import { expect, test } from '@playwright/test';
 import { STRICT, collectErrors, mount, recordEvents } from './helpers.js';
 
 /**
- * <vt-pivot>, <vt-heatmap> and <vt-flame> on the strict CSP page: behavior, keyboard,
+ * <vt-pivot>, <vt-heatmap>, <vt-flame>, <vt-treemap>, <vt-describe> and <vt-compare> on the strict CSP page: behavior, keyboard,
  * events and axe, with nothing refused or reported in the console.
  */
 
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const SALES = 'region,year,sales\nNorth,2025,100\nNorth,2026,120\nSouth,2025,30\nSouth,2026,70';
+const SIZES = 'path,size\nsrc/a.js,60\nsrc/b.js,20\ndocs/c.md,20';
+const PEOPLE = 'name,age,city\nAda,36,London\nAlan,41,London\nGrace,60,New York\nLinus,20,Helsinki';
+const OLD = 'id,name,price\n1,Pen,2\n2,Book,12\n3,Lamp,30';
+const NEW = 'id,name,price\n1,Pen,2\n3,Lamp,35\n4,Mug,8';
 const FOLDED = 'main;parse;tokenize 35\nmain;parse 10\nmain;render;paint 50\nmain;render;layout 20';
 
 /** @param {import('@playwright/test').Page} page */
@@ -83,6 +87,49 @@ test.describe('data elements', () => {
       await expect(el.locator('.fl-crumbs')).toHaveText(/All\s*main$/);
       await el.getByRole('tab', { name: 'Functions' }).click();
       await expect(el.locator('tbody tr').first()).toContainText('paint');
+      expect(await axe(page)).toEqual([]);
+    });
+
+    test(`<vt-treemap> opens groups with the mouse and the keyboard (${theme})`, async ({
+      page,
+    }) => {
+      await mount(page, 'vt-treemap', { variant: 'full', theme, 'lang-ui': 'en' }, SIZES);
+      await recordEvents(page, ['vt-select']);
+      const el = page.locator('#el');
+      // The name band of the group: what it holds covers the rest.
+      await el.getByRole('treeitem', { name: /^src,/ }).click({ position: { x: 12, y: 8 } });
+      await expect(el.locator('.tm-crumbs')).toHaveText(/All\s*src/);
+      expect((await events(page))[0].detail).toMatchObject({ name: 'src', size: 80, leaf: false });
+      await expect(el.locator('[role="treeitem"][tabindex="0"]')).toBeFocused();
+      await page.keyboard.press('ArrowRight');
+      await expect(el.locator('[role="treeitem"][tabindex="0"]')).toHaveAttribute('aria-label', 'b.js, 20, 20%'); // prettier-ignore
+      await page.keyboard.press('Escape');
+      await expect(el.locator('.tm-crumbs')).toHaveText(/^All$/);
+      await el.getByRole('tab', { name: 'List' }).click();
+      await expect(el.locator('tbody tr').first()).toContainText('src');
+      expect(await axe(page)).toEqual([]);
+    });
+
+    test(`<vt-describe> profiles columns and opens one (${theme})`, async ({ page }) => {
+      await mount(page, 'vt-describe', { variant: 'full', theme, 'lang-ui': 'en' }, PEOPLE);
+      await recordEvents(page, ['vt-toggle']);
+      const el = page.locator('#el');
+      await expect(el.locator('tbody tr').nth(1)).toContainText('20 to 60');
+      await el.getByRole('button', { name: 'city' }).click();
+      await expect(el.locator('.ds-details')).toContainText('Most frequent');
+      expect((await events(page))[0].detail).toEqual({ column: 'city', open: true });
+      expect(await axe(page)).toEqual([]);
+    });
+
+    test(`<vt-compare> shows differences and filters them (${theme})`, async ({ page }) => {
+      await mount(page, 'vt-compare', { variant: 'full', theme, 'lang-ui': 'en' }, JSON.stringify({ original: OLD, modified: NEW })); // prettier-ignore
+      await recordEvents(page, ['vt-filter-change']);
+      const el = page.locator('#el');
+      await expect(el.locator('tbody tr')).toHaveCount(3);
+      await expect(el.locator('td.cmp-cell-changed')).toHaveText(/30\s*→?\s*35/);
+      await el.getByRole('button', { name: /^Removed/ }).click();
+      await expect(el.locator('tbody tr')).toHaveCount(1);
+      expect((await events(page))[0].detail).toEqual({ filter: 'removed' });
       expect(await axe(page)).toEqual([]);
     });
   }

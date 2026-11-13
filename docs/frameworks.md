@@ -643,7 +643,10 @@ vt-math:not(:defined),
 vt-diagram:not(:defined),
 vt-pivot:not(:defined),
 vt-heatmap:not(:defined),
-vt-flame:not(:defined) {
+vt-flame:not(:defined),
+vt-treemap:not(:defined),
+vt-describe:not(:defined),
+vt-compare:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

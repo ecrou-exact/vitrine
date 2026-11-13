@@ -80,6 +80,12 @@ const SAMPLES = {
     '{\n  "2026-10-01": 3,\n  "2026-10-02": 5,\n  "2026-10-06": 8,\n  "2026-10-07": 2,\n  "2026-10-13": 9,\n  "2026-10-20": 4,\n  "2026-10-27": 7,\n  "2026-11-03": 6,\n  "2026-11-10": 11\n}',
   flame:
     'main;server;handle;db.query;pg.send 300\nmain;server;handle;db.query;pg.parse 80\nmain;server;handle;render;template 160\nmain;server;auth;jwt.verify 90\nmain;gc 60',
+  treemap:
+    'path,size\nsrc/components/chart.js,24100\nsrc/components/table.js,16300\nsrc/api/client.js,8800\nnode_modules/lodash/lodash.js,71000\nnode_modules/date-fns/format.js,18200\nnode_modules/date-fns/parse.js,21500',
+  describe:
+    'plan,seats,mrr,signup\nPro,12,480,2025-03-14\nTeam,4,96,2025-05-02\nFree,1,0,2025-06-21\nPro,25,1000,2025-07-09\nTeam,6,144,\nFree,1,0,2025-09-12',
+  compare:
+    '{\n  "key": "sku",\n  "original": [\n    {\n      "sku": "A-100",\n      "price": 39,\n      "stock": 12\n    },\n    {\n      "sku": "A-101",\n      "price": 4.5,\n      "stock": 140\n    },\n    {\n      "sku": "A-103",\n      "price": 19.9,\n      "stock": 0\n    }\n  ],\n  "modified": [\n    {\n      "sku": "A-100",\n      "price": 42,\n      "stock": 12\n    },\n    {\n      "sku": "A-101",\n      "price": 4.5,\n      "stock": 128\n    },\n    {\n      "sku": "A-105",\n      "price": 9.9,\n      "stock": 60\n    }\n  ]\n}',
   countdown:
     '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
@@ -577,6 +583,35 @@ const SCHEMA = {
       { name: 'unit', type: 'text', placeholder: 'samples' },
     ],
   },
+  treemap: {
+    tag: 'vt-treemap',
+    flags: ['tabs'],
+    fields: [
+      { name: 'unit', type: 'text', placeholder: 'bytes' },
+      { name: 'depth', type: 'number', placeholder: '2' },
+    ],
+  },
+  describe: {
+    tag: 'vt-describe',
+    flags: ['expanded'],
+    fields: [
+      { name: 'columns', type: 'text', placeholder: 'plan,mrr' },
+      { name: 'bins', type: 'number', placeholder: '12' },
+      { name: 'top', type: 'number', placeholder: '5' },
+    ],
+  },
+  compare: {
+    tag: 'vt-compare',
+    flags: ['filters'],
+    fields: [
+      { name: 'key', type: 'text', placeholder: 'sku' },
+      {
+        name: 'filter',
+        type: 'select',
+        options: ['', 'changes', 'all', 'added', 'removed', 'changed'],
+      },
+    ],
+  },
   countdown: {
     tag: 'vt-countdown',
     flags: [],
@@ -836,6 +871,9 @@ function switchType(type) {
     pivot: 'sales.csv',
     heatmap: 'Commits',
     flame: 'checkout.folded',
+    treemap: 'app.js',
+    describe: 'customers.csv',
+    compare: 'catalog.json',
     countdown: 'countdown.json',
   }[type];
   buildControls();

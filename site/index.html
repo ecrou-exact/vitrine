@@ -672,6 +672,35 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
                 main;gc 60</vt-flame>
               <a href="examples.html#flame">Flame graph examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-treemap&gt;</h3>
+              <p>
+                Treemaps of sizes: bundles, disks or budgets, with zoom and search.
+              </p>
+              <vt-treemap class="preview" lang-ui="en" unit="bytes">path,size
+                src/components/chart.js,24100
+                src/components/table.js,16300
+                src/api/client.js,8800
+                node_modules/lodash/lodash.js,71000
+                node_modules/date-fns/format.js,18200</vt-treemap>
+              <a href="examples.html#treemap">Treemap examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-describe&gt;</h3>
+              <p>
+                The profile of a dataset: types, missing values, statistics and histograms.
+              </p>
+              <vt-describe class="preview" lang-ui="en" json='[{"plan":"Pro","seats":12,"mrr":480},{"plan":"Team","seats":4,"mrr":96},{"plan":"Free","seats":1,"mrr":0},{"plan":"Pro","seats":25,"mrr":1000},{"plan":"Team","seats":6,"mrr":144}]'></vt-describe>
+              <a href="examples.html#describe">Dataset profile examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-compare&gt;</h3>
+              <p>
+                The differences between two datasets, row by row and cell by cell.
+              </p>
+              <vt-compare class="preview" lang-ui="en" json='{"original":[{"sku":"A-100","price":39},{"sku":"A-101","price":4.5},{"sku":"A-103","price":19.9}],"modified":[{"sku":"A-100","price":42},{"sku":"A-101","price":4.5},{"sku":"A-105","price":9.9}]}'></vt-compare>
+              <a href="examples.html#compare">Dataset comparison examples</a>
+            </article>
           </div>
         </div>
       </section>

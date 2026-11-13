@@ -1,3 +1,6 @@
+| `<vt-treemap>` | A treemap of sizes that zooms | Map / List tabs, search, copy, download, full screen | [docs/components/treemap.md](docs/components/treemap.md) |
+| `<vt-describe>` | The profile of a dataset | Search, copy, download, full screen | [docs/components/describe.md](docs/components/describe.md) |
+| `<vt-compare>` | The differences between two datasets | Filters, search, copy, download, full screen | [docs/components/compare.md](docs/components/compare.md) |
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="brand/logo-horizontal-dark.svg">
@@ -6,7 +9,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps and flame graphs — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles and dataset comparisons — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -83,7 +86,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps and flame graphs — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles and dataset comparisons — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -151,6 +154,9 @@
 - **`<vt-pivot>`** — pivot tables from CSV or JSON: rows × columns, sum, count, average, min, max or distinct values, totals, shaded cells, lists to change the fields, and the records of a cell on a click.
 - **`<vt-heatmap>`** — heat maps: values by day as a calendar of weeks (contributions, activity), or by two categories as a matrix, with a scale, totals and a keyboard grid.
 - **`<vt-flame>`** — flame graphs of CPU profiles (folded stacks of perf, py-spy, async-profiler; Chrome and Node `.cpuprofile`), with zoom, search and the costliest functions.
+- **`<vt-treemap>`** — treemaps of sizes (esbuild metafiles, webpack stats, `du`, CSV, JSON trees): what takes the space in a bundle or a disk, with zoom, search and a list.
+- **`<vt-describe>`** — the profile of a dataset, as pandas `describe()`: type, missing and distinct values, quartiles, histograms and most frequent values of each column.
+- **`<vt-compare>`** — the differences between two datasets: rows paired by a key, added, removed and changed, with the old and new value of each cell.
 - **JSON everywhere** — every element reads JSON from a `data` property, a `json` or `json-src` attribute (with `json-path`) or a JSON script, and turns it into its own format. See [docs/json.md](docs/json.md).
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.

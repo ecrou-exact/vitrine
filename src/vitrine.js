@@ -46,6 +46,9 @@ import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
 import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
+import { VtCompare } from './components/compare/vt-compare.js';
+import { VtDescribe } from './components/describe/vt-describe.js';
+import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
 import { VtHeatmap } from './components/heatmap/vt-heatmap.js';
 import { VtPivot } from './components/pivot/vt-pivot.js';
@@ -110,6 +113,9 @@ export {
   VtPivot,
   VtHeatmap,
   VtFlame,
+  VtTreemap,
+  VtDescribe,
+  VtCompare,
   configure,
   getConfig,
   EVENTS,
@@ -186,6 +192,9 @@ export const registry = new Map(
     ['vt-pivot', VtPivot],
     ['vt-heatmap', VtHeatmap],
     ['vt-flame', VtFlame],
+    ['vt-treemap', VtTreemap],
+    ['vt-describe', VtDescribe],
+    ['vt-compare', VtCompare],
   ]),
 );
 
@@ -239,6 +248,9 @@ const TYPES = /** @type {const} */ ({
   pivot: 'vt-pivot',
   heatmap: 'vt-heatmap',
   flame: 'vt-flame',
+  treemap: 'vt-treemap',
+  describe: 'vt-describe',
+  compare: 'vt-compare',
 });
 
 /**

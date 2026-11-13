@@ -73,6 +73,9 @@
           <option value="pivot">Pivot</option>
           <option value="heatmap">Heat map</option>
           <option value="flame">Flame graph</option>
+          <option value="treemap">Treemap</option>
+          <option value="describe">Dataset profile</option>
+          <option value="compare">Dataset comparison</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -3446,6 +3449,125 @@ AssertionError: assert 404 == 200</failure>
                 main;gc 60
               </template>
             </vt-flame>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="treemap" aria-labelledby="treemap-title">
+        <h2 id="treemap-title">&lt;vt-treemap&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>What takes the space in a bundle</h3>
+            <p>Paths and sizes in bytes, as an esbuild metafile or webpack stats give them. Choose a folder to open it, <kbd>Escape</kbd> to go back; search <code>lodash</code> to see its share.</p>
+          </div>
+          <template>
+            <vt-treemap variant="full" unit="bytes" label="app.js" lang-ui="en">
+              <template>
+                path,size
+                node_modules/react-dom/cjs/react-dom.production.js,131000
+                node_modules/react/cjs/react.production.js,7400
+                node_modules/lodash/lodash.js,71000
+                node_modules/date-fns/format.js,18200
+                node_modules/date-fns/parse.js,21500
+                node_modules/date-fns/locale/fr.js,9800
+                src/components/Chart.jsx,24100
+                src/components/Table.jsx,16300
+                src/components/Form.jsx,11900
+                src/pages/Dashboard.jsx,13400
+                src/pages/Settings.jsx,6200
+                src/api/client.js,8800
+                src/api/cache.js,3100
+                src/index.jsx,1200
+              </template>
+            </vt-treemap>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A budget, a column per level</h3>
+            <p>CSV with the levels before the value: here the cost of a cloud bill by team and service.</p>
+          </div>
+          <template>
+            <vt-treemap unit="€" depth="2" label="Cloud bill" lang-ui="en">
+              <template>
+                team,service,cost
+                Web,CDN,1200
+                Web,Compute,3400
+                Web,Storage,800
+                Data,Warehouse,5200
+                Data,Pipelines,1900
+                Mobile,Push,300
+                Mobile,API,1700
+                Platform,Kubernetes,4100
+                Platform,Logs,1300
+              </template>
+            </vt-treemap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="describe" aria-labelledby="describe-title">
+        <h2 id="describe-title">&lt;vt-describe&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A first look at an export</h3>
+            <p>Each column with its type, its missing values and its distribution. Choose a column name to see its quartiles and most frequent values.</p>
+          </div>
+          <template>
+            <vt-describe variant="full" label="customers.csv" lang-ui="en">
+              <template>
+                id,country,plan,seats,mrr,signup,active
+                1,France,Pro,12,480,2025-03-14,yes
+                2,Germany,Team,4,96,2025-05-02,yes
+                3,France,Free,1,0,2025-06-21,no
+                4,Spain,Pro,25,1000,2025-07-09,yes
+                5,France,Team,6,144,2025-08-30,yes
+                6,Italy,Free,1,0,2025-09-12,no
+                7,Germany,Pro,40,1600,2025-10-01,yes
+                8,France,Team,3,72,,yes
+                9,Spain,Free,1,0,2025-11-18,no
+                10,France,Pro,18,720,2026-01-07,yes
+                11,Belgium,Team,5,120,2026-02-15,yes
+                12,France,Pro,9,360,2026-03-03,N/A
+                13,Germany,Free,1,0,2026-04-22,no
+                14,Italy,Team,8,192,2026-06-10,yes
+                15,France,Pro,30,1200,2026-08-28,yes
+              </template>
+            </vt-describe>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="compare" aria-labelledby="compare-title">
+        <h2 id="compare-title">&lt;vt-compare&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Two exports of a catalog</h3>
+            <p>Rows are paired by <code>sku</code>, found on its own. The filters show the added, removed and changed rows; a changed value is struck through beside the new one.</p>
+          </div>
+          <template>
+            <vt-compare variant="full" label="catalog.csv" lang-ui="en">
+              <template data-original>
+                sku,name,price,stock
+                A-100,Desk lamp,39.00,12
+                A-101,Notebook,4.50,140
+                A-102,Fountain pen,25.00,30
+                A-103,Desk mat,19.90,0
+                A-104,Stapler,12.00,25
+              </template>
+              <template data-modified>
+                sku,name,price,stock,color
+                A-100,Desk lamp,42.00,12,black
+                A-101,Notebook,4.5,128,white
+                A-102,Fountain pen,25.00,30,blue
+                A-104,Stapler,12.00,25,red
+                A-105,Pencil case,9.90,60,grey
+              </template>
+            </vt-compare>
           </template>
         </article>
       </section>

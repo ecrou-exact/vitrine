@@ -467,6 +467,39 @@ const MODES = [
     wrap: (p) => `main;${p.replace(/[;\n]/g, ' ')};leaf 10\nmain 2`,
   },
   {
+    tag: 'vt-treemap',
+    attrs: { variant: 'full', tabs: '', unit: '<b>u</b>' },
+    wrap: (p) =>
+      JSON.stringify([
+        { path: p + '/' + p, size: 5 },
+        { path: p, size: 3 },
+      ]),
+  },
+  {
+    tag: 'vt-describe',
+    attrs: { variant: 'full', expanded: '' },
+    wrap: (p) =>
+      JSON.stringify([
+        { [p]: p, n: 1 },
+        { [p]: 'x', n: 2 },
+      ]),
+  },
+  {
+    tag: 'vt-compare',
+    attrs: { variant: 'full', filter: 'all' },
+    wrap: (p) =>
+      JSON.stringify({
+        original: [
+          { id: 1, [p]: p },
+          { id: 3, [p]: p },
+        ],
+        modified: [
+          { id: 1, [p]: p + 'x' },
+          { id: 2, [p]: p },
+        ],
+      }),
+  },
+  {
     tag: 'vt-math',
     attrs: { delimiters: '', variant: 'full' },
     wrap: (p) =>

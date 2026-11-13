@@ -1,0 +1,156 @@
+/*
+ * Comparison of datasets: filter buttons, notes, then the rows marked added, removed or
+ * changed, the old value struck through beside the new one. Colors are never the only cue:
+ * a mark and the status are written in each row.
+ */
+.cmp-body {
+  display: grid;
+  align-content: start;
+  padding: 0;
+  background: var(--_surface);
+  overscroll-behavior: auto;
+}
+
+.cmp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+  padding: var(--_space-3) var(--_space-4) 0;
+}
+
+.cmp-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 500 var(--_font-size-ui) / 1 var(--_font-ui);
+  cursor: pointer;
+}
+
+.cmp-filter:hover {
+  background: var(--_surface-sunken);
+}
+
+.cmp-filter[aria-pressed='true'] {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.cmp-filter:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.cmp-count {
+  color: var(--_fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-notes {
+  margin: 0;
+  padding: var(--_space-2) var(--_space-4) var(--_space-3);
+  list-style: none;
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-small) / 1.5 var(--_font-ui);
+  border-bottom: 1px solid var(--_border);
+}
+
+.cmp-none {
+  margin: 0;
+  padding: var(--_space-4);
+  color: var(--_fg-muted);
+  font: 400 var(--_font-size-ui) / 1.5 var(--_font-ui);
+}
+
+.cmp-body > .notice {
+  margin: var(--_space-3) var(--_space-4) 0;
+}
+
+.cmp-wrap {
+  overflow: auto;
+  max-height: 560px;
+}
+
+:host([max-height]) .cmp-wrap,
+.vt[data-fullscreen] .cmp-wrap {
+  max-height: none;
+}
+
+.cmp-wrap:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.cmp-table td {
+  vertical-align: top;
+}
+
+.cmp-status {
+  white-space: nowrap;
+}
+
+.cmp-mark {
+  display: inline-block;
+  width: 1.2em;
+  font-family: var(--_font-mono);
+  font-weight: 700;
+}
+
+.cmp-status-text {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.cmp-added > td {
+  background: color-mix(in srgb, var(--_success) 10%, transparent);
+}
+
+.cmp-added .cmp-mark {
+  color: var(--_success);
+}
+
+.cmp-removed > td {
+  background: color-mix(in srgb, var(--_danger) 9%, transparent);
+  color: var(--_fg-muted);
+}
+
+.cmp-removed .cmp-mark {
+  color: var(--_danger);
+}
+
+.cmp-changed .cmp-mark {
+  color: var(--_warning);
+}
+
+.cmp-table td.cmp-cell-changed {
+  background: color-mix(in srgb, var(--_warning) 12%, transparent);
+}
+
+.cmp-cell-changed del,
+.cmp-cell-changed ins {
+  display: block;
+  text-decoration-thickness: 1px;
+}
+
+.cmp-cell-changed del {
+  color: var(--_fg-muted);
+}
+
+.cmp-cell-changed ins {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cmp-col-added::after {
+  content: ' +';
+  color: var(--_success);
+}
+
+.cmp-col-removed {
+  text-decoration: line-through;
+}

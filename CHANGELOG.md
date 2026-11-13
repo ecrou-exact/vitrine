@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-heatmap>`: heat maps. Values by day as a calendar of weeks (a year by default, or `year`, `from`, `to`), or values by two categories as a matrix, in 3 to 9 shades of the theme. The squares follow the WAI-ARIA grid pattern, and each says its day and value.
 - `<vt-flame>`: flame graphs of CPU profiles: folded stacks (perf, py-spy, async-profiler…), Chrome and Node `.cpuprofile` files, or a JSON tree. Zoom into a function, search what share of the time matching functions take, move with the keyboard, and a Functions tab with the self and total time of each function.
 
+- `<vt-treemap>`: treemaps of sizes from esbuild metafiles, webpack stats, the output of `du`, CSV (paths and sizes, or a column per level), lists and JSON trees. Squarified rectangles nested on up to 4 levels, a group opened by choosing it and closed with Escape, search with the share of the matches, sizes of bundles in kB and MB, and a List tab.
+- `<vt-describe>`: the profile of a dataset, as pandas `describe()`. The type of each column (number, date, yes / no, text), its missing and distinct values, a summary and a histogram or the shares of its most frequent values; opening a column shows its quartiles, standard deviation and most frequent values. Copy and download as CSV.
+- `<vt-compare>`: the differences between two datasets (CSV or JSON). Rows are paired by a key column, found or set with `key`, or by position; added, removed and changed rows are marked, with the old and new value of each changed cell, the columns added or removed, and filters with counts. Copy and download the differences as CSV.
+
 ### Changed
 
-- The budget of the full bundles is 400 KB, for the three new elements.
+- The budget of the full bundles is 410 KB, for the six new elements.
 
 ## [0.14.0] - 2026-11-13
 

@@ -1,6 +1,6 @@
 # Getting started
 
-Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, data tables, status pages, calendars, pricing plans and the other blocks of a site, form fields, SQL results, test reports, distributed traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps and flame graphs on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-table>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-board>`, `<vt-field>`, `<vt-search>`, `<vt-date-picker>`, `<vt-menu>`, `<vt-upload>`, `<vt-testimonials>`, `<vt-countdown>`, `<vt-sql>`, `<vt-test-report>`, `<vt-trace>`, `<vt-notebook>`, `<vt-math>`, `<vt-diagram>`, `<vt-pivot>`, `<vt-heatmap>` and `<vt-flame>` elements in your HTML.
+Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, data tables, status pages, calendars, pricing plans and the other blocks of a site, form fields, SQL results, test reports, distributed traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles and dataset comparisons on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-table>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-board>`, `<vt-field>`, `<vt-search>`, `<vt-date-picker>`, `<vt-menu>`, `<vt-upload>`, `<vt-testimonials>`, `<vt-countdown>`, `<vt-sql>`, `<vt-test-report>`, `<vt-trace>`, `<vt-notebook>`, `<vt-math>`, `<vt-diagram>`, `<vt-pivot>`, `<vt-heatmap>`, `<vt-flame>`, `<vt-treemap>`, `<vt-describe>` and `<vt-compare>` elements in your HTML.
 
 This page covers installation, a first example for each component, and the ways to give content to an element.
 
@@ -11,7 +11,7 @@ The `dist/` folder contains:
 | File                       | Format         | Behavior                                                                                                                                                                                                                                                            |
 | -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dist/vitrine-loader.js`   | Classic script | Loads only the elements a page uses, from `dist/esm/`. See [Loader](#loader-only-the-elements-a-page-uses).                                                                                                                                                         |
-| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the forty-eight elements automatically and exposes a global `Vitrine` object.                                                                                                                                                  |
+| `dist/vitrine.min.js`      | Classic script | Every component in one file. Defines the fifty-one elements automatically and exposes a global `Vitrine` object.                                                                                                                                                    |
 | `dist/vitrine.esm.js`      | ES module      | Every component in one file. Defines nothing by itself: import `defineAll()` and call it.                                                                                                                                                                           |
 | `dist/esm/vt-<name>.js`    | ES modules     | One module per component, which defines its element when imported. Code shared between components is in `dist/esm/chunks/`. See [Per-component modules](#per-component-modules).                                                                                    |
 | `dist/esm/vitrine.js`      | ES module      | Every component, built from the same shared chunks as the per-component modules. Call `defineAll()`.                                                                                                                                                                |
@@ -32,7 +32,7 @@ One small script (about 1.2 KB gzipped) finds the `vt-*` elements of the page, n
 <vt-sql dialect="postgresql">SELECT * FROM users;</vt-sql>
 ```
 
-A page with `<vt-code>` and `<vt-markdown>` downloads about 90 KB instead of the 380 KB of `vitrine.min.js`. The [Integrations page](https://ecrou-exact.github.io/vitrine/integrations.html#pick) of the website gives the size for any set of elements. When a site uses most elements, `vitrine.min.js` is smaller in all.
+A page with `<vt-code>` and `<vt-markdown>` downloads about 90 KB instead of the 405 KB of `vitrine.min.js`. The [Integrations page](https://ecrou-exact.github.io/vitrine/integrations.html#pick) of the website gives the size for any set of elements. When a site uses most elements, `vitrine.min.js` is smaller in all.
 
 | Attribute     | Description                                                                                                |
 | ------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -55,7 +55,7 @@ Do not load the loader and `vitrine.min.js` on the same page.
 <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 ```
 
-The script defines the forty-eight elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
+The script defines the fifty-one elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
 
 Each GitHub release lists SRI hashes for the release files. If you add an `integrity` attribute, pin an exact version (`@0.14.0`) instead of `@0`, because the hash changes with every release. Until 1.0, a new minor version may change the API: pin a version in production too.
 
@@ -106,9 +106,9 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 
 | File                          | Size (gzip) |
 | ----------------------------- | ----------- |
-| `dist/vitrine.min.js`         | 393.1 KB    |
-| `dist/vitrine.esm.js`         | 393.0 KB    |
-| `dist/vitrine-loader.js`      | 1.2 KB      |
+| `dist/vitrine.min.js`         | 406.5 KB    |
+| `dist/vitrine.esm.js`         | 406.4 KB    |
+| `dist/vitrine-loader.js`      | 1.3 KB      |
 | `dist/esm/vt-code.js`         | 60.0 KB     |
 | `dist/esm/vt-markdown.js`     | 79.4 KB     |
 | `dist/esm/vt-json.js`         | 64.1 KB     |
@@ -148,17 +148,20 @@ Download size (minified and gzipped), each module counted with every chunk it lo
 | `dist/esm/vt-upload.js`       | 63.4 KB     |
 | `dist/esm/vt-menu.js`         | 61.2 KB     |
 | `dist/esm/vt-date-picker.js`  | 65.2 KB     |
+| `dist/esm/vt-compare.js`      | 30.5 KB     |
+| `dist/esm/vt-describe.js`     | 62.3 KB     |
+| `dist/esm/vt-treemap.js`      | 62.3 KB     |
+| `dist/esm/vt-flame.js`        | 60.6 KB     |
+| `dist/esm/vt-heatmap.js`      | 60.4 KB     |
+| `dist/esm/vt-pivot.js`        | 61.4 KB     |
 | `dist/esm/vt-sql.js`          | 68.0 KB     |
 | `dist/esm/vt-test-report.js`  | 67.7 KB     |
 | `dist/esm/vt-trace.js`        | 63.4 KB     |
 | `dist/esm/vt-notebook.js`     | 83.7 KB     |
 | `dist/esm/vt-math.js`         | 61.0 KB     |
 | `dist/esm/vt-diagram.js`      | 59.6 KB     |
-| `dist/esm/vt-pivot.js`        | 61.4 KB     |
-| `dist/esm/vt-heatmap.js`      | 60.4 KB     |
-| `dist/esm/vt-flame.js`        | 60.6 KB     |
 
-These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (400 KB for the full bundles; 2 KB for the loader; 62, 80, 66, 63, 34, 68, 64, 64, 69, 66, 62, 64, 66, 64, 66, 66, 58, 66, 69, 67, 66, 67, 68, 67, 74, 64, 69, 63, 61, 62, 62, 62, 62, 66, 71, 64, 66, 64, 68, 70, 70, 66, 86, 63, 62, 64, 63 and 63 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
+These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (410 KB for the full bundles; 2 KB for the loader; 62, 80, 66, 63, 34, 68, 64, 64, 69, 66, 62, 64, 66, 64, 66, 66, 58, 66, 69, 67, 66, 67, 68, 67, 74, 64, 69, 63, 61, 62, 62, 62, 62, 66, 71, 64, 66, 64, 68, 33, 65, 65, 63, 63, 64, 70, 70, 66, 86, 63 and 62 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>`, the first time a page shows a description written in YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
 
 ### Git submodule
 
@@ -488,7 +491,7 @@ While content loads from `src`, the element shows a loading placeholder. If cont
 ## Next steps
 
 - [Common attributes and events](common-attributes.md)
-- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md), [`<vt-env>`](components/env.md), [`<vt-hex>`](components/hex.md), [`<vt-timeline>`](components/timeline.md), [`<vt-job>`](components/job.md), [`<vt-git>`](components/git.md), [`<vt-regex>`](components/regex.md), [`<vt-yaml>`](components/yaml.md), [`<vt-xml>`](components/xml.md), [`<vt-toml>`](components/toml.md), [`<vt-jwt>`](components/jwt.md), [`<vt-cron>`](components/cron.md), [`<vt-cert>`](components/cert.md), [`<vt-status>`](components/status.md), [`<vt-calendar>`](components/calendar.md), [`<vt-pricing>`](components/pricing.md), [`<vt-faq>`](components/faq.md), [`<vt-gallery>`](components/gallery.md), [`<vt-stats>`](components/stats.md), [`<vt-board>`](components/board.md), [`<vt-field>`](components/field.md), [`<vt-search>`](components/search.md), [`<vt-date-picker>`](components/date-picker.md), [`<vt-menu>`](components/menu.md), [`<vt-upload>`](components/upload.md), [`<vt-testimonials>`](components/testimonials.md), [`<vt-countdown>`](components/countdown.md), [`<vt-sql>`](components/sql.md), [`<vt-test-report>`](components/test-report.md), [`<vt-trace>`](components/trace.md), [`<vt-notebook>`](components/notebook.md), [`<vt-math>`](components/math.md), [`<vt-diagram>`](components/diagram.md), [`<vt-pivot>`](components/pivot.md), [`<vt-heatmap>`](components/heatmap.md), [`<vt-flame>`](components/flame.md)
+- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md), [`<vt-env>`](components/env.md), [`<vt-hex>`](components/hex.md), [`<vt-timeline>`](components/timeline.md), [`<vt-job>`](components/job.md), [`<vt-git>`](components/git.md), [`<vt-regex>`](components/regex.md), [`<vt-yaml>`](components/yaml.md), [`<vt-xml>`](components/xml.md), [`<vt-toml>`](components/toml.md), [`<vt-jwt>`](components/jwt.md), [`<vt-cron>`](components/cron.md), [`<vt-cert>`](components/cert.md), [`<vt-status>`](components/status.md), [`<vt-calendar>`](components/calendar.md), [`<vt-pricing>`](components/pricing.md), [`<vt-faq>`](components/faq.md), [`<vt-gallery>`](components/gallery.md), [`<vt-stats>`](components/stats.md), [`<vt-board>`](components/board.md), [`<vt-field>`](components/field.md), [`<vt-search>`](components/search.md), [`<vt-date-picker>`](components/date-picker.md), [`<vt-menu>`](components/menu.md), [`<vt-upload>`](components/upload.md), [`<vt-testimonials>`](components/testimonials.md), [`<vt-countdown>`](components/countdown.md), [`<vt-sql>`](components/sql.md), [`<vt-test-report>`](components/test-report.md), [`<vt-trace>`](components/trace.md), [`<vt-notebook>`](components/notebook.md), [`<vt-math>`](components/math.md), [`<vt-diagram>`](components/diagram.md), [`<vt-pivot>`](components/pivot.md), [`<vt-heatmap>`](components/heatmap.md), [`<vt-flame>`](components/flame.md), [`<vt-treemap>`](components/treemap.md), [`<vt-describe>`](components/describe.md), [`<vt-compare>`](components/compare.md)
 - [Editing](editing.md)
 - [Theming](theming.md) and [Configuration](configuration.md)
 - [Security](security.md) before displaying untrusted content
