@@ -69,7 +69,7 @@ Vitrine is a library of framework-free web components to display and edit source
 ## Quick example
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 
 <vt-code variant="full" label="hello.py" language="python">
   def hello(name):

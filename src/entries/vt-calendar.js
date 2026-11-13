@@ -4,7 +4,7 @@
  * components is split into common chunks and loaded once.
  *
  * @example
- * <script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-calendar.js"></script>
+ * <script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-calendar.js"></script>
  */
 import { VtCalendar } from '../components/calendar/vt-calendar.js';
 import { useAssetsFrom } from './assets.js';

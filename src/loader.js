@@ -7,7 +7,7 @@
  * names of Vitrine's own elements are ever turned into URLs.
  *
  * ```html
- * <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"
+ * <script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine-loader.js"
  *         data-config='{"theme": "auto"}' data-lazy></script>
  * ```
  *

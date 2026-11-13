@@ -48,7 +48,7 @@ A page that already loads Mermaid can draw with it, and `dist/vendor/mermaid.js`
 ```js
 // A Mermaid the page already uses (here from a CDN), or `import mermaid from 'mermaid'` in a build:
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@12.3.0/dist/mermaid.esm.min.mjs';
-import { VtDiagram } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-diagram.js';
+import { VtDiagram } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-diagram.js';
 
 let n = 0;
 VtDiagram.useEngine({

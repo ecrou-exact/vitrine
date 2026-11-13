@@ -2,7 +2,7 @@
  * Integrations page: framework snippets (set through the content property, so their
  * syntax is never parsed as HTML) and the live form binding demo.
  */
-const CDN = 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist';
+const CDN = 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist';
 
 const SNIPPETS = {
   html: `<script src="${CDN}/vitrine.min.js"></script>
@@ -298,7 +298,7 @@ function setUpPicker(sizes) {
       .map((n) => `<script type="module" src="${CDN}/esm/vt-${n}.js"></script>`)
       .join('\n');
     document.getElementById('picker-bundler').content =
-      `// npm install github:ecrou-exact/vitrine#v1.0.0
+      `// npm install github:ecrou-exact/vitrine#v0.14.0
 ${list.map((n) => `import 'vitrine/${n}';`).join('\n')}
 import { configure } from 'vitrine/api';
 

@@ -26,7 +26,7 @@ The `dist/` folder contains:
 One small script (about 1.2 KB gzipped) finds the `vt-*` elements of the page, now and whenever some are added later, and imports only their modules from `dist/esm/`. Code shared by several elements is downloaded once:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine-loader.js"
         data-config='{"theme": "auto", "lang": "fr"}'></script>
 
 <vt-sql dialect="postgresql">SELECT * FROM users;</vt-sql>
@@ -52,16 +52,18 @@ Do not load the loader and `vitrine.min.js` on the same page.
 ### CDN (classic script)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 ```
 
 The script defines the forty-five elements as soon as it runs, and exposes the API as `window.Vitrine` (for example `Vitrine.configure()` or `Vitrine.render()`).
 
-Each GitHub release lists SRI hashes for the release files. If you add an `integrity` attribute, pin an exact version (`@1.2.3`) instead of `@1`, because the hash changes with every release:
+Each GitHub release lists SRI hashes for the release files. If you add an `integrity` attribute, pin an exact version (`@0.14.0`) instead of `@0`, because the hash changes with every release. Until 1.0, a new minor version may change the API: pin a version in production too.
+
+For example:
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1.2.3/dist/vitrine.min.js"
+  src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0.14.0/dist/vitrine.min.js"
   integrity="sha384-HASH-FROM-THE-RELEASE-NOTES"
   crossorigin="anonymous"
 ></script>
@@ -71,7 +73,7 @@ Each GitHub release lists SRI hashes for the release files. If you add an `integ
 
 ```html
 <script type="module">
-  import { defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.esm.js';
+  import { defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.esm.js';
 
   defineAll();
 </script>
@@ -86,14 +88,14 @@ The ES module does not create a global. Import what you need from it: `defineAll
 To load only the elements a page uses, import their modules. Each one defines its element as soon as it is imported (unless an element with that name is already defined):
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-code.js"></script>
-<script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-tags.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-code.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-tags.js"></script>
 ```
 
 The modules import shared chunks from `dist/esm/chunks/`, so code used by several components (the base element, the highlighter, the editor) is downloaded once. Each module also exports its element class and the shared API: `configure`, `getConfig`, `EVENTS`, `registerLocale`, `registerTheme`, `getTheme`, `listThemes`, `BUILT_IN_THEMES` and `listSyntaxThemes`. Configuration, themes and locales are shared by every element loaded this way.
 
 ```js
-import { configure } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-markdown.js';
+import { configure } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-markdown.js';
 
 configure({ syntaxTheme: 'github', syntaxThemeDark: 'github-dark' });
 ```
