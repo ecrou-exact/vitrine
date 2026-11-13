@@ -29,7 +29,7 @@ defineStrings({ en: strings, fr: stringsFr });
  * MathML natively, and the TeX is kept in an annotation.
  *
  * @element vt-math
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {boolean} inline - Inside a line of text: no frame, the math in text size.
  * @attr {boolean} delimiters - The content is text with math between `$…$`, `$$…$$`, `\(…\)` and `\[…\]`.

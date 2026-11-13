@@ -47,7 +47,7 @@ const STATUS_ICONS = {
  * everything is shown as text.
  *
  * @element vt-test-report
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {"all"|"failed"|"passed"|"skipped"} status - Tests shown at first (default `all`).
  * @attr {"failed"|"all"|"none"} open - Suites open at first (default `failed`: those with failures).

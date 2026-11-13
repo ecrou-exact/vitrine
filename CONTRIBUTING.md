@@ -31,16 +31,19 @@ Useful commands:
 
 ## Project layout
 
-| Path                                           | Contents                                                                                       |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `src/core/`                                    | Shared modules: base element, security, content loading, highlighter, search, UI, themes, i18n |
-| `src/components/`                              | `vt-code`, `vt-markdown`, `vt-json`                                                            |
-| `src/styles/`                                  | Component CSS and theme token files (`themes/*.css`)                                           |
-| `tests/unit/`                                  | Vitest unit tests (`tests/unit/security.test.js` runs in jsdom)                                |
-| `tests/e2e/`, `tests/security/`, `tests/site/` | Playwright tests (strict CSP fixtures, XSS suite, website)                                     |
-| `site/`                                        | Website sources (assembled by `scripts/build-site.js`)                                         |
-| `docs/`                                        | Documentation, rendered on the website by `<vt-markdown>`                                      |
-| `brand/`                                       | Logo files and specification                                                                   |
+| Path                                           | Contents                                                                                            |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `src/core/`                                    | Shared modules: base element, security, content loading, highlighter, search, UI, themes, i18n      |
+| `src/entries/`                                 | One ES module per element (`dist/esm/vt-*.js`), the API alone and every element                     |
+| `src/vendor/`                                  | Libraries loaded on demand (`dist/vendor/`): ECharts, js-yaml, Temml, Mermaid                       |
+| `src/loader.js`, `src/integrations/`           | The loader (`dist/vitrine-loader.js`) and the markdown-it and remark plugins                        |
+| `src/components/`                              | One folder per element (`code/`, `sql/`, `date-picker/`…): the element, its parsers and its strings |
+| `src/styles/`                                  | Component CSS and theme token files (`themes/*.css`)                                                |
+| `tests/unit/`                                  | Vitest unit tests (in happy-dom; tests of sanitized output run in jsdom, which DOMPurify supports)  |
+| `tests/e2e/`, `tests/security/`, `tests/site/` | Playwright tests (strict CSP fixtures, XSS suite, website)                                          |
+| `site/`                                        | Website sources (assembled by `scripts/build-site.js`)                                              |
+| `docs/`                                        | Documentation, rendered on the website by `<vt-markdown>`                                           |
+| `brand/`                                       | Logo files and specification                                                                        |
 
 ## Rules
 
@@ -58,7 +61,7 @@ Useful commands:
 ## Commits and pull requests
 
 - Use [Conventional Commits](https://www.conventionalcommits.org/): `feat(code): add line highlighting`.
-  Scopes: `code`, `markdown`, `json`, `core`, `docs`, `build`, `ci`.
+  Scopes: the name of an element without `vt-` (`code`, `sql`, `date-picker`…), `core`, `loader`, `docs`, `site`, `build`, `ci`.
 - Update `CHANGELOG.md` under `[Unreleased]`.
 - Pull requests need passing CI and a linear history (rebase, no merge commits).
 

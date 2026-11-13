@@ -66,7 +66,7 @@ function sqlFromData(value) {
  * only reads text.
  *
  * @element vt-sql
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {"sql"|"postgresql"|"mysql"|"sqlite"|"mssql"|"oracle"} dialect - Database, for the badge and the highlighting (default `sql`).
  * @attr {boolean} format - Lays the queries out: keywords in capitals, one clause per line.

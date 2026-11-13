@@ -42,7 +42,7 @@ const RASTER = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
  * as images, where they cannot run scripts.
  *
  * @element vt-notebook
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {boolean} code - Code cells (default on); off shows only Markdown and outputs, like a report.
  * @attr {boolean} outputs - Outputs of the code cells (default on).

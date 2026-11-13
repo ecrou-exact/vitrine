@@ -43,7 +43,7 @@ const LOOKS = /** @type {const} */ (['classic', 'handDrawn']);
  * Content Security Policy and Trusted Types.
  *
  * @element vt-diagram
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {boolean} tabs - Diagram / Source tabs. Full variant: on.
  * @attr {"diagram"|"source"} default-tab - Tab shown at first (default `diagram`).

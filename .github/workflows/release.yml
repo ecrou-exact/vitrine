@@ -59,7 +59,7 @@ jobs:
             echo
             echo "| File | Integrity |"
             echo "|---|---|"
-            for f in dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css; do
+            for f in dist/vitrine-loader.js dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css; do
               hash=$(openssl dgst -sha384 -binary "$f" | openssl base64 -A)
               echo "| \`$f\` | \`sha384-$hash\` |"
             done
@@ -75,4 +75,5 @@ jobs:
           TAG: ${{ steps.version.outputs.tag }}
         run: |
           gh release create "$TAG" --title "$TAG" --notes-file release-notes.md \
-            dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css dist/custom-elements.json
+            dist/vitrine-loader.js dist/vitrine.min.js dist/vitrine.esm.js dist/vitrine.css \
+            dist/custom-elements.json

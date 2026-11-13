@@ -35,7 +35,7 @@ const PAGE = 2000;
  * traces shows one at a time. Everything is shown as text; nothing is fetched.
  *
  * @element vt-trace
- * @since 0.9.0
+ * @since 0.14.0
  *
  * @attr {string} trace - Id of the trace shown at first, when the file has several (default: the first).
  * @attr {string} selected - Id of the span selected at first.
