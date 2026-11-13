@@ -4,7 +4,7 @@
  * components is split into common chunks and loaded once.
  *
  * @example
- * <script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-http.js"></script>
+ * <script type="module" src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-http.js"></script>
  */
 import { VtHttp } from '../components/http/vt-http.js';
 import { useAssetsFrom } from './assets.js';

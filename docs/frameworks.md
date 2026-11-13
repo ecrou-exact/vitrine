@@ -22,9 +22,9 @@ Vitrine elements are standard custom elements, so they work in any framework tha
 Either load a script in your HTML template, the loader (which imports only the elements a page uses) or every element at once:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine-loader.js"></script>
 <!-- or -->
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 ```
 
 or install a release and import the elements you use. Release tags hold the built `dist/` folder, so npm can install one from GitHub:
@@ -116,7 +116,7 @@ Then add [the loader](getting-started.md#loader-only-the-elements-a-page-uses) t
 Your own content can be written inline. Content you did not write goes through the `content` property:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 
 <vt-code language="bash" copy>npm run build</vt-code>
 
@@ -564,7 +564,7 @@ Enqueue the Vitrine script, and pass the data with `wp_json_encode`:
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script(
         'vitrine',
-        'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js',
+        'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js',
         [],
         null
     );

@@ -5,7 +5,7 @@ This page describes the global configuration, locales, and the JavaScript API ex
 With the classic script, the API is the global `Vitrine` object. With the ES module, import the same names (the per-component modules export only part of the API; see [Per-component modules](getting-started.md#per-component-modules)):
 
 ```js
-import { configure, render, defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.esm.js';
+import { configure, render, defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.esm.js';
 ```
 
 ## API overview
@@ -69,7 +69,7 @@ Validation rules:
 Call `configure()` before the elements are created when you can, for example right after the Vitrine script:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script>
 <script src="/js/vitrine-setup.js"></script>
 ```
 

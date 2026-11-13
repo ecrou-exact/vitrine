@@ -160,7 +160,7 @@
 ### Only the elements you use (loader)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine-loader.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine-loader.js"></script>
 
 <vt-sql dialect="postgresql">SELECT * FROM users;</vt-sql>
 ```
@@ -170,7 +170,7 @@ A 1.2 KB script finds the elements of the page and loads only their modules. The
 ### Every element (classic script)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.min.js"
+<script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"
         integrity="sha384-…" crossorigin="anonymous"></script>
 
 <vt-code language="python" line-numbers>
@@ -198,7 +198,7 @@ Plugins for [markdown-it and remark](docs/frameworks.md#markdown-pipelines) turn
 
 ```html
 <script type="module">
-  import { defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/vitrine.esm.js';
+  import { defineAll } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.esm.js';
   defineAll();
 </script>
 ```

@@ -86,4 +86,4 @@ output (`dist/` is ignored). To release:
    commits it in a release commit that only the `vX.Y.Z` tag points to, and publishes a GitHub
    release with SRI hashes.
 
-CDN (`@1`, `@1.2.3`) and git submodule users therefore always get prebuilt files.
+CDN (`@0`, `@0.14.0`) and git submodule users therefore always get prebuilt files.

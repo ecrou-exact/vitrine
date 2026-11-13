@@ -5,7 +5,7 @@ name: Release
 #
 # The workflow builds dist/, commits it in a release commit that only the vX.Y.Z tag
 # points to (main never contains build output), and publishes a GitHub release with
-# SRI hashes. jsDelivr (`@1`, `@1.2.3`) and git submodule users get prebuilt files.
+# SRI hashes. jsDelivr (`@0`, `@0.14.0`) and git submodule users get prebuilt files.
 
 on:
   workflow_dispatch:

@@ -55,7 +55,7 @@ A page or a build that already has Temml can hand it over, and `dist/vendor/temm
 ```js
 // A Temml the page already uses (here from a CDN), or `import temml from 'temml'` in a build:
 import temml from 'https://cdn.jsdelivr.net/npm/temml@0.14.0/dist/temml.mjs';
-import { VtMath } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@1/dist/esm/vt-math.js';
+import { VtMath } from 'https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-math.js';
 
 VtMath.useEngine(temml);
 ```
