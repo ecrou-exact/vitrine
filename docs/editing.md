@@ -135,6 +135,12 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-search>`       | `content`                                                                                |
 | `<vt-testimonials>` | `content`                                                                                |
 | `<vt-countdown>`    | `content`                                                                                |
+| `<vt-sql>`          | `content`, `statements`                                                                  |
+| `<vt-test-report>`  | `content`, `report`                                                                      |
+| `<vt-trace>`        | `content`, `traces`                                                                      |
+| `<vt-notebook>`     | `content`, `notebook`                                                                    |
+| `<vt-math>`         | `content`                                                                                |
+| `<vt-diagram>`      | `content`, `svg`                                                                         |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

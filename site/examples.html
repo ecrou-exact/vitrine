@@ -64,6 +64,12 @@
           <option value="upload">Upload</option>
           <option value="testimonials">Testimonials</option>
           <option value="countdown">Countdown</option>
+          <option value="sql">SQL</option>
+          <option value="test-report">Test report</option>
+          <option value="trace">Trace</option>
+          <option value="notebook">Notebook</option>
+          <option value="math">Math</option>
+          <option value="diagram">Diagram</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -3081,6 +3087,255 @@ export { unit };</template>
           </div>
           <template>
             <vt-countdown to="2027-01-01T00:00:00Z" units="hours minutes" lang-ui="en"></vt-countdown>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="sql" aria-labelledby="sql-title">
+        <h2 id="sql-title">&lt;vt-sql&gt;</h2>
+        <p class="muted prose">Nothing is sent to a database: the element only reads what a session printed.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A psql session</h3>
+            <p>Queries, result tables, row counts, timings and errors. Click a column to sort it; the empty email is an empty string, not <code>NULL</code>.</p>
+          </div>
+          <template>
+            <vt-sql variant="full" dialect="postgresql" label="users" lang-ui="en">
+              <template>
+                app=# SELECT id, name, email FROM users WHERE active ORDER BY id LIMIT 4;
+                 id | name  |      email
+                ----+-------+------------------
+                  1 | Ada   | ada@example.com
+                  2 | Alan  | alan@example.com
+                  3 | Grace |
+                 10 | Linus | linus@example.com
+                (4 rows)
+
+                Time: 0.512 ms
+                app=# UPDATE users SET active = false WHERE id = 3;
+                UPDATE 1
+                app=# SELECT * FROM userz;
+                ERROR:  relation "userz" does not exist
+                LINE 1: SELECT * FROM userz;
+                                      ^
+              </template>
+            </vt-sql>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A query, laid out</h3>
+            <p><code>format</code> puts one clause per line, the select list and the conditions indented, and the subquery under its parenthesis.</p>
+          </div>
+          <template>
+            <vt-sql format lang-ui="en">select u.id, u.name, count(o.id) as orders from users u left join orders o on o.user_id = u.id and o.status = 'paid' where u.created_at >= now() - interval '30 days' and u.id in (select user_id from vip) group by u.id, u.name order by orders desc limit 10;</vt-sql>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="test-report" aria-labelledby="test-report-title">
+        <h2 id="test-report-title">&lt;vt-test-report&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A JUnit report</h3>
+            <p>Written by pytest, Maven, Gradle and most CI tools. Suites with failures are open; filter by status, or list the slowest tests first.</p>
+          </div>
+          <template>
+            <vt-test-report variant="full" label="junit.xml" lang-ui="en">
+              <template>
+                <testsuites name="api" time="3.52">
+                  <testsuite name="tests.test_users" time="1.25">
+                    <testcase classname="tests.test_users" name="test_create" time="0.41"/>
+                    <testcase classname="tests.test_users" name="test_delete" time="0.72">
+                      <failure message="assert 404 == 200" type="AssertionError">Traceback (most recent call last):
+  File "tests/test_users.py", line 31, in test_delete
+    assert response.status_code == 200
+AssertionError: assert 404 == 200</failure>
+                      <system-out>DELETE /users/7 404</system-out>
+                    </testcase>
+                    <testcase classname="tests.test_users" name="test_export"><skipped message="needs S3"/></testcase>
+                  </testsuite>
+                  <testsuite name="tests.test_auth" time="2.27">
+                    <testcase classname="tests.test_auth" name="test_login" time="1.92"/>
+                    <testcase classname="tests.test_auth" name="test_logout" time="0.35"/>
+                  </testsuite>
+                </testsuites>
+              </template>
+            </vt-test-report>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>TAP from node --test</h3>
+            <p>Subtests become suites; <code># SKIP</code> and <code># TODO</code> are skipped tests.</p>
+          </div>
+          <template>
+            <vt-test-report open="all" lang-ui="en">
+              <template>
+                TAP version 13
+                # Subtest: cart
+                    # Subtest: adds an item
+                    ok 1 - adds an item
+                      ---
+                      duration_ms: 1.2
+                      ...
+                    # Subtest: applies a coupon
+                    not ok 2 - applies a coupon
+                      ---
+                      duration_ms: 3.4
+                      error: 'Expected 90, received 100'
+                      ...
+                    1..2
+                not ok 1 - cart
+                ok 2 - checkout # SKIP payment sandbox down
+                1..2
+              </template>
+            </vt-test-report>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="trace" aria-labelledby="trace-title">
+        <h2 id="trace-title">&lt;vt-trace&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A checkout, span by span</h3>
+            <p>Arrows move between spans, <kbd>→</kbd> and <kbd>←</kbd> open and close them, <kbd>Enter</kbd> shows the attributes. OpenTelemetry, Jaeger and Zipkin files work the same way.</p>
+          </div>
+          <template>
+            <vt-trace variant="full" selected="pay" lang-ui="en">
+              <template data-json>
+                [
+                  { "id": "root", "name": "POST /checkout", "service": "web", "start": 0, "duration": 412, "kind": "server", "attributes": { "http.method": "POST", "http.status_code": 502 }, "error": "Bad gateway" },
+                  { "id": "auth", "parent": "root", "name": "auth.verify", "service": "auth", "start": 4, "duration": 28 },
+                  { "id": "cart", "parent": "root", "name": "cart.load", "service": "cart", "start": 36, "duration": 96 },
+                  { "id": "sql", "parent": "cart", "name": "SELECT items", "service": "postgres", "start": 44, "duration": 71, "attributes": { "db.system": "postgresql", "db.statement": "SELECT * FROM items WHERE cart_id = $1" } },
+                  { "id": "pay", "parent": "root", "name": "payment.charge", "service": "payments", "start": 140, "duration": 265, "kind": "client", "error": "card declined", "events": [{ "name": "retry", "time": 260 }] },
+                  { "id": "bank", "parent": "pay", "name": "POST /v1/charges", "service": "bank-api", "start": 150, "duration": 240 }
+                ]
+              </template>
+            </vt-trace>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="notebook" aria-labelledby="notebook-title">
+        <h2 id="notebook-title">&lt;vt-notebook&gt;</h2>
+        <p class="muted prose">Nothing is run: outputs are the ones saved in the notebook, sanitized.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An analysis with pandas</h3>
+            <p>Markdown, code with its execution counts, a DataFrame, printed text and an error. The eye button hides the code, like a report.</p>
+          </div>
+          <template>
+            <vt-notebook variant="full" label="sales.ipynb" lang-ui="en">
+              <template data-json>
+                {
+                  "nbformat": 4,
+                  "metadata": { "kernelspec": { "display_name": "Python 3 (ipykernel)" }, "language_info": { "name": "python" } },
+                  "cells": [
+                    { "cell_type": "markdown", "source": ["# Sales by region\n", "\n", "Figures for **Q3**, before returns."] },
+                    { "cell_type": "code", "execution_count": 1, "source": ["import pandas as pd\n", "df = pd.read_csv(\"sales.csv\")\n", "df.groupby(\"region\").total.sum()"],
+                      "outputs": [{ "output_type": "execute_result", "execution_count": 1, "data": {
+                        "text/html": "<table><thead><tr><th></th><th>region</th><th>total</th></tr></thead><tbody><tr><th>0</th><td>North</td><td>1,284</td></tr><tr><th>1</th><td>South</td><td>973</td></tr><tr><th>2</th><td>West</td><td>1,102</td></tr></tbody></table>",
+                        "text/plain": "region total"
+                      } }] },
+                    { "cell_type": "code", "execution_count": 2, "source": "print(f\"{len(df)} orders\")", "outputs": [{ "output_type": "stream", "name": "stdout", "text": "3359 orders\n" }] },
+                    { "cell_type": "code", "execution_count": 3, "source": "df.total.mean() / 0", "outputs": [{ "output_type": "error", "ename": "ZeroDivisionError", "evalue": "float division by zero", "traceback": ["\u001b[0;31m---------------------------------------------------------------------------\u001b[0m", "\u001b[0;31mZeroDivisionError\u001b[0m: float division by zero"] }] }
+                  ]
+                }
+              </template>
+            </vt-notebook>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="math" aria-labelledby="math-title">
+        <h2 id="math-title">&lt;vt-math&gt;</h2>
+        <p class="muted prose">TeX drawn as MathML by the browser. Temml is loaded the first time a page shows math.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Numbered equations</h3>
+            <p>One equation per block, an <code>aligned</code> environment, and a typo shown with its reason.</p>
+          </div>
+          <template>
+            <vt-math variant="full" numbered label="Formulas" lang-ui="en">
+              <template>
+                \int_0^\infty e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}
+
+                \begin{aligned}
+                  (a + b)^2 &amp;= a^2 + 2ab + b^2 \\
+                  \sum_{k=1}^{n} k &amp;= \frac{n(n+1)}{2}
+                \end{aligned}
+
+                \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right
+              </template>
+            </vt-math>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Math in text</h3>
+            <p><code>delimiters</code> reads <code>$…$</code> and <code>$…$</code>; <code>inline</code> puts one formula in a sentence.</p>
+          </div>
+          <template>
+            <vt-math delimiters lang-ui="en">The roots of $ax^2 + bx + c = 0$ are $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a},$ real when $b^2 \ge 4ac$. It costs $5 and $10 to print.</vt-math>
+            <p>Euler's identity, <vt-math inline>e^{i\pi} + 1 = 0</vt-math>, links five constants.</p>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="diagram" aria-labelledby="diagram-title">
+        <h2 id="diagram-title">&lt;vt-diagram&gt;</h2>
+        <p class="muted prose">Mermaid, in the colors of the theme, under this site's strict Content Security Policy and Trusted Types.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A flowchart</h3>
+            <p>Switch to the Source tab, or download the drawing as SVG.</p>
+          </div>
+          <template>
+            <vt-diagram variant="full" label="Orders" lang-ui="en">
+              <template>
+                flowchart LR
+                  A[Order placed] --> B{Paid?}
+                  B -- yes --> C[Ship the parcel]
+                  B -- no --> D[Send a reminder]
+                  D --> B
+                  C --> E([Delivered])
+              </template>
+            </vt-diagram>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A sequence diagram</h3>
+            <p>Each type of diagram is downloaded the first time a page uses it.</p>
+          </div>
+          <template>
+            <vt-diagram label="Sign-in" lang-ui="en">
+              <template>
+                sequenceDiagram
+                  autonumber
+                  Browser->>API: POST /sessions
+                  API->>Database: Find the user
+                  Database-->>API: User and hash
+                  alt Password matches
+                    API-->>Browser: 201 Created
+                  else Wrong password
+                    API-->>Browser: 401 Unauthorized
+                  end
+              </template>
+            </vt-diagram>
           </template>
         </article>
       </section>
