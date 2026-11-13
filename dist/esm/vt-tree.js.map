@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-tree.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-tree> (dist/esm/vt-tree.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-tree.js\"></script>\n */\nimport { VtTree } from '../components/tree/vt-tree.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-tree')) customElements.define('vt-tree', VtTree);\n\nexport { VtTree };\nexport * from './api.js';\n"],
+  "mappings": ";;;8SAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,SAAS,GAAG,eAAe,OAAO,UAAWC,CAAM",
+  "names": ["useAssetsFrom", "VtTree"]
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-calendar.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-calendar> (dist/esm/vt-calendar.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-calendar.js\"></script>\n */\nimport { VtCalendar } from '../components/calendar/vt-calendar.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-calendar')) customElements.define('vt-calendar', VtCalendar);\n\nexport { VtCalendar };\nexport * from './api.js';\n"],
+  "mappings": ";;;uZAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,aAAa,GAAG,eAAe,OAAO,cAAeC,CAAU",
+  "names": ["useAssetsFrom", "VtCalendar"]
+}

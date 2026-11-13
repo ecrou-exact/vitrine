@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-math.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-math> (dist/esm/vt-math.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-math.js\"></script>\n */\nimport { VtMath } from '../components/math/vt-math.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-math')) customElements.define('vt-math', VtMath);\n\nexport { VtMath };\nexport * from './api.js';\n"],
+  "mappings": ";;;2QAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,SAAS,GAAG,eAAe,OAAO,UAAWC,CAAM",
+  "names": ["useAssetsFrom", "VtMath"]
+}

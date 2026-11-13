@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-git.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-git> (dist/esm/vt-git.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-git.js\"></script>\n */\nimport { VtGit } from '../components/git/vt-git.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-git')) customElements.define('vt-git', VtGit);\n\nexport { VtGit };\nexport * from './api.js';\n"],
+  "mappings": ";;;ySAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,QAAQ,GAAG,eAAe,OAAO,SAAUC,CAAK",
+  "names": ["useAssetsFrom", "VtGit"]
+}

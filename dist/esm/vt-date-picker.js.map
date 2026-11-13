@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-date-picker.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-date-picker> (dist/esm/vt-date-picker.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-date-picker.js\"></script>\n */\nimport { VtDatePicker } from '../components/date-picker/vt-date-picker.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-date-picker')) customElements.define('vt-date-picker', VtDatePicker);\n\nexport { VtDatePicker };\nexport * from './api.js';\n"],
+  "mappings": ";;;+WAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,gBAAgB,GAAG,eAAe,OAAO,iBAAkBC,CAAY",
+  "names": ["useAssetsFrom", "VtDatePicker"]
+}

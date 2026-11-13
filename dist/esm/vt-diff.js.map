@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-diff.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-diff> (dist/esm/vt-diff.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-diff.js\"></script>\n */\nimport { VtDiff } from '../components/diff/vt-diff.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-diff')) customElements.define('vt-diff', VtDiff);\n\nexport { VtDiff };\nexport * from './api.js';\n"],
+  "mappings": ";;;8SAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,SAAS,GAAG,eAAe,OAAO,UAAWC,CAAM",
+  "names": ["useAssetsFrom", "VtDiff"]
+}

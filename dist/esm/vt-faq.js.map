@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-faq.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-faq> (dist/esm/vt-faq.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-faq.js\"></script>\n */\nimport { VtFaq } from '../components/faq/vt-faq.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-faq')) customElements.define('vt-faq', VtFaq);\n\nexport { VtFaq };\nexport * from './api.js';\n"],
+  "mappings": ";;;oXAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,QAAQ,GAAG,eAAe,OAAO,SAAUC,CAAK",
+  "names": ["useAssetsFrom", "VtFaq"]
+}

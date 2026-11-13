@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-test-report.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-test-report> (dist/esm/vt-test-report.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-test-report.js\"></script>\n */\nimport { VtTestReport } from '../components/test-report/vt-test-report.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-test-report')) customElements.define('vt-test-report', VtTestReport);\n\nexport { VtTestReport };\nexport * from './api.js';\n"],
+  "mappings": ";;;iVAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,gBAAgB,GAAG,eAAe,OAAO,iBAAkBC,CAAY",
+  "names": ["useAssetsFrom", "VtTestReport"]
+}

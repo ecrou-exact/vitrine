@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-xml.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-xml> (dist/esm/vt-xml.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-xml.js\"></script>\n */\nimport { VtXml } from '../components/xml/vt-xml.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-xml')) customElements.define('vt-xml', VtXml);\n\nexport { VtXml };\nexport * from './api.js';\n"],
+  "mappings": ";;;uZAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,QAAQ,GAAG,eAAe,OAAO,SAAUC,CAAK",
+  "names": ["useAssetsFrom", "VtXml"]
+}

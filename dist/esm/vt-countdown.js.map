@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-countdown.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-countdown> (dist/esm/vt-countdown.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-countdown.js\"></script>\n */\nimport { VtCountdown } from '../components/countdown/vt-countdown.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-countdown')) customElements.define('vt-countdown', VtCountdown);\n\nexport { VtCountdown };\nexport * from './api.js';\n"],
+  "mappings": ";;;qbAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,cAAc,GAAG,eAAe,OAAO,eAAgBC,CAAW",
+  "names": ["useAssetsFrom", "VtCountdown"]
+}

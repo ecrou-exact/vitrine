@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/entries/vt-pricing.js"],
+  "sourcesContent": ["// @ts-check\n/**\n * ES module that defines only <vt-pricing> (dist/esm/vt-pricing.js). Code shared with other\n * components is split into common chunks and loaded once.\n *\n * @example\n * <script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/esm/vt-pricing.js\"></script>\n */\nimport { VtPricing } from '../components/pricing/vt-pricing.js';\nimport { useAssetsFrom } from './assets.js';\n\nuseAssetsFrom(new URL('../', import.meta.url));\nif (!customElements.get('vt-pricing')) customElements.define('vt-pricing', VtPricing);\n\nexport { VtPricing };\nexport * from './api.js';\n"],
+  "mappings": ";;;4UAWAA,EAAc,IAAI,IAAI,MAAO,YAAY,GAAG,CAAC,EACxC,eAAe,IAAI,YAAY,GAAG,eAAe,OAAO,aAAcC,CAAS",
+  "names": ["useAssetsFrom", "VtPricing"]
+}
