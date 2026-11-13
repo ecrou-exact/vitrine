@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math and diagrams — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps and flame graphs — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -83,7 +83,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math and diagrams — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps and flame graphs — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -148,6 +148,9 @@
 - **`<vt-testimonials>`** — testimonials and reviews as a grid, a list or a carousel, with ratings and their average.
   delimiters and macros.
 - **`<vt-diagram>`** — Mermaid diagrams (loaded on demand, one type at a time) in the theme colors, sanitized again by Vitrine, under a strict CSP and Trusted Types.
+- **`<vt-pivot>`** — pivot tables from CSV or JSON: rows × columns, sum, count, average, min, max or distinct values, totals, shaded cells, lists to change the fields, and the records of a cell on a click.
+- **`<vt-heatmap>`** — heat maps: values by day as a calendar of weeks (contributions, activity), or by two categories as a matrix, with a scale, totals and a keyboard grid.
+- **`<vt-flame>`** — flame graphs of CPU profiles (folded stacks of perf, py-spy, async-profiler; Chrome and Node `.cpuprofile`), with zoom, search and the costliest functions.
 - **JSON everywhere** — every element reads JSON from a `data` property, a `json` or `json-src` attribute (with `json-path`) or a JSON script, and turns it into its own format. See [docs/json.md](docs/json.md).
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
@@ -270,6 +273,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-notebook>`     | Cells, prompts and outputs                          | Hide code, search, copy code, download `.ipynb`, full screen                                            | [docs/components/notebook.md](docs/components/notebook.md)         |
 | `<vt-math>`         | Equations as MathML                                 | Copy TeX, copy MathML, full screen                                                                      | [docs/components/math.md](docs/components/math.md)                 |
 | `<vt-diagram>`      | A Mermaid diagram                                   | Diagram / Source tabs, copy, download SVG, full screen                                                  | [docs/components/diagram.md](docs/components/diagram.md)           |
+| `<vt-pivot>`        | A pivot table with totals                           | Lists of fields, search, copy and download as CSV, full screen                                          | [docs/components/pivot.md](docs/components/pivot.md)               |
+| `<vt-heatmap>`      | A calendar or a matrix of shaded squares            | Copy and download as CSV, full screen                                                                   | [docs/components/heatmap.md](docs/components/heatmap.md)           |
+| `<vt-flame>`        | A flame graph that zooms                            | Flame graph / Functions tabs, search, copy, download, full screen                                       | [docs/components/flame.md](docs/components/flame.md)               |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 

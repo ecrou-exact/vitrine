@@ -74,6 +74,12 @@ const SAMPLES = {
     '{\n  "cells": [\n    {\n      "cell_type": "markdown",\n      "source": "# Scores\\nThe mean of the class."\n    },\n    {\n      "cell_type": "code",\n      "execution_count": 1,\n      "source": "scores = [91, 82, 87]\\nsum(scores) / len(scores)",\n      "outputs": [\n        {\n          "output_type": "execute_result",\n          "execution_count": 1,\n          "data": {\n            "text/plain": "86.666"\n          }\n        }\n      ]\n    }\n  ]\n}',
   math: '\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n\n\\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}',
   diagram: 'flowchart LR\n  A[Order] --> B{Paid?}\n  B -- yes --> C[Ship]\n  B -- no --> D[Remind]',
+  pivot:
+    'region,quarter,revenue\nNorth,Q1,12400\nNorth,Q2,15800\nSouth,Q1,6200\nSouth,Q2,8400\nWest,Q1,2900\nWest,Q2,7800',
+  heatmap:
+    '{\n  "2026-10-01": 3,\n  "2026-10-02": 5,\n  "2026-10-06": 8,\n  "2026-10-07": 2,\n  "2026-10-13": 9,\n  "2026-10-20": 4,\n  "2026-10-27": 7,\n  "2026-11-03": 6,\n  "2026-11-10": 11\n}',
+  flame:
+    'main;server;handle;db.query;pg.send 300\nmain;server;handle;db.query;pg.parse 80\nmain;server;handle;render;template 160\nmain;server;auth;jwt.verify 90\nmain;gc 60',
   countdown:
     '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
@@ -539,6 +545,38 @@ const SCHEMA = {
     flags: ['tabs', 'line-numbers'],
     fields: [{ name: 'look', type: 'select', options: ['', 'classic', 'handDrawn'] }],
   },
+  pivot: {
+    tag: 'vt-pivot',
+    flags: ['totals', 'heat', 'controls'],
+    fields: [
+      { name: 'rows', type: 'text', placeholder: 'region' },
+      { name: 'columns', type: 'text', placeholder: 'quarter' },
+      { name: 'values', type: 'text', placeholder: 'revenue' },
+      {
+        name: 'aggregate',
+        type: 'select',
+        options: ['', 'sum', 'count', 'avg', 'min', 'max', 'distinct'],
+      },
+    ],
+  },
+  heatmap: {
+    tag: 'vt-heatmap',
+    flags: [],
+    fields: [
+      { name: 'unit', type: 'text', placeholder: 'commits' },
+      { name: 'from', type: 'text', placeholder: '2026-09-01' },
+      { name: 'levels', type: 'number', placeholder: '5' },
+      { name: 'first-day', type: 'number', placeholder: '1' },
+    ],
+  },
+  flame: {
+    tag: 'vt-flame',
+    flags: ['tabs'],
+    fields: [
+      { name: 'direction', type: 'select', options: ['', 'down', 'up'] },
+      { name: 'unit', type: 'text', placeholder: 'samples' },
+    ],
+  },
   countdown: {
     tag: 'vt-countdown',
     flags: [],
@@ -795,6 +833,9 @@ function switchType(type) {
     notebook: 'scores.ipynb',
     math: 'Formulas',
     diagram: 'Orders',
+    pivot: 'sales.csv',
+    heatmap: 'Commits',
+    flame: 'checkout.folded',
     countdown: 'countdown.json',
   }[type];
   buildControls();

@@ -1,0 +1,142 @@
+/*
+ * Heat map: a calendar of weeks or a matrix of square cells, shaded from the surface to
+ * the accent of the theme, with the scale and the value under the pointer or the focus.
+ */
+.hm-body {
+  padding: var(--_space-4);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+  overscroll-behavior: auto;
+}
+
+.hm-view {
+  --_cell: var(--vt-heatmap-cell, 13px);
+  --_gap: 3px;
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.hm-scroll {
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.hm-calendar {
+  display: grid;
+  gap: 4px;
+  width: max-content;
+}
+
+.hm-months,
+.hm-row {
+  display: grid;
+  grid-template-columns: 4ch repeat(var(--_columns), var(--_cell));
+  gap: var(--_gap);
+}
+
+.hm-months {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.hm-grid {
+  display: grid;
+  gap: var(--_gap);
+  width: max-content;
+}
+
+.hm-matrix .hm-row {
+  grid-template-columns: minmax(4ch, max-content) repeat(var(--_columns), calc(var(--_cell) * 2));
+}
+
+.hm-matrix .hm-cell {
+  width: auto;
+}
+
+.hm-day,
+.hm-x {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  line-height: var(--_cell);
+  white-space: nowrap;
+}
+
+.hm-x {
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.hm-cell {
+  width: var(--_cell);
+  height: var(--_cell);
+  border-radius: 3px;
+  background: color-mix(
+    in srgb,
+    var(--_accent) calc(var(--_level, 0) * 100%),
+    var(--_surface-sunken)
+  );
+  outline: 1px solid color-mix(in srgb, var(--_fg) 8%, transparent);
+  outline-offset: -1px;
+  cursor: pointer;
+}
+
+.hm-cell.out {
+  visibility: hidden;
+}
+
+.hm-cell:hover {
+  outline: 1px solid var(--_fg);
+}
+
+.hm-cell:focus-visible {
+  outline: 2px solid var(--_fg);
+  outline-offset: 1px;
+}
+
+.hm-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--_space-2) var(--_space-4);
+}
+
+.hm-summary,
+.hm-details {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.hm-details {
+  min-height: 1.4em;
+  color: var(--_fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.hm-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.hm-legend .hm-cell {
+  cursor: default;
+}
+
+.hm-legend > span:first-child {
+  margin-inline-end: 4px;
+}
+
+.hm-legend > span:last-child {
+  margin-inline-start: 4px;
+}
+
+.hm-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

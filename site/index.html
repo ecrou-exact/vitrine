@@ -645,6 +645,33 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
                 B -- no --> D[Remind]</vt-diagram>
               <a href="examples.html#diagram">Diagram examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-pivot&gt;</h3>
+              <p>
+                Pivot tables from CSV or JSON, with totals, shading and the records of a cell.
+              </p>
+              <vt-pivot class="preview" lang-ui="en" rows="region" columns="quarter" heat json='[{"region":"North","quarter":"Q1","sales":120},{"region":"North","quarter":"Q2","sales":150},{"region":"South","quarter":"Q1","sales":60},{"region":"South","quarter":"Q2","sales":95}]'></vt-pivot>
+              <a href="examples.html#pivot">Pivot examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-heatmap&gt;</h3>
+              <p>
+                Heat maps: a calendar of days or a matrix of two categories.
+              </p>
+              <vt-heatmap class="preview" lang-ui="en" unit="commits" from="2026-09-01" to="2026-11-13" json='{"2026-09-02":3,"2026-09-09":6,"2026-09-16":2,"2026-09-23":8,"2026-10-01":5,"2026-10-08":9,"2026-10-15":4,"2026-10-22":7,"2026-11-03":2,"2026-11-05":10,"2026-11-12":6}'></vt-heatmap>
+              <a href="examples.html#heatmap">Heat map examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-flame&gt;</h3>
+              <p>
+                Flame graphs of CPU profiles, with zoom and the costliest functions.
+              </p>
+              <vt-flame class="preview" lang-ui="en">main;server;handle;db.query 300
+                main;server;handle;render 160
+                main;server;auth 90
+                main;gc 60</vt-flame>
+              <a href="examples.html#flame">Flame graph examples</a>
+            </article>
           </div>
         </div>
       </section>

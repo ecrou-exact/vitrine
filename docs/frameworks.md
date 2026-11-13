@@ -640,7 +640,10 @@ vt-test-report:not(:defined),
 vt-trace:not(:defined),
 vt-notebook:not(:defined),
 vt-math:not(:defined),
-vt-diagram:not(:defined) {
+vt-diagram:not(:defined),
+vt-pivot:not(:defined),
+vt-heatmap:not(:defined),
+vt-flame:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

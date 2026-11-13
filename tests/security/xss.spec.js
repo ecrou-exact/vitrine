@@ -444,6 +444,29 @@ const MODES = [
       }),
   },
   {
+    tag: 'vt-pivot',
+    attrs: { variant: 'full', columns: 'b', heat: '' },
+    wrap: (p) =>
+      JSON.stringify([
+        { a: p, b: p, n: 1, [p]: p },
+        { a: 'x', b: p, n: 2 },
+      ]),
+  },
+  {
+    tag: 'vt-heatmap',
+    attrs: { variant: 'full', unit: '<b>u</b>' },
+    wrap: (p) =>
+      JSON.stringify([
+        { x: p, y: p, value: 1 },
+        { x: 'a', y: p, value: 2 },
+      ]),
+  },
+  {
+    tag: 'vt-flame',
+    attrs: { variant: 'full' },
+    wrap: (p) => `main;${p.replace(/[;\n]/g, ' ')};leaf 10\nmain 2`,
+  },
+  {
     tag: 'vt-math',
     attrs: { delimiters: '', variant: 'full' },
     wrap: (p) =>

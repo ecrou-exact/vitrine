@@ -70,6 +70,9 @@
           <option value="notebook">Notebook</option>
           <option value="math">Math</option>
           <option value="diagram">Diagram</option>
+          <option value="pivot">Pivot</option>
+          <option value="heatmap">Heat map</option>
+          <option value="flame">Flame graph</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -3336,6 +3339,113 @@ AssertionError: assert 404 == 200</failure>
                   end
               </template>
             </vt-diagram>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="pivot" aria-labelledby="pivot-title">
+        <h2 id="pivot-title">&lt;vt-pivot&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Revenue by region and quarter</h3>
+            <p>Change the rows, columns, value or calculation with the lists. Each value is a button: choosing it sends the records behind it.</p>
+          </div>
+          <template>
+            <vt-pivot variant="full" rows="region" columns="quarter" values="revenue" heat label="sales.csv" lang-ui="en">
+              <template>
+                region,quarter,product,revenue,units
+                North,Q1,Laptop,12400,8
+                North,Q1,Phone,5300,9
+                North,Q2,Laptop,15800,10
+                North,Q2,Phone,6100,11
+                North,Q3,Laptop,9900,6
+                South,Q1,Laptop,6200,4
+                South,Q2,Phone,8400,15
+                South,Q3,Laptop,14100,9
+                South,Q3,Phone,7300,13
+                West,Q1,Phone,2900,5
+                West,Q2,Laptop,7800,5
+                West,Q3,Laptop,11200,7
+              </template>
+            </vt-pivot>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="heatmap" aria-labelledby="heatmap-title">
+        <h2 id="heatmap-title">&lt;vt-heatmap&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A year of commits</h3>
+            <p>Move with the arrows: each square says its day and its value.</p>
+          </div>
+          <template>
+            <vt-heatmap variant="full" unit="commits" from="2026-07-01" to="2026-11-13" first-day="1" label="Commits" lang-ui="en">
+              <template data-json>
+                {"2026-07-02":3,"2026-07-03":5,"2026-07-07":2,"2026-07-08":8,"2026-07-09":6,"2026-07-14":4,"2026-07-15":1,"2026-07-21":7,"2026-07-22":9,"2026-07-23":3,"2026-07-28":2,"2026-08-04":5,"2026-08-05":6,"2026-08-11":1,"2026-08-18":4,"2026-08-19":2,"2026-08-25":3,"2026-09-01":6,"2026-09-02":8,"2026-09-03":10,"2026-09-08":7,"2026-09-09":5,"2026-09-15":3,"2026-09-16":4,"2026-09-22":6,"2026-09-29":2,"2026-10-06":5,"2026-10-07":9,"2026-10-08":11,"2026-10-13":6,"2026-10-14":4,"2026-10-20":2,"2026-10-27":8,"2026-10-28":7,"2026-11-03":3,"2026-11-04":6,"2026-11-05":12,"2026-11-10":9,"2026-11-11":4,"2026-11-12":7,"2026-11-13":5}
+              </template>
+            </vt-heatmap>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Two categories</h3>
+            <p>CSV with two categories and a value: here the load of a service by hour and weekday.</p>
+          </div>
+          <template>
+            <vt-heatmap label="Requests per minute" lang-ui="en">
+              <template>
+                day,hour,requests
+                Mon,8h,120
+                Mon,12h,340
+                Mon,16h,290
+                Mon,20h,80
+                Tue,8h,140
+                Tue,12h,380
+                Tue,16h,310
+                Tue,20h,95
+                Wed,8h,130
+                Wed,12h,410
+                Wed,16h,350
+                Wed,20h,70
+                Thu,8h,110
+                Thu,12h,360
+                Thu,16h,300
+                Thu,20h,90
+                Fri,8h,100
+                Fri,12h,280
+                Fri,16h,220
+                Fri,20h,140
+              </template>
+            </vt-heatmap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="flame" aria-labelledby="flame-title">
+        <h2 id="flame-title">&lt;vt-flame&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Where a request spends its time</h3>
+            <p>Choose a bar to zoom into it, <kbd>Escape</kbd> to zoom out; search <code>pg</code> to see how much time the database takes. The Functions tab lists the costliest functions.</p>
+          </div>
+          <template>
+            <vt-flame variant="full" label="checkout.folded" lang-ui="en">
+              <template>
+                main;http.server;handle;parseJSON 120
+                main;http.server;handle;db.query;pg.send 300
+                main;http.server;handle;db.query;pg.parse 80
+                main;http.server;handle;render;template 160
+                main;http.server;handle;render;escapeHtml 40
+                main;http.server;middleware;auth;jwt.verify 90
+                main;http.server;middleware;log 20
+                main;gc 60
+              </template>
+            </vt-flame>
           </template>
         </article>
       </section>

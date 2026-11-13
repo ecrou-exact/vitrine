@@ -46,6 +46,9 @@ import { VtTestimonials } from './components/testimonials/vt-testimonials.js';
 import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
+import { VtFlame } from './components/flame/vt-flame.js';
+import { VtHeatmap } from './components/heatmap/vt-heatmap.js';
+import { VtPivot } from './components/pivot/vt-pivot.js';
 import { VtDiagram } from './components/diagram/vt-diagram.js';
 import { VtMath } from './components/math/vt-math.js';
 import { VtNotebook } from './components/notebook/vt-notebook.js';
@@ -104,6 +107,9 @@ export {
   VtNotebook,
   VtMath,
   VtDiagram,
+  VtPivot,
+  VtHeatmap,
+  VtFlame,
   configure,
   getConfig,
   EVENTS,
@@ -177,6 +183,9 @@ export const registry = new Map(
     ['vt-notebook', VtNotebook],
     ['vt-math', VtMath],
     ['vt-diagram', VtDiagram],
+    ['vt-pivot', VtPivot],
+    ['vt-heatmap', VtHeatmap],
+    ['vt-flame', VtFlame],
   ]),
 );
 
@@ -227,6 +236,9 @@ const TYPES = /** @type {const} */ ({
   notebook: 'vt-notebook',
   math: 'vt-math',
   diagram: 'vt-diagram',
+  pivot: 'vt-pivot',
+  heatmap: 'vt-heatmap',
+  flame: 'vt-flame',
 });
 
 /**

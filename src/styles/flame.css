@@ -1,0 +1,181 @@
+/*
+ * Flame graph: rows of frames, each as wide as its share of the time, colored by name in
+ * warm tones of the theme, with the path of the zoom and the frame under the pointer.
+ */
+.fl-body {
+  padding: 0;
+  background: var(--_surface);
+  color: var(--_fg);
+  font: 400 var(--_font-size-ui) / 1.4 var(--_font-ui);
+  overscroll-behavior: auto;
+}
+
+.fl-view {
+  display: grid;
+}
+
+.fl-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: var(--_space-2) var(--_space-4);
+  border-bottom: 1px solid var(--_border);
+}
+
+.fl-crumbs .text-btn + .text-btn::before {
+  content: '›';
+  margin-inline-end: 6px;
+  color: var(--_fg-muted);
+}
+
+.fl-crumbs .text-btn[aria-current='true'] {
+  color: var(--_fg);
+  font-weight: 600;
+}
+
+.fl-scroll {
+  overflow: auto;
+  max-height: 560px;
+  padding: var(--_space-3) var(--_space-4);
+}
+
+:host([max-height]) .fl-scroll,
+.vt[data-fullscreen] .fl-scroll {
+  max-height: none;
+}
+
+.fl-graph {
+  --_row: 22px;
+  position: relative;
+  min-width: 480px;
+  height: calc(var(--_rows) * var(--_row));
+}
+
+.c0 {
+  --_c: var(--_warning);
+}
+
+.c1 {
+  --_c: var(--_danger);
+}
+
+.c2 {
+  --_c: var(--_syntax-number);
+}
+
+.c3 {
+  --_c: var(--_syntax-type);
+}
+
+.c4 {
+  --_c: color-mix(in srgb, var(--_warning) 60%, var(--_danger));
+}
+
+.c5 {
+  --_c: color-mix(in srgb, var(--_syntax-number) 60%, var(--_syntax-type));
+}
+
+.c6 {
+  --_c: color-mix(in srgb, var(--_warning) 70%, var(--_fg-muted));
+}
+
+.c7 {
+  --_c: color-mix(in srgb, var(--_danger) 70%, var(--_fg-muted));
+}
+
+.fl-frame {
+  position: absolute;
+  top: calc((var(--_depth) - var(--_offset, 0)) * var(--_row));
+  box-sizing: border-box;
+  height: calc(var(--_row) - 2px);
+  padding: 0 4px;
+  overflow: hidden;
+  border: 1px solid var(--_surface);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--_c) 38%, var(--_surface));
+  color: var(--_fg);
+  font-size: var(--_font-size-small);
+  line-height: calc(var(--_row) - 4px);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.fl-graph.up .fl-frame {
+  top: auto;
+  bottom: calc((var(--_depth) - var(--_offset, 0)) * var(--_row));
+}
+
+.fl-frame:hover {
+  background: color-mix(in srgb, var(--_c) 60%, var(--_surface));
+}
+
+.fl-frame:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--_fg);
+  outline-offset: 0;
+}
+
+.fl-frame.match {
+  background: color-mix(in srgb, var(--_accent) 55%, var(--_surface));
+  font-weight: 600;
+}
+
+.fl-frame.dim {
+  opacity: 0.45;
+}
+
+.fl-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fl-details,
+.fl-match {
+  min-height: 1.4em;
+  margin: 0;
+  padding: var(--_space-2) var(--_space-4);
+  border-top: 1px solid var(--_border);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.fl-match {
+  color: var(--_fg-muted);
+}
+
+.fl-table {
+  overflow: auto;
+  max-height: 560px;
+}
+
+.fl-table:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.fl-fn {
+  max-width: 60ch;
+  font-family: var(--_font-mono);
+  font-weight: 400;
+}
+
+.fl-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-inline-end: 8px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--_c) 60%, var(--_surface));
+  vertical-align: baseline;
+}
+
+.fl-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}
+
+:host(:dir(rtl)) .fl-graph {
+  direction: ltr;
+}
