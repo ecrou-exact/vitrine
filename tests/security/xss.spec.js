@@ -467,6 +467,42 @@ const MODES = [
     wrap: (p) => `main;${p.replace(/[;\n]/g, ' ')};leaf 10\nmain 2`,
   },
   {
+    tag: 'vt-install',
+    attrs: { variant: 'full', prompt: '<b>$</b>' },
+    wrap: (p) => JSON.stringify({ command: `npm i ${p}\n${p}`, tabs: { [p]: p, CDN: p } }),
+  },
+  {
+    tag: 'vt-download',
+    attrs: { variant: 'full', platform: 'windows' },
+    wrap: (p) =>
+      JSON.stringify({
+        version: p,
+        name: p,
+        notes: p,
+        files: [
+          { name: `${p}.exe`, url: p, sha256: 'a'.repeat(64) },
+          { name: `${p}.exe`, url: `https://example.com/${encodeURIComponent(p)}.exe`, sha256: 'a'.repeat(64) }, // prettier-ignore
+          { name: p, url: 'https://example.com/x.sig' },
+        ],
+      }),
+  },
+  {
+    tag: 'vt-contributors',
+    attrs: { variant: 'full', layout: 'list' },
+    wrap: (p) =>
+      JSON.stringify({
+        groups: [
+          {
+            name: p,
+            people: [
+              { name: p, login: p, url: p, avatar: p, contributions: ['code', p] },
+              { name: 'x', login: 'x', url: 'https://example.com', avatar: `https://example.com/${p}`, tier: p, amount: 5 }, // prettier-ignore
+            ],
+          },
+        ],
+      }),
+  },
+  {
     tag: 'vt-treemap',
     attrs: { variant: 'full', tabs: '', unit: '<b>u</b>' },
     wrap: (p) =>

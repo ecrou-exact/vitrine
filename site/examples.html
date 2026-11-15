@@ -76,6 +76,9 @@
           <option value="treemap">Treemap</option>
           <option value="describe">Dataset profile</option>
           <option value="compare">Dataset comparison</option>
+          <option value="install">Install command</option>
+          <option value="download">Download page</option>
+          <option value="contributors">Contributors</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -3568,6 +3571,356 @@ AssertionError: assert 404 == 200</failure>
                 A-105,Pencil case,9.90,60,grey
               </template>
             </vt-compare>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="install" aria-labelledby="install-title">
+        <h2 id="install-title">&lt;vt-install&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Getting started, for every package manager</h3>
+            <p>Written once with npm. Choose pnpm in one element and the other follows, now and on the next visit. The CDN tab is given as it is.</p>
+          </div>
+          <template>
+            <vt-install variant="full" label="Install" lang-ui="en" managers="npm,pnpm,yarn,bun,deno">
+              npm install vitrine
+              <template data-tab="CDN"><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script></template>
+            </vt-install>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Several commands</h3>
+            <p>One per line, joined with <code>&amp;&amp;</code> or not. <code>npm create</code> needs <code>--</code> before the options of the template; the other managers do not.</p>
+          </div>
+          <template>
+            <vt-install lang-ui="en">
+              npm create vite@latest my-app -- --template vanilla
+              cd my-app && npm install -D vitest
+              npx vitest run
+            </vt-install>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A Python package</h3>
+            <p>pip, uv and poetry from one line, with the version range quoted for the shell. Tools run once become <code>uvx</code> and <code>pipx run</code>.</p>
+          </div>
+          <template>
+            <vt-install lang-ui="en" sync="python">
+              pip install "httpx>=0.27"
+              poetry add --group dev pytest
+            </vt-install>
+            <vt-install lang-ui="en" sync="python">uvx ruff check .</vt-install>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="download" aria-labelledby="download-title">
+        <h2 id="download-title">&lt;vt-download&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Download for your system</h3>
+            <p>A release of the GitHub API. The button is for the system of this device: open the page on another one, or open the table. Checksums and signatures are kept apart.</p>
+          </div>
+          <template>
+            <vt-download variant="full" label="Atlas" lang-ui="en">
+              <template data-json>
+                {
+                  "tag_name": "v2.1.0",
+                  "name": "Atlas 2.1",
+                  "html_url": "https://example.com/app/releases/tag/v2.1.0",
+                  "published_at": "2026-11-03T09:30:00Z",
+                  "assets": [
+                    {
+                      "name": "Atlas-2.1.0-universal.dmg",
+                      "size": 98304000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-universal.dmg",
+                      "digest": "sha256:ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12"
+                    },
+                    {
+                      "name": "Atlas-Setup-2.1.0.exe",
+                      "size": 84410000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-Setup-2.1.0.exe",
+                      "digest": "sha256:cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34"
+                    },
+                    {
+                      "name": "Atlas-2.1.0-arm64.exe",
+                      "size": 83900000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-arm64.exe"
+                    },
+                    {
+                      "name": "Atlas-2.1.0.AppImage",
+                      "size": 102760000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0.AppImage",
+                      "digest": "sha256:ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56"
+                    },
+                    {
+                      "name": "atlas_2.1.0_amd64.deb",
+                      "size": 71200000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas_2.1.0_amd64.deb"
+                    },
+                    {
+                      "name": "atlas-2.1.0.x86_64.rpm",
+                      "size": 71900000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas-2.1.0.x86_64.rpm"
+                    },
+                    {
+                      "name": "SHA256SUMS",
+                      "size": 512,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS"
+                    },
+                    {
+                      "name": "SHA256SUMS.asc",
+                      "size": 833,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS.asc"
+                    }
+                  ]
+                }
+              </template>
+            </vt-download>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A page per system</h3>
+            <p><code>platform</code> chooses for Linux x64 whatever the device, and <code>prefer</code> puts <code>.rpm</code> first for a Fedora page.</p>
+          </div>
+          <template>
+            <vt-download platform="linux-x64" prefer="rpm" all="false" lang-ui="en">
+              <template data-json>
+                {
+                  "tag_name": "v2.1.0",
+                  "name": "Atlas 2.1",
+                  "html_url": "https://example.com/app/releases/tag/v2.1.0",
+                  "published_at": "2026-11-03T09:30:00Z",
+                  "assets": [
+                    {
+                      "name": "Atlas-2.1.0-universal.dmg",
+                      "size": 98304000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-universal.dmg",
+                      "digest": "sha256:ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12"
+                    },
+                    {
+                      "name": "Atlas-Setup-2.1.0.exe",
+                      "size": 84410000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-Setup-2.1.0.exe",
+                      "digest": "sha256:cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34"
+                    },
+                    {
+                      "name": "Atlas-2.1.0-arm64.exe",
+                      "size": 83900000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-arm64.exe"
+                    },
+                    {
+                      "name": "Atlas-2.1.0.AppImage",
+                      "size": 102760000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0.AppImage",
+                      "digest": "sha256:ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56"
+                    },
+                    {
+                      "name": "atlas_2.1.0_amd64.deb",
+                      "size": 71200000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas_2.1.0_amd64.deb"
+                    },
+                    {
+                      "name": "atlas-2.1.0.x86_64.rpm",
+                      "size": 71900000,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas-2.1.0.x86_64.rpm"
+                    },
+                    {
+                      "name": "SHA256SUMS",
+                      "size": 512,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS"
+                    },
+                    {
+                      "name": "SHA256SUMS.asc",
+                      "size": 833,
+                      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS.asc"
+                    }
+                  ]
+                }
+              </template>
+            </vt-download>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="contributors" aria-labelledby="contributors-title">
+        <h2 id="contributors-title">&lt;vt-contributors&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An All Contributors file</h3>
+            <p>Every kind of contribution, not only code. Choose a kind to see who made it; the copy button gives a Markdown list for release notes.</p>
+          </div>
+          <template>
+            <vt-contributors variant="full" label="Contributors" lang-ui="en">
+              <template data-json>
+                {
+                  "projectName": "atlas",
+                  "contributors": [
+                    {
+                      "login": "ada",
+                      "name": "Ada Lovelace",
+                      "profile": "https://example.com/ada",
+                      "contributions": [
+                        "code",
+                        "doc",
+                        "maintenance"
+                      ]
+                    },
+                    {
+                      "login": "alan",
+                      "name": "Alan Turing",
+                      "profile": "https://example.com/alan",
+                      "contributions": [
+                        "code",
+                        "test"
+                      ]
+                    },
+                    {
+                      "login": "grace",
+                      "name": "Grace Hopper",
+                      "profile": "https://example.com/grace",
+                      "contributions": [
+                        "review",
+                        "ideas"
+                      ]
+                    },
+                    {
+                      "login": "katherine",
+                      "name": "Katherine Johnson",
+                      "profile": "https://example.com/kj",
+                      "contributions": [
+                        "bug",
+                        "test"
+                      ]
+                    },
+                    {
+                      "login": "linus",
+                      "name": "Linus Torvalds",
+                      "profile": "https://example.com/linus",
+                      "contributions": [
+                        "infra"
+                      ]
+                    },
+                    {
+                      "login": "margaret",
+                      "name": "Margaret Hamilton",
+                      "profile": "https://example.com/mh",
+                      "contributions": [
+                        "design",
+                        "a11y"
+                      ]
+                    },
+                    {
+                      "login": "tim",
+                      "name": "Tim Berners-Lee",
+                      "profile": "https://example.com/tim",
+                      "contributions": [
+                        "translation",
+                        "doc"
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-contributors>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Sponsor tiers</h3>
+            <p>The most generous tier first, with the largest logos. Links of sponsors are <code>rel="sponsored"</code>.</p>
+          </div>
+          <template>
+            <vt-contributors lang-ui="en">
+              <template data-json>
+                {
+                  "groups": [
+                    {
+                      "name": "Gold sponsors",
+                      "people": [
+                        {
+                          "name": "Northwind",
+                          "url": "https://example.com/northwind",
+                          "amount": 500
+                        },
+                        {
+                          "name": "Contoso",
+                          "url": "https://example.com/contoso",
+                          "amount": 500
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Silver sponsors",
+                      "people": [
+                        {
+                          "name": "Fabrikam",
+                          "url": "https://example.com/fabrikam",
+                          "amount": 100
+                        },
+                        {
+                          "name": "Tailspin",
+                          "url": "https://example.com/tailspin",
+                          "amount": 100
+                        },
+                        {
+                          "name": "Litware",
+                          "amount": 100
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Backers",
+                      "people": [
+                        {
+                          "name": "Sam Lee",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Ana Ruiz",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Kofi Mensah",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Mia Chen",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Noah Weber",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Lea Martin",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Ravi Patel",
+                          "amount": 5
+                        },
+                        {
+                          "name": "Ines Costa",
+                          "amount": 5
+                        }
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-contributors>
           </template>
         </article>
       </section>

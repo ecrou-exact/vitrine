@@ -1,0 +1,85 @@
+// @ts-check
+/**
+ * Interface strings of <vt-download>, registered by its module with `defineStrings()`
+ * so other modules do not carry them.
+ *
+ * @module components/download/strings
+ */
+
+export const en = Object.freeze({
+  downloadFor: 'Download for {system}',
+  downloadFile: 'Download {name}',
+  downloadDetected: 'For {system}, the system of this device.',
+  downloadChosen: 'For {system}.',
+  downloadUnknown: 'Choose the file for your system below.',
+  downloadNoFile: 'No file for {system} in this release: choose another below.',
+  downloadAlso: 'Also for {system}:',
+  downloadAll: 'All downloads',
+  downloadVerifyFiles: 'Signatures and checksums',
+  downloadFileCol: 'File',
+  downloadSystem: 'System',
+  downloadArch: 'Architecture',
+  downloadSize: 'Size',
+  downloadHash: 'SHA-256',
+  downloadCopyHash: 'Copy the SHA-256 of {name}',
+  downloadVerify: 'Check the download: the command prints the SHA-256 of the file, which must be',
+  downloadCopyCommand: 'Copy the command',
+  downloadNotes: 'Release notes',
+  downloadPrerelease: 'Pre-release',
+  downloadVersion: 'Version {version}',
+  downloadEmpty: 'This release has no file to download.',
+  downloadNone: 'No release to show: they are all drafts or pre-releases.',
+  downloadShape: 'Expected a GitHub release, a list of releases, or JSON with "files".',
+  downloadOs_windows: 'Windows',
+  downloadOs_macos: 'macOS',
+  downloadOs_linux: 'Linux',
+  downloadOs_android: 'Android',
+  downloadOs_ios: 'iOS',
+  downloadOs_bsd: 'BSD',
+  downloadOs_source: 'Source code',
+  downloadOs_other: 'Other files',
+  downloadArch_x64: '64-bit (x64)',
+  downloadArch_arm64: 'ARM64',
+  downloadArch_x86: '32-bit (x86)',
+  downloadArch_arm: 'ARM (32-bit)',
+  downloadArch_universal: 'Universal',
+  downloadArch_riscv64: 'RISC-V 64',
+  downloadArch_macArm64: 'Apple Silicon',
+  downloadArch_macX64: 'Intel',
+  downloadSystemArch: '{system} ({arch})',
+});
+
+/** @type {Partial<Record<keyof typeof en, string>>} */
+export const fr = {
+  downloadFor: 'Télécharger pour {system}',
+  downloadFile: 'Télécharger {name}',
+  downloadDetected: 'Pour {system}, le système de cet appareil.',
+  downloadChosen: 'Pour {system}.',
+  downloadUnknown: 'Choisissez le fichier de votre système ci-dessous.',
+  downloadNoFile:
+    'Aucun fichier pour {system} dans cette version : choisissez-en un autre ci-dessous.',
+  downloadAlso: 'Aussi pour {system} :',
+  downloadAll: 'Tous les téléchargements',
+  downloadVerifyFiles: 'Signatures et sommes de contrôle',
+  downloadFileCol: 'Fichier',
+  downloadSystem: 'Système',
+  downloadArch: 'Architecture',
+  downloadSize: 'Taille',
+  downloadHash: 'SHA-256',
+  downloadCopyHash: 'Copier le SHA-256 de {name}',
+  downloadVerify:
+    'Vérifiez le téléchargement : la commande affiche le SHA-256 du fichier, qui doit être',
+  downloadCopyCommand: 'Copier la commande',
+  downloadNotes: 'Notes de version',
+  downloadPrerelease: 'Préversion',
+  downloadVersion: 'Version {version}',
+  downloadEmpty: 'Cette version n’a aucun fichier à télécharger.',
+  downloadNone: 'Aucune version à afficher : ce sont toutes des brouillons ou des préversions.',
+  downloadShape: 'Une version GitHub, une liste de versions, ou du JSON avec "files" est attendu.',
+  downloadOs_source: 'Code source',
+  downloadOs_other: 'Autres fichiers',
+  downloadArch_x64: '64 bits (x64)',
+  downloadArch_x86: '32 bits (x86)',
+  downloadArch_arm: 'ARM (32 bits)',
+  downloadArch_universal: 'Universel',
+};

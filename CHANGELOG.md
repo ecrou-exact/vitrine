@@ -17,9 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-describe>`: the profile of a dataset, as pandas `describe()`. The type of each column (number, date, yes / no, text), its missing and distinct values, a summary and a histogram or the shares of its most frequent values; opening a column shows its quartiles, standard deviation and most frequent values. Copy and download as CSV.
 - `<vt-compare>`: the differences between two datasets (CSV or JSON). Rows are paired by a key column, found or set with `key`, or by position; added, removed and changed rows are marked, with the old and new value of each changed cell, the columns added or removed, and filters with counts. Copy and download the differences as CSV.
 
+- `<vt-install>`: an install command for every package manager, as tabs. Write it once for npm, pnpm, yarn, bun, pip, uv, poetry or pdm (or set `package`), and each tab gets the command of its manager: add, development dependency, global tool, remove, `ci`, `npx` / `dlx`, `create` and `run`, with `--` placed where npm needs it. The reader's choice is shared by the elements of the page and kept in `localStorage`. Words are quoted for the shell; lines that are not understood are kept as written, in their own manager's tab only. Tabs can be added as they are (a CDN `<script>`).
+- `<vt-download>`: a download page from a GitHub release, a list of releases or your own JSON. The file that suits the reader's system and architecture, guessed in the browser and never sent, is one button, with the other files of that system next to it; every file is in a table with its size and SHA-256 (GitHub `digest` or a checksums file), signatures and checksums apart, and the command that checks the download on its system. `vt-download` is cancelable, to count downloads.
+- `<vt-contributors>`: contributors and sponsors from the GitHub API, an All Contributors file, Open Collective members, GitHub Sponsors (GraphQL) or your own groups. A wall of avatars, a grid or a list, sponsor tiers the most generous first with larger avatars, the types of contributions of All Contributors with filters, bots hidden, "Show more", and copy as a Markdown list. Avatars load lazily without a referrer, and links of sponsors are `rel="sponsored"`.
+
 ### Changed
 
-- The budget of the full bundles is 410 KB, for the six new elements.
+- The budget of the full bundles is 425 KB, for the nine new elements.
+
+### Fixed
+
+- Docs: the rows of `<vt-treemap>`, `<vt-describe>` and `<vt-compare>` were at the top of `README.md`, `docs/README.md`, `docs/editing.md` and `docs/security.md` instead of in their tables, and the start of `README.md` was written a second time inside the `<vt-math>` item.
 
 ## [0.14.0] - 2026-11-13
 

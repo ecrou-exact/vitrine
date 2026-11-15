@@ -1,0 +1,169 @@
+/*
+ * Download: the file for the reader's system, the others, and how to check them.
+ */
+.dl-body {
+  display: grid;
+  gap: var(--_space-4);
+}
+
+.dl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-ui);
+}
+
+.dl-meta strong {
+  color: var(--_fg);
+  font-weight: 600;
+}
+
+.dl-pre {
+  padding: 1px var(--_space-2);
+  border: 1px solid var(--_warning);
+  border-radius: var(--_radius-full);
+  color: var(--_warning);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.dl-main {
+  display: grid;
+  justify-items: start;
+  gap: var(--_space-3);
+}
+
+.dl-for,
+.dl-also,
+.dl-verify p,
+.dl-verify-files {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-ui);
+  overflow-wrap: anywhere;
+}
+
+.dl-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-3);
+  max-width: 100%;
+  padding: var(--_space-3) var(--_space-5) var(--_space-3) var(--_space-4);
+  border-radius: var(--_radius-sm);
+  background: var(--_accent);
+  color: var(--_on-accent);
+  text-decoration: none;
+  transition: filter var(--_duration-fast) var(--_easing);
+}
+
+.dl-button:hover {
+  filter: brightness(1.06);
+}
+
+.dl-button:focus-visible {
+  outline: 2px solid var(--_fg);
+  outline-offset: 2px;
+}
+
+.dl-button .icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.dl-button-text {
+  display: grid;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.dl-button-file {
+  overflow: hidden;
+  font-size: var(--_font-size-small);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dl-alt,
+.dl-name,
+.dl-meta a {
+  color: var(--_accent-fg);
+  overflow-wrap: anywhere;
+}
+
+.dl-verify {
+  display: grid;
+  gap: var(--_space-2);
+  width: 100%;
+}
+
+.dl-hash,
+.dl-hash-cell code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.dl-hash {
+  color: var(--_fg);
+}
+
+.dl-command {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.dl-command pre {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: var(--_space-2) var(--_space-3);
+  overflow-x: auto;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.dl-all summary {
+  width: fit-content;
+  color: var(--_fg);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dl-all summary:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+  border-radius: var(--_radius-sm);
+}
+
+.dl-wrap {
+  margin-top: var(--_space-3);
+  overflow-x: auto;
+}
+
+.dl-table tr.dl-best td:first-child {
+  box-shadow: inset 3px 0 0 var(--_accent);
+}
+
+.dl-hash-cell {
+  white-space: nowrap;
+}
+
+.dl-hash-cell .btn {
+  vertical-align: middle;
+}
+
+.dl-verify-files {
+  margin-top: var(--_space-3);
+}

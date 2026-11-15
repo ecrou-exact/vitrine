@@ -1,6 +1,3 @@
-| `<vt-treemap>` | A treemap of sizes that zooms | Map / List tabs, search, copy, download, full screen | [docs/components/treemap.md](docs/components/treemap.md) |
-| `<vt-describe>` | The profile of a dataset | Search, copy, download, full screen | [docs/components/describe.md](docs/components/describe.md) |
-| `<vt-compare>` | The differences between two datasets | Filters, search, copy, download, full screen | [docs/components/compare.md](docs/components/compare.md) |
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="brand/logo-horizontal-dark.svg">
@@ -9,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles and dataset comparisons — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages and contributors — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -77,79 +74,7 @@
 - **`<vt-test-report>`** — test reports from JUnit XML, TAP or the JSON of Jest, Vitest and Mocha: counts, a bar, suites, failures with their stack traces and colors, status filters and "Copy failures".
 - **`<vt-trace>`** — distributed traces from OpenTelemetry (OTLP JSON), Jaeger or Zipkin as a waterfall of spans, with services, errors, a time ruler, keyboard navigation and the details of each span.
 - **`<vt-notebook>`** — Jupyter notebooks: Markdown cells, highlighted code with execution counts, and outputs (text with colors, images, pandas tables, errors), sanitized and never run; code can be hidden like a report.
-- **`<vt-math>`** — TeX drawn as native MathML (Temml, loaded on demand): equations, numbered or not, inline math in text, `$…<p align="center">
-  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="brand/logo-horizontal-dark.svg">
-  <img src="brand/logo-horizontal.svg" alt="Vitrine" width="280">
-  </picture>
-
-</p>
-
-<p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles and dataset comparisons — on any website, with zero framework.
-</p>
-
-<p align="center">
-  <a href="https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml"><img src="https://github.com/ecrou-exact/vitrine/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0a6e6f.svg" alt="MIT License"></a>
-  <a href="https://ecrou-exact.github.io/vitrine/"><img src="https://img.shields.io/badge/docs-website-0a6e6f.svg" alt="Website"></a>
-</p>
-
-<p align="center">
-  <a href="https://ecrou-exact.github.io/vitrine/">Website</a> &nbsp;|&nbsp;
-  <a href="https://ecrou-exact.github.io/vitrine/examples.html">Examples</a> &nbsp;|&nbsp;
-  <a href="https://ecrou-exact.github.io/vitrine/playground.html">Playground</a> &nbsp;|&nbsp;
-  <a href="docs/getting-started.md">Documentation</a>
-</p>
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/preview-dark.png">
-  <img src="docs/assets/preview-light.png" alt="A vt-code element in its full variant: title bar, TypeScript code with line numbers and highlighted lines, next to theme and content type switches.">
-</picture>
-
-> **Status:** pre-release. The components are implemented and tested; the API may still change before 1.0.
-
-## Features
-
-- **`<vt-code>`** — syntax highlighting for 190+ languages (common ones bundled, the rest loaded on demand), line numbers, highlighted lines, diffs, wrap, collapse, search, copy and download.
-- **`<vt-markdown>`** — sanitized GitHub Flavored Markdown, Preview / Source / Split tabs, table of contents, heading anchors, image and link policies.
-- **`<vt-json>`** — pretty printing or a collapsible tree, JSONPath copy, search inside collapsed nodes, exact big numbers, precise syntax errors.
-- **`<vt-csv>`** — CSV and TSV as an accessible table with typed sorting, pagination and search.
-- **`<vt-tags>`** — tags as chips, or a form field with suggestions, #hashtags, a browse panel and backend suggestions.
-- **`<vt-diff>`** — two texts or a unified patch, side by side or unified, with changed words marked and arrows between changes.
-- **`<vt-terminal>`** — terminal sessions with prompts, ANSI colors and styles, a copy button per command, collapsible output and a typing replay.
-- **`<vt-tree>`** — file trees from `tree` output, indented text, paths or JSON, with icons, notes, change markers, links to files and keyboard navigation.
-- **`<vt-http>`** — HTTP requests and responses from raw HTTP, curl commands, JSON or HAR, with code for curl, `fetch`, Python `requests` and HTTPie, and masked credentials.
-- **`<vt-log>`** — application logs in plain text, JSON lines or logfmt, with levels, fields, stack traces kept with their entry, level buttons, a search that filters entries, and live streaming with `write()`.
-- **`<vt-chart>`** — line, area, bar and donut charts from CSV or JSON, drawn with Apache ECharts (loaded on demand) in the theme colors, with keyboard reading of values and a Table view.
-- **`<vt-openapi>`** — API references from OpenAPI 3.0 and 3.1 (or Swagger 2.0) descriptions in JSON or YAML: endpoints by tag, parameters, schema trees and generated examples.
-- **`<vt-env>`** — dotenv, INI and `.properties` files as a table, with `${VAR}` references linked and secrets masked until revealed.
-- **`<vt-hex>`** — hex dumps of binary data from `src`, hex or base64, with offsets, an ASCII column, bytes colored by kind, byte search and the file type read from its magic bytes.
-- **`<vt-timeline>`** — incident timelines and release history from JSON or a Keep a Changelog file, grouped by date, with durations, kind filters and search.
-- **`<vt-job>`** — jobs and CI runs with a progress bar, steps with status and duration, the log of each step with ANSI colors, and live updates with `setStep()` and `appendLog()`.
-- **`<vt-git>`** — commit history as a graph of branches and merges from `git log` output or JSON, with branch and tag labels, branch filters, commit details and keyboard navigation.
-- **`<vt-regex>`** — regular expressions colored by part and explained in words, matches and groups highlighted in a test text, a match table, replacement, and limits against catastrophic patterns.
-- **`<vt-yaml>`** — YAML as a tree like `<vt-json>`, with several documents, anchors, aliases and merge keys, a highlighted raw view and copy as JSON (js-yaml loaded on demand).
-- **`<vt-xml>`** — XML as a tree of elements, attributes, text, CDATA, comments and namespaces, with XPath copy and an indented raw view; read with its own parser, entities never expanded and nothing fetched.
-- **`<vt-toml>`** — TOML 1.0 as a typed tree (dates, times, integers as written), with errors at their line and column, and copy as JSON.
-- **`<vt-jwt>`** — JSON Web Tokens decoded: parts colored, header and payload as trees, claims explained with dates, validity status and security warnings; never verified and never sent anywhere.
-- **`<vt-cron>`** — cron expressions and crontabs explained in words, with the next runs in a time zone, a week grid, Quartz extensions and errors at their field.
-- **`<vt-cert>`** — X.509 certificates, chains and CSRs from PEM or DER with a bounded DER reader: names, validity, keys, extensions, fingerprints and an ASN.1 view; nothing verified or fetched.
-- **`<vt-table>`** — a complete data table: sorting on several columns, filters per column, selection with bulk actions, grouping, expandable rows, a column chooser, resizing, reordering and pinning, footer totals, cell editing, virtual scrolling, keyboard navigation and a card layout on phones.
-- **`<vt-status>`** — service status pages from JSON or a Statuspage summary: overall state, uptime with a bar per day, incidents with their updates, scheduled maintenance and live refresh.
-- **`<vt-calendar>`** — events from iCalendar or JSON as a month grid or an agenda, with recurring events, time zones, keyboard navigation and Add to calendar.
-- **`<vt-pricing>`** — pricing plans as cards, with a billing period switch, several currencies, savings worked out, a table comparing the plans and an event for your checkout.
-- **`<vt-faq>`** — questions and answers as an accordion, with a search, categories, links to a question and schema.org data for search engines.
-- **`<vt-gallery>`** — images as a grid, with a viewer that moves with the keyboard and lazy loading without a referrer.
-- **`<vt-stats>`** — key figures as tiles: values written for the reader's language, changes in words and a small history read with the keyboard.
-- **`<vt-board>`** — a task board with real drag and drop (mouse, touch and keyboard), board, list and table views, tasks added and edited in place, filters, limits per column and cancelable events to save to your server. Read-only, it is a public roadmap.
-- **`<vt-field>`** — a complete form field: required mark, "?" tip, hint, counter, clear errors, and lists with search, groups and several choices. It takes part in `<form>` like a native field.
-- **`<vt-date-picker>`** — a date or period field: typed in the order of the reader's language or chosen in an accessible calendar, usual periods such as "Last 7 days", blocked days, `min` / `max`, submitted in ISO 8601.
-- **`<vt-menu>`** — a dropdown, "⋮" or right-click menu of actions: links, check boxes, radio groups, shortcuts, icons and submenus, with the full keyboard of WAI-ARIA, always inside the window.
-- **`<vt-upload>`** — a file field with a drop zone, thumbnails, reasons for refused files, and uploads with progress to your server.
-- **`<vt-search>`** — a site search for your menu: Ctrl K / ⌘ K / `/`, a JSON index or your API, typo-tolerant ranking, results by id (UUID) with `url-template`, recent searches, fully accessible.
-- **`<vt-testimonials>`** — testimonials and reviews as a grid, a list or a carousel, with ratings and their average.
-  delimiters and macros.
+- **`<vt-math>`** — TeX drawn as native MathML (Temml, loaded on demand): equations, numbered or not, inline math in text, `$…$` delimiters and macros.
 - **`<vt-diagram>`** — Mermaid diagrams (loaded on demand, one type at a time) in the theme colors, sanitized again by Vitrine, under a strict CSP and Trusted Types.
 - **`<vt-pivot>`** — pivot tables from CSV or JSON: rows × columns, sum, count, average, min, max or distinct values, totals, shaded cells, lists to change the fields, and the records of a cell on a click.
 - **`<vt-heatmap>`** — heat maps: values by day as a calendar of weeks (contributions, activity), or by two categories as a matrix, with a scale, totals and a keyboard grid.
@@ -157,6 +82,9 @@
 - **`<vt-treemap>`** — treemaps of sizes (esbuild metafiles, webpack stats, `du`, CSV, JSON trees): what takes the space in a bundle or a disk, with zoom, search and a list.
 - **`<vt-describe>`** — the profile of a dataset, as pandas `describe()`: type, missing and distinct values, quartiles, histograms and most frequent values of each column.
 - **`<vt-compare>`** — the differences between two datasets: rows paired by a key, added, removed and changed, with the old and new value of each cell.
+- **`<vt-install>`** — an install command for every package manager: write `npm i -D vitrine` once and get pnpm, yarn, bun and deno (or pip, uv, poetry and pdm), as tabs shared by the page and remembered.
+- **`<vt-download>`** — a download page from a GitHub release: the file for the reader's system as one button, every other file with its size and SHA-256, and the command that checks it.
+- **`<vt-contributors>`** — contributors and sponsors from GitHub, All Contributors, Open Collective or GitHub Sponsors: avatars, tiers and filters by type of contribution.
 - **JSON everywhere** — every element reads JSON from a `data` property, a `json` or `json-src` attribute (with `json-path`) or a JSON script, and turns it into its own format. See [docs/json.md](docs/json.md).
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
 - **Secure by default** — sanitized output, no `eval`, size, depth and time limits, strict CSP and Trusted Types support. Tested against an XSS payload suite in three browsers.
@@ -282,6 +210,12 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-pivot>`        | A pivot table with totals                           | Lists of fields, search, copy and download as CSV, full screen                                          | [docs/components/pivot.md](docs/components/pivot.md)               |
 | `<vt-heatmap>`      | A calendar or a matrix of shaded squares            | Copy and download as CSV, full screen                                                                   | [docs/components/heatmap.md](docs/components/heatmap.md)           |
 | `<vt-flame>`        | A flame graph that zooms                            | Flame graph / Functions tabs, search, copy, download, full screen                                       | [docs/components/flame.md](docs/components/flame.md)               |
+| `<vt-treemap>`      | A treemap of sizes that zooms                       | Map / List tabs, search, copy, download, full screen                                                    | [docs/components/treemap.md](docs/components/treemap.md)           |
+| `<vt-describe>`     | The profile of a dataset                            | Search, copy, download, full screen                                                                     | [docs/components/describe.md](docs/components/describe.md)         |
+| `<vt-compare>`      | The differences between two datasets                | Filters, search, copy, download, full screen                                                            | [docs/components/compare.md](docs/components/compare.md)           |
+| `<vt-install>`      | An install command for every package manager        | Tabs shared by the page and remembered, copy                                                            | [docs/components/install.md](docs/components/install.md)           |
+| `<vt-download>`     | The download for the reader's system                | Every file with its size and SHA-256, check command, full screen                                        | [docs/components/download.md](docs/components/download.md)         |
+| `<vt-contributors>` | Contributors and sponsors                           | Tiers, filters by contribution, search, copy as Markdown, download, full screen                         | [docs/components/contributors.md](docs/components/contributors.md) |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 

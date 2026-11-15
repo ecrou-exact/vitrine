@@ -1,0 +1,56 @@
+/*
+ * Install: the command of each package manager, as tabs.
+ */
+.ins-body {
+  padding: 0;
+}
+
+.ins-code {
+  margin: 0;
+  padding: var(--_space-3) var(--_space-4);
+  overflow-x: auto;
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  font-variant-ligatures: none;
+  line-height: var(--_line-height);
+  white-space: pre;
+}
+
+.ins-code:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: -2px;
+}
+
+.ins-prompt {
+  color: var(--_fg-muted);
+  user-select: none;
+}
+
+.ins-cmd {
+  color: var(--_syntax-function);
+}
+
+.ins-flag {
+  color: var(--_syntax-attr);
+}
+
+.ins-pkg {
+  color: var(--_syntax-string);
+}
+
+.ins-op {
+  color: var(--_syntax-keyword);
+}
+
+.ins-comment {
+  color: var(--_syntax-comment);
+  font-style: italic;
+}
+
+.ins-none {
+  margin: 0;
+  padding: var(--_space-3) var(--_space-4);
+  color: var(--_fg-muted);
+}

@@ -86,6 +86,11 @@ const SAMPLES = {
     'plan,seats,mrr,signup\nPro,12,480,2025-03-14\nTeam,4,96,2025-05-02\nFree,1,0,2025-06-21\nPro,25,1000,2025-07-09\nTeam,6,144,\nFree,1,0,2025-09-12',
   compare:
     '{\n  "key": "sku",\n  "original": [\n    {\n      "sku": "A-100",\n      "price": 39,\n      "stock": 12\n    },\n    {\n      "sku": "A-101",\n      "price": 4.5,\n      "stock": 140\n    },\n    {\n      "sku": "A-103",\n      "price": 19.9,\n      "stock": 0\n    }\n  ],\n  "modified": [\n    {\n      "sku": "A-100",\n      "price": 42,\n      "stock": 12\n    },\n    {\n      "sku": "A-101",\n      "price": 4.5,\n      "stock": 128\n    },\n    {\n      "sku": "A-105",\n      "price": 9.9,\n      "stock": 60\n    }\n  ]\n}',
+  install: '# Add Vitrine and build\nnpm install vitrine\nnpm install -D vitest\nnpm run build',
+  download:
+    '{\n  "tag_name": "v2.1.0",\n  "name": "Atlas 2.1",\n  "html_url": "https://example.com/app/releases/tag/v2.1.0",\n  "published_at": "2026-11-03T09:30:00Z",\n  "assets": [\n    {\n      "name": "Atlas-2.1.0-universal.dmg",\n      "size": 98304000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-universal.dmg",\n      "digest": "sha256:ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12ab12"\n    },\n    {\n      "name": "Atlas-Setup-2.1.0.exe",\n      "size": 84410000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-Setup-2.1.0.exe",\n      "digest": "sha256:cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34cd34"\n    },\n    {\n      "name": "Atlas-2.1.0-arm64.exe",\n      "size": 83900000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0-arm64.exe"\n    },\n    {\n      "name": "Atlas-2.1.0.AppImage",\n      "size": 102760000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/Atlas-2.1.0.AppImage",\n      "digest": "sha256:ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56ef56"\n    },\n    {\n      "name": "atlas_2.1.0_amd64.deb",\n      "size": 71200000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas_2.1.0_amd64.deb"\n    },\n    {\n      "name": "atlas-2.1.0.x86_64.rpm",\n      "size": 71900000,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/atlas-2.1.0.x86_64.rpm"\n    },\n    {\n      "name": "SHA256SUMS",\n      "size": 512,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS"\n    },\n    {\n      "name": "SHA256SUMS.asc",\n      "size": 833,\n      "browser_download_url": "https://example.com/app/releases/download/v2.1.0/SHA256SUMS.asc"\n    }\n  ]\n}',
+  contributors:
+    '{\n  "projectName": "atlas",\n  "contributors": [\n    {\n      "login": "ada",\n      "name": "Ada Lovelace",\n      "profile": "https://example.com/ada",\n      "contributions": [\n        "code",\n        "doc",\n        "maintenance"\n      ]\n    },\n    {\n      "login": "alan",\n      "name": "Alan Turing",\n      "profile": "https://example.com/alan",\n      "contributions": [\n        "code",\n        "test"\n      ]\n    },\n    {\n      "login": "grace",\n      "name": "Grace Hopper",\n      "profile": "https://example.com/grace",\n      "contributions": [\n        "review",\n        "ideas"\n      ]\n    },\n    {\n      "login": "katherine",\n      "name": "Katherine Johnson",\n      "profile": "https://example.com/kj",\n      "contributions": [\n        "bug",\n        "test"\n      ]\n    },\n    {\n      "login": "linus",\n      "name": "Linus Torvalds",\n      "profile": "https://example.com/linus",\n      "contributions": [\n        "infra"\n      ]\n    },\n    {\n      "login": "margaret",\n      "name": "Margaret Hamilton",\n      "profile": "https://example.com/mh",\n      "contributions": [\n        "design",\n        "a11y"\n      ]\n    },\n    {\n      "login": "tim",\n      "name": "Tim Berners-Lee",\n      "profile": "https://example.com/tim",\n      "contributions": [\n        "translation",\n        "doc"\n      ]\n    }\n  ]\n}',
   countdown:
     '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
@@ -612,6 +617,48 @@ const SCHEMA = {
       },
     ],
   },
+  install: {
+    tag: 'vt-install',
+    flags: ['dev'],
+    fields: [
+      { name: 'managers', type: 'text', placeholder: 'npm,pnpm,yarn,bun,deno' },
+      { name: 'manager', type: 'text', placeholder: 'pnpm' },
+      { name: 'package', type: 'text', placeholder: 'vitrine' },
+      { name: 'prompt', type: 'text', placeholder: '$' },
+    ],
+  },
+  download: {
+    tag: 'vt-download',
+    flags: ['prerelease'],
+    fields: [
+      {
+        name: 'platform',
+        type: 'select',
+        options: [
+          '',
+          'windows-x64',
+          'windows-arm64',
+          'macos',
+          'macos-arm64',
+          'linux-x64',
+          'linux-arm64',
+          'android',
+          'none',
+        ],
+      },
+      { name: 'prefer', type: 'text', placeholder: 'deb,rpm' },
+    ],
+  },
+  contributors: {
+    tag: 'vt-contributors',
+    flags: ['bots', 'filters'],
+    fields: [
+      { name: 'layout', type: 'select', options: ['', 'grid', 'avatars', 'list'] },
+      { name: 'sort', type: 'select', options: ['', 'contributions', 'name', 'amount'] },
+      { name: 'max', type: 'number', placeholder: '24' },
+      { name: 'size', type: 'select', options: ['', 'small', 'medium', 'large'] },
+    ],
+  },
   countdown: {
     tag: 'vt-countdown',
     flags: [],
@@ -874,6 +921,9 @@ function switchType(type) {
     treemap: 'app.js',
     describe: 'customers.csv',
     compare: 'catalog.json',
+    install: 'Install',
+    download: 'Atlas',
+    contributors: '.all-contributorsrc',
     countdown: 'countdown.json',
   }[type];
   buildControls();

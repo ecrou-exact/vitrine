@@ -1,7 +1,3 @@
-| `<vt-treemap>` | `content`, `tree` |
-| `<vt-describe>` | `content`, `profile` |
-| `<vt-compare>` | `original`, `modified`, `comparison` (read only: not editable in place) |
-
 # Editing
 
 Every Vitrine component can switch from displaying content to editing it. In edit mode, `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>` and `<vt-diff>` show a highlighted code editor, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>` and `<vt-cert>` show an editor with a live preview under it, and `<vt-tags>` becomes a tag field. This page covers the attributes, keyboard, undo history and events shared by all editors, then what edit mode does in each component.
@@ -148,6 +144,12 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-pivot>`        | `content`, `settings`                                                                    |
 | `<vt-heatmap>`      | `content`                                                                                |
 | `<vt-flame>`        | `content`, `profile`                                                                     |
+| `<vt-treemap>`      | `content`, `tree`                                                                        |
+| `<vt-describe>`     | `content`, `profile`                                                                     |
+| `<vt-compare>`      | `original`, `modified`, `comparison` (read only: not editable in place)                  |
+| `<vt-install>`      | `content`, `tabs` (read only), `selected`                                                |
+| `<vt-download>`     | `content`, `release` (read only)                                                         |
+| `<vt-contributors>` | `content`, `groups` (read only)                                                          |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

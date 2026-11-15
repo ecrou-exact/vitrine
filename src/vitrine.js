@@ -47,6 +47,9 @@ import { VtCountdown } from './components/countdown/vt-countdown.js';
 import { VtTerminal } from './components/terminal/vt-terminal.js';
 import { VtTree } from './components/tree/vt-tree.js';
 import { VtCompare } from './components/compare/vt-compare.js';
+import { VtInstall } from './components/install/vt-install.js';
+import { VtDownload } from './components/download/vt-download.js';
+import { VtContributors } from './components/contributors/vt-contributors.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -116,6 +119,9 @@ export {
   VtTreemap,
   VtDescribe,
   VtCompare,
+  VtInstall,
+  VtDownload,
+  VtContributors,
   configure,
   getConfig,
   EVENTS,
@@ -195,6 +201,9 @@ export const registry = new Map(
     ['vt-treemap', VtTreemap],
     ['vt-describe', VtDescribe],
     ['vt-compare', VtCompare],
+    ['vt-install', VtInstall],
+    ['vt-download', VtDownload],
+    ['vt-contributors', VtContributors],
   ]),
 );
 
@@ -251,6 +260,9 @@ const TYPES = /** @type {const} */ ({
   treemap: 'vt-treemap',
   describe: 'vt-describe',
   compare: 'vt-compare',
+  install: 'vt-install',
+  download: 'vt-download',
+  contributors: 'vt-contributors',
 });
 
 /**

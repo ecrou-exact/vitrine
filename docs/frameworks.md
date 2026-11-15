@@ -646,7 +646,10 @@ vt-heatmap:not(:defined),
 vt-flame:not(:defined),
 vt-treemap:not(:defined),
 vt-describe:not(:defined),
-vt-compare:not(:defined) {
+vt-compare:not(:defined),
+vt-install:not(:defined),
+vt-download:not(:defined),
+vt-contributors:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

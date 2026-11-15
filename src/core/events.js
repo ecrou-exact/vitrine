@@ -93,6 +93,8 @@ export const EVENTS = Object.freeze({
   UPLOAD_DONE: 'vt-upload-done',
   /** Upload: a file could not be sent. Detail: `{ file, status }`. */
   UPLOAD_ERROR: 'vt-upload-error',
+  /** Download: a file link was followed (cancelable). Detail: `{ name, url, os, arch, recommended }`. */
+  DOWNLOAD: 'vt-download',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });
