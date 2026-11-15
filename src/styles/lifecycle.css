@@ -1,0 +1,254 @@
+/*
+ * Lifecycle: release cycles, their support and its end, as a table and a schedule.
+ */
+.lc-body {
+  display: grid;
+  gap: var(--_space-4);
+}
+
+.lc-status {
+  display: inline-block;
+  padding: 1px var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lc-status.s-active {
+  color: var(--_success);
+}
+
+.lc-status.s-security,
+.lc-status.s-extended {
+  color: var(--_warning);
+}
+
+.lc-status.s-eol {
+  color: var(--_danger);
+}
+
+.lc-status.s-upcoming {
+  color: var(--_info);
+}
+
+/* ---------- The version checked ---------- */
+
+.lc-check {
+  display: grid;
+  justify-items: start;
+  gap: var(--_space-1);
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid var(--_border);
+  border-inline-start: 4px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.lc-check p {
+  margin: 0;
+  color: var(--_fg);
+}
+
+.lc-check.s-active {
+  border-inline-start-color: var(--_success);
+}
+
+.lc-check.s-security,
+.lc-check.s-extended {
+  border-inline-start-color: var(--_warning);
+}
+
+.lc-check.s-eol,
+.lc-check.s-unknown {
+  border-inline-start-color: var(--_danger);
+}
+
+.lc-check .lc-update {
+  color: var(--_fg-muted);
+}
+
+/* ---------- Table ---------- */
+
+.lc-wrap {
+  overflow-x: auto;
+}
+
+.lc-table th[scope='row'] {
+  text-align: start;
+}
+
+.lc-table tr.s-eol {
+  color: var(--_fg-muted);
+}
+
+.lc-table tr.lc-mine th,
+.lc-table tr.lc-mine td {
+  background: var(--_accent-soft);
+}
+
+.lc-table a {
+  color: var(--_accent-fg);
+}
+
+.lc-name {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.lc-lts {
+  padding: 0 var(--_space-1);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-sm);
+  color: var(--_accent-fg);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.lc-codename {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 400;
+}
+
+/* ---------- Schedule ---------- */
+
+.lc-schedule {
+  --_label: 9rem;
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.lc-ruler {
+  position: relative;
+  height: 1.5em;
+  margin-inline-start: var(--_label);
+  border-bottom: 1px solid var(--_border);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.lc-tick {
+  position: absolute;
+  inset-inline-start: var(--_at);
+  translate: -50% 0;
+}
+
+.lc-today {
+  position: absolute;
+  inset-inline-start: var(--_at);
+  top: 0;
+  height: 100%;
+  border-inline-start: 2px solid var(--_accent);
+}
+
+.lc-rows {
+  position: relative;
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lc-row {
+  display: grid;
+  grid-template-columns: var(--_label) 1fr;
+  align-items: center;
+  min-height: 28px;
+}
+
+.lc-row.lc-mine {
+  border-radius: var(--_radius-sm);
+  background: var(--_accent-soft);
+}
+
+.lc-label {
+  overflow: hidden;
+  padding-inline: var(--_space-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lc-track {
+  position: relative;
+  height: 18px;
+}
+
+.lc-bar {
+  position: absolute;
+  inset-inline-start: var(--_start);
+  top: 0;
+  width: var(--_width);
+  height: 100%;
+}
+
+.lc-bar.b-active,
+.lc-key.b-active::before {
+  background: var(--_success);
+}
+
+.lc-bar.b-security,
+.lc-key.b-security::before {
+  background: var(--_warning);
+}
+
+.lc-bar.b-extended,
+.lc-key.b-extended::before {
+  background: var(--_border-strong);
+}
+
+.lc-bar:first-child {
+  border-start-start-radius: var(--_radius-sm);
+  border-end-start-radius: var(--_radius-sm);
+}
+
+.lc-bar:last-child {
+  border-start-end-radius: var(--_radius-sm);
+  border-end-end-radius: var(--_radius-sm);
+}
+
+/* No end date: the bar fades out. */
+.lc-bar.open {
+  mask-image: linear-gradient(to right, #000 70%, transparent);
+}
+
+.lc-row.s-eol .lc-bar {
+  opacity: 0.45;
+}
+
+.lc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-4);
+  margin: 0;
+  margin-inline-start: var(--_label);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.lc-key::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 8px;
+  margin-inline-end: var(--_space-1);
+  border-radius: 2px;
+}
+
+.lc-more {
+  justify-self: start;
+}
+
+@media (max-width: 520px) {
+  .lc-schedule {
+    --_label: 5.5rem;
+  }
+
+  .lc-codename {
+    display: none;
+  }
+}

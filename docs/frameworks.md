@@ -649,7 +649,10 @@ vt-describe:not(:defined),
 vt-compare:not(:defined),
 vt-install:not(:defined),
 vt-download:not(:defined),
-vt-contributors:not(:defined) {
+vt-contributors:not(:defined),
+vt-lifecycle:not(:defined),
+vt-advisories:not(:defined),
+vt-licenses:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

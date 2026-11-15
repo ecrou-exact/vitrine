@@ -50,6 +50,9 @@ import { VtCompare } from './components/compare/vt-compare.js';
 import { VtInstall } from './components/install/vt-install.js';
 import { VtDownload } from './components/download/vt-download.js';
 import { VtContributors } from './components/contributors/vt-contributors.js';
+import { VtLifecycle } from './components/lifecycle/vt-lifecycle.js';
+import { VtAdvisories } from './components/advisories/vt-advisories.js';
+import { VtLicenses } from './components/licenses/vt-licenses.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -122,6 +125,9 @@ export {
   VtInstall,
   VtDownload,
   VtContributors,
+  VtLifecycle,
+  VtAdvisories,
+  VtLicenses,
   configure,
   getConfig,
   EVENTS,
@@ -204,6 +210,9 @@ export const registry = new Map(
     ['vt-install', VtInstall],
     ['vt-download', VtDownload],
     ['vt-contributors', VtContributors],
+    ['vt-lifecycle', VtLifecycle],
+    ['vt-advisories', VtAdvisories],
+    ['vt-licenses', VtLicenses],
   ]),
 );
 
@@ -263,6 +272,9 @@ const TYPES = /** @type {const} */ ({
   install: 'vt-install',
   download: 'vt-download',
   contributors: 'vt-contributors',
+  lifecycle: 'vt-lifecycle',
+  advisories: 'vt-advisories',
+  licenses: 'vt-licenses',
 });
 
 /**

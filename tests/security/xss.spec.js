@@ -467,6 +467,46 @@ const MODES = [
     wrap: (p) => `main;${p.replace(/[;\n]/g, ' ')};leaf 10\nmain 2`,
   },
   {
+    tag: 'vt-lifecycle',
+    attrs: { variant: 'full', version: '<img src=x onerror=alert(1)>', now: '2026-01-01' },
+    wrap: (p) =>
+      JSON.stringify([
+        { cycle: p, codename: p, label: p, releaseDate: '2025-01-01', eol: '2027-01-01', latest: p, link: p }, // prettier-ignore
+        { cycle: '1', releaseDate: p, eol: p, support: p, latest: { name: p, link: `https://example.com/${p}` } }, // prettier-ignore
+      ]),
+  },
+  {
+    tag: 'vt-lifecycle',
+    attrs: { view: 'schedule', version: '1.2' },
+    wrap: (p) => JSON.stringify({ result: { label: p, releases: [{ name: '1', codename: p, releaseDate: '2025-01-01', eolFrom: '2028-01-01' }] } }), // prettier-ignore
+  },
+  {
+    tag: 'vt-advisories',
+    attrs: { variant: 'full', expanded: '' },
+    wrap: (p) =>
+      JSON.stringify([
+        { id: p, summary: p, details: p, aliases: [p], severity: [{ type: 'CVSS_V3', score: p }], affected: [{ package: { name: p, ecosystem: p }, ranges: [{ type: 'SEMVER', events: [{ introduced: p }, { fixed: p }] }] }], references: [{ type: 'ADVISORY', url: p }], database_specific: { severity: p, cwe_ids: [p, 'CWE-79'] } }, // prettier-ignore
+        { ghsa_id: 'GHSA-1', summary: p, description: p, severity: 'high', html_url: p, cvss: { score: 7, vector_string: p }, vulnerabilities: [{ package: { name: p }, vulnerable_version_range: p, first_patched_version: p }] }, // prettier-ignore
+      ]),
+  },
+  {
+    tag: 'vt-licenses',
+    attrs: { variant: 'full', allow: '<b>MIT</b>' },
+    wrap: (p) =>
+      JSON.stringify({
+        bomFormat: 'CycloneDX',
+        components: [
+          { name: p, group: p, version: p, licenses: [{ expression: p }], externalReferences: [{ type: 'website', url: p }] }, // prettier-ignore
+          { name: 'x', licenses: [{ license: { name: p } }] },
+        ],
+      }),
+  },
+  {
+    tag: 'vt-licenses',
+    attrs: { view: 'packages' },
+    wrap: (p) => JSON.stringify({ [`${p}@1.0.0`]: { licenses: `${p}*`, repository: p } }),
+  },
+  {
     tag: 'vt-install',
     attrs: { variant: 'full', prompt: '<b>$</b>' },
     wrap: (p) => JSON.stringify({ command: `npm i ${p}\n${p}`, tabs: { [p]: p, CDN: p } }),

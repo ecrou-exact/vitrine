@@ -21,9 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-download>`: a download page from a GitHub release, a list of releases or your own JSON. The file that suits the reader's system and architecture, guessed in the browser and never sent, is one button, with the other files of that system next to it; every file is in a table with its size and SHA-256 (GitHub `digest` or a checksums file), signatures and checksums apart, and the command that checks the download on its system. `vt-download` is cancelable, to count downloads.
 - `<vt-contributors>`: contributors and sponsors from the GitHub API, an All Contributors file, Open Collective members, GitHub Sponsors (GraphQL) or your own groups. A wall of avatars, a grid or a list, sponsor tiers the most generous first with larger avatars, the types of contributions of All Contributors with filters, bots hidden, "Show more", and copy as a Markdown list. Avatars load lazily without a referrer, and links of sponsors are `rel="sponsored"`.
 
+- `<vt-lifecycle>`: supported versions and their end of life, from the endoflife.date API (v1 and v0) or a list. A table with the status of each cycle (upcoming, supported, security fixes only, extended support, end of life), LTS and latest release, a schedule of bars like the one of Node.js with a line for today, and `version`, which says whether a version is still supported and what its latest release is.
+- `<vt-advisories>`: security reports from OSV records, osv-scanner, `npm audit --json`, GitHub security advisories or Dependabot alerts. The most severe first, severity filters with counts, CVSS 3 scores computed from vectors and explained in words, versions affected and fixed, weaknesses linked to CWE, copy as a Markdown table and download as CSV.
+- `<vt-licenses>`: the licenses of dependencies from a CycloneDX or SPDX SBOM, license-checker or pip-licenses. Licenses sorted into permissive, weak copyleft, strong copyleft, other and unknown, SPDX expressions evaluated (`OR`, `AND`, `WITH` exceptions), common names understood, and `allow`, a list of licenses and kinds that marks and filters the packages not allowed.
+
 ### Changed
 
-- The budget of the full bundles is 425 KB, for the nine new elements.
+- The budget of the full bundles is 440 KB, for the twelve new elements.
 
 ### Fixed
 

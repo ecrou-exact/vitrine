@@ -54,7 +54,10 @@
  *   | keyof typeof import('../components/compare/strings.js').en
  *   | keyof typeof import('../components/install/strings.js').en
  *   | keyof typeof import('../components/download/strings.js').en
- *   | keyof typeof import('../components/contributors/strings.js').en} StringKey
+ *   | keyof typeof import('../components/contributors/strings.js').en
+ *   | keyof typeof import('../components/lifecycle/strings.js').en
+ *   | keyof typeof import('../components/advisories/strings.js').en
+ *   | keyof typeof import('../components/licenses/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

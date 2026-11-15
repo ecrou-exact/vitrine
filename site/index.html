@@ -725,6 +725,30 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <vt-contributors class="preview" lang-ui="en" layout="avatars" json='{"projectName":"atlas","contributors":[{"login":"ada","name":"Ada Lovelace","profile":"https://example.com/ada","contributions":["code","doc","maintenance"]},{"login":"alan","name":"Alan Turing","profile":"https://example.com/alan","contributions":["code","test"]},{"login":"grace","name":"Grace Hopper","profile":"https://example.com/grace","contributions":["review","ideas"]},{"login":"katherine","name":"Katherine Johnson","profile":"https://example.com/kj","contributions":["bug","test"]},{"login":"linus","name":"Linus Torvalds","profile":"https://example.com/linus","contributions":["infra"]},{"login":"margaret","name":"Margaret Hamilton","profile":"https://example.com/mh","contributions":["design","a11y"]},{"login":"tim","name":"Tim Berners-Lee","profile":"https://example.com/tim","contributions":["translation","doc"]}]}'></vt-contributors>
               <a href="examples.html#contributors">Contributor examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-lifecycle&gt;</h3>
+              <p>
+                Supported versions and their end of life, and whether yours is still supported.
+              </p>
+              <vt-lifecycle class="preview" lang-ui="en" version="20.11.1" ended="1" json='[{"cycle":"26","releaseDate":"2026-04-21","eol":"2029-04-30","support":"2027-10-20","lts":false,"latest":"26.2.0"},{"cycle":"24","codename":"Krypton","releaseDate":"2025-05-06","eol":"2028-04-30","support":"2026-10-20","lts":"2025-10-28","latest":"24.11.0"},{"cycle":"23","releaseDate":"2024-10-16","eol":"2025-06-01","support":"2025-04-01","lts":false,"latest":"23.11.1"},{"cycle":"22","codename":"Jod","releaseDate":"2024-04-24","eol":"2027-04-30","support":"2025-10-21","lts":"2024-10-29","latest":"22.21.0"},{"cycle":"21","releaseDate":"2023-10-17","eol":"2024-06-01","support":"2024-04-01","lts":false,"latest":"21.7.3"},{"cycle":"20","codename":"Iron","releaseDate":"2023-04-18","eol":"2026-04-30","support":"2024-10-22","lts":"2023-10-24","latest":"20.19.5"},{"cycle":"18","codename":"Hydrogen","releaseDate":"2022-04-19","eol":"2025-04-30","support":"2023-10-18","lts":"2022-10-25","latest":"18.20.8"}]'></vt-lifecycle>
+              <a href="examples.html#lifecycle">Support schedule examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-advisories&gt;</h3>
+              <p>
+                A security report from OSV, npm audit or GitHub, the most severe first.
+              </p>
+              <vt-advisories class="preview" lang-ui="en" json='{"vulns":[{"id":"GHSA-35jh-r3h4-6jhm","summary":"Command Injection in lodash","details":"lodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function.","aliases":["CVE-2021-23337"],"published":"2021-05-06T16:05:51Z","severity":[{"type":"CVSS_V3","score":"CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"}],"affected":[{"package":{"ecosystem":"npm","name":"lodash"},"ranges":[{"type":"SEMVER","events":[{"introduced":"0"},{"fixed":"4.17.21"}]}]}],"references":[{"type":"ADVISORY","url":"https://nvd.nist.gov/vuln/detail/CVE-2021-23337"}],"database_specific":{"severity":"HIGH","cwe_ids":["CWE-77","CWE-94"]}},{"id":"GHSA-xvch-5gv4-984h","summary":"Prototype Pollution in minimist","details":"Minimist 1.2.5 and earlier are vulnerable to Prototype Pollution via file index.js, function setKey().","aliases":["CVE-2021-44906"],"published":"2022-03-18T00:01:09Z","severity":[{"type":"CVSS_V3","score":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"}],"affected":[{"package":{"ecosystem":"npm","name":"minimist"},"ranges":[{"type":"SEMVER","events":[{"introduced":"0"},{"fixed":"1.2.6"}]}]}],"database_specific":{"severity":"CRITICAL","cwe_ids":["CWE-1321"]}}]}'></vt-advisories>
+              <a href="examples.html#advisories">Security report examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-licenses&gt;</h3>
+              <p>
+                The licenses of your dependencies, and those you do not allow.
+              </p>
+              <vt-licenses class="preview" lang-ui="en" allow="permissive,MPL-2.0" json='{"bomFormat":"CycloneDX","specVersion":"1.6","components":[{"name":"react","version":"19.0.0","licenses":[{"license":{"id":"MIT"}}]},{"name":"react-dom","version":"19.0.0","licenses":[{"license":{"id":"MIT"}}]},{"name":"lodash","version":"4.17.21","licenses":[{"license":{"id":"MIT"}}]},{"name":"express","version":"5.1.0","licenses":[{"license":{"id":"MIT"}}]},{"name":"typescript","version":"5.9.3","licenses":[{"license":{"id":"Apache-2.0"}}]},{"name":"rxjs","version":"7.8.2","licenses":[{"license":{"id":"Apache-2.0"}}]},{"name":"chalk","version":"5.4.1","licenses":[{"license":{"id":"MIT"}}]},{"name":"semver","version":"7.7.2","licenses":[{"license":{"id":"ISC"}}]},{"name":"glob","version":"11.0.3","licenses":[{"license":{"id":"ISC"}}]},{"name":"qs","version":"6.14.0","licenses":[{"license":{"id":"BSD-3-Clause"}}]},{"name":"esprima","version":"4.0.1","licenses":[{"license":{"id":"BSD-2-Clause"}}]},{"name":"argparse","version":"2.0.1","licenses":[{"license":{"id":"Python-2.0"}}]},{"name":"jszip","version":"3.10.1","licenses":[{"expression":"(MIT OR GPL-3.0-or-later)"}]},{"name":"axe-core","version":"4.10.3","licenses":[{"license":{"id":"MPL-2.0"}}]},{"name":"@img/sharp-libvips","version":"1.2.0","licenses":[{"license":{"id":"LGPL-3.0-or-later"}}]},{"name":"readline-sync","version":"1.4.10","licenses":[{"license":{"id":"GPL-3.0-only"}}]},{"name":"caniuse-lite","version":"1.0.30001720","licenses":[{"license":{"id":"CC-BY-4.0"}}]},{"name":"internal-utils","version":"0.3.0","licenses":[{"license":{"id":"UNLICENSED"}}]}]}'></vt-licenses>
+              <a href="examples.html#licenses">License report examples</a>
+            </article>
           </div>
         </div>
       </section>

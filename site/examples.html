@@ -79,6 +79,9 @@
           <option value="install">Install command</option>
           <option value="download">Download page</option>
           <option value="contributors">Contributors</option>
+          <option value="lifecycle">Support schedule</option>
+          <option value="advisories">Security report</option>
+          <option value="licenses">License report</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -3921,6 +3924,648 @@ AssertionError: assert 404 == 200</failure>
                 }
               </template>
             </vt-contributors>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="lifecycle" aria-labelledby="lifecycle-title">
+        <h2 id="lifecycle-title">&lt;vt-lifecycle&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Node.js release schedule</h3>
+            <p>endoflife.date data for Node.js, checked for version <code>20.11.1</code>. Switch to the Schedule tab for the bars, with a line for today.</p>
+          </div>
+          <template>
+            <vt-lifecycle variant="full" label="Node.js" version="20.11.1" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "cycle": "26",
+                    "releaseDate": "2026-04-21",
+                    "eol": "2029-04-30",
+                    "support": "2027-10-20",
+                    "lts": false,
+                    "latest": "26.2.0"
+                  },
+                  {
+                    "cycle": "24",
+                    "codename": "Krypton",
+                    "releaseDate": "2025-05-06",
+                    "eol": "2028-04-30",
+                    "support": "2026-10-20",
+                    "lts": "2025-10-28",
+                    "latest": "24.11.0"
+                  },
+                  {
+                    "cycle": "23",
+                    "releaseDate": "2024-10-16",
+                    "eol": "2025-06-01",
+                    "support": "2025-04-01",
+                    "lts": false,
+                    "latest": "23.11.1"
+                  },
+                  {
+                    "cycle": "22",
+                    "codename": "Jod",
+                    "releaseDate": "2024-04-24",
+                    "eol": "2027-04-30",
+                    "support": "2025-10-21",
+                    "lts": "2024-10-29",
+                    "latest": "22.21.0"
+                  },
+                  {
+                    "cycle": "21",
+                    "releaseDate": "2023-10-17",
+                    "eol": "2024-06-01",
+                    "support": "2024-04-01",
+                    "lts": false,
+                    "latest": "21.7.3"
+                  },
+                  {
+                    "cycle": "20",
+                    "codename": "Iron",
+                    "releaseDate": "2023-04-18",
+                    "eol": "2026-04-30",
+                    "support": "2024-10-22",
+                    "lts": "2023-10-24",
+                    "latest": "20.19.5"
+                  },
+                  {
+                    "cycle": "18",
+                    "codename": "Hydrogen",
+                    "releaseDate": "2022-04-19",
+                    "eol": "2025-04-30",
+                    "support": "2023-10-18",
+                    "lts": "2022-10-25",
+                    "latest": "18.20.8"
+                  }
+                ]
+              </template>
+            </vt-lifecycle>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Supported versions of your project</h3>
+            <p>The table of a <code>SECURITY.md</code>, from your own list: <code>supported: true</code> without an end date, and a version in extended support.</p>
+          </div>
+          <template>
+            <vt-lifecycle view="schedule" ended="5" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "version": "3.x",
+                    "released": "2026-02-02",
+                    "supported": true,
+                    "latest": "3.2.1"
+                  },
+                  {
+                    "version": "2.x",
+                    "released": "2024-06-10",
+                    "support": "2026-02-02",
+                    "eol": "2027-02-02",
+                    "latest": "2.9.4"
+                  },
+                  {
+                    "version": "1.x",
+                    "released": "2022-03-01",
+                    "eol": "2025-01-01",
+                    "extendedSupport": "2027-01-01",
+                    "latest": "1.14.0"
+                  }
+                ]
+              </template>
+            </vt-lifecycle>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="advisories" aria-labelledby="advisories-title">
+        <h2 id="advisories-title">&lt;vt-advisories&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An osv.dev report</h3>
+            <p>OSV records, the most severe first. Choose a severity to keep it; open an advisory for its details, its attack vector in words and its weaknesses.</p>
+          </div>
+          <template>
+            <vt-advisories variant="full" label="osv-scanner" lang-ui="en">
+              <template data-json>
+                {
+                  "vulns": [
+                    {
+                      "id": "GHSA-35jh-r3h4-6jhm",
+                      "summary": "Command Injection in lodash",
+                      "details": "lodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+                      "aliases": [
+                        "CVE-2021-23337"
+                      ],
+                      "published": "2021-05-06T16:05:51Z",
+                      "severity": [
+                        {
+                          "type": "CVSS_V3",
+                          "score": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+                        }
+                      ],
+                      "affected": [
+                        {
+                          "package": {
+                            "ecosystem": "npm",
+                            "name": "lodash"
+                          },
+                          "ranges": [
+                            {
+                              "type": "SEMVER",
+                              "events": [
+                                {
+                                  "introduced": "0"
+                                },
+                                {
+                                  "fixed": "4.17.21"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "references": [
+                        {
+                          "type": "ADVISORY",
+                          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+                        }
+                      ],
+                      "database_specific": {
+                        "severity": "HIGH",
+                        "cwe_ids": [
+                          "CWE-77",
+                          "CWE-94"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "GHSA-xvch-5gv4-984h",
+                      "summary": "Prototype Pollution in minimist",
+                      "details": "Minimist 1.2.5 and earlier are vulnerable to Prototype Pollution via file index.js, function setKey().",
+                      "aliases": [
+                        "CVE-2021-44906"
+                      ],
+                      "published": "2022-03-18T00:01:09Z",
+                      "severity": [
+                        {
+                          "type": "CVSS_V3",
+                          "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+                        }
+                      ],
+                      "affected": [
+                        {
+                          "package": {
+                            "ecosystem": "npm",
+                            "name": "minimist"
+                          },
+                          "ranges": [
+                            {
+                              "type": "SEMVER",
+                              "events": [
+                                {
+                                  "introduced": "0"
+                                },
+                                {
+                                  "fixed": "1.2.6"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "database_specific": {
+                        "severity": "CRITICAL",
+                        "cwe_ids": [
+                          "CWE-1321"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "GHSA-7fh5-64p2-3v2j",
+                      "summary": "PostCSS line return parsing error",
+                      "details": "An issue was discovered in PostCSS before 8.4.31: it may find content in comments when parsing linters output.",
+                      "aliases": [
+                        "CVE-2023-44270"
+                      ],
+                      "published": "2023-09-30T00:30:21Z",
+                      "severity": [
+                        {
+                          "type": "CVSS_V3",
+                          "score": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+                        }
+                      ],
+                      "affected": [
+                        {
+                          "package": {
+                            "ecosystem": "npm",
+                            "name": "postcss"
+                          },
+                          "ranges": [
+                            {
+                              "type": "SEMVER",
+                              "events": [
+                                {
+                                  "introduced": "0"
+                                },
+                                {
+                                  "fixed": "8.4.31"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "database_specific": {
+                        "severity": "MODERATE",
+                        "cwe_ids": [
+                          "CWE-74"
+                        ]
+                      }
+                    },
+                    {
+                      "id": "GHSA-9wv6-86v2-598j",
+                      "summary": "path-to-regexp outputs backtracking regular expressions",
+                      "aliases": [
+                        "CVE-2024-45296"
+                      ],
+                      "published": "2024-09-09T00:00:00Z",
+                      "severity": [
+                        {
+                          "type": "CVSS_V3",
+                          "score": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                        }
+                      ],
+                      "affected": [
+                        {
+                          "package": {
+                            "ecosystem": "npm",
+                            "name": "path-to-regexp"
+                          },
+                          "ranges": [
+                            {
+                              "type": "SEMVER",
+                              "events": [
+                                {
+                                  "introduced": "0"
+                                },
+                                {
+                                  "fixed": "0.1.10"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "database_specific": {
+                        "severity": "HIGH",
+                        "cwe_ids": [
+                          "CWE-1333"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              </template>
+            </vt-advisories>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>npm audit</h3>
+            <p>The output of <code>npm audit --json</code>, with the version that fixes each package.</p>
+          </div>
+          <template>
+            <vt-advisories lang-ui="en">
+              <template data-json>
+                {
+                  "auditReportVersion": 2,
+                  "vulnerabilities": {
+                    "nth-check": {
+                      "name": "nth-check",
+                      "severity": "high",
+                      "isDirect": false,
+                      "via": [
+                        {
+                          "source": 1095141,
+                          "name": "nth-check",
+                          "dependency": "nth-check",
+                          "title": "Inefficient Regular Expression Complexity in nth-check",
+                          "url": "https://github.com/advisories/GHSA-rp65-9cf3-cjxr",
+                          "severity": "high",
+                          "cwe": [
+                            "CWE-1333"
+                          ],
+                          "cvss": {
+                            "score": 7.5,
+                            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+                          },
+                          "range": "<2.0.1"
+                        }
+                      ],
+                      "range": "<2.0.1",
+                      "fixAvailable": {
+                        "name": "nth-check",
+                        "version": "2.0.1"
+                      }
+                    },
+                    "postcss": {
+                      "name": "postcss",
+                      "severity": "moderate",
+                      "via": [
+                        {
+                          "source": 1094544,
+                          "name": "postcss",
+                          "title": "PostCSS line return parsing error",
+                          "url": "https://github.com/advisories/GHSA-7fh5-64p2-3v2j",
+                          "severity": "moderate",
+                          "cvss": {
+                            "score": 5.3,
+                            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+                          },
+                          "range": "<8.4.31"
+                        }
+                      ],
+                      "range": "<8.4.31",
+                      "fixAvailable": {
+                        "name": "postcss",
+                        "version": "8.4.31"
+                      }
+                    }
+                  }
+                }
+              </template>
+            </vt-advisories>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="licenses" aria-labelledby="licenses-title">
+        <h2 id="licenses-title">&lt;vt-licenses&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A CycloneDX SBOM with a policy</h3>
+            <p><code>allow="permissive,MPL-2.0"</code>: the GPL, LGPL and unlicensed packages are marked. <code>jszip</code> is dual licensed, so its MIT choice is allowed.</p>
+          </div>
+          <template>
+            <vt-licenses variant="full" label="sbom.cdx.json" allow="permissive,MPL-2.0" lang-ui="en">
+              <template data-json>
+                {
+                  "bomFormat": "CycloneDX",
+                  "specVersion": "1.6",
+                  "components": [
+                    {
+                      "name": "react",
+                      "version": "19.0.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "react-dom",
+                      "version": "19.0.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "lodash",
+                      "version": "4.17.21",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "express",
+                      "version": "5.1.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "typescript",
+                      "version": "5.9.3",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "Apache-2.0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "rxjs",
+                      "version": "7.8.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "Apache-2.0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "chalk",
+                      "version": "5.4.1",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "semver",
+                      "version": "7.7.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "ISC"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "glob",
+                      "version": "11.0.3",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "ISC"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "qs",
+                      "version": "6.14.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "BSD-3-Clause"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "esprima",
+                      "version": "4.0.1",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "BSD-2-Clause"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "argparse",
+                      "version": "2.0.1",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "Python-2.0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "jszip",
+                      "version": "3.10.1",
+                      "licenses": [
+                        {
+                          "expression": "(MIT OR GPL-3.0-or-later)"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "axe-core",
+                      "version": "4.10.3",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MPL-2.0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "@img/sharp-libvips",
+                      "version": "1.2.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "LGPL-3.0-or-later"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "readline-sync",
+                      "version": "1.4.10",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "GPL-3.0-only"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "caniuse-lite",
+                      "version": "1.0.30001720",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "CC-BY-4.0"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "name": "internal-utils",
+                      "version": "0.3.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "UNLICENSED"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-licenses>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>pip-licenses</h3>
+            <p>The long names of Python package metadata, understood: "Apache Software License", "GPL v3", "LGPLv2+".</p>
+          </div>
+          <template>
+            <vt-licenses view="packages" lang-ui="en">
+              <template data-json>
+                [
+                  {
+                    "Name": "requests",
+                    "Version": "2.32.4",
+                    "License": "Apache Software License"
+                  },
+                  {
+                    "Name": "certifi",
+                    "Version": "2025.6.15",
+                    "License": "Mozilla Public License 2.0 (MPL 2.0)"
+                  },
+                  {
+                    "Name": "urllib3",
+                    "Version": "2.5.0",
+                    "License": "MIT"
+                  },
+                  {
+                    "Name": "idna",
+                    "Version": "3.10",
+                    "License": "BSD License"
+                  },
+                  {
+                    "Name": "chardet",
+                    "Version": "5.2.0",
+                    "License": "GNU Lesser General Public License v2 or later (LGPLv2+)"
+                  },
+                  {
+                    "Name": "pyqt5",
+                    "Version": "5.15.11",
+                    "License": "GPL v3"
+                  }
+                ]
+              </template>
+            </vt-licenses>
           </template>
         </article>
       </section>

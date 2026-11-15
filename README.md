@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages and contributors — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories and dependency licenses — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -84,6 +84,9 @@
 - **`<vt-compare>`** — the differences between two datasets: rows paired by a key, added, removed and changed, with the old and new value of each cell.
 - **`<vt-install>`** — an install command for every package manager: write `npm i -D vitrine` once and get pnpm, yarn, bun and deno (or pip, uv, poetry and pdm), as tabs shared by the page and remembered.
 - **`<vt-download>`** — a download page from a GitHub release: the file for the reader's system as one button, every other file with its size and SHA-256, and the command that checks it.
+- **`<vt-lifecycle>`** — supported versions and their end of life, from endoflife.date or a list: a table and a schedule like Node.js's, and whether a given version is still supported.
+- **`<vt-advisories>`** — security reports from OSV, osv-scanner, `npm audit --json`, GitHub advisories or Dependabot: the most severe first, CVSS scores explained in words, affected versions and fixes.
+- **`<vt-licenses>`** — the licenses of your dependencies from a CycloneDX or SPDX SBOM, license-checker or pip-licenses: permissive or copyleft, and those not in your allowed list.
 - **`<vt-contributors>`** — contributors and sponsors from GitHub, All Contributors, Open Collective or GitHub Sponsors: avatars, tiers and filters by type of contribution.
 - **JSON everywhere** — every element reads JSON from a `data` property, a `json` or `json-src` attribute (with `json-path`) or a JSON script, and turns it into its own format. See [docs/json.md](docs/json.md).
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
@@ -216,6 +219,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-install>`      | An install command for every package manager        | Tabs shared by the page and remembered, copy                                                            | [docs/components/install.md](docs/components/install.md)           |
 | `<vt-download>`     | The download for the reader's system                | Every file with its size and SHA-256, check command, full screen                                        | [docs/components/download.md](docs/components/download.md)         |
 | `<vt-contributors>` | Contributors and sponsors                           | Tiers, filters by contribution, search, copy as Markdown, download, full screen                         | [docs/components/contributors.md](docs/components/contributors.md) |
+| `<vt-lifecycle>`    | Supported versions and their end of life            | Table / Schedule tabs, version check, copy and download as CSV, full screen                             | [docs/components/lifecycle.md](docs/components/lifecycle.md)       |
+| `<vt-advisories>`   | A security report                                   | Severity filters, search, copy as Markdown, download as CSV, full screen                                | [docs/components/advisories.md](docs/components/advisories.md)     |
+| `<vt-licenses>`     | The licenses of dependencies                        | Licenses / Packages tabs, allow-list, filters, search, copy and download as CSV, full screen            | [docs/components/licenses.md](docs/components/licenses.md)         |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 

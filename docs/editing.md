@@ -150,6 +150,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-install>`      | `content`, `tabs` (read only), `selected`                                                |
 | `<vt-download>`     | `content`, `release` (read only)                                                         |
 | `<vt-contributors>` | `content`, `groups` (read only)                                                          |
+| `<vt-lifecycle>`    | `content`, `cycles` (read only)                                                          |
+| `<vt-advisories>`   | `content`, `advisories` (read only)                                                      |
+| `<vt-licenses>`     | `content`, `dependencies`, `violations` (read only)                                      |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 
