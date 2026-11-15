@@ -85,6 +85,9 @@
           <option value="icon-picker">Icon picker</option>
           <option value="workflow">Workflow run</option>
           <option value="access-log">Access log</option>
+          <option value="password">Password</option>
+          <option value="secret">API key</option>
+          <option value="version">Version</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -5052,6 +5055,118 @@ AssertionError: assert 404 == 200</failure>
                 {"level": "error", "ts": 1763197321.9, "logger": "http.log.access", "msg": "handled request", "request": {"remote_ip": "192.0.2.77", "client_ip": "192.0.2.77", "proto": "HTTP/2.0", "method": "POST", "host": "api.example.com", "uri": "/v1/orders", "headers": {"User-Agent": ["okhttp/4.12.0"]}}, "duration": 1.84, "size": 61, "status": 502}
               </template>
             </vt-access-log>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="password" aria-labelledby="password-title">
+        <h2 id="password-title">&lt;vt-password&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Choose a password</h3>
+            <p>Type <kbd>password</kbd>, then <kbd>P@ssw0rd!</kbd>, then <kbd>alice1990</kbd>: the meter finds the common password, the substitutions and the name of the user. Press the generate button for a strong one: it is shown and fills in the confirmation.</p>
+          </div>
+          <template>
+            <vt-password label="New password" confirm require="upper,digit" user-inputs="Alice Martin alice@example.com" lang-ui="en"></vt-password>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>How it would be guessed</h3>
+            <p>The <code>full</code> variant adds the time of four attacks, from a login form that limits tries to stolen hashes on many GPUs, and the parts an attacker would try.</p>
+          </div>
+          <template>
+            <vt-password variant="full" label="Password" value="monkey1990!" lang-ui="en"></vt-password>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Sign in</h3>
+            <p><code>mode="current"</code> is a plain field for signing in: reveal button, Caps Lock warning, and the autocomplete password managers expect.</p>
+          </div>
+          <template>
+            <vt-password mode="current" label="Password" required lang-ui="en"></vt-password>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="secret" aria-labelledby="secret-title">
+        <h2 id="secret-title">&lt;vt-secret&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A live key in a dashboard</h3>
+            <p>The key is blurred, and what is blurred is not the key: it is not in the page until shown. Copy it without showing it, or as a <code>.env</code> line or a shell export. Regenerate asks to confirm first.</p>
+          </div>
+          <template>
+            <vt-secret variant="full" label="Stripe secret key" value="sk_live_51DemoKeyNotReal0000" env-name="STRIPE_SECRET_KEY" created="2026-09-01" expires="2026-11-20" last-used="2026-11-14" scopes="charges:write,refunds:read" rotate now="2026-11-15T12:00:00Z" lang-ui="en"></vt-secret>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A new token, shown once</h3>
+            <p><code>show-once</code> lets the token be seen and copied until it is hidden; <code>auto-hide</code> hides it after 20 seconds.</p>
+          </div>
+          <template>
+            <vt-secret label="GitHub token" value="ghp_N7xYqK2LmP9aR4vB8sT3dW6fH1jC5gZ0eQ2u" show-once auto-hide="20" scopes="repo,read:org" lang-ui="en"></vt-secret>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Paste a key</h3>
+            <p><code>editable</code> with <code>expect="github,gitlab"</code>: paste an AWS key and it is refused; spaces and line breaks pasted with a key are removed.</p>
+          </div>
+          <template>
+            <vt-secret editable required expect="github,gitlab" label="Access token" hint="A GitHub or GitLab token with the repo scope." lang-ui="en"></vt-secret>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="version" aria-labelledby="version-title">
+        <h2 id="version-title">&lt;vt-version&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>The next release</h3>
+            <p>Each part is a spin button: arrow keys step it, typing replaces it. The buttons give the next patch, minor and major versions, and the field says what kind of release it is from 1.4.2.</p>
+          </div>
+          <template>
+            <vt-version variant="full" label="Release" value="1.4.2" current="1.4.2" newer lang-ui="en"></vt-version>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>1.0, 1.1, … 1.9, 2.0</h3>
+            <p><code>format="x.y"</code> with <code>segment-max="*,9"</code>: the minor part goes up to 9 and carries into the major, both ways. Only digits and dots can be typed.</p>
+          </div>
+          <template>
+            <vt-version format="x.y" segment-max="*,9" value="1.8" label="Docs version" lang-ui="en"></vt-version>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Calendar versions</h3>
+            <p>The pip format, <code>YYYY.0M.MICRO</code>: Today sets the year and month, and counts up the micro part on the same month.</p>
+          </div>
+          <template>
+            <vt-version variant="full" format="calver" value="2026.10.2" label="Release" lang-ui="en"></vt-version>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Decimals with a step</h3>
+            <p>An API version from 1.0 to 5.0, stepped by 0.5 with − and + or the arrow keys. A comma works too: <kbd>1,5</kbd>.</p>
+          </div>
+          <template>
+            <vt-version format="decimal" step="0.5" value="1.0" min="1" max="5" label="API version" lang-ui="en"></vt-version>
           </template>
         </article>
       </section>

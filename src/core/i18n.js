@@ -60,7 +60,10 @@
  *   | keyof typeof import('../components/licenses/strings.js').en
  *   | keyof typeof import('../components/icon-picker/strings.js').en
  *   | keyof typeof import('../components/workflow/strings.js').en
- *   | keyof typeof import('../components/access-log/strings.js').en} StringKey
+ *   | keyof typeof import('../components/access-log/strings.js').en
+ *   | keyof typeof import('../components/password/strings.js').en
+ *   | keyof typeof import('../components/secret/strings.js').en
+ *   | keyof typeof import('../components/version/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

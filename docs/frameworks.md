@@ -655,7 +655,10 @@ vt-advisories:not(:defined),
 vt-licenses:not(:defined),
 vt-icon-picker:not(:defined),
 vt-workflow:not(:defined),
-vt-access-log:not(:defined) {
+vt-access-log:not(:defined),
+vt-password:not(:defined),
+vt-secret:not(:defined),
+vt-version:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

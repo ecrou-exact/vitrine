@@ -499,6 +499,35 @@ const MODES = [
       ].join('\n'),
   },
   {
+    tag: 'vt-password',
+    attrs: { variant: 'full', confirm: '', label: '<img src=x onerror=alert(1)>', hint: '<b>x</b>', value: '<svg onload=alert(1)>pass', placeholder: '"><script>alert(1)</script>' }, // prettier-ignore
+    data: true,
+    wrap: (p) => JSON.stringify({ mode: 'new', require: [p, 'upper'], userInputs: [p], minScore: p, minLength: p }), // prettier-ignore
+  },
+  {
+    tag: 'vt-secret',
+    attrs: { variant: 'full', rotate: '', 'show-once': '', 'copy-as': 'env,shell,<b>x</b>', label: '<img src=x onerror=alert(1)>', value: 'sk_live_<img src=x onerror=alert(1)>aaaaaaaaaaaaaaaaaaaa', now: '2026-11-15' }, // prettier-ignore
+    data: true,
+    wrap: (p) => JSON.stringify({ created: p, expires: p, lastUsed: p, scopes: [p, `${p}:write`], envName: p, expect: p }), // prettier-ignore
+  },
+  {
+    tag: 'vt-secret',
+    attrs: { editable: '', generate: '', 'generate-prefix': '<img src=x onerror=alert(1)>', pattern: '(<script>', placeholder: '<b>x</b>', value: '<script>alert(1)</script>' }, // prettier-ignore
+    wrap: () => null,
+  },
+  {
+    tag: 'vt-version',
+    attrs: { variant: 'full', prefix: '<svg onload=alert(1)>', preids: '<img src=x onerror=alert(1)>,beta', label: '<img src=x onerror=alert(1)>' }, // prettier-ignore
+    data: true,
+    wrap: (p) => JSON.stringify({ value: `1.2.3-${p}`, current: p, min: p, max: p, format: p, segmentMax: [p] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-version',
+    attrs: { format: '#.#', placeholder: '<img src=x onerror=alert(1)>', hint: '<b>x</b>' },
+    data: true,
+    wrap: (p) => JSON.stringify({ value: p, current: '1.0' }),
+  },
+  {
     tag: 'vt-access-log',
     attrs: { tabs: '', filters: '' },
     wrap: (p) => JSON.stringify({ RequestPath: p, ClientHost: p, DownstreamStatus: 500, 'request_User-Agent': `${p} bot` }), // prettier-ignore

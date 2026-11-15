@@ -836,6 +836,30 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               </vt-access-log>
               <a href="examples.html#access-log">Access log examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-password&gt;</h3>
+              <p>
+                A password field that rates passwords as an attacker would guess them.
+              </p>
+              <vt-password class="preview" lang-ui="en" require="upper,digit" value="Summer2026!"></vt-password>
+              <a href="examples.html#password">Password examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-secret&gt;</h3>
+              <p>
+                An API key, blurred, copied as a .env line, with its kind and expiry.
+              </p>
+              <vt-secret class="preview" lang-ui="en" label="Stripe key" value="sk_live_51DemoKeyNotReal0000" copy-as="env,shell" created="2026-09-01" scopes="charges:write"></vt-secret>
+              <a href="examples.html#secret">API key examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-version&gt;</h3>
+              <p>
+                A version field: each part a spin button, and the next versions.
+              </p>
+              <vt-version class="preview" lang-ui="en" variant="full" value="1.5.0" current="1.4.2"></vt-version>
+              <a href="examples.html#version">Version examples</a>
+            </article>
           </div>
         </div>
       </section>

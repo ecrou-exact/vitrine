@@ -29,9 +29,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-workflow>`: workflow runs as a CI system shows them, from GitHub Actions, GitLab or your own JSON. The run with its status, event, branch, commit and duration; a graph of jobs in columns by `needs` or stage, linked by curves that move while a job runs; the steps of a job with their logs, ANSI colors, folded `##[group]` sections and marked errors; keyboard moves between jobs; and `updateJob()` and `appendLog()` to follow a run live, with times counting up.
 - `<vt-access-log>`: access logs of Apache, Nginx, IIS, Caddy and Traefik, line by line. Totals (requests, visitors, errors, data, bots, median and p95 response time), requests per period by class of status, a table with IP, user, path, status, size, duration and client (browsers, systems, tools and bots read from user agents), top lists that filter, a filter field with `status:`, `ip:`, `bot:yes`…, `anonymize` for IP addresses, CSV and `write()` for live lines.
 
+- `<vt-password>`: a password field to sign in or choose a password. A strength meter (0 to 4) that finds common passwords and words, leet substitutions, reversed words, keyboard runs (QWERTY and AZERTY), sequences, repeats, dates and the user's name or email (`user-inputs`, `user-fields`), with the time four attacks would take, the main weakness and advice; requirements checked as you type (`minlength`, `require`, `min-classes`, `min-score`); a generator without ambiguous characters; a confirmation field; a Caps Lock warning; and `breach-check`, Have I Been Pwned with k-anonymity. Form associated; the password is never in an attribute or an event.
+- `<vt-secret>`: API keys, tokens and secrets, shown or typed. Hidden behind a blur of stand-in characters, so the key is not in the page until shown; copy without showing, or as a `.env` line, a shell or PowerShell variable, an `Authorization` header or JSON, with `clear-clipboard`; about thirty kinds of keys recognized (GitHub, GitLab, AWS, Stripe, OpenAI, Anthropic, Slack, npm, PyPI…) with live or test and secret or publishable; created, expires, last used, scopes and randomness; `show-once`, `auto-hide` and `rotate` with a confirmation and the cancelable `vt-rotate`; `editable` with `expect` and `pattern` as a form field.
+- `<vt-version>`: a version field for Semantic Versioning, `x.y`, `x.y.z.w`, CalVer tokens (`YYYY.0M.MICRO`, `YY.0M`) and decimals with a step. Only valid characters; − and +, arrow keys on the part under the caret; `segment-max` to carry into the part before (1.9 → 2.0); the `full` variant edits each part as a spin button, with pre-release, next versions (patch, minor, major, pre-release, release, today) and the kind of release from `current`; `min`, `max`, `newer` and `strict`. Form associated.
+- Events `vt-generate`, `vt-breach` and `vt-rotate`.
+
 ### Changed
 
-- The budget of the full bundles is 460 KB, for the fifteen new elements.
+- The budget of the full bundles is 500 KB, for the eighteen new elements.
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
 ### Fixed

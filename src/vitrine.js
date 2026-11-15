@@ -56,6 +56,9 @@ import { VtLicenses } from './components/licenses/vt-licenses.js';
 import { VtIconPicker, registerIconSet } from './components/icon-picker/vt-icon-picker.js';
 import { VtWorkflow } from './components/workflow/vt-workflow.js';
 import { VtAccessLog } from './components/access-log/vt-access-log.js';
+import { VtPassword } from './components/password/vt-password.js';
+import { VtSecret } from './components/secret/vt-secret.js';
+import { VtVersion } from './components/version/vt-version.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -134,6 +137,9 @@ export {
   VtIconPicker,
   VtWorkflow,
   VtAccessLog,
+  VtPassword,
+  VtSecret,
+  VtVersion,
   registerIconSet,
   configure,
   getConfig,
@@ -223,6 +229,9 @@ export const registry = new Map(
     ['vt-icon-picker', VtIconPicker],
     ['vt-workflow', VtWorkflow],
     ['vt-access-log', VtAccessLog],
+    ['vt-password', VtPassword],
+    ['vt-secret', VtSecret],
+    ['vt-version', VtVersion],
   ]),
 );
 
@@ -288,6 +297,9 @@ const TYPES = /** @type {const} */ ({
   'icon-picker': 'vt-icon-picker',
   workflow: 'vt-workflow',
   'access-log': 'vt-access-log',
+  password: 'vt-password',
+  secret: 'vt-secret',
+  version: 'vt-version',
 });
 
 /**

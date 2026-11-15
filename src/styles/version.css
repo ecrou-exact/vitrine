@@ -1,0 +1,304 @@
+/*
+ * Version: a text field with − and +, or one spin button per part, the next versions and
+ * the kind of release.
+ */
+.vr-box {
+  padding: 3px;
+}
+
+.vr-input {
+  font-family: var(--_font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.vr-prefix {
+  padding-inline: var(--_space-1) 0;
+  font-family: var(--_font-mono);
+}
+
+.vr-step {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  cursor: pointer;
+}
+
+.vr-step .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.vr-step:hover:not(:disabled) {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.vr-step:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.vr-step:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---------- Parts ---------- */
+
+.vr-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_space-1);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+}
+
+.vr-editor:focus-within {
+  border-color: var(--_accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--_accent) 35%, transparent);
+}
+
+.has-error .vr-editor {
+  border-color: var(--_danger);
+}
+
+.vr-editor > .vr-prefix {
+  align-self: center;
+  margin-bottom: 18px;
+  padding: 0;
+  color: var(--_fg-muted);
+  font-size: 22px;
+}
+
+.vr-seg,
+.vr-pre-box {
+  display: inline-grid;
+  justify-items: center;
+  gap: 2px;
+}
+
+.vr-seg-step {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 32px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_fg-muted);
+  cursor: pointer;
+}
+
+.vr-seg-step .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.vr-seg-step:hover:not(:disabled) {
+  background: var(--_accent-soft);
+  color: var(--_fg);
+}
+
+.vr-seg-step:disabled {
+  visibility: hidden;
+}
+
+.vr-seg-input {
+  min-width: 2ch;
+  padding: 2px var(--_space-1);
+  border: 1px solid transparent;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: 600 22px / 1.2 var(--_font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  field-sizing: content;
+}
+
+.vr-seg-input:focus {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  outline: none;
+}
+
+.vr-seg-input[aria-invalid='true'] {
+  border-color: var(--_danger);
+}
+
+.vr-seg.date .vr-seg-input {
+  background: color-mix(in srgb, var(--_accent) 8%, var(--_surface-sunken));
+}
+
+.vr-seg-name {
+  color: var(--_fg-muted);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.vr-sep {
+  align-self: center;
+  margin-bottom: 0;
+  color: var(--_fg-muted);
+  font: 600 22px / 1 var(--_font-mono);
+}
+
+.vr-pre {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--_space-1);
+}
+
+.vr-pre > .vr-sep {
+  align-self: auto;
+  margin-top: 26px;
+}
+
+.vr-pre-box {
+  margin-top: 20px;
+}
+
+.vr-pre-id {
+  height: 34px;
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: 600 14px var(--_font-mono);
+}
+
+.vr-pre-id:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+/* ---------- Result, change, next versions ---------- */
+
+.vr-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  font-size: var(--_font-size-ui);
+}
+
+.vr-result-label {
+  color: var(--_fg-muted);
+}
+
+.vr-result-value {
+  padding: 1px var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  font-family: var(--_font-mono);
+  font-weight: 600;
+}
+
+.vr-result .vr-change {
+  flex-basis: 100%;
+}
+
+.vr-change {
+  --_tone: var(--_accent);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.vr-change:empty {
+  display: none;
+}
+
+.vr-change .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--_tone);
+}
+
+.vr-change strong {
+  color: var(--_fg);
+}
+
+.vr-change.change-major {
+  --_tone: var(--_danger);
+}
+
+.vr-change.change-minor {
+  --_tone: var(--_warning);
+}
+
+.vr-change.change-patch,
+.vr-change.change-date {
+  --_tone: var(--_success);
+}
+
+.vr-change.change-downgrade {
+  --_tone: var(--_danger);
+}
+
+.vr-bumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+  margin-top: var(--_space-1);
+}
+
+.vr-bump {
+  display: inline-grid;
+  gap: 1px;
+  min-width: 6rem;
+  padding: var(--_space-1) var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.vr-bump:hover:not(:disabled) {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.vr-bump:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.vr-bump-kind {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.vr-bump-version {
+  font-family: var(--_font-mono);
+  font-weight: 600;
+}
+
+/* A version is short: the text field does not stretch across a wide form. */
+.version:not(.full) .vr-box {
+  max-width: 16rem;
+}

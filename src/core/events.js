@@ -95,6 +95,12 @@ export const EVENTS = Object.freeze({
   UPLOAD_ERROR: 'vt-upload-error',
   /** Download: a file link was followed (cancelable). Detail: `{ name, url, os, arch, recommended }`. */
   DOWNLOAD: 'vt-download',
+  /** Password or secret: a value was generated. Detail: `{ length }`. */
+  GENERATE: 'vt-generate',
+  /** Password: known breaches were checked. Detail: `{ count }`. */
+  BREACH: 'vt-breach',
+  /** Secret: the key is about to be regenerated (cancelable). Detail: `{ provider }`. */
+  ROTATE: 'vt-rotate',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

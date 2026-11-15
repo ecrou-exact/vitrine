@@ -65,6 +65,9 @@ const SAMPLES = {
   upload: '',
   // The icon picker is set by its attributes too.
   'icon-picker': '',
+  password: '',
+  secret: '',
+  version: '',
   testimonials:
     '[\n  {\n    "quote": "We replaced three tools with this one. Setup took an afternoon.",\n    "author": "Ada Lovelace",\n    "role": "CTO",\n    "company": "Analytical Engines",\n    "rating": 5\n  },\n  {\n    "quote": "Support answered within the hour, every single time.",\n    "author": "Alan Turing",\n    "role": "Engineer",\n    "rating": 4.5\n  },\n  {\n    "quote": "Clean, fast, and it just works on every page we tried.",\n    "author": "Grace Hopper",\n    "company": "Compilers Inc.",\n    "rating": 4\n  }\n]',
   sql: 'app=# SELECT id, name, email FROM users ORDER BY id LIMIT 3;\n id | name  |      email\n----+-------+------------------\n  1 | Ada   | ada@example.com\n  2 | Alan  | alan@example.com\n  3 | Grace |\n(3 rows)\n\nTime: 0.512 ms',
@@ -710,6 +713,37 @@ const SCHEMA = {
     flags: [],
     fields: [{ name: 'job', type: 'text', placeholder: 'test-22' }],
   },
+  password: {
+    tag: 'vt-password',
+    flags: ['confirm', 'breach-check', 'required'],
+    fields: [
+      { name: 'mode', type: 'select', options: ['', 'new', 'current'] },
+      { name: 'require', type: 'text', placeholder: 'lower,upper,digit,symbol' },
+      { name: 'min-score', type: 'select', options: ['', '0', '1', '2', '3', '4'] },
+      { name: 'user-inputs', type: 'text', placeholder: 'Alice alice@example.com' },
+    ],
+  },
+  secret: {
+    tag: 'vt-secret',
+    flags: ['editable', 'rotate', 'show-once'],
+    fields: [
+      { name: 'value', type: 'text', placeholder: 'sk_live_51DemoKeyNotReal0000' },
+      { name: 'copy-as', type: 'text', placeholder: 'env,shell,header' },
+      { name: 'expires', type: 'text', placeholder: '2026-12-01' },
+      { name: 'scopes', type: 'text', placeholder: 'repo,read:org' },
+      { name: 'mask', type: 'select', options: ['', 'blur', 'dots'] },
+    ],
+  },
+  version: {
+    tag: 'vt-version',
+    flags: ['newer', 'strict'],
+    fields: [
+      { name: 'value', type: 'text', placeholder: '1.4.2' },
+      { name: 'format', type: 'text', placeholder: 'semver, x.y, calver, decimal, YY.0M' },
+      { name: 'current', type: 'text', placeholder: '1.4.2' },
+      { name: 'segment-max', type: 'text', placeholder: '*,9,9' },
+    ],
+  },
   'access-log': {
     tag: 'vt-access-log',
     flags: ['anonymize', 'filters', 'tabs'],
@@ -989,6 +1023,9 @@ function switchType(type) {
     'icon-picker': 'Icon',
     workflow: 'CI',
     'access-log': 'access.log',
+    password: 'Password',
+    secret: 'API key',
+    version: 'Version',
     countdown: 'countdown.json',
   }[type];
   buildControls();
