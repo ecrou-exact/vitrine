@@ -63,7 +63,10 @@
  *   | keyof typeof import('../components/access-log/strings.js').en
  *   | keyof typeof import('../components/password/strings.js').en
  *   | keyof typeof import('../components/secret/strings.js').en
- *   | keyof typeof import('../components/version/strings.js').en} StringKey
+ *   | keyof typeof import('../components/version/strings.js').en
+ *   | keyof typeof import('../components/consent/strings.js').en
+ *   | keyof typeof import('../components/changelog/strings.js').en
+ *   | keyof typeof import('../components/repo/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

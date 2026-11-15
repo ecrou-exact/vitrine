@@ -528,6 +528,49 @@ const MODES = [
     wrap: (p) => JSON.stringify({ value: p, current: '1.0' }),
   },
   {
+    tag: 'vt-consent',
+    attrs: { position: 'inline', policy: 'javascript:alert(1)', label: '<img src=x onerror=alert(1)>', 'storage-key': '"><img src=x onerror=alert(1)>' }, // prettier-ignore
+    wrap: (p) =>
+      JSON.stringify({
+        title: p,
+        text: p,
+        policy: p,
+        version: p,
+        categories: [{ id: 'analytics', label: p, description: p, cookies: [{ name: p, provider: p, purpose: p, duration: p }] }, { id: p, label: p }, p], // prettier-ignore
+      }),
+  },
+  {
+    tag: 'vt-consent',
+    attrs: { version: 'xss' },
+    hover: false,
+    wrap: (p) => JSON.stringify({ title: p, text: p, policy: `https://example.com/${p}` }),
+  },
+  {
+    tag: 'vt-changelog',
+    attrs: { variant: 'full', repo: 'https://github.com/o/r', since: '<b>0</b>' },
+    wrap: (p) => `# ${p}\n\n## [${p}] - 2026-01-01\n${p}\n### ${p}\n- ${p}\n- **${p}:** [${p}](${p}) \`${p}\` #1 @x a1b2c3d\n\n## [1.0.0] - 2026-01-01\n### Added\n- ${p}\n\n[1.0.0]: ${p}\n`, // prettier-ignore
+  },
+  {
+    tag: 'vt-changelog',
+    attrs: { filters: '' },
+    wrap: (p) => JSON.stringify([{ tag_name: `v1.0.0`, name: p, html_url: p, body: `## ${p}\n* ${p}\n\n**Full Changelog**: ${p}` }, { version: '0.9.0', compare: p, changes: { [p]: [p] } }]), // prettier-ignore
+  },
+  {
+    tag: 'vt-repo',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        repo: { full_name: `${p}/${p}`, name: p, owner: { login: p, avatar_url: p }, html_url: p, clone_url: p, description: p, homepage: p, stargazers_count: 1, license: { spdx_id: p, name: p, url: p }, topics: [p], pushed_at: p, default_branch: p }, // prettier-ignore
+        languages: { [p]: 10, '<svg onload=alert(1)>': 5 },
+        release: { tag_name: p, html_url: p, published_at: p },
+      }),
+  },
+  {
+    tag: 'vt-repo',
+    attrs: {},
+    wrap: (p) => JSON.stringify({ path_with_namespace: p, name: p, web_url: `https://gitlab.com/${p}`, avatar_url: `data:text/html,${p}`, star_count: 1, tag_list: [p] }), // prettier-ignore
+  },
+  {
     tag: 'vt-access-log',
     attrs: { tabs: '', filters: '' },
     wrap: (p) => JSON.stringify({ RequestPath: p, ClientHost: p, DownstreamStatus: 500, 'request_User-Agent': `${p} bot` }), // prettier-ignore
@@ -725,8 +768,9 @@ test.describe('XSS payloads', () => {
         // `data` modes go through the json attribute, so the JSON layer is tested too.
         if (mode.data) await mount(page, mode.tag, { ...mode.attrs, json: content });
         else await mount(page, mode.tag, mode.attrs, content);
-        // Exercise interactive paths too: hover, focus and the search bar.
-        await page.locator('#el').hover();
+        // Exercise interactive paths too: hover, focus and the search bar. An element drawn
+        // fixed to the window (a consent banner) has no box of its own to hover.
+        if (mode.hover !== false) await page.locator('#el').hover();
         await page.waitForTimeout(30);
         const problems = await page.evaluate(audit);
         expect(problems, `payload: ${payload}`).toEqual([]);

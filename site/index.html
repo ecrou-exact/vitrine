@@ -860,6 +860,30 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <vt-version class="preview" lang-ui="en" variant="full" value="1.5.0" current="1.4.2"></vt-version>
               <a href="examples.html#version">Version examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-consent&gt;</h3>
+              <p>
+                Cookie consent where refusing is as easy as accepting, with scripts held back.
+              </p>
+              <vt-consent class="preview" lang-ui="en" position="inline" categories="analytics,marketing" storage-key="vitrine-home-consent" version="demo"></vt-consent>
+              <a href="examples.html#consent">Consent examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-changelog&gt;</h3>
+              <p>
+                Release notes from CHANGELOG.md or GitHub releases, filtered by kind.
+              </p>
+              <vt-changelog class="preview" lang-ui="en" limit="2" repo="https://github.com/acme/rocket" src="assets/demo-changelog.md"></vt-changelog>
+              <a href="examples.html#changelog">Changelog examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-repo&gt;</h3>
+              <p>
+                A live repository card: stars, languages, license, latest release.
+              </p>
+              <vt-repo class="preview" lang-ui="en" now="2026-11-15T12:00:00Z" json='{"repo":{"full_name":"acme/rocket","name":"rocket","owner":{"login":"acme"},"html_url":"https://github.com/acme/rocket","clone_url":"https://github.com/acme/rocket.git","description":"A fast, friendly task launcher for monorepos.","homepage":"https://rocket.example.com","stargazers_count":12480,"forks_count":684,"open_issues_count":42,"subscribers_count":96,"license":{"spdx_id":"MIT","name":"MIT License"},"topics":["cli","monorepo","task-runner","typescript"],"pushed_at":"2026-11-13T12:00:00Z","default_branch":"main"},"languages":{"TypeScript":812000,"JavaScript":64000,"CSS":21000,"Shell":9000,"Dockerfile":2000},"release":{"tag_name":"v2.0.0","published_at":"2026-11-10T09:00:00Z","html_url":"https://github.com/acme/rocket/releases/tag/v2.0.0"}}'></vt-repo>
+              <a href="examples.html#repo">Repository examples</a>
+            </article>
           </div>
         </div>
       </section>

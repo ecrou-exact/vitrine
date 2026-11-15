@@ -59,6 +59,9 @@ import { VtAccessLog } from './components/access-log/vt-access-log.js';
 import { VtPassword } from './components/password/vt-password.js';
 import { VtSecret } from './components/secret/vt-secret.js';
 import { VtVersion } from './components/version/vt-version.js';
+import { VtConsent } from './components/consent/vt-consent.js';
+import { VtChangelog } from './components/changelog/vt-changelog.js';
+import { VtRepo } from './components/repo/vt-repo.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -140,6 +143,9 @@ export {
   VtPassword,
   VtSecret,
   VtVersion,
+  VtConsent,
+  VtChangelog,
+  VtRepo,
   registerIconSet,
   configure,
   getConfig,
@@ -232,6 +238,9 @@ export const registry = new Map(
     ['vt-password', VtPassword],
     ['vt-secret', VtSecret],
     ['vt-version', VtVersion],
+    ['vt-consent', VtConsent],
+    ['vt-changelog', VtChangelog],
+    ['vt-repo', VtRepo],
   ]),
 );
 
@@ -300,6 +309,9 @@ const TYPES = /** @type {const} */ ({
   password: 'vt-password',
   secret: 'vt-secret',
   version: 'vt-version',
+  consent: 'vt-consent',
+  changelog: 'vt-changelog',
+  repo: 'vt-repo',
 });
 
 /**

@@ -88,6 +88,9 @@
           <option value="password">Password</option>
           <option value="secret">API key</option>
           <option value="version">Version</option>
+          <option value="consent">Cookie consent</option>
+          <option value="changelog">Changelog</option>
+          <option value="repo">Repository card</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -5167,6 +5170,126 @@ AssertionError: assert 404 == 200</failure>
           </div>
           <template>
             <vt-version format="decimal" step="0.5" value="1.0" min="1" max="5" label="API version" lang-ui="en"></vt-version>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="consent" aria-labelledby="consent-title">
+        <h2 id="consent-title">&lt;vt-consent&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Settings in the page, with your categories</h3>
+            <p>For the privacy policy page: <code>position="inline"</code>. Categories of your own, with the cookies each one sets.</p>
+          </div>
+          <template>
+            <vt-consent position="inline" storage-key="vitrine-demo-consent-2" version="demo" lang-ui="en">
+              <template>
+                {
+                  "categories": [
+                    { "id": "analytics", "cookies": [{ "name": "_pk_id", "provider": "Matomo", "purpose": "Tells visits apart", "duration": "13 months" }, { "name": "_pk_ses", "provider": "Matomo", "purpose": "Groups the pages of a visit", "duration": "30 minutes" }] },
+                    { "id": "video", "label": "Videos", "description": "YouTube videos in the articles, from youtube-nocookie.com.", "consentMode": [] }
+                  ]
+                }
+              </template>
+            </vt-consent>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>The banner</h3>
+            <p>Here the banner sits at the bottom of this box; on a page it sits at the bottom of the window. Reject all and Accept all are alike, side by side. Customize opens the settings; after a choice, the round button in the corner opens them again.</p>
+          </div>
+          <template>
+            <vt-consent policy="#consent" storage-key="vitrine-demo-consent" version="demo" categories="analytics,marketing" lang-ui="en"></vt-consent>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="changelog" aria-labelledby="changelog-title">
+        <h2 id="changelog-title">&lt;vt-changelog&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Release notes from CHANGELOG.md</h3>
+            <p>A Keep a Changelog file. Breaking changes come first; <code>#198</code>, <code>@ada</code> and the commit link to the repository. Press <kbd>Fixed</kbd> to see only fixes.</p>
+          </div>
+          <template>
+            <vt-changelog variant="full" label="CHANGELOG.md" repo="https://github.com/acme/rocket" lang-ui="en">
+              <template>
+                # Changelog
+
+                ## [Unreleased]
+                ### Added
+                - A `theme` option for the dashboard (#212)
+
+                ## [2.0.0] - 2026-11-10
+                The release that drops the old configuration format.
+                ### Breaking changes
+                - **config:** `rocket.json` replaces `.rocketrc` ([migration guide](https://example.com/migrate))
+                - Node 18 is no longer supported
+                ### Added
+                - Launch several targets at once with `rocket run --all` by @ada (#198)
+                - Dark mode for the dashboard
+                ### Fixed
+                - The watcher no longer misses renamed files (3f9c2ab)
+                ### Security
+                - Paths given to `--out` are checked against the project folder
+
+                ## [1.4.1] - 2026-10-21
+                ### Fixed
+                - Crash on an empty `targets` list (#187)
+
+                ## [1.4.0] - 2026-10-02
+                ### Added
+                - `rocket doctor` checks the setup
+                ### Deprecated
+                - `.rocketrc`: use `rocket.json`
+
+                ## [1.3.0] - 2026-09-01 [YANKED]
+                ### Changed
+                - Faster cold starts
+
+                [unreleased]: https://github.com/acme/rocket/compare/v2.0.0...HEAD
+                [2.0.0]: https://github.com/acme/rocket/compare/v1.4.1...v2.0.0
+                [1.4.1]: https://github.com/acme/rocket/compare/v1.4.0...v1.4.1
+              </template>
+            </vt-changelog>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>What is new since your version</h3>
+            <p><code>since="1.4.0"</code>: the page to send to someone who upgrades from 1.4.0, with a summary of what changed.</p>
+          </div>
+          <template>
+            <vt-changelog since="1.4.0" unreleased="false" repo="https://github.com/acme/rocket" src="assets/demo-changelog.md" lang-ui="en"></vt-changelog>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="repo" aria-labelledby="repo-title">
+        <h2 id="repo-title">&lt;vt-repo&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A repository card</h3>
+            <p>From the GitHub API with its languages and latest release. The counts link to the stargazers, forks and issues; the full variant adds the clone command.</p>
+          </div>
+          <template>
+            <vt-repo variant="full" now="2026-11-15T12:00:00Z" lang-ui="en" json='{"repo":{"full_name":"acme/rocket","name":"rocket","owner":{"login":"acme"},"html_url":"https://github.com/acme/rocket","clone_url":"https://github.com/acme/rocket.git","description":"A fast, friendly task launcher for monorepos.","homepage":"https://rocket.example.com","stargazers_count":12480,"forks_count":684,"open_issues_count":42,"subscribers_count":96,"license":{"spdx_id":"MIT","name":"MIT License"},"topics":["cli","monorepo","task-runner","typescript"],"pushed_at":"2026-11-13T12:00:00Z","default_branch":"main"},"languages":{"TypeScript":812000,"JavaScript":64000,"CSS":21000,"Shell":9000,"Dockerfile":2000},"release":{"tag_name":"v2.0.0","published_at":"2026-11-10T09:00:00Z","html_url":"https://github.com/acme/rocket/releases/tag/v2.0.0"}}'></vt-repo>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A GitLab project</h3>
+            <p>The project of the GitLab API, as it comes.</p>
+          </div>
+          <template>
+            <vt-repo now="2026-11-15T12:00:00Z" lang-ui="en" json='{"path_with_namespace":"gitlab-org/cli","name":"cli","web_url":"https://gitlab.com/gitlab-org/cli","http_url_to_repo":"https://gitlab.com/gitlab-org/cli.git","description":"A GitLab CLI tool bringing GitLab to your command line.","star_count":1180,"forks_count":402,"open_issues_count":610,"topics":["cli","go"],"last_activity_at":"2026-11-14T08:00:00Z","license":{"key":"mit","name":"MIT License"}}'></vt-repo>
           </template>
         </article>
       </section>

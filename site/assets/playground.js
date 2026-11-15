@@ -68,6 +68,10 @@ const SAMPLES = {
   password: '',
   secret: '',
   version: '',
+  consent: '',
+  changelog:
+    '# Changelog\n\n## [Unreleased]\n### Added\n- A `theme` option for the dashboard (#212)\n\n## [2.0.0] - 2026-11-10\nThe release that drops the old configuration format.\n### Breaking changes\n- **config:** `rocket.json` replaces `.rocketrc` ([migration guide](https://example.com/migrate))\n- Node 18 is no longer supported\n### Added\n- Launch several targets at once with `rocket run --all` by @ada (#198)\n- Dark mode for the dashboard\n### Fixed\n- The watcher no longer misses renamed files (3f9c2ab)\n### Security\n- Paths given to `--out` are checked against the project folder\n\n## [1.4.1] - 2026-10-21\n### Fixed\n- Crash on an empty `targets` list (#187)\n\n## [1.4.0] - 2026-10-02\n### Added\n- `rocket doctor` checks the setup\n### Deprecated\n- `.rocketrc`: use `rocket.json`\n\n## [1.3.0] - 2026-09-01 [YANKED]\n### Changed\n- Faster cold starts\n\n[unreleased]: https://github.com/acme/rocket/compare/v2.0.0...HEAD\n[2.0.0]: https://github.com/acme/rocket/compare/v1.4.1...v2.0.0\n[1.4.1]: https://github.com/acme/rocket/compare/v1.4.0...v1.4.1\n',
+  repo: '{"repo":{"full_name":"acme/rocket","name":"rocket","owner":{"login":"acme"},"html_url":"https://github.com/acme/rocket","clone_url":"https://github.com/acme/rocket.git","description":"A fast, friendly task launcher for monorepos.","homepage":"https://rocket.example.com","stargazers_count":12480,"forks_count":684,"open_issues_count":42,"subscribers_count":96,"license":{"spdx_id":"MIT","name":"MIT License"},"topics":["cli","monorepo","task-runner","typescript"],"pushed_at":"2026-11-13T12:00:00Z","default_branch":"main"},"languages":{"TypeScript":812000,"JavaScript":64000,"CSS":21000,"Shell":9000,"Dockerfile":2000},"release":{"tag_name":"v2.0.0","published_at":"2026-11-10T09:00:00Z","html_url":"https://github.com/acme/rocket/releases/tag/v2.0.0"}}',
   testimonials:
     '[\n  {\n    "quote": "We replaced three tools with this one. Setup took an afternoon.",\n    "author": "Ada Lovelace",\n    "role": "CTO",\n    "company": "Analytical Engines",\n    "rating": 5\n  },\n  {\n    "quote": "Support answered within the hour, every single time.",\n    "author": "Alan Turing",\n    "role": "Engineer",\n    "rating": 4.5\n  },\n  {\n    "quote": "Clean, fast, and it just works on every page we tried.",\n    "author": "Grace Hopper",\n    "company": "Compilers Inc.",\n    "rating": 4\n  }\n]',
   sql: 'app=# SELECT id, name, email FROM users ORDER BY id LIMIT 3;\n id | name  |      email\n----+-------+------------------\n  1 | Ada   | ada@example.com\n  2 | Alan  | alan@example.com\n  3 | Grace |\n(3 rows)\n\nTime: 0.512 ms',
@@ -744,6 +748,30 @@ const SCHEMA = {
       { name: 'segment-max', type: 'text', placeholder: '*,9,9' },
     ],
   },
+  consent: {
+    tag: 'vt-consent',
+    flags: ['consent-mode'],
+    fields: [
+      { name: 'position', type: 'select', options: ['inline', 'bottom', 'top'] },
+      { name: 'categories', type: 'text', placeholder: 'analytics,marketing' },
+      { name: 'policy', type: 'text', placeholder: '/privacy' },
+      { name: 'version', type: 'text', placeholder: '2026-11' },
+    ],
+  },
+  changelog: {
+    tag: 'vt-changelog',
+    flags: ['filters'],
+    fields: [
+      { name: 'repo', type: 'text', placeholder: 'https://github.com/acme/rocket' },
+      { name: 'since', type: 'text', placeholder: '1.4.0' },
+      { name: 'limit', type: 'text', placeholder: '3' },
+    ],
+  },
+  repo: {
+    tag: 'vt-repo',
+    flags: ['clone'],
+    fields: [{ name: 'now', type: 'text', placeholder: '2026-11-15T12:00:00Z' }],
+  },
   'access-log': {
     tag: 'vt-access-log',
     flags: ['anonymize', 'filters', 'tabs'],
@@ -1026,6 +1054,9 @@ function switchType(type) {
     password: 'Password',
     secret: 'API key',
     version: 'Version',
+    consent: 'Cookies',
+    changelog: 'CHANGELOG.md',
+    repo: 'acme/rocket',
     countdown: 'countdown.json',
   }[type];
   buildControls();

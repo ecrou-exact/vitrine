@@ -72,7 +72,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'consent', 'changelog', 'repo', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {

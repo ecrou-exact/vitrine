@@ -89,6 +89,8 @@ vt-access-log:not(:defined),
 vt-password:not(:defined),
 vt-secret:not(:defined),
 vt-version:not(:defined),
+vt-changelog:not(:defined),
+vt-repo:not(:defined),
 vt-flame:not(:defined),
 vt-heatmap:not(:defined),
 vt-pivot:not(:defined),
@@ -150,6 +152,8 @@ vt-yaml:not(:defined) {
     vt-password,
     vt-secret,
     vt-version,
+    vt-changelog,
+    vt-repo,
     vt-flame,
     vt-heatmap,
     vt-pivot,
@@ -221,6 +225,8 @@ vt-yaml:not(:defined) {
     vt-password,
     vt-secret,
     vt-version,
+    vt-changelog,
+    vt-repo,
     vt-flame,
     vt-heatmap,
     vt-pivot,
@@ -307,6 +313,8 @@ vt-yaml:not(:defined) {
       vt-password,
       vt-secret,
       vt-version,
+      vt-changelog,
+      vt-repo,
       vt-flame,
       vt-heatmap,
       vt-pivot,
@@ -322,4 +330,9 @@ vt-yaml:not(:defined) {
     ):not(:defined)::after {
     animation: vt-pending 0ms 300ms forwards;
   }
+}
+
+/* The consent banner takes no room in the page: nothing is shown until it is defined. */
+vt-consent:not(:defined) {
+  display: none;
 }

@@ -101,6 +101,8 @@ export const EVENTS = Object.freeze({
   BREACH: 'vt-breach',
   /** Secret: the key is about to be regenerated (cancelable). Detail: `{ provider }`. */
   ROTATE: 'vt-rotate',
+  /** Consent: a choice was made or read back. Detail: `{ categories, action, id }`. */
+  CONSENT: 'vt-consent',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

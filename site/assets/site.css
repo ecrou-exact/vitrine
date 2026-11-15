@@ -2998,3 +2998,11 @@ h3 {
   color: var(--site-fg-muted);
   font-weight: 400;
 }
+
+/* The consent banner of the examples stays in its box: a transform makes the box the
+   containing block of fixed elements. */
+#consent .demo-canvas {
+  min-height: 300px;
+  overflow: hidden;
+  transform: translateZ(0);
+}

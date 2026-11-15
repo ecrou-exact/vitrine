@@ -159,6 +159,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-password>`     | `value` (a form field, not an editor)                                                    |
 | `<vt-secret>`       | `value` (a form field with `editable`, not an editor)                                    |
 | `<vt-version>`      | `value` (a form field, not an editor)                                                    |
+| `<vt-consent>`      | `content` (the settings as JSON); the choice with `accept()`, `reject()` and `reset()`   |
+| `<vt-changelog>`    | `content`, `releases` (read only)                                                        |
+| `<vt-repo>`         | `content`, `repo` (read only)                                                            |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

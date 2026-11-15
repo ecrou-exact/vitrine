@@ -658,7 +658,9 @@ vt-workflow:not(:defined),
 vt-access-log:not(:defined),
 vt-password:not(:defined),
 vt-secret:not(:defined),
-vt-version:not(:defined) {
+vt-version:not(:defined),
+vt-changelog:not(:defined),
+vt-repo:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;
