@@ -82,6 +82,9 @@
           <option value="lifecycle">Support schedule</option>
           <option value="advisories">Security report</option>
           <option value="licenses">License report</option>
+          <option value="icon-picker">Icon picker</option>
+          <option value="workflow">Workflow run</option>
+          <option value="access-log">Access log</option>
           <option value="api">JavaScript</option>
         </select>
       </nav>
@@ -4566,6 +4569,489 @@ AssertionError: assert 404 == 200</failure>
                 ]
               </template>
             </vt-licenses>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="icon-picker" aria-labelledby="icon-picker-title">
+        <h2 id="icon-picker-title">&lt;vt-icon-picker&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A field for a menu icon</h3>
+            <p>Open it, type <kbd>cart</kbd>, move with the arrow keys and press <kbd>Enter</kbd>. Change the set to Lucide, Bootstrap Icons or Flags: each one loads the first time it is shown.</p>
+          </div>
+          <template>
+            <vt-icon-picker label="Menu icon" hint="Shown before the name of the page in the menu." value="fa-solid:cart-shopping" lang-ui="en"></vt-icon-picker>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>An icon browser</h3>
+            <p><code>inline</code> shows the icons in the page. The preview copies the SVG, with the Font Awesome credit, or the class names to paste in your HTML.</p>
+          </div>
+          <template>
+            <vt-icon-picker inline sets="fa-brands,fa-solid,fa-regular" label="Font Awesome Free" lang-ui="en"></vt-icon-picker>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Every country</h3>
+            <p>The flags of flag-icons, found by country, code, capital or continent: try <kbd>tokyo</kbd> or <kbd>oceania</kbd>. In a form, the value sent is <code>flags:jp</code>.</p>
+          </div>
+          <template>
+            <vt-icon-picker sets="flags" label="Country" required lang-ui="en"></vt-icon-picker>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="workflow" aria-labelledby="workflow-title">
+        <h2 id="workflow-title">&lt;vt-workflow&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A failed pull request check</h3>
+            <p>GitHub Actions jobs with their <code>needs</code>. The failed job is open on its failed step: the error is marked, the <code>npm test</code> group is folded. Move between jobs with the arrow keys.</p>
+          </div>
+          <template>
+            <vt-workflow variant="full" label="ci.yml" lang-ui="en">
+              <template data-json>
+                {
+                  "name": "CI",
+                  "display_title": "Add the checkout page",
+                  "status": "completed",
+                  "conclusion": "failure",
+                  "event": "pull_request",
+                  "head_branch": "feat/checkout",
+                  "head_sha": "9f1c2ab4e6d8c0b1a2f3e4d5c6b7a8091a2b3c4d",
+                  "actor": {
+                    "login": "ada"
+                  },
+                  "run_started_at": "2026-11-15T10:00:00Z",
+                  "updated_at": "2026-11-15T10:07:12Z",
+                  "jobs": [
+                    {
+                      "id": "lint",
+                      "name": "Lint",
+                      "status": "completed",
+                      "conclusion": "success",
+                      "started_at": "2026-11-15T10:00:04Z",
+                      "completed_at": "2026-11-15T10:00:41Z",
+                      "steps": [
+                        {
+                          "name": "Set up job",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 2,
+                          "log": "Current runner version: 2.329.0\nOperating System: Ubuntu 24.04"
+                        },
+                        {
+                          "name": "Run npm run lint",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 21,
+                          "log": "##[group]Run npm run lint\nnpm run lint\n##[endgroup]\n> eslint .\n\u001b[32m✔\u001b[0m No problems found"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "types",
+                      "name": "Type check",
+                      "status": "completed",
+                      "conclusion": "success",
+                      "duration": 33,
+                      "steps": [
+                        {
+                          "name": "Run tsc",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 30,
+                          "log": "> tsc --noEmit\nDone in 29.4s"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "test-20",
+                      "name": "Test (Node 20)",
+                      "needs": [
+                        "lint",
+                        "types"
+                      ],
+                      "status": "completed",
+                      "conclusion": "success",
+                      "duration": 96,
+                      "steps": [
+                        {
+                          "name": "Run tests",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 88,
+                          "log": " \u001b[32m✓\u001b[0m tests/cart.test.js (24 tests) 310ms\n \u001b[32m✓\u001b[0m tests/checkout.test.js (18 tests) 512ms\n\n Test Files  2 passed (2)\n      Tests  42 passed (42)"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "test-22",
+                      "name": "Test (Node 22)",
+                      "needs": [
+                        "lint",
+                        "types"
+                      ],
+                      "status": "completed",
+                      "conclusion": "failure",
+                      "started_at": "2026-11-15T10:01:02Z",
+                      "completed_at": "2026-11-15T10:02:51Z",
+                      "html_url": "https://example.com/ci/runs/4821/jobs/2",
+                      "runner_name": "ubuntu-24.04",
+                      "steps": [
+                        {
+                          "name": "Set up job",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 2,
+                          "log": "Current runner version: 2.329.0"
+                        },
+                        {
+                          "name": "Install dependencies",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 19,
+                          "log": "added 412 packages in 18s"
+                        },
+                        {
+                          "name": "Run tests",
+                          "status": "completed",
+                          "conclusion": "failure",
+                          "duration": 84,
+                          "log": "2026-11-15T10:01:25.4410000Z ##[group]Run npm test\n2026-11-15T10:01:25.4420000Z npm test\n2026-11-15T10:01:25.4430000Z ##[endgroup]\n2026-11-15T10:02:40.1000000Z  \u001b[32m✓\u001b[0m tests/cart.test.js (24 tests) 298ms\n2026-11-15T10:02:47.2000000Z  \u001b[31m✗\u001b[0m tests/checkout.test.js > applies the discount code\n2026-11-15T10:02:47.2010000Z    \u001b[31mAssertionError: expected 90 to be 81\u001b[0m\n2026-11-15T10:02:47.2020000Z     at tests/checkout.test.js:42:21\n2026-11-15T10:02:48.0000000Z  Tests  1 failed | 41 passed (42)\n2026-11-15T10:02:48.1000000Z ##[error]Process completed with exit code 1."
+                        }
+                      ]
+                    },
+                    {
+                      "id": "build",
+                      "name": "Build",
+                      "needs": [
+                        "lint",
+                        "types"
+                      ],
+                      "status": "completed",
+                      "conclusion": "success",
+                      "duration": 71,
+                      "steps": [
+                        {
+                          "name": "Run npm run build",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 64,
+                          "log": "vite v7.2.0 building for production...\n✓ 214 modules transformed.\ndist/index.html   0.46 kB\ndist/assets/index.js  148.20 kB │ gzip: 47.91 kB\n✓ built in 3.81s"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "e2e",
+                      "name": "End-to-end",
+                      "needs": [
+                        "build"
+                      ],
+                      "status": "completed",
+                      "conclusion": "success",
+                      "duration": 202,
+                      "steps": [
+                        {
+                          "name": "Run Playwright",
+                          "status": "completed",
+                          "conclusion": "success",
+                          "duration": 190,
+                          "log": "Running 36 tests using 4 workers\n  36 passed (3.1m)"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "deploy",
+                      "name": "Deploy preview",
+                      "needs": [
+                        "test-20",
+                        "test-22",
+                        "e2e"
+                      ],
+                      "status": "completed",
+                      "conclusion": "skipped"
+                    }
+                  ]
+                }
+              </template>
+            </vt-workflow>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A GitLab pipeline running</h3>
+            <p>Jobs by stage, one still running, with its time counting up, and manual jobs waiting.</p>
+          </div>
+          <template>
+            <vt-workflow lang-ui="en">
+              <template data-json>
+                {
+                  "id": 1872,
+                  "status": "running",
+                  "ref": "main",
+                  "sha": "3e5b9c0d",
+                  "source": "push",
+                  "user": {
+                    "username": "grace"
+                  },
+                  "jobs": [
+                    {
+                      "id": 1,
+                      "name": "compile",
+                      "stage": "build",
+                      "status": "success",
+                      "duration": 41.2,
+                      "log": "Compiling 128 files\nDone."
+                    },
+                    {
+                      "id": 2,
+                      "name": "assets",
+                      "stage": "build",
+                      "status": "success",
+                      "duration": 18.6
+                    },
+                    {
+                      "id": 3,
+                      "name": "unit",
+                      "stage": "test",
+                      "status": "success",
+                      "duration": 75
+                    },
+                    {
+                      "id": 4,
+                      "name": "integration",
+                      "stage": "test",
+                      "status": "running",
+                      "log": "Starting PostgreSQL 17...\nRunning 64 tests"
+                    },
+                    {
+                      "id": 5,
+                      "name": "lint",
+                      "stage": "test",
+                      "status": "success",
+                      "duration": 12
+                    },
+                    {
+                      "id": 6,
+                      "name": "staging",
+                      "stage": "deploy",
+                      "status": "created"
+                    },
+                    {
+                      "id": 7,
+                      "name": "production",
+                      "stage": "deploy",
+                      "status": "manual"
+                    }
+                  ]
+                }
+              </template>
+            </vt-workflow>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="access-log" aria-labelledby="access-log-title">
+        <h2 id="access-log-title">&lt;vt-access-log&gt;</h2>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>A day of Nginx</h3>
+            <p>The combined format with the request time. Look at the 401s on <code>/login</code> from one IP, the 503s on <code>/api/cart</code>, and the bots in the top lists; every entry filters the table. IPs are anonymized.</p>
+          </div>
+          <template>
+            <vt-access-log variant="full" anonymize label="access.log" lang-ui="en">
+              <template>
+                203.0.113.6 - - [15/Nov/2026:08:00:20 +0100] "GET /docs/getting-started HTTP/2.0" 200 35919 "https://news.ycombinator.com/" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 0.010
+                203.0.113.17 - - [15/Nov/2026:08:01:01 +0100] "GET /docs/getting-started HTTP/2.0" 200 6744 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.050
+                192.0.2.39 - - [15/Nov/2026:08:02:12 +0100] "GET / HTTP/2.0" 200 4854 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.053
+                203.0.113.20 - - [15/Nov/2026:08:02:27 +0100] "GET / HTTP/2.0" 200 28268 "-" "curl/8.10.1" 0.015
+                203.0.113.8 - - [15/Nov/2026:08:03:48 +0100] "GET /assets/style.css HTTP/2.0" 200 38915 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.004
+                198.51.100.36 - - [15/Nov/2026:08:04:04 +0100] "GET /assets/app.js HTTP/2.0" 200 28822 "https://www.google.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.005
+                192.0.2.17 - - [15/Nov/2026:08:05:11 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.004
+                203.0.113.34 - - [15/Nov/2026:08:06:04 +0100] "GET /favicon.ico HTTP/2.0" 200 28202 "https://www.google.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.002
+                192.0.2.38 - - [15/Nov/2026:08:06:50 +0100] "GET /assets/app.js HTTP/2.0" 200 21361 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.005
+                198.51.100.32 - - [15/Nov/2026:08:07:41 +0100] "GET / HTTP/2.0" 200 5059 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.007
+                198.51.100.20 - - [15/Nov/2026:08:08:19 +0100] "GET /favicon.ico HTTP/2.0" 200 26083 "https://www.google.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.001
+                203.0.113.15 - - [15/Nov/2026:08:09:10 +0100] "GET / HTTP/2.0" 200 19637 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.013
+                203.0.113.12 - - [15/Nov/2026:08:10:01 +0100] "POST /api/cart HTTP/2.0" 200 30237 "https://www.google.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.037
+                198.51.100.26 - - [15/Nov/2026:08:10:59 +0100] "GET /docs/getting-started HTTP/2.0" 200 15922 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.015
+                198.51.100.39 - - [15/Nov/2026:08:11:21 +0100] "GET / HTTP/2.0" 200 12750 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.025
+                192.0.2.22 - - [15/Nov/2026:08:12:09 +0100] "GET /docs/getting-started HTTP/2.0" 200 9024 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.063
+                198.51.100.37 - - [15/Nov/2026:08:13:27 +0100] "GET /assets/style.css HTTP/2.0" 200 26514 "https://github.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.002
+                203.0.113.30 - - [15/Nov/2026:08:14:01 +0100] "GET / HTTP/2.0" 200 11436 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.012
+                192.0.2.8 - alice [15/Nov/2026:08:14:27 +0100] "POST /login HTTP/2.0" 302 0 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.056
+                192.0.2.25 - - [15/Nov/2026:08:15:21 +0100] "GET /favicon.ico HTTP/2.0" 200 31873 "https://www.google.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.008
+                203.0.113.23 - - [15/Nov/2026:08:16:30 +0100] "GET / HTTP/2.0" 200 18151 "https://github.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.044
+                192.0.2.25 - - [15/Nov/2026:08:16:58 +0100] "GET / HTTP/2.0" 200 10407 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.063
+                203.0.113.18 - - [15/Nov/2026:08:18:09 +0100] "GET /assets/app.js HTTP/2.0" 200 34773 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.003
+                192.0.2.16 - - [15/Nov/2026:08:18:58 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 13589 "https://www.google.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.073
+                192.0.2.3 - - [15/Nov/2026:08:19:26 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 2630 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.072
+                198.51.100.30 - - [15/Nov/2026:08:20:16 +0100] "GET /assets/app.js HTTP/2.0" 200 23706 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.002
+                198.51.100.2 - - [15/Nov/2026:08:21:02 +0100] "GET /pricing HTTP/2.0" 200 32222 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.082
+                198.51.100.14 - - [15/Nov/2026:08:21:41 +0100] "GET / HTTP/2.0" 200 32128 "https://github.com/" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.080
+                192.0.2.27 - - [15/Nov/2026:08:22:45 +0100] "GET /api/cart HTTP/2.0" 200 31153 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.037
+                198.51.100.11 - - [15/Nov/2026:08:23:20 +0100] "GET /assets/app.js HTTP/2.0" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.008
+                192.0.2.8 - - [15/Nov/2026:08:24:35 +0100] "GET / HTTP/2.0" 200 35310 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.068
+                203.0.113.3 - - [15/Nov/2026:08:25:15 +0100] "GET / HTTP/2.0" 200 17304 "https://news.ycombinator.com/" "curl/8.10.1" 0.021
+                192.0.2.28 - - [15/Nov/2026:08:25:51 +0100] "GET /pricing HTTP/2.0" 200 9390 "https://github.com/" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.007
+                192.0.2.28 - - [15/Nov/2026:08:26:46 +0100] "GET /wp-login.php HTTP/2.0" 404 153 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.005
+                203.0.113.11 - - [15/Nov/2026:08:27:50 +0100] "GET /assets/style.css HTTP/2.0" 200 31830 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.005
+                203.0.113.37 - - [15/Nov/2026:08:28:33 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 4523 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.024
+                192.0.2.3 - - [15/Nov/2026:08:28:50 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 4952 "https://news.ycombinator.com/" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.041
+                198.51.100.30 - - [15/Nov/2026:08:30:08 +0100] "GET / HTTP/2.0" 200 34102 "https://www.google.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.049
+                198.51.100.37 - - [15/Nov/2026:08:30:56 +0100] "GET /assets/app.js HTTP/2.0" 200 14076 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 0.004
+                203.0.113.21 - - [15/Nov/2026:08:31:16 +0100] "GET /docs/getting-started HTTP/2.0" 200 8818 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.081
+                198.51.100.16 - alice [15/Nov/2026:08:32:23 +0100] "POST /api/cart HTTP/2.0" 200 6968 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.037
+                192.0.2.27 - - [15/Nov/2026:08:33:02 +0100] "GET /docs/getting-started HTTP/2.0" 200 23024 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.039
+                198.51.100.37 - - [15/Nov/2026:08:33:56 +0100] "GET /docs/getting-started HTTP/2.0" 200 30859 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.041
+                192.0.2.6 - - [15/Nov/2026:08:34:48 +0100] "GET /assets/app.js HTTP/2.0" 200 8195 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.008
+                203.0.113.19 - - [15/Nov/2026:08:35:17 +0100] "GET / HTTP/2.0" 200 9290 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.074
+                192.0.2.38 - alice [15/Nov/2026:08:36:16 +0100] "POST /login HTTP/2.0" 302 0 "https://github.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.064
+                203.0.113.7 - - [15/Nov/2026:08:36:59 +0100] "GET / HTTP/2.0" 200 17875 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.009
+                203.0.113.23 - - [15/Nov/2026:08:37:40 +0100] "GET / HTTP/2.0" 200 37045 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.039
+                203.0.113.9 - - [15/Nov/2026:08:39:03 +0100] "POST /login HTTP/2.0" 302 0 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.025
+                198.51.100.34 - - [15/Nov/2026:08:39:31 +0100] "GET / HTTP/2.0" 200 12458 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.026
+                192.0.2.37 - - [15/Nov/2026:08:40:16 +0100] "GET / HTTP/2.0" 200 13216 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.047
+                198.51.100.33 - - [15/Nov/2026:08:41:16 +0100] "GET /assets/style.css HTTP/2.0" 200 36576 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.008
+                192.0.2.10 - - [15/Nov/2026:08:41:49 +0100] "GET /docs/getting-started HTTP/2.0" 200 27322 "-" "curl/8.10.1" 0.089
+                198.51.100.29 - - [15/Nov/2026:08:42:32 +0100] "GET /assets/app.js HTTP/2.0" 304 0 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.007
+                203.0.113.31 - - [15/Nov/2026:08:43:30 +0100] "GET /assets/app.js HTTP/2.0" 200 12947 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.001
+                203.0.113.4 - alice [15/Nov/2026:08:44:21 +0100] "POST /login HTTP/2.0" 302 0 "-" "curl/8.10.1" 0.021
+                203.0.113.34 - - [15/Nov/2026:08:45:18 +0100] "GET /assets/app.js HTTP/2.0" 200 1124 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.002
+                192.0.2.16 - - [15/Nov/2026:08:45:38 +0100] "GET /pricing HTTP/2.0" 200 6336 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.054
+                192.0.2.26 - - [15/Nov/2026:08:46:33 +0100] "GET /assets/app.js HTTP/2.0" 200 22173 "https://github.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.002
+                192.0.2.34 - - [15/Nov/2026:08:47:51 +0100] "GET / HTTP/2.0" 200 28930 "https://news.ycombinator.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.067
+                192.0.2.3 - - [15/Nov/2026:08:48:08 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.006
+                198.51.100.8 - - [15/Nov/2026:08:48:53 +0100] "GET / HTTP/2.0" 200 25482 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.076
+                192.0.2.17 - - [15/Nov/2026:08:49:39 +0100] "GET /assets/app.js HTTP/2.0" 200 32866 "https://github.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.007
+                192.0.2.6 - - [15/Nov/2026:08:50:56 +0100] "GET /wp-login.php HTTP/2.0" 404 153 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.024
+                198.51.100.33 - - [15/Nov/2026:08:51:25 +0100] "GET /assets/app.js HTTP/2.0" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.003
+                192.0.2.11 - - [15/Nov/2026:08:52:39 +0100] "GET / HTTP/2.0" 200 22543 "https://github.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.024
+                198.51.100.5 - - [15/Nov/2026:08:53:07 +0100] "GET / HTTP/2.0" 200 32637 "https://github.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.026
+                198.51.100.35 - - [15/Nov/2026:08:53:42 +0100] "GET /assets/app.js HTTP/2.0" 200 19513 "https://news.ycombinator.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.006
+                198.51.100.3 - - [15/Nov/2026:08:54:36 +0100] "GET / HTTP/2.0" 200 19778 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.042
+                203.0.113.6 - - [15/Nov/2026:08:55:40 +0100] "GET /docs/getting-started HTTP/2.0" 200 38907 "https://github.com/" "curl/8.10.1" 0.010
+                192.0.2.34 - - [15/Nov/2026:08:56:33 +0100] "GET /docs/getting-started HTTP/2.0" 200 19121 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.080
+                198.51.100.27 - - [15/Nov/2026:08:57:11 +0100] "POST /api/cart HTTP/2.0" 200 2427 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.016
+                198.51.100.22 - - [15/Nov/2026:08:57:55 +0100] "GET /docs/getting-started HTTP/2.0" 200 8723 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.076
+                203.0.113.14 - - [15/Nov/2026:08:58:44 +0100] "GET /assets/style.css HTTP/2.0" 200 1568 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.003
+                203.0.113.25 - alice [15/Nov/2026:08:59:37 +0100] "GET /api/cart HTTP/2.0" 200 28852 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.068
+                198.51.100.29 - - [15/Nov/2026:09:00:18 +0100] "GET / HTTP/2.0" 200 34286 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.030
+                192.0.2.27 - - [15/Nov/2026:09:01:15 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "https://www.google.com/" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.002
+                198.51.100.33 - - [15/Nov/2026:09:02:04 +0100] "GET / HTTP/2.0" 200 4009 "https://news.ycombinator.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.082
+                198.51.100.21 - - [15/Nov/2026:09:02:32 +0100] "GET /docs/getting-started HTTP/2.0" 200 17560 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.067
+                198.51.100.37 - - [15/Nov/2026:09:03:28 +0100] "GET /pricing HTTP/2.0" 200 26645 "https://github.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.013
+                198.51.100.37 - - [15/Nov/2026:09:04:10 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 15219 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.042
+                203.0.113.7 - alice [15/Nov/2026:09:05:16 +0100] "POST /login HTTP/2.0" 302 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.032
+                198.51.100.26 - - [15/Nov/2026:09:06:12 +0100] "GET / HTTP/2.0" 200 27924 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.068
+                198.51.100.19 - - [15/Nov/2026:09:06:48 +0100] "GET /assets/style.css HTTP/2.0" 200 38436 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.006
+                203.0.113.19 - - [15/Nov/2026:09:07:52 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.004
+                198.51.100.39 - - [15/Nov/2026:09:08:01 +0100] "GET /docs/getting-started HTTP/2.0" 200 32901 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.002
+                203.0.113.8 - - [15/Nov/2026:09:09:21 +0100] "GET /blog/2019/hello HTTP/2.0" 404 153 "https://github.com/" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.008
+                203.0.113.10 - - [15/Nov/2026:09:10:05 +0100] "GET /assets/style.css HTTP/2.0" 200 16042 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.006
+                198.51.100.9 - - [15/Nov/2026:09:10:32 +0100] "GET /login HTTP/2.0" 200 7317 "https://www.google.com/" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.008
+                203.0.113.36 - - [15/Nov/2026:09:11:28 +0100] "GET /assets/app.js HTTP/2.0" 200 20560 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.008
+                45.155.205.17 - - [15/Nov/2026:09:12:00 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:03 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:06 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:09 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:12 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:15 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                203.0.113.3 - - [15/Nov/2026:09:12:15 +0100] "GET / HTTP/2.0" 200 27788 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.064
+                45.155.205.17 - - [15/Nov/2026:09:12:18 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:21 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:24 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:27 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:30 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                45.155.205.17 - - [15/Nov/2026:09:12:33 +0100] "POST /login HTTP/1.1" 401 64 "-" "python-requests/2.32.3" 0.041
+                192.0.2.28 - - [15/Nov/2026:09:12:51 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 6114 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.025
+                203.0.113.23 - - [15/Nov/2026:09:14:03 +0100] "GET / HTTP/2.0" 200 28361 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.034
+                203.0.113.33 - - [15/Nov/2026:09:14:42 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 13934 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.029
+                198.51.100.8 - - [15/Nov/2026:09:15:26 +0100] "GET /pricing HTTP/2.0" 200 33290 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.056
+                192.0.2.11 - - [15/Nov/2026:09:16:31 +0100] "GET /assets/app.js HTTP/2.0" 200 26585 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.008
+                198.51.100.30 - - [15/Nov/2026:09:17:14 +0100] "GET / HTTP/2.0" 200 21391 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.066
+                192.0.2.31 - - [15/Nov/2026:09:17:46 +0100] "GET / HTTP/2.0" 200 2890 "https://github.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.029
+                198.51.100.12 - - [15/Nov/2026:09:18:48 +0100] "GET /favicon.ico HTTP/2.0" 200 7940 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.002
+                198.51.100.21 - - [15/Nov/2026:09:19:47 +0100] "GET / HTTP/2.0" 200 29140 "-" "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)" 0.010
+                198.51.100.25 - - [15/Nov/2026:09:20:23 +0100] "GET /docs/getting-started HTTP/2.0" 200 31899 "https://www.google.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.005
+                203.0.113.26 - - [15/Nov/2026:09:21:03 +0100] "GET /assets/style.css HTTP/2.0" 200 3084 "https://github.com/" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.003
+                198.51.100.23 - - [15/Nov/2026:09:21:40 +0100] "GET /pricing HTTP/2.0" 200 3656 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.025
+                192.0.2.6 - - [15/Nov/2026:09:22:41 +0100] "GET /assets/app.js HTTP/2.0" 200 2389 "https://www.google.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.004
+                198.51.100.10 - - [15/Nov/2026:09:23:36 +0100] "POST /api/cart HTTP/2.0" 200 33341 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.018
+                198.51.100.25 - - [15/Nov/2026:09:24:38 +0100] "GET /assets/style.css HTTP/2.0" 200 39840 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.004
+                198.51.100.37 - - [15/Nov/2026:09:25:03 +0100] "GET /assets/app.js HTTP/2.0" 200 36491 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.007
+                198.51.100.33 - - [15/Nov/2026:09:25:52 +0100] "GET / HTTP/2.0" 200 30092 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.017
+                203.0.113.36 - alice [15/Nov/2026:09:26:50 +0100] "POST /api/cart HTTP/2.0" 200 8740 "https://news.ycombinator.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.071
+                203.0.113.30 - - [15/Nov/2026:09:27:29 +0100] "GET /assets/style.css HTTP/2.0" 200 17015 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.002
+                203.0.113.34 - - [15/Nov/2026:09:28:12 +0100] "GET /docs/getting-started HTTP/2.0" 200 35292 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.022
+                198.51.100.16 - - [15/Nov/2026:09:29:17 +0100] "GET / HTTP/2.0" 200 30179 "-" "curl/8.10.1" 0.082
+                192.0.2.39 - - [15/Nov/2026:09:29:54 +0100] "GET / HTTP/2.0" 200 13524 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.084
+                198.51.100.2 - - [15/Nov/2026:09:30:56 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 7732 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.058
+                203.0.113.15 - - [15/Nov/2026:09:31:25 +0100] "GET /pricing HTTP/2.0" 200 17506 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.005
+                198.51.100.25 - - [15/Nov/2026:09:32:13 +0100] "GET /assets/style.css HTTP/2.0" 200 12933 "https://www.google.com/" "Mozilla/5.0 (X11; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0" 0.002
+                198.51.100.37 - - [15/Nov/2026:09:33:23 +0100] "GET /docs/getting-started HTTP/2.0" 200 10928 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.058
+                198.51.100.21 - - [15/Nov/2026:09:33:46 +0100] "GET /pricing HTTP/2.0" 200 28183 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.086
+                203.0.113.25 - - [15/Nov/2026:09:35:00 +0100] "GET /docs/getting-started HTTP/2.0" 200 13723 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" 0.036
+                203.0.113.27 - - [15/Nov/2026:09:35:39 +0100] "GET /docs/getting-started HTTP/2.0" 200 38666 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.080
+                192.0.2.27 - - [15/Nov/2026:09:36:08 +0100] "GET /login HTTP/2.0" 200 6634 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.052
+                203.0.113.6 - - [15/Nov/2026:09:36:57 +0100] "GET / HTTP/2.0" 200 7929 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.036
+                198.51.100.22 - alice [15/Nov/2026:09:37:55 +0100] "POST /api/cart HTTP/2.0" 200 4297 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.055
+                192.0.2.16 - - [15/Nov/2026:09:39:03 +0100] "GET /api/cart HTTP/2.0" 200 27308 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.056
+                192.0.2.12 - - [15/Nov/2026:09:39:48 +0100] "GET /docs/getting-started HTTP/2.0" 200 25938 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.034
+                203.0.113.4 - - [15/Nov/2026:09:40:15 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "-" "curl/8.10.1" 0.001
+                192.0.2.21 - - [15/Nov/2026:09:40:55 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 28329 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.029
+                192.0.2.30 - - [15/Nov/2026:09:42:03 +0100] "GET /docs/getting-started HTTP/2.0" 200 12515 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.004
+                192.0.2.31 - - [15/Nov/2026:09:42:55 +0100] "GET /docs/getting-started HTTP/2.0" 200 12568 "https://www.google.com/" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.073
+                198.51.100.7 - - [15/Nov/2026:09:43:18 +0100] "GET /docs/getting-started HTTP/2.0" 200 29764 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.046
+                192.0.2.22 - - [15/Nov/2026:09:44:02 +0100] "GET / HTTP/2.0" 200 34320 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.009
+                203.0.113.6 - - [15/Nov/2026:09:45:12 +0100] "GET /assets/style.css HTTP/2.0" 200 7981 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.003
+                198.51.100.12 - - [15/Nov/2026:09:45:50 +0100] "GET /docs/getting-started HTTP/2.0" 200 22023 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.081
+                198.51.100.15 - - [15/Nov/2026:09:46:53 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 39589 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.025
+                203.0.113.27 - - [15/Nov/2026:09:47:27 +0100] "GET / HTTP/2.0" 200 11366 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.058
+                198.51.100.9 - - [15/Nov/2026:09:48:20 +0100] "GET / HTTP/2.0" 200 35581 "https://www.google.com/" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.006
+                203.0.113.18 - - [15/Nov/2026:09:49:23 +0100] "GET /assets/app.js HTTP/2.0" 200 35907 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.006
+                203.0.113.25 - - [15/Nov/2026:09:49:52 +0100] "GET /docs/getting-started HTTP/2.0" 200 22481 "https://www.google.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.069
+                203.0.113.20 - - [15/Nov/2026:09:50:38 +0100] "GET /assets/style.css HTTP/2.0" 304 0 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.008
+                203.0.113.11 - - [15/Nov/2026:09:51:32 +0100] "GET /assets/style.css HTTP/2.0" 200 19869 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.004
+                192.0.2.4 - - [15/Nov/2026:09:52:03 +0100] "GET / HTTP/2.0" 200 2260 "https://news.ycombinator.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.007
+                192.0.2.16 - - [15/Nov/2026:09:53:10 +0100] "GET /blog/release-2-0 HTTP/2.0" 200 27881 "https://news.ycombinator.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.053
+                198.51.100.12 - - [15/Nov/2026:09:53:44 +0100] "GET /assets/app.js HTTP/2.0" 200 9630 "https://www.google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.006
+                192.0.2.19 - - [15/Nov/2026:09:54:30 +0100] "GET / HTTP/2.0" 200 27142 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.073
+                198.51.100.40 - - [15/Nov/2026:09:55:15 +0100] "GET /login HTTP/2.0" 200 38710 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.041
+                192.0.2.3 - - [15/Nov/2026:09:56:10 +0100] "GET /old-page HTTP/2.0" 404 153 "-" "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.2; +https://openai.com/gptbot)" 0.018
+                203.0.113.28 - - [15/Nov/2026:09:57:27 +0100] "POST /api/cart HTTP/2.0" 200 13875 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1" 0.048
+                203.0.113.32 - - [15/Nov/2026:09:58:08 +0100] "GET /pricing HTTP/2.0" 200 36084 "https://www.google.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15" 0.003
+                203.0.113.16 - - [15/Nov/2026:09:58:53 +0100] "GET /assets/app.js HTTP/2.0" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.001
+                192.0.2.29 - - [15/Nov/2026:09:59:28 +0100] "GET /pricing HTTP/2.0" 200 35091 "-" "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36" 0.088
+              </template>
+            </vt-access-log>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h3>Caddy JSON logs</h3>
+            <p>JSON lines of Caddy, with the host, HTTP/3 and the response time; a scan for <code>/.env</code> and a slow 502.</p>
+          </div>
+          <template>
+            <vt-access-log tabs filters lang-ui="en">
+              <template>
+                {"level": "info", "ts": 1763197200.512, "logger": "http.log.access", "msg": "handled request", "request": {"remote_ip": "203.0.113.9", "client_ip": "203.0.113.9", "proto": "HTTP/3.0", "method": "GET", "host": "example.com", "uri": "/", "headers": {"User-Agent": ["Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.1 Safari/605.1.15"]}}, "duration": 0.0021, "size": 18234, "status": 200}
+                {"level": "info", "ts": 1763197201.104, "logger": "http.log.access", "msg": "handled request", "request": {"remote_ip": "203.0.113.9", "client_ip": "203.0.113.9", "proto": "HTTP/3.0", "method": "GET", "host": "example.com", "uri": "/assets/app.js", "headers": {"User-Agent": ["Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.1 Safari/605.1.15"]}}, "duration": 0.0007, "size": 94120, "status": 200}
+                {"level": "info", "ts": 1763197260.33, "logger": "http.log.access", "msg": "handled request", "request": {"remote_ip": "198.51.100.4", "client_ip": "198.51.100.4", "proto": "HTTP/2.0", "method": "GET", "host": "example.com", "uri": "/.env", "headers": {"User-Agent": ["Go-http-client/1.1"]}}, "duration": 0.0003, "size": 0, "status": 404}
+                {"level": "error", "ts": 1763197321.9, "logger": "http.log.access", "msg": "handled request", "request": {"remote_ip": "192.0.2.77", "client_ip": "192.0.2.77", "proto": "HTTP/2.0", "method": "POST", "host": "api.example.com", "uri": "/v1/orders", "headers": {"User-Agent": ["okhttp/4.12.0"]}}, "duration": 1.84, "size": 61, "status": 502}
+              </template>
+            </vt-access-log>
           </template>
         </article>
       </section>

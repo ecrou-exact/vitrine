@@ -153,6 +153,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-lifecycle>`    | `content`, `cycles` (read only)                                                          |
 | `<vt-advisories>`   | `content`, `advisories` (read only)                                                      |
 | `<vt-licenses>`     | `content`, `dependencies`, `violations` (read only)                                      |
+| `<vt-icon-picker>`  | `value` (a form field, not an editor)                                                    |
+| `<vt-workflow>`     | `content`, `workflow` (read only; changed live with `updateJob()` and `appendLog()`)     |
+| `<vt-access-log>`   | `content`, `requests` (read only; lines added with `write()`)                            |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

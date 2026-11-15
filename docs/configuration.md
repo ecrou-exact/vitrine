@@ -376,7 +376,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar`, `vt-pricing`, `vt-faq`, `vt-gallery`, `vt-stats`, `vt-board`, `vt-field`, `vt-search`, `vt-date-picker`, `vt-menu`, `vt-upload`, `vt-testimonials`, `vt-countdown`, `vt-sql`, `vt-test-report`, `vt-trace`, `vt-notebook`, `vt-math`, `vt-diagram`, `vt-pivot`, `vt-heatmap`, `vt-flame`, `vt-treemap`, `vt-describe`, `vt-compare`, `vt-install`, `vt-download`, `vt-contributors`, `vt-lifecycle`, `vt-advisories` and `vt-licenses` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar`, `vt-pricing`, `vt-faq`, `vt-gallery`, `vt-stats`, `vt-board`, `vt-field`, `vt-search`, `vt-date-picker`, `vt-menu`, `vt-upload`, `vt-testimonials`, `vt-countdown`, `vt-sql`, `vt-test-report`, `vt-trace`, `vt-notebook`, `vt-math`, `vt-diagram`, `vt-pivot`, `vt-heatmap`, `vt-flame`, `vt-treemap`, `vt-describe`, `vt-compare`, `vt-install`, `vt-download`, `vt-contributors`, `vt-lifecycle`, `vt-advisories`, `vt-licenses`, `vt-icon-picker`, `vt-workflow` and `vt-access-log` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 
@@ -451,3 +451,25 @@ element.addEventListener(Vitrine.EVENTS.COPY, (event) => {
 ```
 
 Event details are described in [Common attributes](common-attributes.md#events).
+
+## `registerIconSet(set)`
+
+Adds an icon set that every `<vt-icon-picker>` of the page can show (add its id to `sets`), or replaces one with the same id. Your own icons, a company set:
+
+```js
+import { registerIconSet } from 'vitrine';
+
+registerIconSet({
+  id: 'acme',
+  label: 'Acme icons',
+  license: 'Proprietary',
+  viewBox: '0 0 24 24',
+  attrs: { fill: 'none', stroke: 'currentColor', 'stroke-width': '2' },
+  icons: [
+    ['rocket', 'M12 2c4 3 6 7 6 11l-6 6-6-6c0-4 2-8 6-11z', 'launch start'],
+    ['logo', [['circle', { cx: 12, cy: 12, r: 9 }], ['path', { d: 'M8 12h8' }]]],
+  ],
+});
+```
+
+Each icon is `[name, body, keywords, viewBox, label]`: the body is path data, or `[tag, attributes, ...children]` trees. Only SVG shapes, gradients, clip paths and masks are kept, with presentation attributes; references may only point inside the icon. See [`<vt-icon-picker>`](components/icon-picker.md).

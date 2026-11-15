@@ -13,7 +13,21 @@ const pkg = async (name) =>
  * @returns {Promise<{ name: string, version: string, license: string, url: string, use: string, where: string, licenseFile: string, noticeFile?: string }[]>}
  */
 export async function thirdParty() {
-  const [hljs, marked, purify, echarts, zrender, jsyaml, temml, mono, plex] = await Promise.all(
+  const [
+    hljs,
+    marked,
+    purify,
+    echarts,
+    zrender,
+    jsyaml,
+    temml,
+    mono,
+    plex,
+    fa,
+    lucide,
+    bootstrap,
+    flags,
+  ] = await Promise.all(
     [
       'highlight.js',
       'marked',
@@ -24,6 +38,10 @@ export async function thirdParty() {
       'temml',
       '@fontsource/jetbrains-mono',
       '@fontsource/ibm-plex-sans',
+      '@fortawesome/fontawesome-free',
+      'lucide-static',
+      'bootstrap-icons',
+      'flag-icons',
     ].map(pkg),
   );
   return [
@@ -100,6 +118,42 @@ export async function thirdParty() {
       where:
         'dist/vendor/temml.js, loaded by `<vt-math>` only; its MathML rules in src/styles/math.css',
       licenseFile: 'node_modules/temml/LICENSE',
+    },
+    {
+      name: 'Font Awesome Free',
+      version: fa.version,
+      license: 'Icons: CC-BY-4.0; code: MIT',
+      url: 'https://fontawesome.com',
+      use: 'Solid, regular and brand icons of `<vt-icon-picker>`',
+      where: 'dist/vendor/icons/fa-*.js, loaded by `<vt-icon-picker>` only',
+      licenseFile: 'node_modules/@fortawesome/fontawesome-free/LICENSE.txt',
+    },
+    {
+      name: 'Lucide (icon set)',
+      version: lucide.version,
+      license: 'ISC; icons derived from Feather: MIT',
+      url: 'https://lucide.dev',
+      use: 'Lucide icons of `<vt-icon-picker>`',
+      where: 'dist/vendor/icons/lucide.js, loaded by `<vt-icon-picker>` only',
+      licenseFile: 'node_modules/lucide-static/LICENSE',
+    },
+    {
+      name: 'Bootstrap Icons',
+      version: bootstrap.version,
+      license: 'MIT',
+      url: 'https://icons.getbootstrap.com',
+      use: 'Bootstrap icons of `<vt-icon-picker>`',
+      where: 'dist/vendor/icons/bootstrap.js, loaded by `<vt-icon-picker>` only',
+      licenseFile: 'node_modules/bootstrap-icons/LICENSE',
+    },
+    {
+      name: 'flag-icons',
+      version: flags.version,
+      license: 'MIT',
+      url: 'https://github.com/lipis/flag-icons',
+      use: 'Country flags of `<vt-icon-picker>`',
+      where: 'dist/vendor/icons/flags.js, loaded by `<vt-icon-picker>` only',
+      licenseFile: 'node_modules/flag-icons/LICENSE',
     },
     ...(await mermaidParts()),
     {

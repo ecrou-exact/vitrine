@@ -652,7 +652,10 @@ vt-download:not(:defined),
 vt-contributors:not(:defined),
 vt-lifecycle:not(:defined),
 vt-advisories:not(:defined),
-vt-licenses:not(:defined) {
+vt-licenses:not(:defined),
+vt-icon-picker:not(:defined),
+vt-workflow:not(:defined),
+vt-access-log:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

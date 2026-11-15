@@ -25,9 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<vt-advisories>`: security reports from OSV records, osv-scanner, `npm audit --json`, GitHub security advisories or Dependabot alerts. The most severe first, severity filters with counts, CVSS 3 scores computed from vectors and explained in words, versions affected and fixed, weaknesses linked to CWE, copy as a Markdown table and download as CSV.
 - `<vt-licenses>`: the licenses of dependencies from a CycloneDX or SPDX SBOM, license-checker or pip-licenses. Licenses sorted into permissive, weak copyleft, strong copyleft, other and unknown, SPDX expressions evaluated (`OR`, `AND`, `WITH` exceptions), common names understood, and `allow`, a list of licenses and kinds that marks and filters the packages not allowed.
 
+- `<vt-icon-picker>`: an icon field for forms with about 7,000 free icons: Font Awesome Free (solid, regular, brands), Lucide, Bootstrap Icons and the flags of every country (flag-icons). Each set is a file of `dist/vendor/icons/` loaded when a picker shows it. Search by name and keyword, a keyboard grid, recent icons, a preview with the license of the set, copy of the SVG (with the Font Awesome credit), the class names or `set:name`, and form association (`name`, `required`, reset). Icons are drawn from an allow-list of SVG elements and attributes. `registerIconSet()` adds a page's own sets.
+- `<vt-workflow>`: workflow runs as a CI system shows them, from GitHub Actions, GitLab or your own JSON. The run with its status, event, branch, commit and duration; a graph of jobs in columns by `needs` or stage, linked by curves that move while a job runs; the steps of a job with their logs, ANSI colors, folded `##[group]` sections and marked errors; keyboard moves between jobs; and `updateJob()` and `appendLog()` to follow a run live, with times counting up.
+- `<vt-access-log>`: access logs of Apache, Nginx, IIS, Caddy and Traefik, line by line. Totals (requests, visitors, errors, data, bots, median and p95 response time), requests per period by class of status, a table with IP, user, path, status, size, duration and client (browsers, systems, tools and bots read from user agents), top lists that filter, a filter field with `status:`, `ip:`, `bot:yes`…, `anonymize` for IP addresses, CSV and `write()` for live lines.
+
 ### Changed
 
-- The budget of the full bundles is 440 KB, for the twelve new elements.
+- The budget of the full bundles is 460 KB, for the fifteen new elements.
+- Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
 ### Fixed
 

@@ -53,6 +53,9 @@ import { VtContributors } from './components/contributors/vt-contributors.js';
 import { VtLifecycle } from './components/lifecycle/vt-lifecycle.js';
 import { VtAdvisories } from './components/advisories/vt-advisories.js';
 import { VtLicenses } from './components/licenses/vt-licenses.js';
+import { VtIconPicker, registerIconSet } from './components/icon-picker/vt-icon-picker.js';
+import { VtWorkflow } from './components/workflow/vt-workflow.js';
+import { VtAccessLog } from './components/access-log/vt-access-log.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -128,6 +131,10 @@ export {
   VtLifecycle,
   VtAdvisories,
   VtLicenses,
+  VtIconPicker,
+  VtWorkflow,
+  VtAccessLog,
+  registerIconSet,
   configure,
   getConfig,
   EVENTS,
@@ -213,6 +220,9 @@ export const registry = new Map(
     ['vt-lifecycle', VtLifecycle],
     ['vt-advisories', VtAdvisories],
     ['vt-licenses', VtLicenses],
+    ['vt-icon-picker', VtIconPicker],
+    ['vt-workflow', VtWorkflow],
+    ['vt-access-log', VtAccessLog],
   ]),
 );
 
@@ -275,6 +285,9 @@ const TYPES = /** @type {const} */ ({
   lifecycle: 'vt-lifecycle',
   advisories: 'vt-advisories',
   licenses: 'vt-licenses',
+  'icon-picker': 'vt-icon-picker',
+  workflow: 'vt-workflow',
+  'access-log': 'vt-access-log',
 });
 
 /**

@@ -1,0 +1,199 @@
+/*
+ * Icon picker: a field showing the icon chosen, and a panel to search and choose one.
+ */
+.ip-anchor {
+  position: relative;
+}
+
+.ip-trigger {
+  gap: var(--_space-2);
+}
+
+.ip-preview {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px dashed var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  color: var(--_fg);
+}
+
+.ip-preview:has(svg) {
+  border-color: transparent;
+}
+
+.ip-preview svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ip-panel {
+  display: grid;
+  gap: var(--_space-3);
+  width: min(560px, calc(100vw - 32px));
+  padding: var(--_space-3);
+}
+
+.icon-picker.inline .ip-panel {
+  width: auto;
+  margin-top: var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+}
+
+.ip-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: var(--_space-2);
+}
+
+.ip-status {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.ip-recent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.ip-recent-label {
+  margin-inline-end: var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.ip-recent-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_fg);
+  cursor: pointer;
+}
+
+.ip-recent-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: var(--_space-1);
+  max-height: var(--_max-height, 320px);
+  overflow-y: auto;
+  padding: 2px;
+  overscroll-behavior: contain;
+}
+
+.ip-option {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: var(--_radius-sm);
+  color: var(--_fg);
+  cursor: pointer;
+}
+
+.ip-option svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ip-grid.flags .ip-option svg,
+.ip-large.flag svg {
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--_border);
+}
+
+.ip-option:hover {
+  background: var(--_accent-soft);
+}
+
+.ip-option:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 0;
+}
+
+.ip-option[aria-selected='true'] {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.ip-more {
+  justify-self: start;
+}
+
+.ip-detail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--_space-2) var(--_space-3);
+  padding-top: var(--_space-3);
+  border-top: 1px solid var(--_border);
+}
+
+.ip-large {
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+}
+
+.ip-large svg {
+  width: 32px;
+  height: 32px;
+}
+
+.ip-about {
+  display: grid;
+  min-width: 0;
+}
+
+.ip-name {
+  overflow-wrap: anywhere;
+}
+
+.ip-code {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.ip-license {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+a.ip-license {
+  color: var(--_accent-fg);
+}
+
+.ip-copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+}
+
+@media (max-width: 520px) {
+  .ip-controls {
+    grid-template-columns: 1fr;
+  }
+}

@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories and dependency licenses — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories, dependency licenses, icon pickers, workflow runs and access logs — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -87,6 +87,9 @@
 - **`<vt-lifecycle>`** — supported versions and their end of life, from endoflife.date or a list: a table and a schedule like Node.js's, and whether a given version is still supported.
 - **`<vt-advisories>`** — security reports from OSV, osv-scanner, `npm audit --json`, GitHub advisories or Dependabot: the most severe first, CVSS scores explained in words, affected versions and fixes.
 - **`<vt-licenses>`** — the licenses of your dependencies from a CycloneDX or SPDX SBOM, license-checker or pip-licenses: permissive or copyleft, and those not in your allowed list.
+- **`<vt-icon-picker>`** — an icon field for forms: about 7,000 free icons (Font Awesome Free solid, regular and brands, Lucide, Bootstrap Icons, and every country flag), searched by name and keyword, chosen with the keyboard, each set loaded only when shown; copy the SVG or the class names.
+- **`<vt-workflow>`** — a CI run as a CI system shows it: a graph of jobs linked by what they need, live statuses with times counting up, and each job's steps and logs with ANSI colors, folded groups and errors; from GitHub Actions, GitLab or your own JSON.
+- **`<vt-access-log>`** — web server access logs (Apache, Nginx, IIS, Caddy, Traefik) as an analytics page: requests, visitors, errors, data and response times, requests over time, a table of requests with their IP, user and client, top lists, filters and anonymized IPs.
 - **`<vt-contributors>`** — contributors and sponsors from GitHub, All Contributors, Open Collective or GitHub Sponsors: avatars, tiers and filters by type of contribution.
 - **JSON everywhere** — every element reads JSON from a `data` property, a `json` or `json-src` attribute (with `json-path`) or a JSON script, and turns it into its own format. See [docs/json.md](docs/json.md).
 - **Simple and full variants**, and every feature can be switched on or off with one attribute.
@@ -222,6 +225,9 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-lifecycle>`    | Supported versions and their end of life            | Table / Schedule tabs, version check, copy and download as CSV, full screen                             | [docs/components/lifecycle.md](docs/components/lifecycle.md)       |
 | `<vt-advisories>`   | A security report                                   | Severity filters, search, copy as Markdown, download as CSV, full screen                                | [docs/components/advisories.md](docs/components/advisories.md)     |
 | `<vt-licenses>`     | The licenses of dependencies                        | Licenses / Packages tabs, allow-list, filters, search, copy and download as CSV, full screen            | [docs/components/licenses.md](docs/components/licenses.md)         |
+| `<vt-icon-picker>`  | An icon field with thousands of free icons          | Sets, search, keyboard grid, recent icons, copy SVG and code, form field                                | [docs/components/icon-picker.md](docs/components/icon-picker.md)   |
+| `<vt-workflow>`     | A CI run with its jobs, steps and logs              | Job graph, live updates, step logs, copy the log, download, full screen                                 | [docs/components/workflow.md](docs/components/workflow.md)         |
+| `<vt-access-log>`   | Web server access logs as analytics                 | Totals, chart, Requests / Top lists tabs, filters, anonymized IPs, copy CSV, full screen                | [docs/components/access-log.md](docs/components/access-log.md)     |
 
 Shared attributes (`variant`, `theme`, `src`, `max-height`, `copy`, `search`, `label`, `lang-ui`…) are described in [docs/common-attributes.md](docs/common-attributes.md). The JavaScript API (`Vitrine.configure`, `Vitrine.render`, `registerTheme`, `registerLocale`) is in [docs/configuration.md](docs/configuration.md).
 
@@ -279,16 +285,20 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT
 
 ## Credits and third-party licenses
 
-| Component                                                          | License                               | Used for                                         |
-| ------------------------------------------------------------------ | ------------------------------------- | ------------------------------------------------ |
-| [highlight.js](https://github.com/highlightjs/highlight.js)        | BSD-3-Clause                          | Syntax highlighting                              |
-| [marked](https://github.com/markedjs/marked)                       | MIT                                   | Markdown parsing (GFM)                           |
-| [DOMPurify](https://github.com/cure53/DOMPurify)                   | Apache-2.0 OR MPL-2.0                 | HTML sanitization                                |
-| [Lucide](https://lucide.dev)                                       | ISC (icons derived from Feather: MIT) | Interface icons                                  |
-| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono)       | SIL OFL 1.1                           | Website font, logo wordmark                      |
-| [Temml](https://github.com/ronkok/Temml)                           | MIT                                   | TeX to MathML for `<vt-math>` (loaded on demand) |
-| [Mermaid](https://github.com/mermaid-js/mermaid) and its libraries | MIT, ISC, BSD-3-Clause, Apache-2.0    | Diagrams for `<vt-diagram>` (loaded on demand)   |
-| [IBM Plex Sans](https://github.com/IBM/plex)                       | SIL OFL 1.1                           | Website font                                     |
+| Component                                                          | License                               | Used for                                               |
+| ------------------------------------------------------------------ | ------------------------------------- | ------------------------------------------------------ |
+| [highlight.js](https://github.com/highlightjs/highlight.js)        | BSD-3-Clause                          | Syntax highlighting                                    |
+| [marked](https://github.com/markedjs/marked)                       | MIT                                   | Markdown parsing (GFM)                                 |
+| [DOMPurify](https://github.com/cure53/DOMPurify)                   | Apache-2.0 OR MPL-2.0                 | HTML sanitization                                      |
+| [Lucide](https://lucide.dev)                                       | ISC (icons derived from Feather: MIT) | Interface icons                                        |
+| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono)       | SIL OFL 1.1                           | Website font, logo wordmark                            |
+| [Temml](https://github.com/ronkok/Temml)                           | MIT                                   | TeX to MathML for `<vt-math>` (loaded on demand)       |
+| [Mermaid](https://github.com/mermaid-js/mermaid) and its libraries | MIT, ISC, BSD-3-Clause, Apache-2.0    | Diagrams for `<vt-diagram>` (loaded on demand)         |
+| [IBM Plex Sans](https://github.com/IBM/plex)                       | SIL OFL 1.1                           | Website font                                           |
+| [Font Awesome Free](https://fontawesome.com)                       | Icons CC BY 4.0, code MIT             | Icons of `<vt-icon-picker>` (loaded on demand)         |
+| [Lucide](https://lucide.dev) icon set                              | ISC (icons derived from Feather: MIT) | Icons of `<vt-icon-picker>` (loaded on demand)         |
+| [Bootstrap Icons](https://icons.getbootstrap.com)                  | MIT                                   | Icons of `<vt-icon-picker>` (loaded on demand)         |
+| [flag-icons](https://github.com/lipis/flag-icons)                  | MIT                                   | Country flags of `<vt-icon-picker>` (loaded on demand) |
 
 Full license texts, with exact versions: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

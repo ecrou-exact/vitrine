@@ -467,6 +467,43 @@ const MODES = [
     wrap: (p) => `main;${p.replace(/[;\n]/g, ' ')};leaf 10\nmain 2`,
   },
   {
+    tag: 'vt-icon-picker',
+    attrs: { inline: '', sets: 'fa-regular', label: '<img src=x onerror=alert(1)>', hint: '<b>x</b>', value: '<svg onload=alert(1)>:x' }, // prettier-ignore
+    wrap: () => null,
+  },
+  {
+    tag: 'vt-workflow',
+    attrs: { variant: 'full', job: 'j1' },
+    wrap: (p) =>
+      JSON.stringify({
+        name: p,
+        display_title: p,
+        event: p,
+        head_branch: p,
+        head_sha: p,
+        actor: { login: p },
+        html_url: p,
+        jobs: [
+          { id: 'j1', name: p, stage: p, needs: [p], status: p, html_url: p, runner_name: p, steps: [{ name: p, status: 'failure', log: `${p}\n##[group]${p}\n\u001b[31m${p}\u001b[0m\n##[error]${p}` }] }, // prettier-ignore
+          { id: p, name: 'x', needs: ['j1'], status: 'running', log: p },
+        ],
+      }),
+  },
+  {
+    tag: 'vt-access-log',
+    attrs: { variant: 'full', filter: '<img src=x onerror=alert(1)>' },
+    wrap: (p) =>
+      [
+        `203.0.113.7 - ${p.replace(/\s/g, '_')} [15/Nov/2026:10:00:01 +0100] "GET /${p.replace(/["\s]/g, '_')} HTTP/1.1" 200 1 "${p.replace(/"/g, "'")}" "${p.replace(/"/g, "'")}" 0.1`, // prettier-ignore
+        JSON.stringify({ request: { remote_ip: p, method: p, uri: p, host: p, headers: { 'User-Agent': [p], Referer: [p] } }, status: 404, size: 1, ts: 1763200000 }), // prettier-ignore
+      ].join('\n'),
+  },
+  {
+    tag: 'vt-access-log',
+    attrs: { tabs: '', filters: '' },
+    wrap: (p) => JSON.stringify({ RequestPath: p, ClientHost: p, DownstreamStatus: 500, 'request_User-Agent': `${p} bot` }), // prettier-ignore
+  },
+  {
     tag: 'vt-lifecycle',
     attrs: { variant: 'full', version: '<img src=x onerror=alert(1)>', now: '2026-01-01' },
     wrap: (p) =>

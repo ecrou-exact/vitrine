@@ -6,6 +6,7 @@ import { build, context } from 'esbuild';
 import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { buildIconSets } from './icon-sets.js';
 import { BUNDLED_LANGUAGES, listLanguages } from './languages.js';
 import { syntaxThemes } from './syntax-themes.js';
 import { thirdParty } from './third-party.js';
@@ -71,7 +72,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {
@@ -306,3 +307,6 @@ if (watch) {
   ]);
   console.log(`languages: ${lazy.length} lazy-loaded, ${BUNDLED_LANGUAGES.length} bundled`);
 }
+// The sets of <vt-icon-picker>, loaded one at a time when a picker shows them.
+const iconSets = await buildIconSets('dist/vendor/icons');
+console.log(`icons: ${iconSets.map((s) => `${s.id} ${s.count}`).join(', ')}`);
