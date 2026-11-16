@@ -9,7 +9,7 @@
   <body data-page="examples">
     <!-- @header -->
 
-    <main id="main" class="wrap">
+    <main id="main" class="wrap examples-page">
       <header class="page-head">
         <h1>Examples</h1>
         <p>
@@ -19,6 +19,7 @@
         </p>
       </header>
 
+      <div class="examples-layout">
       <nav class="subnav section-menu" aria-label="Example sections">
         <label for="section-menu">Go to</label>
         <select id="section-menu" data-section-menu>
@@ -95,6 +96,12 @@
         </select>
       </nav>
 
+      <nav id="examples-toc" class="section-toc" aria-label="Example sections" tabindex="0" hidden>
+        <p class="group">On this page</p>
+        <ol></ol>
+      </nav>
+
+      <div class="examples-content">
       <section class="example-group" id="code" aria-labelledby="code-title">
         <h2 id="code-title">&lt;vt-code&gt;</h2>
 
@@ -5313,6 +5320,8 @@ AssertionError: assert 404 == 200</failure>
           </div>
         </article>
       </section>
+      </div>
+      </div>
     </main>
 
     <!-- @footer -->

@@ -182,34 +182,85 @@ syncComponents();
     document.querySelector('[data-section-menu]')
   );
   if (sectionMenu) {
-    const ids = Array.from(sectionMenu.options, (option) => option.value);
-    if (ids.includes(location.hash.slice(1))) sectionMenu.value = location.hash.slice(1);
-    sectionMenu.addEventListener('change', () => {
-      const section = document.getElementById(sectionMenu.value);
-      if (!section) return;
-      history.replaceState(null, '', `#${sectionMenu.value}`);
-      section.scrollIntoView({
+    const toc = document.getElementById('examples-toc');
+    const sections = Array.from(sectionMenu.options, (option) => {
+      const link = document.createElement('a');
+      link.setAttribute('href', `#${option.value}`);
+      link.textContent = option.textContent;
+      const item = document.createElement('li');
+      item.append(link);
+      toc?.querySelector('ol')?.append(item);
+      return { id: option.value, section: document.getElementById(option.value), link };
+    }).filter((entry) => entry.section);
+    if (toc) toc.hidden = sections.length === 0;
+    const byId = new Map(sections.map((entry) => [entry.id, entry]));
+    let current = null;
+    let frame = 0;
+
+    const followSection = () => {
+      frame = 0;
+      const offset = parseFloat(getComputedStyle(sections[0].section).scrollMarginTop) || 88;
+      let next = sections[0];
+      for (const entry of sections) {
+        if (entry.section.getBoundingClientRect().top > offset + 8) break;
+        next = entry;
+      }
+      if (document.activeElement !== sectionMenu) sectionMenu.value = next.id;
+      if (current !== next) {
+        current?.link.removeAttribute('aria-current');
+        current = next;
+        current.link.setAttribute('aria-current', 'location');
+        if (toc?.getClientRects().length) {
+          const bounds = toc.getBoundingClientRect();
+          const item = current.link.getBoundingClientRect();
+          if (item.top < bounds.top || item.bottom > bounds.bottom) {
+            toc.scrollTop += item.top - bounds.top - (toc.clientHeight - item.height) / 2;
+          }
+        }
+      }
+    };
+    const scheduleSection = () => {
+      if (!frame && sections.length) frame = requestAnimationFrame(followSection);
+    };
+    const goToSection = (id, pushHistory = true) => {
+      const entry = byId.get(id);
+      if (!entry) return;
+      if (pushHistory && location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
+      window.scrollTo({
+        top:
+          scrollY +
+          entry.section.getBoundingClientRect().top -
+          (parseFloat(getComputedStyle(entry.section).scrollMarginTop) || 88),
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       });
+      const heading = entry.section.querySelector('h2');
+      heading?.setAttribute('tabindex', '-1');
+      heading?.focus({ preventScroll: true });
+      scheduleSection();
+    };
+    sectionMenu.addEventListener('change', () => goToSection(sectionMenu.value));
+    toc?.addEventListener('click', (event) => {
+      if (
+        event.defaultPrevented ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.button !== 0
+      )
+        return;
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+      event.preventDefault();
+      goToSection(link.getAttribute('href').slice(1));
     });
-    if ('IntersectionObserver' in window) {
-      const visible = new Set();
-      const spy = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) visible.add(entry.target.id);
-            else visible.delete(entry.target.id);
-          }
-          const current = ids.find((id) => visible.has(id));
-          if (current && document.activeElement !== sectionMenu) sectionMenu.value = current;
-        },
-        { rootMargin: '-30% 0px -60% 0px' },
-      );
-      for (const id of ids) {
-        const section = document.getElementById(id);
-        if (section) spy.observe(section);
-      }
-    }
+    addEventListener('scroll', scheduleSection, { passive: true });
+    addEventListener('resize', scheduleSection, { passive: true });
+    addEventListener('load', () => {
+      if (location.hash) goToSection(location.hash.slice(1), false);
+      else scheduleSection();
+    });
+    addEventListener('hashchange', () => goToSection(location.hash.slice(1), false));
+    scheduleSection();
   }
 
   // Section menus (examples, integrations): mark the section being read.
