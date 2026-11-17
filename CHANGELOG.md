@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The Playground component selector is sorted alphabetically.
 - Examples are grouped by need, with category descriptions, a grouped sidebar and mobile menu, and alphabetical ordering within each category.
 - Docs component links are sorted alphabetically.
 - The budget of the full bundles is 530 KB, for `<vt-ioc>`, `<vt-cvss>` and `<vt-headers>` (it was 520 KB for the twenty-one elements before them); `vt-markdown` 81 KB, for the icons shared by every element.
@@ -52,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Integrations navigation has a visible horizontal scrollbar and keyboard access so every section link is reachable.
 - Docs: the rows of `<vt-treemap>`, `<vt-describe>` and `<vt-compare>` were at the top of `README.md`, `docs/README.md`, `docs/editing.md` and `docs/security.md` instead of in their tables, and the start of `README.md` was written a second time inside the `<vt-math>` item.
 
 ## [0.14.0] - 2026-11-13

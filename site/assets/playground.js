@@ -887,7 +887,7 @@ function buildControls() {
       'Element',
       select(
         'type',
-        Object.keys(SCHEMA),
+        Object.keys(SCHEMA).sort(),
         state.type,
         (value) => switchType(value),
         Object.fromEntries(Object.entries(SCHEMA).map(([key, { tag }]) => [key, `<${tag}>`])),

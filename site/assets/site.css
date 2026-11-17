@@ -2061,6 +2061,32 @@ kbd {
   display: none;
 }
 
+/* Keep every integration link reachable with a mouse, touch or the keyboard. */
+.jump.subnav {
+  scrollbar-width: thin;
+  scrollbar-color: var(--site-fg-muted) var(--site-surface);
+  scroll-padding-inline: var(--gutter);
+  mask-image: none;
+}
+
+.jump.subnav > a {
+  flex-shrink: 0;
+}
+
+.jump.subnav::-webkit-scrollbar {
+  display: block;
+  height: var(--space-2);
+}
+
+.jump.subnav::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-full);
+  background: var(--site-fg-muted);
+}
+
+.jump.subnav::-webkit-scrollbar-track {
+  background: var(--site-surface);
+}
+
 /* ---------- Segmented controls ---------- */
 
 .segmented {
