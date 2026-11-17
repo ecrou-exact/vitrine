@@ -675,7 +675,10 @@ vt-sigma:not(:defined),
 vt-pcap:not(:defined),
 vt-semver:not(:defined),
 vt-contrast:not(:defined),
-vt-sbom:not(:defined) {
+vt-sbom:not(:defined),
+vt-dockerfile:not(:defined),
+vt-lighthouse:not(:defined),
+vt-a11y:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

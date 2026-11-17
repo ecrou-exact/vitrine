@@ -120,16 +120,19 @@
           </optgroup>
           <optgroup label="APIs &amp; operations">
             <option value="access-log">Access log</option>
+            <option value="a11y">Accessibility report</option>
             <option value="cert">Certificates</option>
             <option value="cron">Cron</option>
             <option value="cvss">CVSS score</option>
             <option value="dns">DNS records</option>
+            <option value="dockerfile">Dockerfile</option>
             <option value="email">E-mail analysis</option>
             <option value="hash">Hashes</option>
             <option value="http">HTTP</option>
             <option value="ioc">Indicators of compromise</option>
             <option value="job">Job</option>
             <option value="jwt">JWT</option>
+            <option value="lighthouse">Lighthouse report</option>
             <option value="log">Log</option>
             <option value="waterfall">Network waterfall</option>
             <option value="nmap">Nmap scan</option>
@@ -2913,6 +2916,152 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="a11y" aria-labelledby="a11y-title">
+        <h3 id="a11y-title">&lt;vt-a11y&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>An axe-core run on a checkout page</h4>
+            <p>
+              A missing label inside a shadow root, two contrast failures and content outside
+              landmarks, each with its WCAG criterion and how to fix it. The To review tab holds
+              what axe could not decide alone.
+            </p>
+          </div>
+          <template>
+            <vt-a11y variant="full" label="axe-results.json">
+              <template>
+                {
+                  "testEngine": {
+                    "name": "axe-core",
+                    "version": "4.10.2"
+                  },
+                  "timestamp": "2026-11-17T10:00:00.000Z",
+                  "url": "https://shop.example/checkout",
+                  "violations": [
+                    {
+                      "id": "color-contrast",
+                      "impact": "serious",
+                      "tags": [
+                        "cat.color",
+                        "wcag2aa",
+                        "wcag143",
+                        "TTv5",
+                        "EN-301-549"
+                      ],
+                      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+                      "help": "Elements must meet minimum color contrast ratio thresholds",
+                      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+                      "nodes": [
+                        {
+                          "impact": "serious",
+                          "html": "&lt;a class=\"muted\" href=\"/terms\">Terms&lt;/a>",
+                          "target": [
+                            "footer > a.muted"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.84 (foreground color: #999999, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                        },
+                        {
+                          "impact": "serious",
+                          "html": "&lt;span class=\"hint\">Optional&lt;/span>",
+                          "target": [
+                            "#email-hint"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.1"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "label",
+                      "impact": "critical",
+                      "tags": [
+                        "cat.forms",
+                        "wcag2a",
+                        "wcag412",
+                        "wcag131"
+                      ],
+                      "description": "Ensure every form element has a label",
+                      "help": "Form elements must have labels",
+                      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=axeAPI",
+                      "nodes": [
+                        {
+                          "impact": "critical",
+                          "html": "&lt;input type=\"text\" name=\"zip\">",
+                          "target": [
+                            [
+                              "#payment-frame",
+                              "input[name=\"zip\"]"
+                            ]
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Form element does not have an implicit (wrapped) &lt;label>\n  Form element does not have an explicit &lt;label>\n  Element has no title attribute"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "region",
+                      "impact": "moderate",
+                      "tags": [
+                        "cat.keyboard",
+                        "best-practice"
+                      ],
+                      "description": "Ensure all page content is contained by landmarks",
+                      "help": "All page content should be contained by landmarks",
+                      "helpUrl": "javascript:alert(1)",
+                      "nodes": [
+                        {
+                          "impact": "moderate",
+                          "html": "&lt;div class=\"promo\">Free shipping&lt;/div>",
+                          "target": [
+                            ".promo"
+                          ],
+                          "failureSummary": "Fix all of the following:\n  Some page content is not contained by landmarks"
+                        }
+                      ]
+                    }
+                  ],
+                  "incomplete": [
+                    {
+                      "id": "color-contrast",
+                      "impact": "serious",
+                      "tags": [
+                        "wcag2aa",
+                        "wcag143"
+                      ],
+                      "help": "Elements must meet minimum color contrast ratio thresholds",
+                      "nodes": [
+                        {
+                          "html": "&lt;h1 class=\"over-image\">Sale&lt;/h1>",
+                          "target": [
+                            "h1.over-image"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background image"
+                        }
+                      ]
+                    }
+                  ],
+                  "passes": [
+                    {
+                      "id": "document-title"
+                    },
+                    {
+                      "id": "html-has-lang"
+                    },
+                    {
+                      "id": "image-alt"
+                    }
+                  ],
+                  "inapplicable": [
+                    {
+                      "id": "video-caption"
+                    }
+                  ]
+                }
+              </template>
+            </vt-a11y>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="cert" aria-labelledby="cert-title">
         <h3 id="cert-title">&lt;vt-cert&gt;</h3>
 
@@ -3116,6 +3265,74 @@ $TTL 1h
 www 300 IN CNAME @
 _sip._tcp IN SRV 10 60 5060 sip</template>
             </vt-dns>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="dockerfile" aria-labelledby="dockerfile-title">
+        <h3 id="dockerfile-title">&lt;vt-dockerfile&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A multi-stage build</h4>
+            <p>
+              Dependencies, build and runtime stages, what each copies from the others, and a
+              final image that runs as a non-root user with a health check. Hover a keyword to
+              read what it does.
+            </p>
+          </div>
+          <template>
+            <vt-dockerfile variant="full" label="Dockerfile">
+              <template>
+                # syntax=docker/dockerfile:1
+                FROM node:20-alpine AS deps
+                WORKDIR /app
+                COPY package.json package-lock.json ./
+                RUN npm ci
+
+                FROM node:20-alpine AS build
+                WORKDIR /app
+                COPY --from=deps /app/node_modules ./node_modules
+                COPY . .
+                RUN npm run build
+
+                FROM node:20-alpine
+                ENV NODE_ENV=production
+                WORKDIR /app
+                COPY --from=build /app/dist ./dist
+                COPY --from=deps /app/node_modules ./node_modules
+                USER node
+                EXPOSE 3000
+                HEALTHCHECK CMD ["wget", "-qO-", "http://localhost:3000/health"]
+                CMD ["node", "dist/server.js"]
+              </template>
+            </vt-dockerfile>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a review would flag</h4>
+            <p>
+              An untagged base image, a secret in ENV, a script piped to a shell, apt caches left
+              in layers, root at run time, a shell-form CMD.
+            </p>
+          </div>
+          <template>
+            <vt-dockerfile variant="full" tabs="false">
+              <template>
+                FROM ubuntu
+                MAINTAINER ops@example.com
+                RUN apt-get update
+                RUN apt-get install curl python3 python3-pip
+                RUN curl -fsSL https://get.example.sh | sh
+                ENV API_TOKEN=change-me
+                ADD app.py /app/app.py
+                RUN cd /app &amp;&amp; pip install flask &amp;&amp; chmod 777 /app
+                EXPOSE 5000 22
+                CMD python3 /app/app.py
+              </template>
+            </vt-dockerfile>
           </template>
         </article>
       </section>
@@ -3376,6 +3593,339 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
                 eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
               </template>
             </vt-jwt>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="lighthouse" aria-labelledby="lighthouse-title">
+        <h3 id="lighthouse-title">&lt;vt-lighthouse&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A PageSpeed Insights answer</h4>
+            <p>
+              Scores, the Core Web Vitals of real users next to the lab measurements, and the
+              opportunities that would save the most time. Each category tab lists what to fix.
+            </p>
+          </div>
+          <template>
+            <vt-lighthouse variant="full" label="shop.example (mobile)">
+              <template>
+                {
+                  "id": "https://shop.example/",
+                  "loadingExperience": {
+                    "id": "https://shop.example/",
+                    "overall_category": "AVERAGE",
+                    "metrics": {
+                      "LARGEST_CONTENTFUL_PAINT_MS": {
+                        "percentile": 2900,
+                        "category": "AVERAGE",
+                        "distributions": [
+                          {
+                            "min": 0,
+                            "max": 2500,
+                            "proportion": 0.68
+                          },
+                          {
+                            "min": 2500,
+                            "max": 4000,
+                            "proportion": 0.2
+                          },
+                          {
+                            "min": 4000,
+                            "proportion": 0.12
+                          }
+                        ]
+                      },
+                      "INTERACTION_TO_NEXT_PAINT": {
+                        "percentile": 180,
+                        "category": "FAST",
+                        "distributions": [
+                          {
+                            "proportion": 0.8
+                          },
+                          {
+                            "proportion": 0.15
+                          },
+                          {
+                            "proportion": 0.05
+                          }
+                        ]
+                      },
+                      "CUMULATIVE_LAYOUT_SHIFT_SCORE": {
+                        "percentile": 31,
+                        "category": "SLOW",
+                        "distributions": [
+                          {
+                            "proportion": 0.55
+                          },
+                          {
+                            "proportion": 0.2
+                          },
+                          {
+                            "proportion": 0.25
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "lighthouseResult": {
+                    "requestedUrl": "https://shop.example/",
+                    "finalDisplayedUrl": "https://shop.example/",
+                    "lighthouseVersion": "12.2.1",
+                    "fetchTime": "2026-11-17T10:00:00.000Z",
+                    "configSettings": {
+                      "formFactor": "mobile"
+                    },
+                    "runWarnings": [
+                      "The page loaded too slowly to finish within the time limit."
+                    ],
+                    "categories": {
+                      "performance": {
+                        "title": "Performance",
+                        "score": 0.62,
+                        "auditRefs": [
+                          {
+                            "id": "first-contentful-paint",
+                            "weight": 10,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "largest-contentful-paint",
+                            "weight": 25,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "total-blocking-time",
+                            "weight": 30,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "cumulative-layout-shift",
+                            "weight": 25,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "speed-index",
+                            "weight": 10,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "render-blocking-resources",
+                            "weight": 0,
+                            "group": "load-opportunities"
+                          },
+                          {
+                            "id": "uses-optimized-images",
+                            "weight": 0,
+                            "group": "load-opportunities"
+                          },
+                          {
+                            "id": "dom-size",
+                            "weight": 0,
+                            "group": "diagnostics"
+                          }
+                        ]
+                      },
+                      "accessibility": {
+                        "title": "Accessibility",
+                        "score": 0.88,
+                        "auditRefs": [
+                          {
+                            "id": "color-contrast",
+                            "weight": 7,
+                            "group": "a11y-color-contrast"
+                          },
+                          {
+                            "id": "image-alt",
+                            "weight": 10,
+                            "group": "a11y-names-labels"
+                          }
+                        ]
+                      },
+                      "best-practices": {
+                        "title": "Best Practices",
+                        "score": 0.96,
+                        "auditRefs": [
+                          {
+                            "id": "is-on-https",
+                            "weight": 5
+                          }
+                        ]
+                      },
+                      "seo": {
+                        "title": "SEO",
+                        "score": 1,
+                        "auditRefs": [
+                          {
+                            "id": "document-title",
+                            "weight": 1
+                          }
+                        ]
+                      }
+                    },
+                    "audits": {
+                      "first-contentful-paint": {
+                        "id": "first-contentful-paint",
+                        "title": "First Contentful Paint",
+                        "score": 0.72,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 2210,
+                        "displayValue": "2.2 s"
+                      },
+                      "largest-contentful-paint": {
+                        "id": "largest-contentful-paint",
+                        "title": "Largest Contentful Paint",
+                        "score": 0.31,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 4630,
+                        "displayValue": "4.6 s"
+                      },
+                      "total-blocking-time": {
+                        "id": "total-blocking-time",
+                        "title": "Total Blocking Time",
+                        "score": 0.58,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 420,
+                        "displayValue": "420 ms"
+                      },
+                      "cumulative-layout-shift": {
+                        "id": "cumulative-layout-shift",
+                        "title": "Cumulative Layout Shift",
+                        "score": 0.9,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 0.08,
+                        "displayValue": "0.08"
+                      },
+                      "speed-index": {
+                        "id": "speed-index",
+                        "title": "Speed Index",
+                        "score": 0.66,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 4900,
+                        "displayValue": "4.9 s"
+                      },
+                      "render-blocking-resources": {
+                        "id": "render-blocking-resources",
+                        "title": "Eliminate render-blocking resources",
+                        "description": "Resources are blocking the first paint of your page. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+                        "score": 0.3,
+                        "scoreDisplayMode": "metricSavings",
+                        "displayValue": "Potential savings of 780 ms",
+                        "details": {
+                          "type": "opportunity",
+                          "overallSavingsMs": 780,
+                          "headings": [
+                            {
+                              "key": "url",
+                              "valueType": "url",
+                              "label": "URL"
+                            },
+                            {
+                              "key": "totalBytes",
+                              "valueType": "bytes",
+                              "label": "Transfer Size"
+                            },
+                            {
+                              "key": "wastedMs",
+                              "valueType": "timespanMs",
+                              "label": "Potential Savings"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "url": "https://shop.example/css/app.css",
+                              "totalBytes": 48200,
+                              "wastedMs": 540
+                            },
+                            {
+                              "url": "https://fonts.example/css2?family=Inter",
+                              "totalBytes": 1300,
+                              "wastedMs": 240
+                            }
+                          ]
+                        }
+                      },
+                      "uses-optimized-images": {
+                        "id": "uses-optimized-images",
+                        "title": "Efficiently encode images",
+                        "description": "Optimized images load faster.",
+                        "score": 0.5,
+                        "scoreDisplayMode": "metricSavings",
+                        "displayValue": "Potential savings of 312 KiB",
+                        "details": {
+                          "type": "opportunity",
+                          "overallSavingsMs": 300,
+                          "overallSavingsBytes": 319488,
+                          "headings": [
+                            {
+                              "key": "url",
+                              "valueType": "url",
+                              "label": "URL"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "url": "https://shop.example/img/hero.jpg"
+                            }
+                          ]
+                        }
+                      },
+                      "dom-size": {
+                        "id": "dom-size",
+                        "title": "Avoid an excessive DOM size",
+                        "score": 0.6,
+                        "scoreDisplayMode": "numeric",
+                        "displayValue": "1,840 elements"
+                      },
+                      "color-contrast": {
+                        "id": "color-contrast",
+                        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+                        "score": 0,
+                        "scoreDisplayMode": "binary",
+                        "details": {
+                          "type": "table",
+                          "headings": [
+                            {
+                              "key": "node",
+                              "valueType": "node",
+                              "label": "Failing Elements"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "node": {
+                                "type": "node",
+                                "snippet": "&lt;a class=\"muted\">Terms&lt;/a>",
+                                "selector": "footer a.muted"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "image-alt": {
+                        "id": "image-alt",
+                        "title": "Image elements have [alt] attributes",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      },
+                      "is-on-https": {
+                        "id": "is-on-https",
+                        "title": "Uses HTTPS",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      },
+                      "document-title": {
+                        "id": "document-title",
+                        "title": "Document has a &lt;title> element",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      }
+                    }
+                  }
+                }
+              </template>
+            </vt-lighthouse>
           </template>
         </article>
       </section>

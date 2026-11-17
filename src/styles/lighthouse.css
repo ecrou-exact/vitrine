@@ -1,0 +1,366 @@
+/*
+ * Lighthouse reports: score gauges, field data with their distribution, lab metrics,
+ * opportunities with their savings, and audits by category. Ratings are written in words for
+ * screen readers; colors and shapes repeat them.
+ */
+.lh-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.lh-muted {
+  color: var(--_fg-muted);
+}
+
+.lh-label {
+  margin: 0 0 var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.lh-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+}
+
+.lh-url {
+  font-family: var(--_font-mono);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.lh-chip {
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+}
+
+.lh-chip.r-good {
+  border-color: var(--_success);
+}
+
+.lh-chip.r-poor {
+  border-color: var(--_danger);
+}
+
+.lh-scores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--_space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lh-gauge {
+  display: grid;
+  justify-items: center;
+  gap: var(--_space-1);
+  width: 7.5em;
+  text-align: center;
+}
+
+.lh-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+}
+
+.lh-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lh-track {
+  stroke: var(--_border);
+}
+
+.lh-arc {
+  stroke: var(--_border-strong);
+  stroke-linecap: round;
+}
+
+.r-good .lh-arc {
+  stroke: var(--_success);
+}
+
+.r-average .lh-arc {
+  stroke: var(--_warning);
+}
+
+.r-poor .lh-arc {
+  stroke: var(--_danger);
+}
+
+.lh-score {
+  font-size: 1.5em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.lh-gauge-title {
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.lh-field {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.lh-field-scope {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.lh-field-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+  margin: 0;
+}
+
+.lh-field-list,
+.lh-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
+  gap: var(--_space-2) var(--_space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lh-field-metric {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 2px var(--_space-2);
+}
+
+.lh-field-metric .lh-dist {
+  grid-column: 1 / -1;
+}
+
+.lh-metric-name {
+  font-weight: 600;
+}
+
+.lh-metric-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.lh-rating {
+  font-size: var(--_font-size-small);
+}
+
+.r-good > .lh-rating,
+.r-good > .lh-metric-value {
+  color: var(--_success);
+}
+
+.r-average > .lh-rating,
+.r-average > .lh-metric-value {
+  color: var(--_warning);
+}
+
+.r-poor > .lh-rating,
+.r-poor > .lh-metric-value {
+  color: var(--_danger);
+}
+
+.lh-dist {
+  display: flex;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--_border);
+}
+
+.lh-dist > .r-good {
+  background: var(--_success);
+}
+
+.lh-dist > .r-average {
+  background: var(--_warning);
+}
+
+.lh-dist > .r-poor {
+  background: var(--_danger);
+}
+
+.lh-metric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-2);
+  padding: var(--_space-1) 0;
+  border-bottom: 1px solid var(--_border);
+}
+
+.lh-metric .lh-metric-value {
+  flex-basis: 100%;
+  margin-inline-start: 18px;
+  font-size: 1.4em;
+}
+
+/* Shapes as well as colors: circle good, square needs improvement, triangle poor. */
+.lh-dot {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--_border-strong);
+}
+
+.r-good > .lh-dot,
+.r-good > summary > .lh-dot {
+  background: var(--_success);
+}
+
+.r-average > .lh-dot,
+.r-average > summary > .lh-dot {
+  border-radius: 1px;
+  background: var(--_warning);
+}
+
+.r-poor > .lh-dot,
+.r-poor > summary > .lh-dot {
+  width: 0;
+  height: 0;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid var(--_danger);
+  border-left: 6px solid transparent;
+  border-radius: 0;
+  background: none;
+}
+
+.lh-category {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.lh-category h3 {
+  margin: 0;
+  font-size: 1.05em;
+}
+
+.lh-opps,
+.lh-failed,
+.lh-audits {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.lh-audit {
+  border-bottom: 1px solid var(--_border);
+}
+
+.lh-audit summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  padding: var(--_space-1) 0;
+  cursor: pointer;
+}
+
+.lh-audit-title {
+  flex: 1 1 16em;
+}
+
+.lh-saving {
+  display: inline-flex;
+  flex: 0 1 16em;
+  align-items: center;
+  gap: var(--_space-2);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.lh-saving-bar {
+  display: inline-block;
+  height: 8px;
+  max-width: 8em;
+  border-radius: 4px;
+  background: var(--_warning);
+}
+
+.lh-audit-body {
+  display: grid;
+  gap: var(--_space-2);
+  padding: 0 0 var(--_space-2) 18px;
+}
+
+.lh-audit-body p {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.lh-audit-body a {
+  color: var(--_accent-fg);
+}
+
+.lh-scroll {
+  overflow-x: auto;
+}
+
+.lh-items {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--_font-size-small);
+}
+
+.lh-items th,
+.lh-items td {
+  padding: 3px var(--_space-2) 3px 0;
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.lh-items th {
+  color: var(--_fg-muted);
+  font-weight: 500;
+}
+
+.lh-items code {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+}
+
+.lh-fold summary,
+.lh-warnings summary {
+  color: var(--_fg-muted);
+  cursor: pointer;
+}
+
+.lh-plain {
+  margin: var(--_space-1) 0;
+  padding-inline-start: 1.25em;
+}
+
+.lh-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

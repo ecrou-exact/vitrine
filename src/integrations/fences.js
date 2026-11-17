@@ -48,6 +48,9 @@ export const ELEMENTS = Object.freeze({
   semver: 'vt-semver',
   contrast: 'vt-contrast',
   sbom: 'vt-sbom', cyclonedx: 'vt-sbom', spdx: 'vt-sbom',
+  dockerfile: 'vt-dockerfile', docker: 'vt-dockerfile', containerfile: 'vt-dockerfile',
+  lighthouse: 'vt-lighthouse',
+  axe: 'vt-a11y', a11y: 'vt-a11y',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

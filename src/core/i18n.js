@@ -81,7 +81,10 @@
  *   | keyof typeof import('../components/pcap/strings.js').en
  *   | keyof typeof import('../components/semver/strings.js').en
  *   | keyof typeof import('../components/contrast/strings.js').en
- *   | keyof typeof import('../components/sbom/strings.js').en} StringKey
+ *   | keyof typeof import('../components/sbom/strings.js').en
+ *   | keyof typeof import('../components/dockerfile/strings.js').en
+ *   | keyof typeof import('../components/lighthouse/strings.js').en
+ *   | keyof typeof import('../components/a11y/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

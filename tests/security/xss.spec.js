@@ -910,6 +910,29 @@ ${p}`,
     wrap: (p) =>
       JSON.stringify({ spdxVersion: p, name: p, creationInfo: { creators: [`Tool: ${p}`] }, packages: [{ SPDXID: 'a', name: p, versionInfo: p, licenseConcluded: p, supplier: p }] }), // prettier-ignore
   },
+  {
+    tag: 'vt-dockerfile',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `# ${p}\nFROM ${p} AS ${p}\nRUN ${p} <<EOF\n${p}\nEOF\nCOPY --from=${p} ${p} ${p}\nENV ${p}=${p}\nLABEL a="${p}"\n${p}`,
+  },
+  {
+    tag: 'vt-dockerfile',
+    attrs: { variant: 'full', view: 'source' },
+    wrap: (p) => `FROM a:1\nRUN echo "${p}" $${p}\n# ${p}`,
+  },
+  {
+    tag: 'vt-lighthouse',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ lighthouseResult: { finalDisplayedUrl: p, lighthouseVersion: p, fetchTime: p, runWarnings: [p], configSettings: { formFactor: p }, categories: { [p]: { title: p, score: 0.5, auditRefs: [{ id: 'a' }, { id: 'b' }] } }, audits: { a: { title: p, description: `${p} [${p}](javascript:${p})`, score: 0, scoreDisplayMode: 'binary', displayValue: p, details: { overallSavingsMs: 5, headings: [{ key: 'u', valueType: 'url', label: p }, { key: 'n', valueType: 'node', label: p }], items: [{ u: p, n: { type: 'node', snippet: p } }] } }, b: { title: p, score: 1 } } }, loadingExperience: { overall_category: p, metrics: { LARGEST_CONTENTFUL_PAINT_MS: { percentile: 1, category: p, distributions: [{ proportion: 1 }] } } } }), // prettier-ignore
+  },
+  {
+    tag: 'vt-a11y',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ url: p, testEngine: { name: p, version: p }, violations: [{ id: p, impact: 'critical', tags: [p, 'wcag143'], help: p, description: p, helpUrl: `javascript:${p}`, nodes: [{ html: p, target: [p, [p, p]], failureSummary: `Fix any of the following:\n  ${p}` }] }], incomplete: [{ id: p, help: p, nodes: [{ html: p, target: [p] }] }], passes: [] }), // prettier-ignore
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

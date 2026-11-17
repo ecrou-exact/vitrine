@@ -235,7 +235,7 @@ function readVulns(value, sbom) {
     const vuln = {
       id,
       source: text(source.name, 60),
-      url: safeLink(source.url) ?? (/^CVE-\d{4}-\d+$/.test(id) ? `https://nvd.nist.gov/vuln/detail/${id}` : /^GHSA(-[a-z0-9]{4}){3}$/.test(id) ? `https://github.com/advisories/${id}` : null), // prettier-ignore
+      url: (/^https?:\/\//i.test(text(source.url, 2000)) ? safeLink(source.url) : null) ?? (/^CVE-\d{4}-\d+$/.test(id) ? `https://nvd.nist.gov/vuln/detail/${id}` : /^GHSA(-[a-z0-9]{4}){3}$/.test(id) ? `https://github.com/advisories/${id}` : null), // prettier-ignore
       severity: word ? severityWord(word) : score !== null ? severityOfScore(score) : 'unknown',
       score,
       method: rating ? text(rating.method, 20) : '',

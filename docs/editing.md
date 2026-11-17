@@ -176,6 +176,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-semver>`       | `content` (versions, or the range then versions); the range field edits the range alone  |
 | `<vt-contrast>`     | `content` (pairs or a palette); the color fields edit a single pair                      |
 | `<vt-sbom>`         | `content` (JSON)                                                                         |
+| `<vt-dockerfile>`   | `content`; the stages and problems follow as you type                                    |
+| `<vt-lighthouse>`   | `content` (JSON)                                                                         |
+| `<vt-a11y>`         | `content` (JSON)                                                                         |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

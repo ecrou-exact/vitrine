@@ -1040,6 +1040,34 @@ PORT     STATE SERVICE VERSION
               </vt-sbom>
               <a href="examples.html#sbom">SBOM examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-dockerfile&gt;</h3>
+              <p>Dockerfiles as build stages, with each instruction and its problems.</p>
+              <vt-dockerfile class="preview" lang-ui="en" tabs="false">
+                <template>FROM node:latest
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD npm start</template>
+              </vt-dockerfile>
+              <a href="examples.html#dockerfile">Dockerfile examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-lighthouse&gt;</h3>
+              <p>Lighthouse reports: scores, Core Web Vitals and what to fix.</p>
+              <vt-lighthouse class="preview" lang-ui="en" tabs="false">
+                <template>{"lighthouseResult":{"finalDisplayedUrl":"https://shop.example/","categories":{"performance":{"title":"Performance","score":0.62,"auditRefs":[]},"accessibility":{"title":"Accessibility","score":0.88,"auditRefs":[]},"best-practices":{"title":"Best Practices","score":0.96,"auditRefs":[]},"seo":{"title":"SEO","score":1,"auditRefs":[]}},"audits":{}}}</template>
+              </vt-lighthouse>
+              <a href="examples.html#lighthouse">Lighthouse examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-a11y&gt;</h3>
+              <p>axe-core results by impact, with WCAG criteria and fixes.</p>
+              <vt-a11y class="preview" lang-ui="en" filters="false" tabs="false">
+                <template>{"testEngine":{"name":"axe-core","version":"4.10.2"},"violations":[{"id":"label","impact":"critical","tags":["wcag2a","wcag412"],"help":"Form elements must have labels","nodes":[{"html":"&lt;input name=\"zip\">","target":["input[name=\"zip\"]"],"failureSummary":"Fix any of the following:\n  Form element does not have an explicit &lt;label>"}]}],"incomplete":[],"passes":[{},{}]}</template>
+              </vt-a11y>
+              <a href="examples.html#a11y">Accessibility examples</a>
+            </article>
           </div>
         </div>
       </section>

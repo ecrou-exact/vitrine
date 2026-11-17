@@ -1,0 +1,86 @@
+// @ts-check
+/**
+ * Interface strings of <vt-a11y>, registered by its module with `defineStrings()`
+ * so other modules do not carry them.
+ *
+ * @module components/a11y/strings
+ */
+
+export const en = Object.freeze({
+  a11yTabs: 'Accessibility results',
+  a11yTabViolations: 'Violations ({count})',
+  a11yTabReview: 'To review ({count})',
+  a11yInvalidEmpty: 'No accessibility results.',
+  a11yInvalidJson: 'The results are not valid JSON: {detail}',
+  a11yInvalidFormat: 'These are not axe-core or Pa11y results.',
+  a11yRules: '{count} rules failed',
+  a11yElements: 'on {count} elements',
+  a11yPasses: '{count} rules passed',
+  a11yInapplicable: '{count} not applicable',
+  a11yPages: '{count} pages',
+  a11yNone: 'No violation found. Automated tools find only part of the problems: test with a keyboard and a screen reader too.', // prettier-ignore
+  a11yNoReview: 'Nothing left to review by hand.',
+  a11yNoMatch: 'No rule matches the filters.',
+  a11yImpact: 'Impact',
+  a11yImpact_critical: 'Critical',
+  a11yImpact_serious: 'Serious',
+  a11yImpact_moderate: 'Moderate',
+  a11yImpact_minor: 'Minor',
+  a11yImpact_unknown: 'Unrated',
+  a11yAll: 'All',
+  a11yFilter: 'Filter: rule, selector, criterion',
+  a11yFilters: 'Filters',
+  a11yCriteria: 'WCAG {list}',
+  a11yLevel: 'level {level}',
+  a11yBestPractice: 'best practice',
+  a11yNodes: '{count} elements',
+  a11yNode: '1 element',
+  a11yNodesMore: '{count} more elements',
+  a11yElement: 'Element',
+  a11yHtml: 'HTML',
+  a11yFix: 'How to fix',
+  a11yLearnMore: 'Learn more about {rule}',
+  a11yPage: 'Page: {page}',
+  a11yCopyCsv: 'CSV',
+  a11yCopySelectors: 'Copy the selectors',
+});
+
+/** @type {Partial<Record<keyof typeof en, string>>} */
+export const fr = {
+  a11yTabs: 'Résultats d’accessibilité',
+  a11yTabViolations: 'Violations ({count})',
+  a11yTabReview: 'À vérifier ({count})',
+  a11yInvalidEmpty: 'Aucun résultat d’accessibilité.',
+  a11yInvalidJson: 'Les résultats ne sont pas du JSON valide : {detail}',
+  a11yInvalidFormat: 'Ce ne sont pas des résultats axe-core ou Pa11y.',
+  a11yRules: '{count} règles en échec',
+  a11yElements: 'sur {count} éléments',
+  a11yPasses: '{count} règles réussies',
+  a11yInapplicable: '{count} sans objet',
+  a11yPages: '{count} pages',
+  a11yNone: 'Aucune violation trouvée. Les outils automatiques ne trouvent qu’une partie des problèmes : tester aussi au clavier et avec un lecteur d’écran.', // prettier-ignore
+  a11yNoReview: 'Rien à vérifier à la main.',
+  a11yNoMatch: 'Aucune règle ne correspond aux filtres.',
+  a11yImpact: 'Impact',
+  a11yImpact_critical: 'Critique',
+  a11yImpact_serious: 'Grave',
+  a11yImpact_moderate: 'Modéré',
+  a11yImpact_minor: 'Mineur',
+  a11yImpact_unknown: 'Non évalué',
+  a11yAll: 'Tous',
+  a11yFilter: 'Filtrer : règle, sélecteur, critère',
+  a11yFilters: 'Filtres',
+  a11yCriteria: 'WCAG {list}',
+  a11yLevel: 'niveau {level}',
+  a11yBestPractice: 'bonne pratique',
+  a11yNodes: '{count} éléments',
+  a11yNode: '1 élément',
+  a11yNodesMore: '{count} éléments de plus',
+  a11yElement: 'Élément',
+  a11yHtml: 'HTML',
+  a11yFix: 'Comment corriger',
+  a11yLearnMore: 'En savoir plus sur {rule}',
+  a11yPage: 'Page : {page}',
+  a11yCopyCsv: 'CSV',
+  a11yCopySelectors: 'Copier les sélecteurs',
+};

@@ -77,6 +77,9 @@ import { VtPcap } from './components/pcap/vt-pcap.js';
 import { VtSemver } from './components/semver/vt-semver.js';
 import { VtContrast } from './components/contrast/vt-contrast.js';
 import { VtSbom } from './components/sbom/vt-sbom.js';
+import { VtDockerfile } from './components/dockerfile/vt-dockerfile.js';
+import { VtLighthouse } from './components/lighthouse/vt-lighthouse.js';
+import { VtA11y } from './components/a11y/vt-a11y.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -176,6 +179,9 @@ export {
   VtSemver,
   VtContrast,
   VtSbom,
+  VtDockerfile,
+  VtLighthouse,
+  VtA11y,
   registerIconSet,
   configure,
   getConfig,
@@ -286,6 +292,9 @@ export const registry = new Map(
     ['vt-semver', VtSemver],
     ['vt-contrast', VtContrast],
     ['vt-sbom', VtSbom],
+    ['vt-dockerfile', VtDockerfile],
+    ['vt-lighthouse', VtLighthouse],
+    ['vt-a11y', VtA11y],
   ]),
 );
 
@@ -372,6 +381,9 @@ const TYPES = /** @type {const} */ ({
   semver: 'vt-semver',
   contrast: 'vt-contrast',
   sbom: 'vt-sbom',
+  dockerfile: 'vt-dockerfile',
+  lighthouse: 'vt-lighthouse',
+  a11y: 'vt-a11y',
 });
 
 /**
