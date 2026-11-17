@@ -416,3 +416,76 @@ export function certFromData(value) {
     otherwise: () => ({ content: '' }),
   });
 }
+
+// ---------------------------------------------------------------- security
+
+/**
+ * A text, `{ text }`, or a list of indicators (strings, or `{ value }` / `{ indicator }`
+ * objects such as MISP attributes), one per line.
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function iocFromData(value) {
+  const list = listIn(value, ['indicators', 'iocs', 'Attribute', 'attributes', 'objects']);
+  if (list)
+    return {
+      content: list
+        .map((item) =>
+          isObject(item) ? plain(item.value ?? item.indicator ?? item.name ?? '') : plain(item),
+        ) // prettier-ignore
+        .filter(Boolean)
+        .join('\n'),
+    };
+  return wrapped(value, { keys: ['text', 'content', 'report', 'body'] });
+}
+
+/**
+ * `"CVSS:…"`, `{ vector, score }`, or NVD and OSV objects (`vectorString`, `cvssData`,
+ * `baseScore`).
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function cvssFromData(value) {
+  const inner = isObject(value) && isObject(value.cvssData) ? value.cvssData : value;
+  return wrapped(inner, {
+    keys: ['vector', 'vectorString', 'cvss', 'score_vector'],
+    attributes: { baseScore: 'score', score: 'score' },
+    otherwise: () => ({ content: '' }),
+  });
+}
+
+/**
+ * Raw headers as a string; an object of headers (`{ name: value }`, a list value for a
+ * repeated header); a list of `{ name, value }` or `[name, value]`; or a HAR entry or
+ * response (`{ response: { status, httpVersion, headers } }`).
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function headersFromData(value) {
+  if (typeof value === 'string') return { content: value };
+  const response = isObject(value) && isObject(value.response) ? value.response : value;
+  /** @type {string[]} */
+  const lines = [];
+  if (isObject(response) && typeof response.status === 'number')
+    lines.push(`${plain(response.httpVersion) || 'HTTP/1.1'} ${response.status} ${plain(response.statusText)}`.trim()); // prettier-ignore
+  const headers = isObject(response) && 'headers' in response ? response.headers : response;
+  /**
+   * @param {unknown} name
+   * @param {unknown} item
+   */
+  const add = (name, item) => {
+    const key = plain(name).replace(/[\r\n:]/g, '');
+    if (!key) return;
+    for (const v of Array.isArray(item) ? item : [item])
+      lines.push(`${key}: ${plain(v).replace(/[\r\n]+/g, ' ')}`);
+  };
+  if (Array.isArray(headers)) {
+    for (const item of headers)
+      if (Array.isArray(item)) add(item[0], item[1]);
+      else if (isObject(item)) add(item.name, item.value);
+  } else if (isObject(headers)) for (const [name, item] of Object.entries(headers)) add(name, item);
+  return { content: lines.join('\n') };
+}

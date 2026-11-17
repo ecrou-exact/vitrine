@@ -884,6 +884,38 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <vt-repo class="preview" lang-ui="en" now="2026-11-15T12:00:00Z" json='{"repo":{"full_name":"acme/rocket","name":"rocket","owner":{"login":"acme"},"html_url":"https://github.com/acme/rocket","clone_url":"https://github.com/acme/rocket.git","description":"A fast, friendly task launcher for monorepos.","homepage":"https://rocket.example.com","stargazers_count":12480,"forks_count":684,"open_issues_count":42,"subscribers_count":96,"license":{"spdx_id":"MIT","name":"MIT License"},"topics":["cli","monorepo","task-runner","typescript"],"pushed_at":"2026-11-13T12:00:00Z","default_branch":"main"},"languages":{"TypeScript":812000,"JavaScript":64000,"CSS":21000,"Shell":9000,"Dockerfile":2000},"release":{"tag_name":"v2.0.0","published_at":"2026-11-10T09:00:00Z","html_url":"https://github.com/acme/rocket/releases/tag/v2.0.0"}}'></vt-repo>
               <a href="examples.html#repo">Repository examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-ioc&gt;</h3>
+              <p>
+                Indicators of compromise pulled from any text, defanged, ready for STIX or MISP.
+              </p>
+              <vt-ioc class="preview" lang-ui="en" filters="false">
+                <template>Callback to hxxps://cdn-update[.]example[.]xyz/p from 45.33.32[.]156, dropper d41d8cd98f00b204e9800998ecf8427e, CVE-2024-3400.</template>
+              </vt-ioc>
+              <a href="examples.html#ioc">IOC examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-cvss&gt;</h3>
+              <p>
+                CVSS vectors as a score, a severity and every metric in words. A calculator too.
+              </p>
+              <vt-cvss class="preview" lang-ui="en" metrics="false">
+                <template>CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N</template>
+              </vt-cvss>
+              <a href="examples.html#cvss">CVSS examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-headers&gt;</h3>
+              <p>
+                HTTP security headers graded and explained, with the CSP as a table.
+              </p>
+              <vt-headers class="preview" lang-ui="en" passed="false" policy="false" headers="false">
+                <template>strict-transport-security: max-age=86400
+x-content-type-options: nosniff
+server: nginx/1.18.0</template>
+              </vt-headers>
+              <a href="examples.html#headers">Header examples</a>
+            </article>
           </div>
         </div>
       </section>

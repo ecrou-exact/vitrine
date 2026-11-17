@@ -1,0 +1,220 @@
+/*
+ * CVSS vectors: the score with its severity and a bar, the vector, and the metrics by group.
+ * Severity is always written in words; the color only repeats it.
+ */
+.cvss-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.cvss-score {
+  --_sev: var(--_fg-muted);
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  border: 1px solid color-mix(in srgb, var(--_sev) 40%, var(--_border));
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_sev) 6%, var(--_surface));
+}
+
+.cvss-score.sev-low {
+  --_sev: var(--_info);
+}
+
+.cvss-score.sev-medium {
+  --_sev: var(--_warning);
+}
+
+.cvss-score.sev-high {
+  --_sev: color-mix(in srgb, var(--_warning) 45%, var(--_danger));
+}
+
+.cvss-score.sev-critical {
+  --_sev: var(--_danger);
+}
+
+.cvss-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-3);
+}
+
+.cvss-number {
+  color: var(--_fg);
+  font-size: 2.25em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cvss-severity {
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_sev);
+  border-radius: var(--_radius-full);
+  color: var(--_sev);
+  font-weight: 600;
+}
+
+.cvss-gauge {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+}
+
+.cvss-fill {
+  display: block;
+  width: calc(var(--_value, 0) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--_sev);
+}
+
+.cvss-subscores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2) var(--_space-5);
+  margin: 0;
+}
+
+.cvss-subscores div {
+  display: flex;
+  gap: var(--_space-1);
+}
+
+.cvss-subscores dt {
+  color: var(--_fg-muted);
+}
+
+.cvss-subscores dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.cvss-note {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.cvss-vector,
+.cvss-raw {
+  margin: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.cvss-prefix {
+  color: var(--_syntax-keyword);
+}
+
+.cvss-pair {
+  color: var(--_syntax-string);
+}
+
+.cvss-slash {
+  color: var(--_fg-muted);
+}
+
+.cvss-groups {
+  display: grid;
+  gap: var(--_space-4);
+}
+
+.cvss-group {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.cvss-title {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cvss-table {
+  width: 100%;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.cvss-table th,
+.cvss-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.cvss-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.cvss-table thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.cvss-table tbody th {
+  font-weight: 500;
+}
+
+.cvss-code {
+  display: inline-block;
+  min-width: 3ch;
+  margin-inline-end: var(--_space-2);
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+}
+
+.cvss-meaning,
+.cvss-undefined {
+  color: var(--_fg-muted);
+}
+
+.cvss-select {
+  max-width: 100%;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+}
+
+.cvss-select:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.cvss-edit > .editor-body {
+  max-height: min(30vh, 160px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .cvss-meaning,
+  .cvss-table thead th:nth-child(3) {
+    display: none;
+  }
+}
