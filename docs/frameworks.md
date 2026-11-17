@@ -666,7 +666,10 @@ vt-cvss:not(:defined),
 vt-headers:not(:defined),
 vt-email:not(:defined),
 vt-dns:not(:defined),
-vt-nmap:not(:defined) {
+vt-nmap:not(:defined),
+vt-url:not(:defined),
+vt-hash:not(:defined),
+vt-waterfall:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

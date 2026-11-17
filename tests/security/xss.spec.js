@@ -753,6 +753,33 @@ const MODES = [
     wrap: (p) =>
       `<nmaprun args="${p.replace(/[<&"]/g, '')}"><host><address addr="1.2.3.4" addrtype="ipv4"/><ports><port protocol="tcp" portid="80"><state state="open"/><service name="http" product="${p.replace(/[<&"]/g, '')}"/><script id="x" output="${p.replace(/[<&"]/g, '')}"/></port></ports></host></nmaprun>`,
   },
+  {
+    tag: 'vt-url',
+    attrs: { variant: 'full', defang: 'false', chain: '' },
+    wrap: (p) =>
+      `javascript:${p}
+data:text/html,${p}
+https://${p}@x.example/${p}?q=${encodeURIComponent(p)}&next=https://y.example/${encodeURIComponent(p)}#${p}`,
+  },
+  {
+    tag: 'vt-hash',
+    attrs: { variant: 'full', expected: '' },
+    wrap: (p) => p,
+  },
+  {
+    tag: 'vt-waterfall',
+    attrs: { variant: 'full', defang: 'false' },
+    wrap: (p) =>
+      JSON.stringify({
+        log: {
+          pages: [{ id: 'p', title: p }],
+          entries: [
+            { pageref: 'p', startedDateTime: p, time: 1, _resourceType: p, serverIPAddress: p, request: { method: p, url: `https://x.example/${p}`, headers: [{ name: p, value: p }] }, response: { status: 302, statusText: p, httpVersion: p, redirectURL: `javascript:${p}`, headers: [{ name: p, value: p }], content: { mimeType: p, size: 1 } } }, // prettier-ignore
+            { pageref: 'p', request: { url: `javascript:${p}` }, response: { status: 200 } },
+          ],
+        },
+      }),
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

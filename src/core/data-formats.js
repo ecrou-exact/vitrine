@@ -527,3 +527,32 @@ export function dnsFromData(value) {
   }
   return { content: lines.join('\n').trim() };
 }
+
+/**
+ * A URL; a list of URLs (strings, or objects with `url`, `href`, `uri` or `value`); `{ url }`;
+ * `{ urls }`; or a redirect list, such as Lookyloo's `{ response: { redirects } }`.
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function urlFromData(value) {
+  /** @param {unknown} item @returns {string} */
+  const one = (item) => (isObject(item) ? plain(item.url ?? item.href ?? item.uri ?? item.value ?? '') : plain(item)); // prettier-ignore
+  const inner = isObject(value) && isObject(value.response) ? value.response : value;
+  const list = listIn(inner, ['urls', 'redirects', 'chain', 'links']);
+  if (list) return { content: list.map(one).filter(Boolean).join('\n') };
+  return { content: one(inner) };
+}
+
+/**
+ * A text to hash, or `{ text, expected }` (`expected`, `hash`, `sha256`… set `expected`).
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function hashFromData(value) {
+  return wrapped(value, {
+    keys: ['text', 'content', 'value'],
+    attributes: { expected: 'expected', hash: 'expected', sha256: 'expected', sha512: 'expected', algorithms: 'algorithms' }, // prettier-ignore
+  });
+}

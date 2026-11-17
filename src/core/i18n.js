@@ -72,7 +72,10 @@
  *   | keyof typeof import('../components/headers/strings.js').en
  *   | keyof typeof import('../components/email/strings.js').en
  *   | keyof typeof import('../components/dns/strings.js').en
- *   | keyof typeof import('../components/nmap/strings.js').en} StringKey
+ *   | keyof typeof import('../components/nmap/strings.js').en
+ *   | keyof typeof import('../components/url/strings.js').en
+ *   | keyof typeof import('../components/hash/strings.js').en
+ *   | keyof typeof import('../components/waterfall/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

@@ -1,0 +1,299 @@
+/*
+ * URLs taken apart: a card per URL with its verdict, the URL with its parts colored, the
+ * findings, the parts and parameters, and the URLs hidden in it. Verdicts and levels are
+ * written in words; colors only repeat them.
+ */
+.url-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.url-card {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.url-card.danger {
+  border-inline-start-color: var(--_danger);
+}
+
+.url-card.warning {
+  border-inline-start-color: var(--_warning);
+}
+
+.url-card.none {
+  border-inline-start-color: var(--_success);
+}
+
+.url-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.url-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  padding: 1px var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.url-verdict svg,
+.url-finding svg,
+.url-nested-title svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.url-verdict.danger {
+  color: var(--_danger);
+}
+
+.url-verdict.warning {
+  color: var(--_warning);
+}
+
+.url-verdict.none {
+  color: var(--_success);
+}
+
+.url-step {
+  color: var(--_fg-muted);
+  font-weight: 600;
+}
+
+.url-line {
+  margin: 0;
+  padding: var(--_space-2) var(--_space-3);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  line-height: var(--_line-height);
+  overflow-wrap: anywhere;
+}
+
+.url-line code {
+  font: inherit;
+}
+
+.u-scheme {
+  color: var(--_syntax-keyword);
+}
+
+.u-user {
+  color: var(--_danger);
+  text-decoration: line-through;
+}
+
+.u-sub {
+  color: var(--_fg-muted);
+}
+
+.u-domain {
+  color: var(--_fg);
+  font-weight: 700;
+}
+
+.u-port {
+  color: var(--_syntax-number);
+}
+
+.u-path {
+  color: var(--_syntax-string);
+}
+
+.u-query {
+  color: var(--_syntax-attr);
+}
+
+.u-fragment {
+  color: var(--_syntax-comment);
+}
+
+.url-findings {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.url-finding {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.url-finding svg {
+  margin-top: 3px;
+}
+
+.url-finding.danger svg {
+  color: var(--_danger);
+}
+
+.url-finding.warning svg {
+  color: var(--_warning);
+}
+
+.url-finding.info svg {
+  color: var(--_info);
+}
+
+.url-finding.danger {
+  font-weight: 600;
+}
+
+.url-details {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.url-parts,
+.url-params {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.url-parts th,
+.url-parts td,
+.url-params th,
+.url-params td {
+  padding: 4px var(--_space-3) 4px 0;
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.url-parts tr:last-child > *,
+.url-params tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.url-parts th,
+.url-params thead th {
+  color: var(--_fg-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.url-parts th {
+  width: 1%;
+}
+
+.url-params tbody th {
+  width: 1%;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.url-parts code,
+.url-params code {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.url-params tbody th code {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+.url-params tr.tracking code {
+  color: var(--_fg-muted);
+}
+
+.url-scroll {
+  overflow-x: auto;
+}
+
+.url-params-box summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.url-params-box[open] summary {
+  margin-bottom: var(--_space-1);
+}
+
+.url-tag {
+  margin-inline-start: var(--_space-1);
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+}
+
+.url-nested {
+  display: grid;
+  gap: var(--_space-2);
+  padding-inline-start: var(--_space-3);
+  border-inline-start: 2px dashed var(--_border-strong);
+}
+
+.url-nested-title {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-1);
+  margin: 0;
+  color: var(--_fg-muted);
+  font-weight: 600;
+}
+
+.url-chain {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-3);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.url-chain-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.url-chain-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.url-chain-domains li + li::before {
+  content: '→';
+  margin-inline-end: var(--_space-2);
+  color: var(--_fg-muted);
+}
+
+.url-chain-domains code {
+  font-family: var(--_font-mono);
+}
+
+.url-edit > .editor-body {
+  max-height: min(35vh, 240px);
+  border-bottom: 1px solid var(--_border);
+}

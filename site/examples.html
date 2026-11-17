@@ -124,17 +124,20 @@
             <option value="cvss">CVSS score</option>
             <option value="dns">DNS records</option>
             <option value="email">E-mail analysis</option>
+            <option value="hash">Hashes</option>
             <option value="http">HTTP</option>
             <option value="ioc">Indicators of compromise</option>
             <option value="job">Job</option>
             <option value="jwt">JWT</option>
             <option value="log">Log</option>
+            <option value="waterfall">Network waterfall</option>
             <option value="nmap">Nmap scan</option>
             <option value="openapi">OpenAPI</option>
             <option value="headers">Security headers</option>
             <option value="status">Status</option>
             <option value="test-report">Test report</option>
             <option value="trace">Trace</option>
+            <option value="url">URL analysis</option>
             <option value="workflow">Workflow run</option>
           </optgroup>
           <optgroup label="Project &amp; product">
@@ -3116,6 +3119,42 @@ TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         </article>
       </section>
 
+      <section class="example-group" id="hash" aria-labelledby="hash-title">
+        <h3 id="hash-title">&lt;vt-hash&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Verify a download</h4>
+            <p>
+              Paste the published checksum: the element finds the algorithm and says whether it
+              matches. Drop a file on it to hash the file instead; it never leaves the page.
+            </p>
+          </div>
+          <template>
+            <vt-hash
+              variant="full"
+              label="release notes"
+              expected="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  notes.txt"
+              ><template>abc</template></vt-hash
+            >
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A Subresource Integrity value</h4>
+            <p>
+              Only SHA-384, written as an <code>integrity</code> value, to copy into a script tag.
+            </p>
+          </div>
+          <template>
+            <vt-hash algorithms="sha384" format="sri" compare="false"
+              ><template>console.log('Hello, Vitrine');</template></vt-hash
+            >
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="http" aria-labelledby="http-title">
         <h3 id="http-title">&lt;vt-http&gt;</h3>
 
@@ -3340,6 +3379,59 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
                 [18:00:09] ERROR job 1842 failed: timeout after 30s
               </template>
             </vt-log>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="waterfall" aria-labelledby="waterfall-title">
+        <h3 id="waterfall-title">&lt;vt-waterfall&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A capture of a phishing page</h4>
+            <p>
+              A HAR file as Lookyloo or Playwright exports it: the short link redirects to the
+              page, a tracker and an image load from other domains, the image over HTTP, and a
+              request fails. Open a row for its timings and headers, or switch to the domains.
+            </p>
+          </div>
+          <template>
+            <vt-waterfall variant="full" label="capture.har">
+              <template>
+                {
+                "log": {
+                  "creator": { "name": "Lookyloo", "version": "1.30" },
+                  "pages": [{ "id": "page_1", "title": "Sign in", "startedDateTime": "2026-11-17T10:00:00.000Z", "pageTimings": { "onContentLoad": 520, "onLoad": 780 } }],
+                  "entries": [
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.000Z", "time": 90, "_resourceType": "document", "serverIPAddress": "203.0.113.20",
+                      "request": { "method": "GET", "url": "http://bit.example/x7", "httpVersion": "HTTP/1.1", "headers": [] },
+                      "response": { "status": 301, "statusText": "Moved Permanently", "httpVersion": "HTTP/1.1", "redirectURL": "https://login.shop.example/signin", "headers": [{ "name": "Location", "value": "https://login.shop.example/signin" }], "content": { "size": 0, "mimeType": "text/html" }, "bodySize": 0, "headersSize": 180 },
+                      "timings": { "blocked": 2, "dns": 20, "connect": 28, "send": 1, "wait": 37, "receive": 2 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.100Z", "time": 240, "_resourceType": "document", "serverIPAddress": "198.51.100.7",
+                      "request": { "method": "GET", "url": "https://login.shop.example/signin", "httpVersion": "HTTP/2", "headers": [{ "name": "User-Agent", "value": "Mozilla/5.0" }] },
+                      "response": { "status": 200, "httpVersion": "HTTP/2", "headers": [{ "name": "Content-Type", "value": "text/html; charset=utf-8" }], "content": { "size": 18400, "mimeType": "text/html" }, "bodySize": 6200, "headersSize": 300 },
+                      "timings": { "blocked": 1, "dns": 15, "connect": 60, "ssl": 35, "send": 1, "wait": 120, "receive": 43 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.350Z", "time": 110, "_resourceType": "stylesheet", "serverIPAddress": "198.51.100.7",
+                      "request": { "method": "GET", "url": "https://login.shop.example/site.css", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 24000, "mimeType": "text/css" }, "bodySize": 5100, "headersSize": 200 },
+                      "timings": { "send": 0, "wait": 70, "receive": 40 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.360Z", "time": 190, "_resourceType": "script", "serverIPAddress": "192.0.2.50",
+                      "request": { "method": "GET", "url": "https://cdn.tracker.example/t.js?id=42", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 31000, "mimeType": "text/javascript" }, "bodySize": 9800, "headersSize": 150 },
+                      "timings": { "dns": 30, "connect": 50, "ssl": 25, "send": 1, "wait": 60, "receive": 49 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.480Z", "time": 70, "_resourceType": "image",
+                      "request": { "method": "GET", "url": "http://img.other.example/logo.png", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 4000, "mimeType": "image/png" }, "bodySize": 4000, "headersSize": 100 },
+                      "timings": { "dns": 12, "connect": 18, "send": 0, "wait": 30, "receive": 10 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.600Z", "time": 45, "_resourceType": "fetch",
+                      "request": { "method": "POST", "url": "https://collect.other.example/api/c", "headers": [] },
+                      "response": { "status": 0, "headers": [], "content": { "size": -1, "mimeType": "" } },
+                      "timings": { "send": 0, "wait": 45, "receive": 0 } }
+                  ]
+                }
+              }
+              </template>
+            </vt-waterfall>
           </template>
         </article>
       </section>
@@ -3715,6 +3807,52 @@ AssertionError: assert 404 == 200</failure>
                 ]
               </template>
             </vt-trace>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="url" aria-labelledby="url-title">
+        <h3 id="url-title">&lt;vt-url&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Phishing links taken apart</h4>
+            <p>
+              A host before the <code>@</code>, a homograph in Cyrillic letters, a deceptive
+              subdomain carrying the victim's address, and a Google redirect to another site:
+              each URL gets a verdict, its findings and its parts. URLs are defanged and never
+              links.
+            </p>
+          </div>
+          <template>
+            <vt-url variant="full">
+              <template>
+                https://www.paypal.com@evil.example/login
+                https://xn--80ak6aa92e.com/
+                https://paypal.com.secure-login.xyz/verify?email=alice@example.org
+                https://www.google.com/url?q=https://evil.example/x&amp;sa=D&amp;utm_source=mail
+              </template>
+            </vt-url>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A redirect chain</h4>
+            <p>
+              With <code>chain</code>, the lines are the steps of a redirect chain: the domains
+              crossed, and the step that drops HTTPS.
+            </p>
+          </div>
+          <template>
+            <vt-url chain parts="false">
+              <template>
+                https://t.example/c/8f2a
+                https://ads.example/r?to=http%3A%2F%2Fpromo.example%2Fwin
+                http://promo.example/win
+                https://shop.example/offer
+              </template>
+            </vt-url>
           </template>
         </article>
       </section>

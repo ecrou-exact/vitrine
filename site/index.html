@@ -957,6 +957,36 @@ PORT     STATE SERVICE VERSION
               </vt-nmap>
               <a href="examples.html#nmap">Nmap examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-url&gt;</h3>
+              <p>
+                URLs taken apart and checked: hosts before @, homographs, hidden redirects.
+              </p>
+              <vt-url class="preview" lang-ui="en" parts="false">
+                <template>https://www.paypal.com@evil.example/login</template>
+              </vt-url>
+              <a href="examples.html#url">URL examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-hash&gt;</h3>
+              <p>
+                MD5 to SHA-512 of a text or a file, in the page, compared with a fingerprint.
+              </p>
+              <vt-hash class="preview" lang-ui="en" algorithms="sha256 sha512" file="false" expected="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad">
+                <template>abc</template>
+              </vt-hash>
+              <a href="examples.html#hash">Hash examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-waterfall&gt;</h3>
+              <p>
+                HAR files as a network waterfall, with redirects and third parties.
+              </p>
+              <vt-waterfall class="preview" lang-ui="en" filters="false" tabs="false">
+                <template>{"log":{"pages":[{"id":"p","title":"shop.example","startedDateTime":"2026-11-17T10:00:00.000Z","pageTimings":{"onContentLoad":300,"onLoad":420}}],"entries":[{"pageref":"p","startedDateTime":"2026-11-17T10:00:00.000Z","time":180,"_resourceType":"document","request":{"method":"GET","url":"https://shop.example/"},"response":{"status":200,"content":{"size":18000,"mimeType":"text/html"},"bodySize":6000},"timings":{"dns":15,"connect":40,"ssl":25,"send":1,"wait":80,"receive":19}},{"pageref":"p","startedDateTime":"2026-11-17T10:00:00.200Z","time":120,"_resourceType":"script","request":{"method":"GET","url":"https://cdn.tracker.example/t.js"},"response":{"status":200,"content":{"size":9000,"mimeType":"text/javascript"},"bodySize":3000},"timings":{"dns":20,"connect":30,"ssl":20,"wait":40,"receive":10}}]}}</template>
+              </vt-waterfall>
+              <a href="examples.html#waterfall">Waterfall examples</a>
+            </article>
           </div>
         </div>
       </section>

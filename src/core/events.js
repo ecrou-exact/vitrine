@@ -103,6 +103,10 @@ export const EVENTS = Object.freeze({
   ROTATE: 'vt-rotate',
   /** Consent: a choice was made or read back. Detail: `{ categories, action, id }`. */
   CONSENT: 'vt-consent',
+  /** Hash: the hashes of the text or file were computed. Detail: `{ source, name, size, hashes }`. */
+  HASH: 'vt-hash',
+  /** Hash: a fingerprint was compared. Detail: `{ state, algorithm }`. */
+  VERIFY: 'vt-verify',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

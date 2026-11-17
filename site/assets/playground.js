@@ -121,6 +121,61 @@ const SAMPLES = {
     'Authentication-Results: mx.example.org; spf=softfail smtp.mailfrom=bulk-sender.xyz; dkim=none; dmarc=fail\nReceived: from unknown ([203.0.113.66]) by mx.example.org with SMTP; Tue, 17 Nov 2026 10:00:02 +0100\nFrom: "service@paypal.com" <security@paypa1-support.xyz>\nReply-To: help@other-domain.example\nTo: alice@example.org\nSubject: Action required on your account\nDate: Tue, 17 Nov 2026 09:59:58 +0100\nContent-Type: text/html; charset=utf-8\n\n<p>Please confirm your account:</p>\n<a href="https://paypa1-support.xyz/login">https://www.paypal.com/signin</a>\n',
   dns: 'example.com.\t300\tIN\tTXT\t"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all"\n_dmarc.example.com.\t300\tIN\tTXT\t"v=DMARC1; p=none"\nexample.com.\t86400\tIN\tCAA\t0 issue "letsencrypt.org"\nexample.com.\t3600\tIN\tMX\t10 mail.example.com.\n',
   nmap: 'Nmap scan report for shop.example.com (203.0.113.10)\nHost is up (0.012s latency).\nPORT     STATE    SERVICE VERSION\n22/tcp   open     ssh     OpenSSH 8.9p1\n| ssh-hostkey:\n|_  256 aa:bb (ED25519)\n443/tcp  open     ssl/http nginx 1.18.0\n3306/tcp open     mysql   MySQL 8.0.35\n6379/tcp filtered redis\n',
+  url: 'https://www.paypal.com@evil.example/login?next=https://evil.example/x&utm_source=mail\nhttps://xn--80ak6aa92e.com/\n',
+  hash: 'Hello, Vitrine',
+  waterfall: JSON.stringify(
+    {
+      log: {
+        pages: [
+          {
+            id: 'p',
+            title: 'shop.example',
+            startedDateTime: '2026-11-17T10:00:00.000Z',
+            pageTimings: { onContentLoad: 300, onLoad: 420 },
+          },
+        ],
+        entries: [
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.000Z',
+            time: 180,
+            _resourceType: 'document',
+            request: { method: 'GET', url: 'https://shop.example/' },
+            response: {
+              status: 200,
+              content: { size: 18000, mimeType: 'text/html' },
+              bodySize: 6000,
+            },
+            timings: { dns: 15, connect: 40, ssl: 25, send: 1, wait: 80, receive: 19 },
+          },
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.200Z',
+            time: 120,
+            _resourceType: 'script',
+            request: { method: 'GET', url: 'https://cdn.tracker.example/t.js' },
+            response: {
+              status: 200,
+              content: { size: 9000, mimeType: 'text/javascript' },
+              bodySize: 3000,
+            },
+            timings: { dns: 20, connect: 30, ssl: 20, wait: 40, receive: 10 },
+          },
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.250Z',
+            time: 60,
+            _resourceType: 'image',
+            request: { method: 'GET', url: 'http://img.other.example/a.png' },
+            response: { status: 404, content: { size: 0, mimeType: 'image/png' } },
+            timings: { wait: 50, receive: 10 },
+          },
+        ],
+      },
+    },
+    null,
+    2,
+  ),
 };
 
 /** Boolean features shared by every component. */
@@ -865,6 +920,25 @@ const SCHEMA = {
     flags: ['all', 'down', 'scripts', 'risky'],
     fields: [],
   },
+  url: {
+    tag: 'vt-url',
+    flags: ['defang', 'parts', 'chain'],
+    fields: [],
+  },
+  hash: {
+    tag: 'vt-hash',
+    flags: ['file', 'compare'],
+    fields: [
+      { name: 'algorithms', type: 'text', placeholder: 'sha256 sha512' },
+      { name: 'format', type: 'select', options: ['', 'hex', 'upper', 'base64', 'sri'] },
+      { name: 'expected', type: 'text', placeholder: 'sha256:…' },
+    ],
+  },
+  waterfall: {
+    tag: 'vt-waterfall',
+    flags: ['filters', 'defang', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'requests', 'domains'] }],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -1108,6 +1182,9 @@ function switchType(type) {
     email: 'suspicious.eml',
     dns: 'dig example.com',
     nmap: 'nmap -sV',
+    url: 'Suspicious links',
+    hash: 'Checksum',
+    waterfall: 'capture.har',
   }[type];
   buildControls();
   render();

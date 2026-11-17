@@ -39,6 +39,9 @@ export const ELEMENTS = Object.freeze({
   eml: 'vt-email', email: 'vt-email',
   dns: 'vt-dns', zone: 'vt-dns', dig: 'vt-dns',
   nmap: 'vt-nmap',
+  url: 'vt-url', urls: 'vt-url',
+  hash: 'vt-hash',
+  har: 'vt-waterfall', waterfall: 'vt-waterfall',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

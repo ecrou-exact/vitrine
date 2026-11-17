@@ -183,6 +183,23 @@ const MORE = {
     'Nmap scan report for a.example (203.0.113.10)\nHost is up (0.01s latency).\nPORT STATE SERVICE VERSION\n22/tcp open ssh OpenSSH 9\n| ssh-hostkey:\n|_  256 aa (ED25519)\n3389/tcp open ms-wbt-server\n25/tcp filtered smtp',
     { variant: 'full', all: '' },
   ],
+  'vt-url': [
+    'https://www.paypal.com@evil.example/login?utm_source=mail&next=https://evil.example/x\nhttps://xn--80ak6aa92e.com/',
+    { variant: 'full', chain: '' },
+  ],
+  'vt-hash': ['Hello, Vitrine', { variant: 'full', expected: 'd41d8cd98f00b204e9800998ecf8427e' }],
+  'vt-waterfall': [
+    JSON.stringify({
+      log: {
+        pages: [{ id: 'p', title: 'Shop', startedDateTime: '2026-11-17T10:00:00.000Z', pageTimings: { onContentLoad: 300, onLoad: 400 } }], // prettier-ignore
+        entries: [
+          { pageref: 'p', startedDateTime: '2026-11-17T10:00:00.000Z', time: 120, _resourceType: 'document', request: { method: 'GET', url: 'https://shop.example/' }, response: { status: 200, content: { size: 9000, mimeType: 'text/html' }, bodySize: 3000 }, timings: { dns: 10, connect: 30, ssl: 15, send: 1, wait: 60, receive: 19 } }, // prettier-ignore
+          { pageref: 'p', startedDateTime: '2026-11-17T10:00:00.150Z', time: 80, request: { method: 'GET', url: 'https://cdn.other.example/a.js' }, response: { status: 404, content: { size: 0, mimeType: 'text/javascript' } }, timings: { wait: 70, receive: 10 } }, // prettier-ignore
+        ],
+      },
+    }),
+    { variant: 'full' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {

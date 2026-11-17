@@ -1,0 +1,178 @@
+/*
+ * Hashes: what is hashed, the zone to drop a file, the hashes as a table, and the comparison
+ * with a fingerprint. Match and mismatch are written in words; colors only repeat them.
+ */
+.hash-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.hash-body.dragging {
+  outline: 2px dashed var(--_accent);
+  outline-offset: -6px;
+}
+
+.hash-source,
+.hash-zone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  margin: 0;
+}
+
+.hash-source svg,
+.hash-zone svg,
+.hash-result svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.hash-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.hash-muted {
+  color: var(--_fg-muted);
+}
+
+.hash-error {
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.hash-zone {
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px dashed var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  color: var(--_fg-muted);
+}
+
+.hash-zone .text-btn {
+  color: var(--_accent-fg);
+}
+
+.hash-note {
+  flex-basis: 100%;
+  font-size: var(--_font-size-small);
+}
+
+.hash-format,
+.hash-compare {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.hash-format label,
+.hash-compare label {
+  font-weight: 600;
+}
+
+.hash-format select,
+.hash-input {
+  min-height: 32px;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: inherit;
+}
+
+.hash-input {
+  flex: 1 1 100%;
+  min-width: 0;
+  font-family: var(--_font-mono);
+}
+
+.hash-format select:focus-visible,
+.hash-input:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.hash-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.hash-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hash-table th,
+.hash-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.hash-table tr:last-child > * {
+  border-bottom: 0;
+}
+
+.hash-table th {
+  width: 1%;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.hash-value {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.hash-copy {
+  width: 1%;
+  padding-block: 2px;
+}
+
+.hash-tag {
+  margin-inline-start: var(--_space-2);
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 500;
+}
+
+.hash-result {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 1.5em;
+  margin: 0;
+  font-weight: 600;
+}
+
+.hash-result.match {
+  color: var(--_success);
+}
+
+.hash-result.mismatch,
+.hash-result.invalid {
+  color: var(--_danger);
+}
+
+.hash-result.unknown {
+  color: var(--_fg-muted);
+}
+
+.hash-edit > .editor-body {
+  max-height: min(30vh, 200px);
+  border-bottom: 1px solid var(--_border);
+}
