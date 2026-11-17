@@ -1,0 +1,231 @@
+/*
+ * E-mail analysis: the summary with authentication and findings, then tables for the path,
+ * links, attachments and headers. The body is plain text.
+ */
+.email-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.email-fields {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+}
+
+.email-fields div {
+  display: grid;
+  grid-template-columns: minmax(7rem, max-content) 1fr;
+  gap: var(--_space-3);
+}
+
+.email-fields dt {
+  color: var(--_fg-muted);
+}
+
+.email-fields dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.email-auth {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+}
+
+.email-auth-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  padding: 2px var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-weight: 600;
+}
+
+.email-auth-item svg,
+.email-tag svg,
+.email-level svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.email-auth-item.ok {
+  color: var(--_success);
+}
+
+.email-auth-item.warn {
+  color: var(--_warning);
+}
+
+.email-auth-item.bad {
+  color: var(--_danger);
+}
+
+.email-findings {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  list-style: none;
+}
+
+.email-finding {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, auto) 1fr;
+  gap: var(--_space-3);
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  overflow-wrap: anywhere;
+}
+
+.email-finding:last-child {
+  border-bottom: 0;
+}
+
+.email-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.email-finding.bad .email-level {
+  color: var(--_danger);
+}
+
+.email-finding.warn .email-level {
+  color: var(--_warning);
+}
+
+.email-finding.info .email-level {
+  color: var(--_fg-muted);
+}
+
+.email-muted,
+.email-note {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.email-note {
+  font-size: var(--_font-size-small);
+}
+
+.email-scroll {
+  max-height: var(--vt-email-table-height, 480px);
+  overflow: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.email-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.email-table th,
+.email-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.email-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.email-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.email-table tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.email-table code {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.email-table tr.deceptive > * {
+  background: color-mix(in srgb, var(--_danger) 6%, transparent);
+}
+
+.email-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-inline-start: var(--_space-2);
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.email-tag.bad {
+  border-color: var(--_danger);
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.email-num,
+.email-slow {
+  white-space: nowrap;
+}
+
+.email-slow {
+  color: var(--_warning);
+  font-weight: 600;
+}
+
+.email-hash,
+.email-value {
+  font-size: var(--_font-size-small);
+}
+
+.email-text-box {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.email-text {
+  max-height: var(--vt-email-text-height, 480px);
+  margin: 0;
+  padding: var(--_space-3);
+  overflow: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-ui);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.email-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .email-fields div,
+  .email-finding {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

@@ -1,0 +1,22 @@
+Starting Nmap 7.94 ( https://nmap.org ) at 2026-11-17 10:00 CET
+Nmap scan report for shop.example.com (203.0.113.10)
+Host is up (0.012s latency).
+Not shown: 995 closed tcp ports (reset)
+PORT     STATE    SERVICE    VERSION
+22/tcp   open     ssh        OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 aa:bb (ECDSA)
+|_  256 cc:dd (ED25519)
+80/tcp   open     http       nginx 1.18.0 (Ubuntu)
+|_http-title: Did not follow redirect to https://shop.example.com/
+443/tcp  open     ssl/http   nginx 1.18.0
+3306/tcp open     mysql      MySQL 8.0.35
+6379/tcp filtered redis
+MAC Address: 00:1A:2B:3C:4D:5E (Acme)
+OS details: Linux 5.0 - 5.14
+
+Nmap scan report for 203.0.113.11
+Host is up.
+All 1000 scanned ports on 203.0.113.11 are in ignored states.
+
+Nmap done: 256 IP addresses (2 hosts up) scanned in 12.34 seconds

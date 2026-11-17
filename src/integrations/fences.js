@@ -36,6 +36,9 @@ export const ELEMENTS = Object.freeze({
   cvss: 'vt-cvss',
   ioc: 'vt-ioc', iocs: 'vt-ioc',
   csp: 'vt-headers', 'security-headers': 'vt-headers',
+  eml: 'vt-email', email: 'vt-email',
+  dns: 'vt-dns', zone: 'vt-dns', dig: 'vt-dns',
+  nmap: 'vt-nmap',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

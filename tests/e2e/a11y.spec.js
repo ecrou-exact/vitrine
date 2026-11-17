@@ -171,6 +171,18 @@ const MORE = {
     "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nset-cookie: a=1; SameSite=None",
     { variant: 'full' },
   ],
+  'vt-email': [
+    'Authentication-Results: mx; spf=pass; dkim=fail; dmarc=fail\nReceived: from a ([203.0.113.6]) by mx with SMTP; Tue, 17 Nov 2026 10:00:02 +0100\nFrom: "a@bank.example" <x@evil.xyz>\nReply-To: r@other.example\nSubject: Hi\nContent-Type: multipart/mixed; boundary=b\n\n--b\nContent-Type: text/html\n\n<a href="https://evil.xyz">https://bank.example</a>\n--b\nContent-Type: application/octet-stream; name="a.pdf.exe"\nContent-Transfer-Encoding: base64\n\nTVqQ\n--b--',
+    { variant: 'full' },
+  ],
+  'vt-dns': [
+    'example.com. 300 IN TXT "v=spf1 +all"\n_dmarc.example.com. 300 IN TXT "v=DMARC1; p=none"\nexample.com. 300 IN MX 10 mail.example.com.',
+    { variant: 'full' },
+  ],
+  'vt-nmap': [
+    'Nmap scan report for a.example (203.0.113.10)\nHost is up (0.01s latency).\nPORT STATE SERVICE VERSION\n22/tcp open ssh OpenSSH 9\n| ssh-hostkey:\n|_  256 aa (ED25519)\n3389/tcp open ms-wbt-server\n25/tcp filtered smtp',
+    { variant: 'full', all: '' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {

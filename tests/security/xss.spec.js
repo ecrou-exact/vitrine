@@ -718,6 +718,41 @@ const MODES = [
     attrs: {},
     wrap: (p) => JSON.stringify({ [p]: p, 'Set-Cookie': [p] }),
   },
+  {
+    tag: 'vt-email',
+    attrs: { variant: 'full', defang: 'false', view: 'links' },
+    wrap: (p) =>
+      `From: "${p}" <${p}@evil.xyz>\nSubject: ${p}\nAuthentication-Results: x; spf=${p}\nReceived: from ${p} ([1.2.3.4]) by ${p}; ${p}\nContent-Type: text/html\n\n${p}<a href="javascript:alert(1)">${p}</a><a href="https://x.example/${p}">${p}</a>`,
+  },
+  {
+    tag: 'vt-email',
+    attrs: { view: 'attachments' },
+    wrap: (p) =>
+      `From: a@b.example\nContent-Type: multipart/mixed; boundary=b\n\n--b\nContent-Type: text/plain\n\n${p}\n--b\nContent-Disposition: attachment; filename="${p}.exe"\n\n${p}\n--b--`,
+  },
+  {
+    tag: 'vt-dns',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `;; ->>HEADER<<- opcode: QUERY, status: ${p}\n${p}. 300 IN TXT "v=spf1 include:${p} -all"\n_dmarc.x. 300 IN TXT "v=DMARC1; p=${p}"\nx. 300 IN CAA 0 issue "${p}"`,
+  },
+  {
+    tag: 'vt-dns',
+    attrs: {},
+    wrap: (p) => JSON.stringify({ Answer: [{ name: p, type: 16, TTL: 1, data: p }] }),
+  },
+  {
+    tag: 'vt-nmap',
+    attrs: { variant: 'full', all: '' },
+    wrap: (p) =>
+      `Nmap scan report for ${p} (1.2.3.4)\nOS details: ${p}\nPORT STATE SERVICE VERSION\n22/tcp open ${p} ${p}\n| ${p}: ${p}\n|_  ${p}`,
+  },
+  {
+    tag: 'vt-nmap',
+    attrs: {},
+    wrap: (p) =>
+      `<nmaprun args="${p.replace(/[<&"]/g, '')}"><host><address addr="1.2.3.4" addrtype="ipv4"/><ports><port protocol="tcp" portid="80"><state state="open"/><service name="http" product="${p.replace(/[<&"]/g, '')}"/><script id="x" output="${p.replace(/[<&"]/g, '')}"/></port></ports></host></nmaprun>`,
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

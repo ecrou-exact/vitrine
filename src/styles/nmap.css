@@ -1,0 +1,239 @@
+/*
+ * Nmap results: a summary, then a card per host with its ports. States and risky services
+ * are written in words; colors only repeat them.
+ */
+.nmap-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.nmap-summary {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.nmap-summary p {
+  margin: 0;
+}
+
+.nmap-counts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-4);
+}
+
+.nmap-risky-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.nmap-risky-count svg,
+.nmap-tag svg {
+  width: 14px;
+  height: 14px;
+}
+
+.nmap-muted {
+  color: var(--_fg-muted);
+}
+
+.nmap-command code {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+}
+
+.nmap-host {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.nmap-host.down {
+  opacity: 0.75;
+}
+
+.nmap-host-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.nmap-address {
+  margin: 0;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.nmap-status {
+  padding: 0 var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.nmap-status.up {
+  color: var(--_success);
+}
+
+.nmap-status.down {
+  color: var(--_fg-muted);
+}
+
+.nmap-meta {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.nmap-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.nmap-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nmap-table th,
+.nmap-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.nmap-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.nmap-table thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.nmap-table tbody th {
+  width: 1%;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nmap-table code {
+  font-family: var(--_font-mono);
+}
+
+.nmap-table tr.risky > * {
+  background: color-mix(in srgb, var(--_danger) 6%, transparent);
+}
+
+.nmap-state {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nmap-state.st-open {
+  color: var(--_success);
+}
+
+.nmap-state.st-filtered,
+.nmap-state.st-open-filtered {
+  color: var(--_warning);
+}
+
+.nmap-state.st-closed,
+.nmap-state.st-closed-filtered {
+  color: var(--_fg-muted);
+}
+
+.nmap-service {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.nmap-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.nmap-tag.risky {
+  border-color: var(--_danger);
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.nmap-version {
+  color: var(--_fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.nmap-table .nmap-script-row td {
+  padding-top: 0;
+  background: var(--_surface-sunken);
+}
+
+.nmap-script {
+  margin: var(--_space-1) 0 0;
+  font-size: var(--_font-size-small);
+}
+
+.nmap-script-id {
+  color: var(--_syntax-function);
+}
+
+.nmap-script summary {
+  cursor: pointer;
+}
+
+.nmap-script pre {
+  max-height: 240px;
+  margin: var(--_space-1) 0 0;
+  padding: var(--_space-2);
+  overflow: auto;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+}
+
+.nmap-host-scripts h4 {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.nmap-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .nmap-table .nmap-version,
+  .nmap-table thead th:nth-child(4) {
+    display: none;
+  }
+}

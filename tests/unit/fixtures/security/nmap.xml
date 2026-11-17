@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="nmap -sV -oX - 203.0.113.10" startstr="Tue Nov 17 10:00:00 2026">
+<host><status state="up" reason="echo-reply"/>
+<address addr="203.0.113.10" addrtype="ipv4"/><address addr="00:1A:2B:3C:4D:5E" addrtype="mac" vendor="Acme"/>
+<hostnames><hostname name="shop.example.com" type="PTR"/></hostnames>
+<ports><port protocol="tcp" portid="22"><state state="open" reason="syn-ack"/><service name="ssh" product="OpenSSH" version="8.9p1" extrainfo="Ubuntu"/><script id="ssh-hostkey" output="&#xa;  256 aa:bb (ECDSA)"/></port>
+<port protocol="tcp" portid="445"><state state="open" reason="syn-ack"/><service name="microsoft-ds"/></port></ports>
+<os><osmatch name="Linux 5.4" accuracy="96"/></os>
+<times srtt="12000" rttvar="1000" to="100000"/>
+</host>
+<runstats><finished elapsed="7.12" summary="Nmap done; 1 IP address (1 host up) scanned in 7.12 seconds"/></runstats>
+</nmaprun>

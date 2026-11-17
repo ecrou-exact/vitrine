@@ -65,6 +65,9 @@ import { VtRepo } from './components/repo/vt-repo.js';
 import { VtIoc } from './components/ioc/vt-ioc.js';
 import { VtCvss } from './components/cvss/vt-cvss.js';
 import { VtHeaders } from './components/headers/vt-headers.js';
+import { VtEmail } from './components/email/vt-email.js';
+import { VtDns } from './components/dns/vt-dns.js';
+import { VtNmap } from './components/nmap/vt-nmap.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -152,6 +155,9 @@ export {
   VtIoc,
   VtCvss,
   VtHeaders,
+  VtEmail,
+  VtDns,
+  VtNmap,
   registerIconSet,
   configure,
   getConfig,
@@ -250,6 +256,9 @@ export const registry = new Map(
     ['vt-ioc', VtIoc],
     ['vt-cvss', VtCvss],
     ['vt-headers', VtHeaders],
+    ['vt-email', VtEmail],
+    ['vt-dns', VtDns],
+    ['vt-nmap', VtNmap],
   ]),
 );
 
@@ -324,6 +333,9 @@ const TYPES = /** @type {const} */ ({
   ioc: 'vt-ioc',
   cvss: 'vt-cvss',
   headers: 'vt-headers',
+  email: 'vt-email',
+  dns: 'vt-dns',
+  nmap: 'vt-nmap',
 });
 
 /**

@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-email>`: raw e-mail messages (`.eml`) analyzed for phishing. Sender, recipients, subject and dates with encoded words decoded; SPF, DKIM, DMARC and ARC results; the Received path oldest first with IPs and delays; the body as text (HTML reduced to text without a DOM, so nothing renders or loads); links with deceptive ones marked; attachments with size, SHA-256 and risky or double extensions marked; every header. Findings: failed or weak authentication, spoofed display names, Reply-To or Return-Path on another domain, deceptive links, risky attachments, remote images. Tabs, defanged by default.
+- `<vt-dns>`: DNS records from `dig` output (with its header), zone files (`$ORIGIN`, `$TTL`, relative names, parentheses) or DNS-over-HTTPS JSON, as a table with TTLs as durations and type filters. SPF, DMARC, DKIM, CAA, MX, SOA and SRV records explained term by term; checks for SPF `+all`, `?all`, `ptr`, more than 10 lookups and several SPF records, DMARC without policy or with `p=none`, and short or revoked DKIM keys.
+- `<vt-nmap>`: Nmap results from XML (`-oX`), normal (`-oN`) and grepable (`-oG`) output. Hosts with addresses, names, OS guess, MAC vendor and latency; ports with state, service, version, TLS and script output; services risky to expose (Telnet, FTP, SMB, RDP, VNC, databases…) marked and counted; open or all ports; copy as CSV or the hosts with open ports.
+- Markdown fences `eml`, `email`, `dns`, `zone`, `dig` and `nmap`.
+
 - `<vt-ioc>`: indicators of compromise found in any text: URLs, domains, IPv4 and IPv6 addresses, e-mail addresses, MD5, SHA-1, SHA-256 and SHA-512 hashes, CVE identifiers and ATT&CK techniques, defanged ones (`hxxp`, `[.]`, `[@]`…) read too. Each once with its count and first line, private and special addresses marked, grouped by type with filters, shown and copied defanged (never linked, never resolved), and exported as a list, CSV (formulas neutralized), a STIX 2.1 bundle or a MISP event. Linear patterns and limits against hostile text.
 - `<vt-cvss>`: CVSS vectors as a score, a severity in words and a bar, with each metric explained by group. CVSS 3.0 and 3.1 base, temporal and environmental scores computed as the specification does; CVSS 4.0 vectors read and explained, with the score given by `score`; errors that name the metric at fault; `editable` turns it into a calculator (`vt-change` with the new vector). `<vt-advisories>` now uses its scores.
 - `<vt-headers>`: HTTP security headers from raw headers, `curl -I` or `curl -v` output, JSON or a HAR response, or a Content-Security-Policy alone. A grade from A+ to F and each finding in words: HSTS, CSP (`'unsafe-inline'`, `'unsafe-eval'`, wildcards, `object-src`, `base-uri`, with nonces and `'strict-dynamic'` understood), framing, nosniff, Referrer-Policy, Permissions-Policy, COOP, each cookie (`Secure`, `HttpOnly`, `SameSite`, `__Host-` and `__Secure-`), CORS, version leaks and obsolete headers; the policy as a table with risky sources outlined. Nothing is fetched.
@@ -47,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Examples are grouped by need, with category descriptions, a grouped sidebar and mobile menu, and alphabetical ordering within each category.
 - Docs component links are sorted alphabetically.
-- The budget of the full bundles is 530 KB, for `<vt-ioc>`, `<vt-cvss>` and `<vt-headers>` (it was 520 KB for the twenty-one elements before them); `vt-markdown` 81 KB, for the icons shared by every element.
+- The budget of the full bundles is 550 KB: 520 KB for the twenty-one elements before `<vt-ioc>`, 530 KB with `<vt-ioc>`, `<vt-cvss>` and `<vt-headers>`, 550 KB with `<vt-email>`, `<vt-dns>` and `<vt-nmap>`; `vt-markdown` 81 KB, for the icons shared by every element.
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
 ### Fixed
