@@ -663,7 +663,10 @@ vt-changelog:not(:defined),
 vt-repo:not(:defined),
 vt-ioc:not(:defined),
 vt-cvss:not(:defined),
-vt-headers:not(:defined) {
+vt-headers:not(:defined),
+vt-email:not(:defined),
+vt-dns:not(:defined),
+vt-nmap:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

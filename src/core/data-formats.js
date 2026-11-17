@@ -489,3 +489,41 @@ export function headersFromData(value) {
   } else if (isObject(headers)) for (const [name, item] of Object.entries(headers)) add(name, item);
   return { content: lines.join('\n') };
 }
+
+/** Numeric record types of DNS-over-HTTPS JSON answers. */
+const DNS_TYPES = /** @type {Record<number, string>} */ ({
+  1: 'A', 2: 'NS', 5: 'CNAME', 6: 'SOA', 12: 'PTR', 13: 'HINFO', 15: 'MX', 16: 'TXT', 17: 'RP',
+  28: 'AAAA', 29: 'LOC', 33: 'SRV', 35: 'NAPTR', 39: 'DNAME', 43: 'DS', 44: 'SSHFP', 46: 'RRSIG',
+  47: 'NSEC', 48: 'DNSKEY', 50: 'NSEC3', 51: 'NSEC3PARAM', 52: 'TLSA', 53: 'SMIMEA', 59: 'CDS',
+  60: 'CDNSKEY', 64: 'SVCB', 65: 'HTTPS', 99: 'SPF', 256: 'URI', 257: 'CAA',
+}); // prettier-ignore
+
+/**
+ * DNS-over-HTTPS JSON (`{ Answer, Authority, Additional }` as Google and Cloudflare return it),
+ * or a list of `{ name, type, ttl, data }` records, as zone lines.
+ *
+ * @param {unknown} value
+ * @returns {DataResult}
+ */
+export function dnsFromData(value) {
+  if (typeof value === 'string') return { content: value };
+  /** @type {[string, unknown[] | null][]} */
+  const sections = isObject(value)
+    ? [['', listIn(value, ['Answer', 'answer', 'records'])], ['AUTHORITY', listIn(value.Authority, [])], ['ADDITIONAL', listIn(value.Additional, [])]] // prettier-ignore
+    : [['', Array.isArray(value) ? value : null]];
+  /** @type {string[]} */
+  const lines = [];
+  for (const [section, list] of sections) {
+    if (!list?.length) continue;
+    if (section) lines.push('', `;; ${section} SECTION:`);
+    for (const item of list) {
+      if (!isObject(item)) continue;
+      const type = typeof item.type === 'number' ? (DNS_TYPES[item.type] ?? `TYPE${item.type}`) : plain(item.type).toUpperCase(); // prettier-ignore
+      let data = plain(item.data ?? item.value ?? '').replace(/[\r\n]+/g, ' ');
+      if ((type === 'TXT' || type === 'SPF') && !data.startsWith('"')) data = `"${data.replace(/(["\\])/g, '\\$1')}"`; // prettier-ignore
+      const ttl = item.TTL ?? item.ttl;
+      lines.push([plain(item.name).replace(/\s/g, '') || '@', typeof ttl === 'number' ? String(ttl) : '', 'IN', type, data].filter(Boolean).join('\t')); // prettier-ignore
+    }
+  }
+  return { content: lines.join('\n').trim() };
+}

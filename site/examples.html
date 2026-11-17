@@ -122,11 +122,14 @@
             <option value="cert">Certificates</option>
             <option value="cron">Cron</option>
             <option value="cvss">CVSS score</option>
+            <option value="dns">DNS records</option>
+            <option value="email">E-mail analysis</option>
             <option value="http">HTTP</option>
             <option value="ioc">Indicators of compromise</option>
             <option value="job">Job</option>
             <option value="jwt">JWT</option>
             <option value="log">Log</option>
+            <option value="nmap">Nmap scan</option>
             <option value="openapi">OpenAPI</option>
             <option value="headers">Security headers</option>
             <option value="status">Status</option>
@@ -3017,6 +3020,102 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="dns" aria-labelledby="dns-title">
+        <h3 id="dns-title">&lt;vt-dns&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Mail records explained</h4>
+            <p>Paste <code>dig</code> output: SPF, DMARC, CAA and SOA explained term by term, and the mail setup checked.</p>
+          </div>
+          <template>
+            <vt-dns variant="full" label="dig example.com ANY">
+              <template>
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4242
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;example.com.			IN	ANY
+
+;; ANSWER SECTION:
+example.com.		3600	IN	A	93.184.215.14
+example.com.		3600	IN	MX	10 mail.example.com.
+example.com.		300	IN	TXT	"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all"
+example.com.		86400	IN	CAA	0 issue "letsencrypt.org"
+example.com.		3600	IN	SOA	ns1.example.com. hostmaster.example.com. 2026111701 7200 3600 1209600 300
+_dmarc.example.com.	300	IN	TXT	"v=DMARC1; p=none; rua=mailto:dmarc@example.com"
+
+;; Query time: 24 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)</template>
+            </vt-dns>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A zone file</h4>
+            <p><code>$ORIGIN</code>, <code>$TTL</code>, relative names and records in parentheses are read.</p>
+          </div>
+          <template>
+            <vt-dns checks="false">
+              <template>
+$ORIGIN example.org.
+$TTL 1h
+@   IN  SOA ns1 hostmaster (
+        2026111701 ; serial
+        2h 1h 2w 5m )
+    IN  NS  ns1
+    IN  MX  0 .
+www 300 IN CNAME @
+_sip._tcp IN SRV 10 60 5060 sip</template>
+            </vt-dns>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="email" aria-labelledby="email-title">
+        <h3 id="email-title">&lt;vt-email&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A phishing message</h4>
+            <p>Failed authentication, a spoofed sender name, a link that shows one site and opens another, and an executable hidden behind <code>.pdf</code>. Nothing in the message is rendered or loaded.</p>
+          </div>
+          <template>
+            <vt-email variant="full" label="suspicious.eml">
+              <template>
+Return-Path: &lt;bounce@mailer.bulk-sender.xyz&gt;
+Received: from mx.example.org (mx.example.org [198.51.100.7])
+	by inbox.example.org with ESMTPS id abc; Tue, 17 Nov 2026 10:00:09 +0100
+Received: from unknown (HELO pc) ([203.0.113.66])
+	by mx.example.org with SMTP id 42; Tue, 17 Nov 2026 10:00:02 +0100
+Authentication-Results: mx.example.org; spf=softfail smtp.mailfrom=bulk-sender.xyz; dkim=none; dmarc=fail header.from=paypal.com
+From: "service@paypal.com" &lt;security@paypa1-support.xyz&gt;
+Reply-To: help@other-domain.example
+To: alice@example.org
+Subject: =?UTF-8?B?QWN0aW9uIHJlcXVpcmVkIG9uIHlvdXIgYWNjb3VudA==?=
+Date: Tue, 17 Nov 2026 09:59:58 +0100
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="b1"
+
+--b1
+Content-Type: text/html; charset=utf-8
+
+&lt;p&gt;Please confirm your account:&lt;/p&gt;
+&lt;a href="https://paypa1-support.xyz/login"&gt;https://www.paypal.com/signin&lt;/a&gt;
+&lt;img src="https://tracker.example.net/p.gif"&gt;
+--b1
+Content-Type: application/octet-stream; name="invoice.pdf.exe"
+Content-Disposition: attachment; filename="invoice.pdf.exe"
+Content-Transfer-Encoding: base64
+
+TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA==
+--b1--</template>
+            </vt-email>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="http" aria-labelledby="http-title">
         <h3 id="http-title">&lt;vt-http&gt;</h3>
 
@@ -3241,6 +3340,44 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
                 [18:00:09] ERROR job 1842 failed: timeout after 30s
               </template>
             </vt-log>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="nmap" aria-labelledby="nmap-title">
+        <h3 id="nmap-title">&lt;vt-nmap&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A service scan</h4>
+            <p>Normal output from <code>nmap -sV</code>: open ports with their version and script output; the exposed database is marked. The filter button shows closed and filtered ports.</p>
+          </div>
+          <template>
+            <vt-nmap variant="full" label="nmap -sV 203.0.113.0/30">
+              <template>
+Starting Nmap 7.94 ( https://nmap.org ) at 2026-11-17 10:00 CET
+Nmap scan report for shop.example.com (203.0.113.10)
+Host is up (0.012s latency).
+Not shown: 995 closed tcp ports (reset)
+PORT     STATE    SERVICE    VERSION
+22/tcp   open     ssh        OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   256 aa:bb:cc:dd (ECDSA)
+|_  256 ee:ff:00:11 (ED25519)
+80/tcp   open     http       nginx 1.18.0 (Ubuntu)
+|_http-title: Did not follow redirect to https://shop.example.com/
+443/tcp  open     ssl/http   nginx 1.18.0
+3306/tcp open     mysql      MySQL 8.0.35
+6379/tcp filtered redis
+OS details: Linux 5.0 - 5.14
+
+Nmap scan report for 203.0.113.11
+Host is up (0.020s latency).
+PORT   STATE SERVICE VERSION
+23/tcp open  telnet  BusyBox telnetd
+
+Nmap done: 4 IP addresses (2 hosts up) scanned in 12.34 seconds</template>
+            </vt-nmap>
           </template>
         </article>
       </section>

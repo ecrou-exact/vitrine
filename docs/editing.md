@@ -165,6 +165,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-ioc>`          | `content`                                                                                |
 | `<vt-cvss>`         | `content`; with `editable`, each metric is a select that updates `content`               |
 | `<vt-headers>`      | `content`                                                                                |
+| `<vt-email>`        | `content`                                                                                |
+| `<vt-dns>`          | `content`                                                                                |
+| `<vt-nmap>`         | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

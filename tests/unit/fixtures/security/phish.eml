@@ -1,0 +1,36 @@
+Return-Path: <bounce@mailer.bulk-sender.xyz>
+Received: from mx.example.org (mx.example.org [198.51.100.7])
+	by inbox.example.org with ESMTPS id abc; Tue, 17 Nov 2026 10:00:09 +0100
+Received: from unknown (HELO pc) ([203.0.113.66])
+	by mx.example.org with SMTP id 42; Tue, 17 Nov 2026 10:00:02 +0100
+Authentication-Results: mx.example.org;
+	spf=softfail smtp.mailfrom=bulk-sender.xyz;
+	dkim=none;
+	dmarc=fail header.from=paypal.com
+From: "service@paypal.com" <security@paypa1-support.xyz>
+Reply-To: help@other-domain.ru
+To: alice@example.org
+Subject: =?UTF-8?B?VW4gcHJvYmzDqG1lIGF2ZWMgdm90cmUgY29tcHRl?=
+Date: Tue, 17 Nov 2026 09:59:58 +0100
+Message-ID: <x1@pc>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="b1"
+
+--b1
+Content-Type: multipart/alternative; boundary="b2"
+
+--b2
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><style>p{}</style></head><body><p>Bonjour, v=C3=A9rifiez votre compte&nbsp;:</p>
+<a href=3D"https://paypa1-support.xyz/login">https://www.paypal.com/signin</a>
+<img src=3D"https://tracker.example.net/p.gif"><script>alert(1)</script></body></html>
+--b2--
+--b1
+Content-Type: application/octet-stream; name="facture.pdf.exe"
+Content-Disposition: attachment; filename="facture.pdf.exe"
+Content-Transfer-Encoding: base64
+
+TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA==
+--b1--

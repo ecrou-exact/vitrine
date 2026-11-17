@@ -117,6 +117,10 @@ const SAMPLES = {
   cvss: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N',
   headers:
     "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nx-frame-options: SAMEORIGIN\nset-cookie: PHPSESSID=8f2a; path=/; HttpOnly\n",
+  email:
+    'Authentication-Results: mx.example.org; spf=softfail smtp.mailfrom=bulk-sender.xyz; dkim=none; dmarc=fail\nReceived: from unknown ([203.0.113.66]) by mx.example.org with SMTP; Tue, 17 Nov 2026 10:00:02 +0100\nFrom: "service@paypal.com" <security@paypa1-support.xyz>\nReply-To: help@other-domain.example\nTo: alice@example.org\nSubject: Action required on your account\nDate: Tue, 17 Nov 2026 09:59:58 +0100\nContent-Type: text/html; charset=utf-8\n\n<p>Please confirm your account:</p>\n<a href="https://paypa1-support.xyz/login">https://www.paypal.com/signin</a>\n',
+  dns: 'example.com.\t300\tIN\tTXT\t"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all"\n_dmarc.example.com.\t300\tIN\tTXT\t"v=DMARC1; p=none"\nexample.com.\t86400\tIN\tCAA\t0 issue "letsencrypt.org"\nexample.com.\t3600\tIN\tMX\t10 mail.example.com.\n',
+  nmap: 'Nmap scan report for shop.example.com (203.0.113.10)\nHost is up (0.012s latency).\nPORT     STATE    SERVICE VERSION\n22/tcp   open     ssh     OpenSSH 8.9p1\n| ssh-hostkey:\n|_  256 aa:bb (ED25519)\n443/tcp  open     ssl/http nginx 1.18.0\n3306/tcp open     mysql   MySQL 8.0.35\n6379/tcp filtered redis\n',
 };
 
 /** Boolean features shared by every component. */
@@ -840,6 +844,27 @@ const SCHEMA = {
     flags: ['https', 'passed', 'policy', 'headers'],
     fields: [],
   },
+  email: {
+    tag: 'vt-email',
+    flags: ['defang', 'hashes', 'tabs'],
+    fields: [
+      {
+        name: 'view',
+        type: 'select',
+        options: ['', 'summary', 'path', 'body', 'links', 'attachments', 'headers'],
+      },
+    ],
+  },
+  dns: {
+    tag: 'vt-dns',
+    flags: ['explain', 'checks', 'filters'],
+    fields: [],
+  },
+  nmap: {
+    tag: 'vt-nmap',
+    flags: ['all', 'down', 'scripts', 'risky'],
+    fields: [],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -1080,6 +1105,9 @@ function switchType(type) {
     ioc: 'Phishing report',
     cvss: 'CVE-2026-0001',
     headers: 'shop.example.com',
+    email: 'suspicious.eml',
+    dns: 'dig example.com',
+    nmap: 'nmap -sV',
   }[type];
   buildControls();
   render();

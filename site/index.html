@@ -916,6 +916,47 @@ server: nginx/1.18.0</template>
               </vt-headers>
               <a href="examples.html#headers">Header examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-email&gt;</h3>
+              <p>
+                Raw e-mails checked for phishing: authentication, path, deceptive links, risky attachments.
+              </p>
+              <vt-email class="preview" lang-ui="en" tabs="false">
+                <template>Authentication-Results: mx.example.org; spf=pass; dkim=none; dmarc=fail
+From: "billing@bank.example" &lt;alerts@bank-secure.xyz&gt;
+Reply-To: help@other.example
+Subject: Action required
+
+Please confirm your account.</template>
+              </vt-email>
+              <a href="examples.html#email">E-mail examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-dns&gt;</h3>
+              <p>
+                DNS records from dig or a zone file, with SPF, DMARC and CAA explained and checked.
+              </p>
+              <vt-dns class="preview" lang-ui="en" filters="false">
+                <template>example.com. 300 IN TXT "v=spf1 include:_spf.google.com ~all"
+_dmarc.example.com. 300 IN TXT "v=DMARC1; p=reject; rua=mailto:dmarc@example.com"</template>
+              </vt-dns>
+              <a href="examples.html#dns">DNS examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-nmap&gt;</h3>
+              <p>
+                Nmap results as hosts and ports, with risky exposed services marked.
+              </p>
+              <vt-nmap class="preview" lang-ui="en" scripts="false">
+                <template>Nmap scan report for 203.0.113.10
+Host is up (0.012s latency).
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 9.6
+443/tcp  open  https   nginx 1.25.3
+3389/tcp open  ms-wbt-server</template>
+              </vt-nmap>
+              <a href="examples.html#nmap">Nmap examples</a>
+            </article>
           </div>
         </div>
       </section>

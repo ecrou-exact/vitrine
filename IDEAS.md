@@ -7,11 +7,8 @@ Backlog of components to build. None of them exists yet (checked against the 61 
 - **`vt-yara`** / **`vt-sigma`**: colored, explained rules (strings, conditions, logsource, fields, level).
 - **`vt-attack`**: MITRE ATT&CK matrix with covered / detected techniques highlighted.
 - **`vt-pcap`**: packet list from a capture, layers you can expand, hex of each packet (reuses `vt-hex`).
-- **`vt-email`**: raw `.eml`: `Received` path, SPF / DKIM / DMARC results, links and attachments made safe. For phishing analysis.
-- **`vt-dns`**: `dig` output or DNS records as a table, with SPF / DMARC / CAA explained.
 - **`vt-sbom`**: CycloneDX / SPDX SBOM as a dependency tree with linked vulnerabilities and licenses.
 - **`vt-hash`**: local hashing (MD5, SHA-1, SHA-256) of a text or file, compare and verify a fingerprint.
-- **`vt-nmap`**: Nmap result (XML or text) as hosts → ports → services.
 
 ## Web development
 
@@ -29,3 +26,4 @@ Backlog of components to build. None of them exists yet (checked against the 61 
 ## Done
 
 - `vt-ioc`, `vt-cvss`, `vt-headers` (its CSP table covers the planned `vt-csp`).
+- `vt-email`, `vt-dns`, `vt-nmap`.

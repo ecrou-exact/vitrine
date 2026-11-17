@@ -1,0 +1,252 @@
+/*
+ * DNS records: the dig header, findings, type filters and the records table with the
+ * explanation of policy records under their data.
+ */
+.dns-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.dns-query {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-5);
+  margin: 0;
+}
+
+.dns-query div {
+  display: flex;
+  gap: var(--_space-2);
+}
+
+.dns-query dt {
+  color: var(--_fg-muted);
+}
+
+.dns-query dd {
+  margin: 0;
+}
+
+.dns-query code,
+.dns-table code {
+  font-family: var(--_font-mono);
+}
+
+.dns-query .dns-bad dd {
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.dns-findings {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  list-style: none;
+}
+
+.dns-finding {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, auto) 1fr;
+  gap: var(--_space-3);
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+}
+
+.dns-finding:last-child {
+  border-bottom: 0;
+}
+
+.dns-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.dns-level svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.dns-finding.bad .dns-level {
+  color: var(--_danger);
+}
+
+.dns-finding.warn .dns-level {
+  color: var(--_warning);
+}
+
+.dns-finding.info .dns-level {
+  color: var(--_fg-muted);
+}
+
+.dns-message {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dns-message code {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.dns-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+}
+
+.dns-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 32px;
+  padding: 4px var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dns-filter[aria-pressed='true'] {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+  font-weight: 600;
+}
+
+.dns-filter:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.dns-count {
+  min-width: 2ch;
+  padding: 0 6px;
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  text-align: center;
+}
+
+.dns-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.dns-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dns-table th,
+.dns-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.dns-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.dns-table thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.dns-table tbody th {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.dns-ttl {
+  color: var(--_fg-muted);
+  white-space: nowrap;
+}
+
+.dns-type {
+  display: inline-block;
+  min-width: 4ch;
+  color: var(--_syntax-keyword);
+  font-family: var(--_font-mono);
+  font-weight: 600;
+}
+
+.dns-tag {
+  display: inline-block;
+  margin-inline-start: var(--_space-1);
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.dns-data {
+  min-width: 16rem;
+}
+
+.dns-value {
+  color: var(--_syntax-string);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.dns-explain {
+  display: grid;
+  gap: 2px;
+  margin: var(--_space-2) 0 0;
+  padding-inline-start: var(--_space-3);
+  border-inline-start: 2px solid var(--_border);
+  font-size: var(--_font-size-small);
+}
+
+.dns-explain div {
+  display: grid;
+  grid-template-columns: minmax(6rem, max-content) 1fr;
+  gap: var(--_space-2);
+}
+
+.dns-explain dt code {
+  color: var(--_syntax-function);
+  overflow-wrap: anywhere;
+}
+
+.dns-explain dd {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.dns-part-value {
+  margin-inline-end: var(--_space-2);
+  color: var(--_fg);
+}
+
+.dns-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .dns-finding,
+  .dns-explain div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

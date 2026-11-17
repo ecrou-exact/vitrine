@@ -1,0 +1,10 @@
+$ORIGIN example.org.
+$TTL 1h
+@   IN  SOA ns1 hostmaster (
+        2026111701 ; serial
+        2h 1h 2w 5m )
+    IN  NS  ns1
+    IN  MX  0 .
+www 300 IN CNAME @
+sel._domainkey IN TXT "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC"
+_sip._tcp IN SRV 10 60 5060 sip
