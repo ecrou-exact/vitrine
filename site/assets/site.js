@@ -111,7 +111,7 @@ syncComponents();
     '.reasons > .reason',
     '.showcase',
     '.install-tabs',
-    '.example-group > h2',
+    '.example-group > h3',
     '.example',
     '.integration',
     '.binding',
@@ -183,26 +183,53 @@ syncComponents();
   );
   if (sectionMenu) {
     const toc = document.getElementById('examples-toc');
+    const groups = new Map();
     const sections = Array.from(sectionMenu.options, (option) => {
+      let list = toc?.querySelector('ol');
+      const group = option.closest('optgroup');
+      if (list && group) {
+        if (!groups.has(group)) {
+          const item = document.createElement('li');
+          const title = document.createElement('p');
+          title.className = 'group';
+          title.textContent = group.label;
+          const children = document.createElement('ol');
+          item.append(title, children);
+          list.append(item);
+          groups.set(group, children);
+        }
+        list = groups.get(group);
+      }
       const link = document.createElement('a');
       link.setAttribute('href', `#${option.value}`);
       link.textContent = option.textContent;
       const item = document.createElement('li');
       item.append(link);
-      toc?.querySelector('ol')?.append(item);
-      return { id: option.value, section: document.getElementById(option.value), link };
+      list?.append(item);
+      const section = document.getElementById(option.value);
+      // A category jump should mark its first component before that demo reaches the top.
+      const start =
+        option === group?.firstElementChild
+          ? (section?.closest('.example-category') ?? section)
+          : section;
+      return { id: option.value, section, start, link };
     }).filter((entry) => entry.section);
     if (toc) toc.hidden = sections.length === 0;
     const byId = new Map(sections.map((entry) => [entry.id, entry]));
+    for (const entry of sections) {
+      if (entry.start !== entry.section) {
+        byId.set(entry.start.id, { ...entry, id: entry.start.id, section: entry.start });
+      }
+    }
     let current = null;
     let frame = 0;
 
     const followSection = () => {
       frame = 0;
-      const offset = parseFloat(getComputedStyle(sections[0].section).scrollMarginTop) || 88;
       let next = sections[0];
       for (const entry of sections) {
-        if (entry.section.getBoundingClientRect().top > offset + 8) break;
+        const offset = parseFloat(getComputedStyle(entry.start).scrollMarginTop) || 88;
+        if (entry.start.getBoundingClientRect().top > offset + 8) break;
         next = entry;
       }
       if (document.activeElement !== sectionMenu) sectionMenu.value = next.id;
@@ -233,13 +260,13 @@ syncComponents();
           (parseFloat(getComputedStyle(entry.section).scrollMarginTop) || 88),
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       });
-      const heading = entry.section.querySelector('h2');
+      const heading = entry.section.querySelector('h2, h3');
       heading?.setAttribute('tabindex', '-1');
       heading?.focus({ preventScroll: true });
       scheduleSection();
     };
     sectionMenu.addEventListener('change', () => goToSection(sectionMenu.value));
-    toc?.addEventListener('click', (event) => {
+    const onSectionClick = (event) => {
       if (
         event.defaultPrevented ||
         event.metaKey ||
@@ -252,7 +279,9 @@ syncComponents();
       if (!link) return;
       event.preventDefault();
       goToSection(link.getAttribute('href').slice(1));
-    });
+    };
+    toc?.addEventListener('click', onSectionClick);
+    document.querySelector('.example-categories')?.addEventListener('click', onSectionClick);
     addEventListener('scroll', scheduleSection, { passive: true });
     addEventListener('resize', scheduleSection, { passive: true });
     addEventListener('load', () => {
@@ -293,7 +322,7 @@ syncComponents();
 // Section and page titles rise in word by word as they are reached.
 {
   const titles = document.querySelectorAll(
-    '.page-head h1, .section-head h2, .example-group > h2, .cta h2',
+    '.page-head h1, .section-head h2, .example-group > h3, .cta h2',
   );
   if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
