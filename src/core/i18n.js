@@ -66,7 +66,10 @@
  *   | keyof typeof import('../components/version/strings.js').en
  *   | keyof typeof import('../components/consent/strings.js').en
  *   | keyof typeof import('../components/changelog/strings.js').en
- *   | keyof typeof import('../components/repo/strings.js').en} StringKey
+ *   | keyof typeof import('../components/repo/strings.js').en
+ *   | keyof typeof import('../components/ioc/strings.js').en
+ *   | keyof typeof import('../components/cvss/strings.js').en
+ *   | keyof typeof import('../components/headers/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

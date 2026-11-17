@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-ioc>`: indicators of compromise found in any text: URLs, domains, IPv4 and IPv6 addresses, e-mail addresses, MD5, SHA-1, SHA-256 and SHA-512 hashes, CVE identifiers and ATT&CK techniques, defanged ones (`hxxp`, `[.]`, `[@]`…) read too. Each once with its count and first line, private and special addresses marked, grouped by type with filters, shown and copied defanged (never linked, never resolved), and exported as a list, CSV (formulas neutralized), a STIX 2.1 bundle or a MISP event. Linear patterns and limits against hostile text.
+- `<vt-cvss>`: CVSS vectors as a score, a severity in words and a bar, with each metric explained by group. CVSS 3.0 and 3.1 base, temporal and environmental scores computed as the specification does; CVSS 4.0 vectors read and explained, with the score given by `score`; errors that name the metric at fault; `editable` turns it into a calculator (`vt-change` with the new vector). `<vt-advisories>` now uses its scores.
+- `<vt-headers>`: HTTP security headers from raw headers, `curl -I` or `curl -v` output, JSON or a HAR response, or a Content-Security-Policy alone. A grade from A+ to F and each finding in words: HSTS, CSP (`'unsafe-inline'`, `'unsafe-eval'`, wildcards, `object-src`, `base-uri`, with nonces and `'strict-dynamic'` understood), framing, nosniff, Referrer-Policy, Permissions-Policy, COOP, each cookie (`Secure`, `HttpOnly`, `SameSite`, `__Host-` and `__Secure-`), CORS, version leaks and obsolete headers; the policy as a table with risky sources outlined. Nothing is fetched.
+- Markdown fences `cvss`, `ioc`, `iocs`, `csp` and `security-headers`.
+
 - Examples page: a sticky, scrollable section menu beside the demos, with direct links and current-section highlighting. Smaller screens keep the compact dropdown.
 - `<vt-pivot>`: pivot tables from CSV or JSON. Fields in rows and columns, a value summed, counted, averaged, the smallest, the largest or the number of different values, totals, cells shaded by value, lists to change the fields as in a spreadsheet, and each cell a button that sends its records (`vt-select`). Copy and download as CSV, with formulas neutralized.
 - `<vt-heatmap>`: heat maps. Values by day as a calendar of weeks (a year by default, or `year`, `from`, `to`), or values by two categories as a matrix, in 3 to 9 shades of the theme. The squares follow the WAI-ARIA grid pattern, and each says its day and value.
@@ -43,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Playground component selector is sorted alphabetically.
 - Examples are grouped by need, with category descriptions, a grouped sidebar and mobile menu, and alphabetical ordering within each category.
 - Docs component links are sorted alphabetically.
-- The budget of the full bundles is 520 KB, for the twenty-one new elements; `vt-markdown` 81 KB, for the icons shared by every element.
+- The budget of the full bundles is 530 KB, for `<vt-ioc>`, `<vt-cvss>` and `<vt-headers>` (it was 520 KB for the twenty-one elements before them); `vt-markdown` 81 KB, for the icons shared by every element.
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
 ### Fixed

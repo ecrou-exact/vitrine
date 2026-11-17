@@ -660,7 +660,10 @@ vt-password:not(:defined),
 vt-secret:not(:defined),
 vt-version:not(:defined),
 vt-changelog:not(:defined),
-vt-repo:not(:defined) {
+vt-repo:not(:defined),
+vt-ioc:not(:defined),
+vt-cvss:not(:defined),
+vt-headers:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

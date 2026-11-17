@@ -159,6 +159,18 @@ const MORE = {
     'POST /api/users HTTP/1.1\nHost: api.example.com\nContent-Type: application/json\nAuthorization: Bearer abcdefghijklmnopqrst\n\n{"name":"Ada"}\n\nHTTP/1.1 404 Not Found\nContent-Type: application/json\n\n{"error":"missing"}',
     { layout: 'columns' },
   ],
+  'vt-ioc': [
+    'C2 at 45.33.32[.]156 and 10.0.0.5, payload hxxps://evil[.]example[.]xyz/a, d41d8cd98f00b204e9800998ecf8427e, CVE-2024-3400, T1566.001',
+    { variant: 'full' },
+  ],
+  'vt-cvss': [
+    'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N/E:P',
+    { variant: 'full', editable: '' },
+  ],
+  'vt-headers': [
+    "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nset-cookie: a=1; SameSite=None",
+    { variant: 'full' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {

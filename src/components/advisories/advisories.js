@@ -6,6 +6,7 @@
  *
  * @module components/advisories/advisories
  */
+import { parseVector, scores } from '../cvss/cvss.js';
 import { MAX_ITEMS, isObject, safeLink, text, toNumber, toTime } from '../../core/data.js';
 
 /** @typedef {'critical' | 'high' | 'moderate' | 'low' | 'unknown'} Severity */
@@ -40,15 +41,6 @@ export const SEVERITIES = /** @type {const} */ (['critical', 'high', 'moderate',
 
 // ---------------------------------------------------------------- CVSS 3
 
-const METRICS = /** @type {Record<string, Record<string, number>>} */ ({
-  AV: { N: 0.85, A: 0.62, L: 0.55, P: 0.2 },
-  AC: { L: 0.77, H: 0.44 },
-  UI: { N: 0.85, R: 0.62 },
-  C: { H: 0.56, L: 0.22, N: 0 },
-  I: { H: 0.56, L: 0.22, N: 0 },
-  A: { H: 0.56, L: 0.22, N: 0 },
-});
-
 /**
  * Reads a CVSS vector into its metrics.
  *
@@ -66,34 +58,15 @@ export function cvssMetrics(vector) {
 }
 
 /**
- * The base score of a CVSS 3.0 or 3.1 vector, as the specification computes it.
+ * The base score of a CVSS 3.0 or 3.1 vector, computed by the CVSS module of <vt-cvss>.
  *
  * @param {string} vector - `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`.
  * @returns {number | null} `null` for another version or an incomplete vector.
  */
 export function cvss3Score(vector) {
   if (!/^CVSS:3\.[01]\//.test(vector)) return null;
-  const m = cvssMetrics(vector);
-  const changed = m.S === 'C';
-  const pr = { N: 0.85, L: changed ? 0.68 : 0.62, H: changed ? 0.5 : 0.27 }[m.PR];
-  const [av, ac, ui, c, i, a] = ['AV', 'AC', 'UI', 'C', 'I', 'A'].map((k) => METRICS[k][m[k]]);
-  if ([av, ac, ui, c, i, a, pr].some((v) => v === undefined) || !['U', 'C'].includes(m.S)) return null; // prettier-ignore
-  const iss = 1 - (1 - c) * (1 - i) * (1 - a);
-  const impact = changed ? 7.52 * (iss - 0.029) - 3.25 * (iss - 0.02) ** 15 : 6.42 * iss;
-  if (impact <= 0) return 0;
-  const exploitability = 8.22 * av * ac * /** @type {number} */ (pr) * ui;
-  return roundUp(Math.min((changed ? 1.08 : 1) * (impact + exploitability), 10));
-}
-
-/**
- * Rounds up to one decimal as CVSS 3.1 does, without floating point surprises.
- *
- * @param {number} value
- * @returns {number}
- */
-function roundUp(value) {
-  const n = Math.round(value * 100000);
-  return n % 10000 === 0 ? n / 100000 : (Math.floor(n / 10000) + 1) / 10;
+  const result = parseVector(vector);
+  return result.ok ? (scores(result.vector)?.base ?? null) : null;
 }
 
 /**
