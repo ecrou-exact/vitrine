@@ -95,6 +95,7 @@
             <option value="board">Board</option>
             <option value="calendar">Calendar</option>
             <option value="chart">Chart</option>
+            <option value="contrast">Color contrast</option>
             <option value="countdown">Countdown</option>
             <option value="diagram">Diagram</option>
             <option value="flame">Flame graph</option>
@@ -153,9 +154,11 @@
             <option value="licenses">License report</option>
             <option value="pricing">Pricing</option>
             <option value="repo">Repository card</option>
+            <option value="sbom">SBOM</option>
             <option value="advisories">Security report</option>
             <option value="lifecycle">Support schedule</option>
             <option value="testimonials">Testimonials</option>
+            <option value="semver">Version ranges</option>
           </optgroup>
           <optgroup label="Customize &amp; integrate">
             <option value="editing">Editing</option>
@@ -1759,6 +1762,44 @@ Helsinki;656000;FI</template>
                   "datasets": [{ "label": "Share", "data": [64, 19, 6, 5, 6] }] }
               </template>
             </vt-chart>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="contrast" aria-labelledby="contrast-title">
+        <h3 id="contrast-title">&lt;vt-contrast&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Check a pair of colors</h4>
+            <p>
+              Light gray on white fails AA. The element gives the nearest gray that passes AA and
+              AAA. Change either color with its field or the picker.
+            </p>
+          </div>
+          <template>
+            <vt-contrast variant="full" fg="#999999" bg="#ffffff"></vt-contrast>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A palette, every pair at once</h4>
+            <p>
+              Colors one per line make a grid: each text color on each background, with its ratio
+              and the level it reaches.
+            </p>
+          </div>
+          <template>
+            <vt-contrast>
+              <template>
+                ink: #1a1a2e
+                paper: #fbfaf7
+                brand: #0b6bcb
+                accent: #e8590c
+                muted: #8a8f98
+              </template>
+            </vt-contrast>
           </template>
         </article>
       </section>
@@ -5252,6 +5293,242 @@ AssertionError: assert 404 == 200</failure>
         </article>
       </section>
 
+      <section class="example-group" id="sbom" aria-labelledby="sbom-title">
+        <h3 id="sbom-title">&lt;vt-sbom&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A CycloneDX SBOM with its vulnerabilities</h4>
+            <p>
+              The dependency tree of an application, its license kinds, and a VEX: Log4Shell in an
+              optional Java dependency, a prototype pollution brought in twice through Express. The
+              Components tab shows the path that brings each one in.
+            </p>
+          </div>
+          <template>
+            <vt-sbom variant="full" label="bom.cdx.json">
+              <template>
+                {
+                  "bomFormat": "CycloneDX",
+                  "specVersion": "1.6",
+                  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+                  "version": 1,
+                  "metadata": {
+                    "timestamp": "2026-11-17T10:00:00Z",
+                    "tools": {
+                      "components": [
+                        {
+                          "type": "application",
+                          "vendor": "anchore",
+                          "name": "syft",
+                          "version": "1.16.0"
+                        }
+                      ]
+                    },
+                    "component": {
+                      "type": "application",
+                      "bom-ref": "app",
+                      "name": "shop-web",
+                      "version": "3.2.0",
+                      "purl": "pkg:npm/shop-web@3.2.0"
+                    }
+                  },
+                  "components": [
+                    {
+                      "type": "framework",
+                      "bom-ref": "pkg:npm/express@4.19.2",
+                      "name": "express",
+                      "version": "4.19.2",
+                      "purl": "pkg:npm/express@4.19.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ],
+                      "hashes": [
+                        {
+                          "alg": "SHA-512",
+                          "content": "aa11"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/body-parser@1.20.2",
+                      "name": "body-parser",
+                      "version": "1.20.2",
+                      "purl": "pkg:npm/body-parser@1.20.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/qs@6.11.0",
+                      "name": "qs",
+                      "version": "6.11.0",
+                      "purl": "pkg:npm/qs@6.11.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "BSD-3-Clause"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/%40img/sharp@0.33.0",
+                      "group": "@img",
+                      "name": "sharp",
+                      "version": "0.33.0",
+                      "purl": "pkg:npm/%40img/sharp@0.33.0",
+                      "licenses": [
+                        {
+                          "expression": "Apache-2.0 AND LGPL-3.0-or-later"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+                      "group": "org.apache.logging.log4j",
+                      "name": "log4j-core",
+                      "version": "2.14.1",
+                      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "Apache-2.0"
+                          }
+                        }
+                      ],
+                      "scope": "optional"
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/left-pad@1.3.0",
+                      "name": "left-pad",
+                      "version": "1.3.0",
+                      "purl": "pkg:npm/left-pad@1.3.0"
+                    }
+                  ],
+                  "dependencies": [
+                    {
+                      "ref": "app",
+                      "dependsOn": [
+                        "pkg:npm/express@4.19.2",
+                        "pkg:npm/%40img/sharp@0.33.0",
+                        "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/express@4.19.2",
+                      "dependsOn": [
+                        "pkg:npm/body-parser@1.20.2",
+                        "pkg:npm/qs@6.11.0"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/body-parser@1.20.2",
+                      "dependsOn": [
+                        "pkg:npm/qs@6.11.0"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/qs@6.11.0",
+                      "dependsOn": []
+                    }
+                  ],
+                  "vulnerabilities": [
+                    {
+                      "id": "CVE-2021-44228",
+                      "source": {
+                        "name": "NVD",
+                        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+                      },
+                      "ratings": [
+                        {
+                          "source": {
+                            "name": "NVD"
+                          },
+                          "score": 10.0,
+                          "severity": "critical",
+                          "method": "CVSSv31",
+                          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+                        }
+                      ],
+                      "cwes": [
+                        502,
+                        400,
+                        20
+                      ],
+                      "description": "Apache Log4j2 JNDI features do not protect against attacker-controlled LDAP endpoints.",
+                      "recommendation": "Upgrade to 2.17.1 or later.",
+                      "analysis": {
+                        "state": "exploitable"
+                      },
+                      "affects": [
+                        {
+                          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "GHSA-hrpp-h998-j3pp",
+                      "source": {
+                        "name": "GitHub"
+                      },
+                      "ratings": [
+                        {
+                          "severity": "high",
+                          "method": "CVSSv31",
+                          "score": 7.5
+                        }
+                      ],
+                      "description": "qs vulnerable to prototype pollution.",
+                      "affects": [
+                        {
+                          "ref": "pkg:npm/qs@6.11.0"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "CVE-2024-43796",
+                      "source": {
+                        "name": "NVD"
+                      },
+                      "ratings": [
+                        {
+                          "severity": "low",
+                          "score": 2.3,
+                          "method": "CVSSv4"
+                        }
+                      ],
+                      "analysis": {
+                        "state": "not_affected",
+                        "justification": "code_not_reachable"
+                      },
+                      "affects": [
+                        {
+                          "ref": "pkg:npm/express@4.19.2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-sbom>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="advisories" aria-labelledby="advisories-title">
         <h3 id="advisories-title">&lt;vt-advisories&gt;</h3>
 
@@ -5699,6 +5976,60 @@ AssertionError: assert 404 == 200</failure>
                 ]
               </template>
             </vt-testimonials>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="semver" aria-labelledby="semver-title">
+        <h3 id="semver-title">&lt;vt-semver&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a dependency range accepts</h4>
+            <p>
+              The range of a <code>package.json</code> against the versions published on npm (a
+              registry document): which versions match, which one is installed, and how far the
+              latest is. Type another range or test a version below.
+            </p>
+          </div>
+          <template>
+            <vt-semver variant="full" range="^1.2.3" label="left-pad-ish">
+              <template>
+                {
+                  "name": "left-pad-ish",
+                  "dist-tags": {
+                    "latest": "3.1.0",
+                    "next": "3.2.0-beta.1"
+                  },
+                  "versions": {
+                    "1.0.0": {},
+                    "1.2.0": {},
+                    "1.2.3": {},
+                    "1.4.2": {},
+                    "1.9.1": {},
+                    "2.0.0": {},
+                    "2.3.0": {},
+                    "2.5.4": {},
+                    "3.0.0": {},
+                    "3.1.0": {},
+                    "3.2.0-beta.1": {}
+                  }
+                }
+              </template>
+            </vt-semver>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Ranges with a catch</h4>
+            <p>
+              Several sets joined by <code>||</code>: <code>^</code> below 1.0.0, a range without
+              upper bound, a pre-release. Each one is read in words, with a warning.
+            </p>
+          </div>
+          <template>
+            <vt-semver range="^0.4.1 || &gt;=2.0.0-rc.1">0.4.0 0.4.5 0.5.0 1.0.0 2.0.0-rc.1 2.0.0-rc.2 2.0.0 3.1.0</vt-semver>
           </template>
         </article>
       </section>

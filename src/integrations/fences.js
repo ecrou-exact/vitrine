@@ -45,6 +45,9 @@ export const ELEMENTS = Object.freeze({
   yara: 'vt-yara', yar: 'vt-yara',
   sigma: 'vt-sigma',
   pcap: 'vt-pcap',
+  semver: 'vt-semver',
+  contrast: 'vt-contrast',
+  sbom: 'vt-sbom', cyclonedx: 'vt-sbom', spdx: 'vt-sbom',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

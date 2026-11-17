@@ -1018,6 +1018,28 @@ PORT     STATE SERVICE VERSION
               </vt-pcap>
               <a href="examples.html#pcap">Capture examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-semver&gt;</h3>
+              <p>Version ranges in words, with the versions they match and the one installed.</p>
+              <vt-semver class="preview" lang-ui="en" range="^1.2.3" field="false">
+                <template>1.0.0 1.2.3 1.4.2 1.9.1 2.0.0</template>
+              </vt-semver>
+              <a href="examples.html#semver">Version range examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-contrast&gt;</h3>
+              <p>WCAG contrast of two colors, and the nearest color that passes.</p>
+              <vt-contrast class="preview" lang-ui="en" fg="#999999" bg="#ffffff" field="false"></vt-contrast>
+              <a href="examples.html#contrast">Contrast examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-sbom&gt;</h3>
+              <p>SBOMs as a dependency tree, with licenses and vulnerabilities.</p>
+              <vt-sbom class="preview" lang-ui="en" depth="3">
+                <template>{"bomFormat":"CycloneDX","specVersion":"1.6","metadata":{"component":{"bom-ref":"app","name":"shop-web","version":"3.2.0"}},"components":[{"bom-ref":"e","name":"express","version":"4.19.2","purl":"pkg:npm/express@4.19.2","licenses":[{"license":{"id":"MIT"}}]},{"bom-ref":"q","name":"qs","version":"6.11.0","purl":"pkg:npm/qs@6.11.0","licenses":[{"license":{"id":"BSD-3-Clause"}}]}],"dependencies":[{"ref":"app","dependsOn":["e"]},{"ref":"e","dependsOn":["q"]}],"vulnerabilities":[{"id":"GHSA-hrpp-h998-j3pp","ratings":[{"severity":"high","score":7.5}],"affects":[{"ref":"q"}]}]}</template>
+              </vt-sbom>
+              <a href="examples.html#sbom">SBOM examples</a>
+            </article>
           </div>
         </div>
       </section>

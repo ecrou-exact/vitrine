@@ -180,6 +180,9 @@ const SAMPLES = {
   sigma:
     "title: Whoami Execution by a Web Server\nid: 502b42de-4306-40b4-9596-6f590c81f073\nstatus: test\ndescription: A web server process runs whoami, a common first step after a web shell is planted.\nauthor: Vitrine examples\ndate: 2026-11-17\nreferences:\n  - https://attack.mitre.org/techniques/T1033/\ntags:\n  - attack.discovery\n  - attack.t1033\n  - attack.persistence\n  - attack.t1505.003\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection_parent:\n    ParentImage|endswith:\n      - '\\w3wp.exe'\n      - '\\httpd.exe'\n      - '\\nginx.exe'\n  selection_child:\n    - Image|endswith: '\\whoami.exe'\n    - OriginalFileName: 'whoami.exe'\n  filter_health:\n    CommandLine|contains|all:\n      - '/healthcheck'\n      - '--quiet'\n  condition: all of selection_* and not filter_health\nfalsepositives:\n  - Monitoring scripts run by the web server account\nlevel: high\n",
   pcap: '1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==',
+  semver: '^1.2.3\n1.0.0\n1.2.3\n1.4.2\n1.9.1\n2.0.0\n2.1.0-rc.1',
+  contrast: 'Body: #333333 on #ffffff\nMuted: #999999 on #ffffff\nLink: #0b6bcb on #f5f5f5',
+  sbom: '{\n  "bomFormat": "CycloneDX",\n  "specVersion": "1.6",\n  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",\n  "version": 1,\n  "metadata": {\n    "timestamp": "2026-11-17T10:00:00Z",\n    "tools": {\n      "components": [\n        {\n          "type": "application",\n          "vendor": "anchore",\n          "name": "syft",\n          "version": "1.16.0"\n        }\n      ]\n    },\n    "component": {\n      "type": "application",\n      "bom-ref": "app",\n      "name": "shop-web",\n      "version": "3.2.0",\n      "purl": "pkg:npm/shop-web@3.2.0"\n    }\n  },\n  "components": [\n    {\n      "type": "framework",\n      "bom-ref": "pkg:npm/express@4.19.2",\n      "name": "express",\n      "version": "4.19.2",\n      "purl": "pkg:npm/express@4.19.2",\n      "licenses": [\n        {\n          "license": {\n            "id": "MIT"\n          }\n        }\n      ],\n      "hashes": [\n        {\n          "alg": "SHA-512",\n          "content": "aa11"\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/body-parser@1.20.2",\n      "name": "body-parser",\n      "version": "1.20.2",\n      "purl": "pkg:npm/body-parser@1.20.2",\n      "licenses": [\n        {\n          "license": {\n            "id": "MIT"\n          }\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/qs@6.11.0",\n      "name": "qs",\n      "version": "6.11.0",\n      "purl": "pkg:npm/qs@6.11.0",\n      "licenses": [\n        {\n          "license": {\n            "id": "BSD-3-Clause"\n          }\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/%40img/sharp@0.33.0",\n      "group": "@img",\n      "name": "sharp",\n      "version": "0.33.0",\n      "purl": "pkg:npm/%40img/sharp@0.33.0",\n      "licenses": [\n        {\n          "expression": "Apache-2.0 AND LGPL-3.0-or-later"\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",\n      "group": "org.apache.logging.log4j",\n      "name": "log4j-core",\n      "version": "2.14.1",\n      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",\n      "licenses": [\n        {\n          "license": {\n            "id": "Apache-2.0"\n          }\n        }\n      ],\n      "scope": "optional"\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/left-pad@1.3.0",\n      "name": "left-pad",\n      "version": "1.3.0",\n      "purl": "pkg:npm/left-pad@1.3.0"\n    }\n  ],\n  "dependencies": [\n    {\n      "ref": "app",\n      "dependsOn": [\n        "pkg:npm/express@4.19.2",\n        "pkg:npm/%40img/sharp@0.33.0",\n        "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"\n      ]\n    },\n    {\n      "ref": "pkg:npm/express@4.19.2",\n      "dependsOn": [\n        "pkg:npm/body-parser@1.20.2",\n        "pkg:npm/qs@6.11.0"\n      ]\n    },\n    {\n      "ref": "pkg:npm/body-parser@1.20.2",\n      "dependsOn": [\n        "pkg:npm/qs@6.11.0"\n      ]\n    },\n    {\n      "ref": "pkg:npm/qs@6.11.0",\n      "dependsOn": []\n    }\n  ],\n  "vulnerabilities": [\n    {\n      "id": "CVE-2021-44228",\n      "source": {\n        "name": "NVD",\n        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"\n      },\n      "ratings": [\n        {\n          "source": {\n            "name": "NVD"\n          },\n          "score": 10.0,\n          "severity": "critical",\n          "method": "CVSSv31",\n          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"\n        }\n      ],\n      "cwes": [\n        502,\n        400,\n        20\n      ],\n      "description": "Apache Log4j2 JNDI features do not protect against attacker-controlled LDAP endpoints.",\n      "recommendation": "Upgrade to 2.17.1 or later.",\n      "analysis": {\n        "state": "exploitable"\n      },\n      "affects": [\n        {\n          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"\n        }\n      ]\n    },\n    {\n      "id": "GHSA-hrpp-h998-j3pp",\n      "source": {\n        "name": "GitHub"\n      },\n      "ratings": [\n        {\n          "severity": "high",\n          "method": "CVSSv31",\n          "score": 7.5\n        }\n      ],\n      "description": "qs vulnerable to prototype pollution.",\n      "affects": [\n        {\n          "ref": "pkg:npm/qs@6.11.0"\n        }\n      ]\n    },\n    {\n      "id": "CVE-2024-43796",\n      "source": {\n        "name": "NVD"\n      },\n      "ratings": [\n        {\n          "severity": "low",\n          "score": 2.3,\n          "method": "CVSSv4"\n        }\n      ],\n      "analysis": {\n        "state": "not_affected",\n        "justification": "code_not_reachable"\n      },\n      "affects": [\n        {\n          "ref": "pkg:npm/express@4.19.2"\n        }\n      ]\n    }\n  ]\n}',
 };
 
 /** Boolean features shared by every component. */
@@ -958,6 +961,27 @@ const SCHEMA = {
     flags: ['filters', 'file', 'defang', 'tabs'],
     fields: [{ name: 'view', type: 'select', options: ['', 'packets', 'conversations', 'names'] }],
   },
+  semver: {
+    tag: 'vt-semver',
+    flags: ['field', 'prerelease'],
+    fields: [{ name: 'range', type: 'text', placeholder: '^1.2.3' }],
+  },
+  contrast: {
+    tag: 'vt-contrast',
+    flags: ['field', 'suggest'],
+    fields: [
+      { name: 'fg', type: 'text', placeholder: '#767676' },
+      { name: 'bg', type: 'text', placeholder: '#ffffff' },
+    ],
+  },
+  sbom: {
+    tag: 'vt-sbom',
+    flags: ['filters', 'tabs'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'tree', 'components', 'vulnerabilities'] },
+      { name: 'depth', type: 'text', placeholder: '1' },
+    ],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -1207,6 +1231,9 @@ function switchType(type) {
     yara: 'loader.yar',
     sigma: 'web_server_whoami.yml',
     pcap: 'login.pcap',
+    semver: 'left-pad-ish',
+    contrast: 'Palette',
+    sbom: 'bom.cdx.json',
   }[type];
   buildControls();
   render();

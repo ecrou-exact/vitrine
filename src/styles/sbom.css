@@ -1,0 +1,303 @@
+/*
+ * Software bills of materials: a summary, the dependency tree, the table of components and
+ * the vulnerabilities. License kinds and severities are written in words; colors only repeat
+ * them.
+ */
+.sbom-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.sbom-muted {
+  color: var(--_fg-muted);
+}
+
+.sbom-summary {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.sbom-title,
+.sbom-facts {
+  margin: 0;
+}
+
+.sbom-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.sbom-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sbom-chips li {
+  padding: 1px var(--_space-2);
+  border: 1px solid var(--_border);
+  border-inline-start-width: 3px;
+  border-radius: var(--_radius-sm);
+  font-size: var(--_font-size-small);
+}
+
+.sbom-chips li.sbom-plain {
+  border: 0;
+  color: var(--_fg-muted);
+}
+
+.lic-permissive {
+  border-color: var(--_success) !important;
+}
+
+.lic-weak {
+  border-color: var(--_warning) !important;
+}
+
+.lic-strong {
+  border-color: var(--_danger) !important;
+}
+
+.lic-other,
+.lic-unknown {
+  border-color: var(--_border-strong) !important;
+}
+
+.sev-critical,
+.sev-high {
+  border-color: var(--_danger) !important;
+}
+
+.sev-medium {
+  border-color: var(--_warning) !important;
+}
+
+.sev-low,
+.sev-info {
+  border-color: var(--_info) !important;
+}
+
+.sbom-tree-actions {
+  display: flex;
+  gap: var(--_space-3);
+  margin: 0;
+}
+
+.sbom-tree-actions .text-btn {
+  color: var(--_accent-fg);
+}
+
+.sbom-tree,
+.sbom-tree ul {
+  margin: 0;
+  padding-inline-start: 1.1em;
+  list-style: none;
+}
+
+.sbom-tree {
+  padding-inline-start: 0;
+}
+
+.sbom-tree li {
+  margin: 2px 0;
+}
+
+.sbom-tree ul {
+  border-inline-start: 1px dashed var(--_border-strong);
+  margin-inline-start: 0.35em;
+}
+
+.sbom-tree summary {
+  cursor: pointer;
+}
+
+.sbom-node {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--_space-2);
+  vertical-align: middle;
+}
+
+.sbom-name {
+  font-family: var(--_font-mono);
+  font-weight: 600;
+}
+
+.sbom-version {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.sbom-lic,
+.sbom-tag,
+.sbom-sev {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 6px;
+  border: 1px solid var(--_border);
+  border-inline-start-width: 3px;
+  border-radius: var(--_radius-sm);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.sbom-lic {
+  max-width: 18em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbom-sev svg {
+  width: 12px;
+  height: 12px;
+}
+
+.sbom-sev.sev-critical,
+.sbom-sev.sev-high {
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.sbom-count {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.sbom-seen {
+  font-size: var(--_font-size-small);
+  font-style: italic;
+}
+
+.sbom-unreachable summary {
+  color: var(--_fg-muted);
+  cursor: pointer;
+}
+
+.sbom-filters {
+  display: flex;
+}
+
+.sbom-query {
+  flex: 1;
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font: inherit;
+}
+
+.sbom-scroll {
+  max-height: min(60vh, 520px);
+  overflow: auto;
+}
+
+.sbom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--_font-size-small);
+}
+
+.sbom-table th,
+.sbom-table td {
+  padding: 4px var(--_space-2);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.sbom-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sbom-table tbody th {
+  font-weight: 500;
+}
+
+.sbom-table code {
+  font-family: var(--_font-mono);
+}
+
+.sbom-purl {
+  display: block;
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+.sbom-path {
+  color: var(--_fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.sbom-vulns {
+  display: grid;
+  gap: var(--_space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sbom-vuln {
+  display: grid;
+  gap: var(--_space-1);
+  padding: var(--_space-2) var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start-width: 3px;
+  border-radius: var(--_radius-sm);
+}
+
+.sbom-vuln.dismissed {
+  border-style: dashed;
+}
+
+.sbom-vuln p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sbom-vuln-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.sbom-vuln-id {
+  font-family: var(--_font-mono);
+  font-weight: 700;
+}
+
+a.sbom-vuln-id {
+  color: var(--_accent-fg);
+}
+
+.sbom-affects code,
+.sbom-vector {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.sbom-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

@@ -874,6 +874,42 @@ ${p}`,
     attrs: { variant: 'full', defang: 'false' },
     wrap: (p) => pcapWith(p),
   },
+  {
+    tag: 'vt-semver',
+    attrs: { variant: 'full', range: '^1.2.3' },
+    wrap: (p) =>
+      JSON.stringify({
+        versions: { '1.2.3': {}, [p]: {} },
+        'dist-tags': { [p]: '1.2.3', latest: p },
+      }),
+  },
+  {
+    tag: 'vt-semver',
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p}\n1.2.3 ${p}`,
+  },
+  {
+    tag: 'vt-contrast',
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p.replace(/[:\n]/g, '')}: #333 on #fff\nrgb(${p}) on #fff\n${p}\n#fff`,
+  },
+  {
+    tag: 'vt-contrast',
+    attrs: { variant: 'full', fg: 'red', bg: 'white' },
+    wrap: (p) => p,
+  },
+  {
+    tag: 'vt-sbom',
+    attrs: { variant: 'full', view: 'components' },
+    wrap: (p) =>
+      JSON.stringify({ bomFormat: 'CycloneDX', specVersion: p, metadata: { timestamp: p, tools: [{ name: p }], component: { 'bom-ref': 'r', name: p } }, components: [{ 'bom-ref': 'c', name: p, group: p, version: p, purl: `pkg:${p}`, scope: p, licenses: [{ expression: p }] }], dependencies: [{ ref: 'r', dependsOn: ['c'] }], vulnerabilities: [{ id: p, source: { url: `javascript:${p}` }, description: p, recommendation: p, ratings: [{ severity: p, vector: p, method: p }], analysis: { state: p }, affects: [{ ref: 'c' }] }] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-sbom',
+    attrs: { variant: 'full', view: 'vulnerabilities' },
+    wrap: (p) =>
+      JSON.stringify({ spdxVersion: p, name: p, creationInfo: { creators: [`Tool: ${p}`] }, packages: [{ SPDXID: 'a', name: p, versionInfo: p, licenseConcluded: p, supplier: p }] }), // prettier-ignore
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

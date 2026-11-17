@@ -74,6 +74,9 @@ import { VtWaterfall } from './components/waterfall/vt-waterfall.js';
 import { VtYara } from './components/yara/vt-yara.js';
 import { VtSigma } from './components/sigma/vt-sigma.js';
 import { VtPcap } from './components/pcap/vt-pcap.js';
+import { VtSemver } from './components/semver/vt-semver.js';
+import { VtContrast } from './components/contrast/vt-contrast.js';
+import { VtSbom } from './components/sbom/vt-sbom.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -170,6 +173,9 @@ export {
   VtYara,
   VtSigma,
   VtPcap,
+  VtSemver,
+  VtContrast,
+  VtSbom,
   registerIconSet,
   configure,
   getConfig,
@@ -277,6 +283,9 @@ export const registry = new Map(
     ['vt-yara', VtYara],
     ['vt-sigma', VtSigma],
     ['vt-pcap', VtPcap],
+    ['vt-semver', VtSemver],
+    ['vt-contrast', VtContrast],
+    ['vt-sbom', VtSbom],
   ]),
 );
 
@@ -360,6 +369,9 @@ const TYPES = /** @type {const} */ ({
   yara: 'vt-yara',
   sigma: 'vt-sigma',
   pcap: 'vt-pcap',
+  semver: 'vt-semver',
+  contrast: 'vt-contrast',
+  sbom: 'vt-sbom',
 });
 
 /**
