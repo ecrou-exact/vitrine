@@ -92,6 +92,74 @@ const PAYLOADS = [
   '- [x] <img src=x onerror=alert(1)>',
 ];
 
+/**
+ * A pcap whose HTTP request, Host header, DNS question and TLS server name carry the payload.
+ *
+ * @param {string} payload
+ * @returns {string} Base64.
+ */
+function pcapWith(payload) {
+  const text = [...Buffer.from(payload, 'utf8')];
+  const be16 = (n) => [(n >> 8) & 255, n & 255];
+  const le32 = (n) => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255];
+  const ip = (proto, body) => [0x45, 0, ...be16(20 + body.length), 0, 0, 0, 0, 64, proto, 0, 0, 10, 0, 0, 1, 10, 0, 0, 2, ...body]; // prettier-ignore
+  const eth = (body) => [2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1, 8, 0, ...body];
+  const tcp = (dp, body) => [...be16(40000), ...be16(dp), 0, 0, 0, 1, 0, 0, 0, 0, 0x50, 0x18, 1, 0, 0, 0, 0, 0, ...body]; // prettier-ignore
+  const http = [
+    ...Buffer.from(`GET /${payload} HTTP/1.1\r\nHost: `, 'utf8'),
+    ...text,
+    13,
+    10,
+    13,
+    10,
+  ];
+  const labels = [];
+  for (let i = 0; i < text.length; i += 60)
+    labels.push(Math.min(60, text.length - i), ...text.slice(i, i + 60));
+  const dns = [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, ...labels.slice(0, 250), 0, 0, 1, 0, 1];
+  const udp = [...be16(40001), ...be16(53), ...be16(8 + dns.length), 0, 0, ...dns];
+  const host = text.slice(0, 200);
+  const sni = [
+    0,
+    0,
+    ...be16(host.length + 5),
+    ...be16(host.length + 3),
+    0,
+    ...be16(host.length),
+    ...host,
+  ];
+  const hello = [
+    3,
+    3,
+    ...new Array(32).fill(1),
+    0,
+    0,
+    2,
+    0x13,
+    1,
+    1,
+    0,
+    ...be16(sni.length),
+    ...sni,
+  ];
+  const tls = [22, 3, 1, ...be16(hello.length + 4), 1, 0, ...be16(hello.length), ...hello];
+  const frames = [eth(ip(6, tcp(80, http))), eth(ip(17, udp)), eth(ip(6, tcp(443, tls)))];
+  const bytes = [
+    ...le32(0xa1b2c3d4),
+    2,
+    0,
+    4,
+    0,
+    ...le32(0),
+    ...le32(0),
+    ...le32(65535),
+    ...le32(1),
+  ];
+  for (const f of frames)
+    bytes.push(...le32(1), ...le32(0), ...le32(f.length), ...le32(f.length), ...f);
+  return Buffer.from(bytes).toString('base64');
+}
+
 const MODES = [
   {
     tag: 'vt-faq',
@@ -779,6 +847,32 @@ https://${p}@x.example/${p}?q=${encodeURIComponent(p)}&next=https://y.example/${
           ],
         },
       }),
+  },
+  {
+    tag: 'vt-yara',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `import "${p.replace(/"/g, '')}"
+rule R_${p.replace(/\W/g, '')} : ${p.replace(/\W/g, '')} {
+  meta:
+    d = "${p.replace(/["\\\n]/g, '')}"
+  strings:
+    $a = "${p.replace(/["\\\n]/g, '')}" nocase
+  condition:
+    $a and ${p}
+}
+${p}`,
+  },
+  {
+    tag: 'vt-sigma',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ title: p, id: p, status: p, level: p, description: p, author: p, date: p, references: [p, `javascript:${p}`], tags: [p, 'attack.t1059'], logsource: { product: p, [p]: p }, detection: { [p]: { [`${p}|${p}`]: [p, null] }, s: [p], condition: `${p} and s` }, falsepositives: [p], fields: [p] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-pcap',
+    attrs: { variant: 'full', defang: 'false' },
+    wrap: (p) => pcapWith(p),
   },
 ];
 

@@ -1,0 +1,348 @@
+/*
+ * YARA rules: a card per rule with its tags, problems, meta, strings and condition, the
+ * condition read in words, and the colored source. Problems are written in words; colors
+ * only repeat them.
+ */
+.yara-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.yara-header {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.yara-imports {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+}
+
+.yara-imports code,
+.yara-name code,
+.yara-meta dd,
+.yara-strings code,
+.yara-mods code {
+  font-family: var(--_font-mono);
+}
+
+.yara-label {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.yara-rule {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.yara-rule.danger {
+  border-inline-start-color: var(--_danger);
+}
+
+.yara-rule.warning {
+  border-inline-start-color: var(--_warning);
+}
+
+.yara-rule.none {
+  border-inline-start-color: var(--_success);
+}
+
+.yara-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.yara-name {
+  margin: 0;
+  font-size: 1.05em;
+  overflow-wrap: anywhere;
+}
+
+.yara-flag,
+.yara-tag {
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.yara-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yara-tags li {
+  padding: 0 var(--_space-2);
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.yara-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  margin-inline-start: auto;
+  padding: 1px var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.yara-verdict.danger {
+  color: var(--_danger);
+}
+
+.yara-verdict.warning {
+  color: var(--_warning);
+}
+
+.yara-verdict.none {
+  color: var(--_success);
+}
+
+.yara-verdict svg,
+.yara-finding svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.yara-findings {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yara-finding {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_space-1) var(--_space-2);
+  overflow-wrap: anywhere;
+}
+
+.yara-finding svg {
+  margin-top: 3px;
+}
+
+.yara-finding.danger {
+  font-weight: 600;
+}
+
+.yara-finding.danger svg {
+  color: var(--_danger);
+}
+
+.yara-finding.warning svg {
+  color: var(--_warning);
+}
+
+.yara-finding.info svg {
+  color: var(--_info);
+}
+
+.yara-line {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 400;
+}
+
+.yara-meta {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 2px var(--_space-3);
+  margin: 0;
+}
+
+.yara-meta dt {
+  color: var(--_fg-muted);
+}
+
+.yara-meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.yara-meta .m-number,
+.yara-meta .m-boolean {
+  color: var(--_syntax-number);
+}
+
+.yara-scroll {
+  overflow-x: auto;
+}
+
+.yara-strings {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.yara-strings caption {
+  padding-bottom: var(--_space-1);
+}
+
+.yara-strings th,
+.yara-strings td {
+  padding: 4px var(--_space-3) 4px 0;
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.yara-strings thead th {
+  color: var(--_fg-muted);
+  font-weight: 500;
+}
+
+.yara-strings tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.yara-strings tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.yara-strings tr.unused code.y-ref {
+  text-decoration: line-through;
+}
+
+.yara-kind {
+  color: var(--_fg-muted);
+  white-space: nowrap;
+}
+
+.yara-value {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.yara-mods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+}
+
+.yara-mod {
+  padding: 0 6px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  cursor: help;
+}
+
+.yara-condition,
+.yara-notes {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.yara-code {
+  margin: 0;
+  padding: var(--_space-2) var(--_space-3);
+  overflow-x: auto;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  line-height: var(--_line-height);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.yara-code code {
+  font: inherit;
+}
+
+.yara-source {
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.yara-notes ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding-inline-start: 1.25em;
+}
+
+.y-keyword {
+  color: var(--_syntax-keyword);
+  font-weight: 600;
+}
+
+.y-string {
+  color: var(--_syntax-string);
+}
+
+.y-regex {
+  color: var(--_syntax-attr);
+}
+
+.y-hex,
+.y-byte {
+  color: var(--_syntax-number);
+}
+
+.y-wild {
+  color: var(--_syntax-type);
+  font-weight: 600;
+}
+
+.y-jump {
+  color: var(--_syntax-function);
+  font-weight: 600;
+}
+
+.y-number {
+  color: var(--_syntax-number);
+}
+
+.y-ref {
+  color: var(--_syntax-function);
+}
+
+.y-comment {
+  color: var(--_syntax-comment);
+  font-style: italic;
+}
+
+.y-error {
+  color: var(--_danger);
+  text-decoration: wavy underline;
+}
+
+.yara-edit > .editor-body {
+  max-height: min(45vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}

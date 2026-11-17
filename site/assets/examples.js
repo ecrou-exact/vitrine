@@ -54,7 +54,8 @@ for (const example of document.querySelectorAll('.example')) {
   const template = example.querySelector('template');
   if (!template) continue;
   // Serializing the inert template gives back the markup as written (minus indentation).
-  const live = layout(example, 'html', dedent(template.innerHTML));
+  // The serializer writes `>` in text as `&gt;`; a raw `>` is valid HTML, so show it as written.
+  const live = layout(example, 'html', dedent(template.innerHTML).replace(/&gt;/g, '>'));
   live.append(template.content.cloneNode(true));
 }
 

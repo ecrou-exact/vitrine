@@ -1,0 +1,408 @@
+/*
+ * Sigma rules: a card per rule with its level, facts, tags, the searches of the detection
+ * as tables and the condition as a tree. Levels and problems are written in words; colors
+ * only repeat them.
+ */
+.sigma-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.sigma-rule {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.sigma-rule.lv-critical,
+.sigma-rule.lv-high {
+  border-inline-start-color: var(--_danger);
+}
+
+.sigma-rule.lv-medium {
+  border-inline-start-color: var(--_warning);
+}
+
+.sigma-rule.lv-low,
+.sigma-rule.lv-informational {
+  border-inline-start-color: var(--_info);
+}
+
+.sigma-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.sigma-title {
+  margin: 0;
+  font-size: 1.05em;
+  overflow-wrap: anywhere;
+}
+
+.sigma-level {
+  padding: 1px var(--_space-2);
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+}
+
+.sigma-level.lv-critical {
+  background: var(--_danger);
+  color: var(--_on-danger);
+}
+
+.sigma-level.lv-high {
+  border: 1px solid var(--_danger);
+  color: var(--_danger);
+}
+
+.sigma-level.lv-medium {
+  border: 1px solid var(--_warning);
+  color: var(--_warning);
+}
+
+.sigma-level.lv-low,
+.sigma-level.lv-informational {
+  border: 1px solid var(--_info);
+  color: var(--_info);
+}
+
+.sigma-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  margin-inline-start: auto;
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.sigma-verdict.danger {
+  color: var(--_danger);
+}
+
+.sigma-verdict.warning {
+  color: var(--_warning);
+}
+
+.sigma-verdict.none {
+  color: var(--_success);
+}
+
+.sigma-verdict svg,
+.sigma-finding svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.sigma-description {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sigma-label {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sigma-muted {
+  color: var(--_fg-muted);
+}
+
+.sigma-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 2px var(--_space-3);
+  margin: 0;
+}
+
+.sigma-facts dt {
+  color: var(--_fg-muted);
+}
+
+.sigma-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sigma-facts code,
+.sigma-items code,
+.sigma-values code,
+.sigma-cond-line code,
+.sigma-list code,
+.sigma-search-head code {
+  font-family: var(--_font-mono);
+}
+
+.sigma-id {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.sigma-logsource {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+}
+
+.sigma-chip {
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+}
+
+.sigma-chip.warn {
+  border-color: var(--_warning);
+  color: var(--_warning);
+}
+
+.sigma-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sigma-tags li {
+  padding: 1px var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  font-size: var(--_font-size-small);
+}
+
+.sigma-tags .tag-technique,
+.sigma-tags .tag-tactic {
+  font-weight: 600;
+}
+
+.sigma-tags .tag-cve {
+  color: var(--_danger);
+}
+
+.sigma-tags a {
+  color: var(--_accent-fg);
+}
+
+.sigma-findings {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sigma-finding {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  overflow-wrap: anywhere;
+}
+
+.sigma-finding svg {
+  margin-top: 3px;
+}
+
+.sigma-finding.danger {
+  font-weight: 600;
+}
+
+.sigma-finding.danger svg {
+  color: var(--_danger);
+}
+
+.sigma-finding.warning svg {
+  color: var(--_warning);
+}
+
+.sigma-finding.info svg {
+  color: var(--_info);
+}
+
+.sigma-detection {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.sigma-search {
+  display: grid;
+  gap: var(--_space-1);
+  padding: var(--_space-2) var(--_space-3);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.sigma-search-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-2);
+  margin: 0;
+}
+
+.sigma-scroll {
+  overflow-x: auto;
+}
+
+.sigma-or {
+  margin: var(--_space-1) 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sigma-items {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sigma-items th,
+.sigma-items td {
+  padding: 4px var(--_space-3) 4px 0;
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.sigma-items thead th {
+  color: var(--_fg-muted);
+  font-weight: 500;
+}
+
+.sigma-items tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.sigma-items tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sigma-mods {
+  color: var(--_fg-muted);
+}
+
+.sigma-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sigma-values li {
+  overflow-wrap: anywhere;
+}
+
+.sigma-values li[data-joiner]::before {
+  content: attr(data-joiner);
+  margin-inline-end: var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.sigma-values code {
+  padding: 0 4px;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_syntax-string);
+  white-space: pre-wrap;
+}
+
+.sigma-condition {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.sigma-cond-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-2);
+  margin: 0;
+}
+
+.sigma-cond-line code {
+  padding: 2px var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  overflow-wrap: anywhere;
+}
+
+.s-op {
+  color: var(--_syntax-keyword);
+  font-weight: 600;
+}
+
+.s-name {
+  color: var(--_syntax-function);
+}
+
+.s-name.unknown {
+  color: var(--_danger);
+  text-decoration: wavy underline;
+}
+
+.sigma-tree p {
+  margin: 0;
+}
+
+.sigma-tree ul {
+  margin: 2px 0;
+  padding-inline-start: 1.25em;
+}
+
+.sigma-list {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.sigma-list ul,
+.sigma-refs ul {
+  margin: 0;
+  padding-inline-start: 1.25em;
+}
+
+.sigma-refs summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sigma-refs li {
+  overflow-wrap: anywhere;
+}
+
+.sigma-refs a {
+  color: var(--_accent-fg);
+}
+
+.sigma-source {
+  overflow: auto;
+}
+
+.sigma-edit > .editor-body {
+  max-height: min(45vh, 360px);
+  border-bottom: 1px solid var(--_border);
+}

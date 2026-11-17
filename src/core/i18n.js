@@ -75,7 +75,10 @@
  *   | keyof typeof import('../components/nmap/strings.js').en
  *   | keyof typeof import('../components/url/strings.js').en
  *   | keyof typeof import('../components/hash/strings.js').en
- *   | keyof typeof import('../components/waterfall/strings.js').en} StringKey
+ *   | keyof typeof import('../components/waterfall/strings.js').en
+ *   | keyof typeof import('../components/yara/strings.js').en
+ *   | keyof typeof import('../components/sigma/strings.js').en
+ *   | keyof typeof import('../components/pcap/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 

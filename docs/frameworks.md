@@ -669,7 +669,10 @@ vt-dns:not(:defined),
 vt-nmap:not(:defined),
 vt-url:not(:defined),
 vt-hash:not(:defined),
-vt-waterfall:not(:defined) {
+vt-waterfall:not(:defined),
+vt-yara:not(:defined),
+vt-sigma:not(:defined),
+vt-pcap:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

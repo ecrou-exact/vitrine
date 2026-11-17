@@ -133,12 +133,15 @@
             <option value="waterfall">Network waterfall</option>
             <option value="nmap">Nmap scan</option>
             <option value="openapi">OpenAPI</option>
+            <option value="pcap">Packet capture</option>
             <option value="headers">Security headers</option>
+            <option value="sigma">Sigma rules</option>
             <option value="status">Status</option>
             <option value="test-report">Test report</option>
             <option value="trace">Trace</option>
             <option value="url">URL analysis</option>
             <option value="workflow">Workflow run</option>
+            <option value="yara">YARA rules</option>
           </optgroup>
           <optgroup label="Project &amp; product">
             <option value="changelog">Changelog</option>
@@ -3546,6 +3549,37 @@ Nmap done: 4 IP addresses (2 hosts up) scanned in 12.34 seconds</template>
         </article>
       </section>
 
+      <section class="example-group" id="pcap" aria-labelledby="pcap-title">
+        <h3 id="pcap-title">&lt;vt-pcap&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A capture opened in the page</h4>
+            <p>
+              A DNS lookup, a TCP handshake, a TLS Client Hello and an HTTP request. Open a packet
+              by its number, then press a field: its bytes light up in the dump. Drop your own
+              <code>.pcap</code> or <code>.pcapng</code> on it; the file never leaves the page.
+            </p>
+          </div>
+          <template>
+            <vt-pcap variant="full" label="login.pcap"><template>1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==</template></vt-pcap>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Host names as indicators</h4>
+            <p>
+              Every name seen in DNS questions and answers, TLS server names and HTTP Host
+              headers, defanged, with what it resolves to. Copy the names as a list.
+            </p>
+          </div>
+          <template>
+            <vt-pcap variant="full" view="names" defang file="false"><template>1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==</template></vt-pcap>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="headers" aria-labelledby="headers-title">
         <h3 id="headers-title">&lt;vt-headers&gt;</h3>
 
@@ -3585,6 +3619,91 @@ permissions-policy: camera=(), microphone=(), geolocation=()
 cross-origin-opener-policy: same-origin
 set-cookie: __Host-sid=abc; Path=/; Secure; HttpOnly; SameSite=Lax</template>
             </vt-headers>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="sigma" aria-labelledby="sigma-title">
+        <h3 id="sigma-title">&lt;vt-sigma&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A detection rule explained</h4>
+            <p>
+              The level in words, ATT&amp;CK tags as links, each search as a table with its
+              modifiers read out, and the condition as a tree with <code>all of selection_*</code>
+              expanded. The Source tab keeps the YAML.
+            </p>
+          </div>
+          <template>
+            <vt-sigma variant="full" label="web_server_whoami.yml">
+              <template>
+                title: Whoami Execution by a Web Server
+                id: 502b42de-4306-40b4-9596-6f590c81f073
+                status: test
+                description: A web server process runs whoami, a common first step after a web shell is planted.
+                author: Vitrine examples
+                date: 2026-11-17
+                references:
+                  - https://attack.mitre.org/techniques/T1033/
+                tags:
+                  - attack.discovery
+                  - attack.t1033
+                  - attack.persistence
+                  - attack.t1505.003
+                logsource:
+                  category: process_creation
+                  product: windows
+                detection:
+                  selection_parent:
+                    ParentImage|endswith:
+                      - '\w3wp.exe'
+                      - '\httpd.exe'
+                      - '\nginx.exe'
+                  selection_child:
+                    - Image|endswith: '\whoami.exe'
+                    - OriginalFileName: 'whoami.exe'
+                  filter_health:
+                    CommandLine|contains|all:
+                      - '/healthcheck'
+                      - '--quiet'
+                  condition: all of selection_* and not filter_health
+                falsepositives:
+                  - Monitoring scripts run by the web server account
+                level: high
+              </template>
+            </vt-sigma>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a review would flag</h4>
+            <p>
+              A condition naming a search that does not exist, a search never used, a misspelled
+              modifier, a level, status, identifier and date outside the specification.
+            </p>
+          </div>
+          <template>
+            <vt-sigma variant="full" tabs="false">
+              <template>
+                title: Suspicious logins
+                id: 42
+                status: beta
+                level: severe
+                date: 2023/04/01
+                logsource:
+                  product: linux
+                  service: auth
+                detection:
+                  selection:
+                    message|contain: 'Failed password'
+                    user|startswith: 'adm*'
+                  burst:
+                    - 'Too many authentication failures'
+                  condition: selection and brute
+              </template>
+            </vt-sigma>
           </template>
         </article>
       </section>
@@ -4106,6 +4225,74 @@ AssertionError: assert 404 == 200</failure>
                 }
               </template>
             </vt-workflow>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="yara" aria-labelledby="yara-title">
+        <h3 id="yara-title">&lt;vt-yara&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A rule explained</h4>
+            <p>
+              Hex strings with their wildcards, jumps and alternatives, modifiers in words (hover
+              them), and the condition read out: a Windows executable under 2 MB, two of three
+              strings, a module.
+            </p>
+          </div>
+          <template>
+            <vt-yara variant="full" label="loader.yar">
+              <template>
+                import "pe"
+
+                rule Loader_PE_Dropper : loader dropper {
+                  meta:
+                    author = "CIRCL"
+                    description = "PE dropper with an encoded PowerShell stage"
+                    date = "2026-11-17"
+                    score = 80
+                  strings:
+                    $mz = { 4D 5A 90 00 }
+                    $stub = { E8 ?? ?? ?? ?? 5B [2-6] 8B 45 ( 08 | 0C ) }
+                    $cmd = "cmd.exe /c" nocase wide ascii
+                    $ps = "powershell -enc" base64
+                    $key = "Sup3rS3cret" xor(1-255)
+                    $c2 = /https?:\/\/[a-z0-9]{8,}\.(top|xyz)\// nocase
+                  condition:
+                    uint16(0) == 0x5A4D and filesize < 2MB and
+                    $mz at 0 and $stub and 2 of ($cmd, $ps, $key) and #c2 > 1 and
+                    pe.number_of_sections > 3
+                }
+              </template>
+            </vt-yara>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What the compiler would refuse</h4>
+            <p>
+              A string used but never defined, one defined but never used, a module without its
+              import, <code>nocase</code> with <code>xor</code>, a two-byte string and an
+              unbounded jump.
+            </p>
+          </div>
+          <template>
+            <vt-yara variant="full" tabs="false">
+              <template>
+                rule webshell_quick {
+                  strings:
+                    $a = "eval"
+                    $b = "ab"
+                    $c = { 3C ?? [-] 3E }
+                    $d = "base64_decode" nocase xor
+                    $old = "assert("
+                  condition:
+                    any of ($a, $b, $c, $d) and $e and math.entropy(0, filesize) > 6
+                }
+              </template>
+            </vt-yara>
           </template>
         </article>
       </section>

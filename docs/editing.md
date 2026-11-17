@@ -171,6 +171,8 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-url>`          | `content`                                                                                |
 | `<vt-hash>`         | `content`; the hashes follow as you type                                                 |
 | `<vt-waterfall>`    | `content`                                                                                |
+| `<vt-yara>`         | `content`; the rules follow as you type                                                  |
+| `<vt-sigma>`        | `content` (YAML, highlighted); the rules follow as you type                              |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

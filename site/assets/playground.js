@@ -176,6 +176,10 @@ const SAMPLES = {
     null,
     2,
   ),
+  yara: 'import "pe"\n\nrule Loader_PE_Dropper : loader dropper {\n  meta:\n    author = "CIRCL"\n    description = "PE dropper with an encoded PowerShell stage"\n    date = "2026-11-17"\n    score = 80\n  strings:\n    $mz = { 4D 5A 90 00 }\n    $stub = { E8 ?? ?? ?? ?? 5B [2-6] 8B 45 ( 08 | 0C ) }\n    $cmd = "cmd.exe /c" nocase wide ascii\n    $ps = "powershell -enc" base64\n    $key = "Sup3rS3cret" xor(1-255)\n    $c2 = /https?:\\/\\/[a-z0-9]{8,}\\.(top|xyz)\\// nocase\n  condition:\n    uint16(0) == 0x5A4D and filesize < 2MB and\n    $mz at 0 and $stub and 2 of ($cmd, $ps, $key) and #c2 > 1 and\n    pe.number_of_sections > 3\n}',
+  sigma:
+    "title: Whoami Execution by a Web Server\nid: 502b42de-4306-40b4-9596-6f590c81f073\nstatus: test\ndescription: A web server process runs whoami, a common first step after a web shell is planted.\nauthor: Vitrine examples\ndate: 2026-11-17\nreferences:\n  - https://attack.mitre.org/techniques/T1033/\ntags:\n  - attack.discovery\n  - attack.t1033\n  - attack.persistence\n  - attack.t1505.003\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection_parent:\n    ParentImage|endswith:\n      - '\\w3wp.exe'\n      - '\\httpd.exe'\n      - '\\nginx.exe'\n  selection_child:\n    - Image|endswith: '\\whoami.exe'\n    - OriginalFileName: 'whoami.exe'\n  filter_health:\n    CommandLine|contains|all:\n      - '/healthcheck'\n      - '--quiet'\n  condition: all of selection_* and not filter_health\nfalsepositives:\n  - Monitoring scripts run by the web server account\nlevel: high\n",
+  pcap: '1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==',
 };
 
 /** Boolean features shared by every component. */
@@ -939,6 +943,21 @@ const SCHEMA = {
     flags: ['filters', 'defang', 'tabs'],
     fields: [{ name: 'view', type: 'select', options: ['', 'requests', 'domains'] }],
   },
+  yara: {
+    tag: 'vt-yara',
+    flags: ['lint', 'explain', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'rules', 'source'] }],
+  },
+  sigma: {
+    tag: 'vt-sigma',
+    flags: ['lint', 'links', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'rules', 'source'] }],
+  },
+  pcap: {
+    tag: 'vt-pcap',
+    flags: ['filters', 'file', 'defang', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'packets', 'conversations', 'names'] }],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -1185,6 +1204,9 @@ function switchType(type) {
     url: 'Suspicious links',
     hash: 'Checksum',
     waterfall: 'capture.har',
+    yara: 'loader.yar',
+    sigma: 'web_server_whoami.yml',
+    pcap: 'login.pcap',
   }[type];
   buildControls();
   render();

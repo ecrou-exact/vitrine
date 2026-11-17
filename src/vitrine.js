@@ -71,6 +71,9 @@ import { VtNmap } from './components/nmap/vt-nmap.js';
 import { VtUrl } from './components/url/vt-url.js';
 import { VtHash } from './components/hash/vt-hash.js';
 import { VtWaterfall } from './components/waterfall/vt-waterfall.js';
+import { VtYara } from './components/yara/vt-yara.js';
+import { VtSigma } from './components/sigma/vt-sigma.js';
+import { VtPcap } from './components/pcap/vt-pcap.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -164,6 +167,9 @@ export {
   VtUrl,
   VtHash,
   VtWaterfall,
+  VtYara,
+  VtSigma,
+  VtPcap,
   registerIconSet,
   configure,
   getConfig,
@@ -268,6 +274,9 @@ export const registry = new Map(
     ['vt-url', VtUrl],
     ['vt-hash', VtHash],
     ['vt-waterfall', VtWaterfall],
+    ['vt-yara', VtYara],
+    ['vt-sigma', VtSigma],
+    ['vt-pcap', VtPcap],
   ]),
 );
 
@@ -348,6 +357,9 @@ const TYPES = /** @type {const} */ ({
   url: 'vt-url',
   hash: 'vt-hash',
   waterfall: 'vt-waterfall',
+  yara: 'vt-yara',
+  sigma: 'vt-sigma',
+  pcap: 'vt-pcap',
 });
 
 /**

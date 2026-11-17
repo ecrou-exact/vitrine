@@ -42,6 +42,9 @@ export const ELEMENTS = Object.freeze({
   url: 'vt-url', urls: 'vt-url',
   hash: 'vt-hash',
   har: 'vt-waterfall', waterfall: 'vt-waterfall',
+  yara: 'vt-yara', yar: 'vt-yara',
+  sigma: 'vt-sigma',
+  pcap: 'vt-pcap',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */
