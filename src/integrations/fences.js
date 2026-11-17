@@ -33,6 +33,9 @@ export const ELEMENTS = Object.freeze({
   junit: 'vt-test-report', tap: 'vt-test-report',
   ipynb: 'vt-notebook',
   'otel-trace': 'vt-trace',
+  cvss: 'vt-cvss',
+  ioc: 'vt-ioc', iocs: 'vt-ioc',
+  csp: 'vt-headers', 'security-headers': 'vt-headers',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

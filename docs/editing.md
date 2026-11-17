@@ -162,6 +162,9 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-consent>`      | `content` (the settings as JSON); the choice with `accept()`, `reject()` and `reset()`   |
 | `<vt-changelog>`    | `content`, `releases` (read only)                                                        |
 | `<vt-repo>`         | `content`, `repo` (read only)                                                            |
+| `<vt-ioc>`          | `content`                                                                                |
+| `<vt-cvss>`         | `content`; with `editable`, each metric is a select that updates `content`               |
+| `<vt-headers>`      | `content`                                                                                |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

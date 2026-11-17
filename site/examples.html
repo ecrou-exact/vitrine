@@ -121,11 +121,14 @@
             <option value="access-log">Access log</option>
             <option value="cert">Certificates</option>
             <option value="cron">Cron</option>
+            <option value="cvss">CVSS score</option>
             <option value="http">HTTP</option>
+            <option value="ioc">Indicators of compromise</option>
             <option value="job">Job</option>
             <option value="jwt">JWT</option>
             <option value="log">Log</option>
             <option value="openapi">OpenAPI</option>
+            <option value="headers">Security headers</option>
             <option value="status">Status</option>
             <option value="test-report">Test report</option>
             <option value="trace">Trace</option>
@@ -2974,6 +2977,46 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="cvss" aria-labelledby="cvss-title">
+        <h3 id="cvss-title">&lt;vt-cvss&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A score explained</h4>
+            <p>The score, its severity in words and every metric explained. CVSS 3.0 and 3.1 scores are computed, temporal and environmental included.</p>
+          </div>
+          <template>
+            <vt-cvss variant="full" label="CVE-2024-3400">
+              <template>CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/E:H/RL:O/RC:C</template>
+            </vt-cvss>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A calculator</h4>
+            <p>With <code>editable</code>, each metric is a list: change one and the vector and score follow.</p>
+          </div>
+          <template>
+            <vt-cvss editable>
+              <template>CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N</template>
+            </vt-cvss>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>CVSS 4.0</h4>
+            <p>4.0 vectors are explained; their score comes from the specification's tables, so it is given with <code>score</code>.</p>
+          </div>
+          <template>
+            <vt-cvss variant="full" score="9.3">
+              <template>CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:A</template>
+            </vt-cvss>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="http" aria-labelledby="http-title">
         <h3 id="http-title">&lt;vt-http&gt;</h3>
 
@@ -3043,6 +3086,26 @@ Helsinki;656000;FI</template>
                 {"errors": [{"field": "email", "message": "is not a valid address"}]}
               </template>
             </vt-http>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="ioc" aria-labelledby="ioc-title">
+        <h3 id="ioc-title">&lt;vt-ioc&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Indicators from a report</h4>
+            <p>URLs, domains, addresses, hashes, CVE and ATT&amp;CK techniques found in free text, defanged ones included. Shown defanged, never linked, and copied as a list, CSV, STIX 2.1 or a MISP event.</p>
+          </div>
+          <template>
+            <vt-ioc variant="full" label="Phishing campaign">
+              <template>
+Phishing e-mails from billing[@]invoice-update[.]com lead to hxxps://login-secure[.]example-portal[.]xyz/auth?session=42.
+The dropper (SHA-256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855) calls back to 45.33.32[.]156
+and 2001:db8:85a3::8a2e:370:7334, then moves to 10.0.4.17 on the internal network.
+Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32.156 was seen again the next day.</template>
+            </vt-ioc>
           </template>
         </article>
       </section>
@@ -3250,6 +3313,49 @@ Helsinki;656000;FI</template>
                     bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
               </template>
             </vt-openapi>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="headers" aria-labelledby="headers-title">
+        <h3 id="headers-title">&lt;vt-headers&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A response to fix</h4>
+            <p>Paste <code>curl -I</code> output: a grade, each finding explained, the policy as a table with risky sources outlined. Nothing is fetched.</p>
+          </div>
+          <template>
+            <vt-headers variant="full" label="shop.example.com">
+              <template>
+HTTP/2 200
+server: nginx/1.18.0
+x-powered-by: PHP/8.1.2
+strict-transport-security: max-age=86400
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:
+x-frame-options: SAMEORIGIN
+set-cookie: PHPSESSID=8f2a; path=/; HttpOnly
+set-cookie: tracking=1; SameSite=None</template>
+            </vt-headers>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A hardened response</h4>
+            <p>Every check passes: grade A+.</p>
+          </div>
+          <template>
+            <vt-headers passed="false" headers="false">
+              <template>
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+content-security-policy: default-src 'self'; script-src 'nonce-r4nd0m' 'strict-dynamic'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+cross-origin-opener-policy: same-origin
+set-cookie: __Host-sid=abc; Path=/; Secure; HttpOnly; SameSite=Lax</template>
+            </vt-headers>
           </template>
         </article>
       </section>

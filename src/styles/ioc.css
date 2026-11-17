@@ -1,0 +1,144 @@
+/*
+ * Indicators of compromise: type filters, then a table per type.
+ */
+.ioc-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.ioc-note {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.ioc-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+}
+
+.ioc-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 32px;
+  padding: 4px var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.ioc-filter:hover {
+  border-color: var(--_border-strong);
+}
+
+.ioc-filter[aria-pressed='true'] {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+  font-weight: 600;
+}
+
+.ioc-filter:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.ioc-count {
+  min-width: 2ch;
+  padding: 0 6px;
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.ioc-group {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.ioc-title {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ioc-scroll {
+  max-height: var(--vt-ioc-group-height, 360px);
+  overflow: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.ioc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ioc-table th,
+.ioc-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.ioc-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.ioc-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.ioc-table .ioc-num {
+  width: 1%;
+  color: var(--_fg-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.ioc-value code {
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.ioc-tag {
+  display: inline-block;
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.ioc-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}

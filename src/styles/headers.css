@@ -1,0 +1,236 @@
+/*
+ * HTTP security headers: the grade, the findings by severity, the Content-Security-Policy
+ * table and every header. Severity is always written in words, with an icon.
+ */
+.hdr-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.hdr-summary {
+  --_tone-color: var(--_success);
+  display: flex;
+  align-items: center;
+  gap: var(--_space-4);
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid color-mix(in srgb, var(--_tone-color) 40%, var(--_border));
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_tone-color) 6%, var(--_surface));
+}
+
+.hdr-summary.warn {
+  --_tone-color: var(--_warning);
+}
+
+.hdr-summary.bad {
+  --_tone-color: var(--_danger);
+}
+
+.hdr-grade {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 3px solid var(--_tone-color);
+  border-radius: var(--_radius-full);
+  color: var(--_tone-color);
+  font-size: 1.35em;
+  font-weight: 700;
+}
+
+.hdr-summary-text {
+  display: grid;
+  gap: 2px;
+}
+
+.hdr-muted {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.hdr-findings {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  list-style: none;
+}
+
+.hdr-finding {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, auto) 1fr;
+  gap: var(--_space-3);
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+}
+
+.hdr-finding:last-child {
+  border-bottom: 0;
+}
+
+.hdr-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.hdr-level svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.hdr-finding.bad .hdr-level {
+  color: var(--_danger);
+}
+
+.hdr-finding.warn .hdr-level {
+  color: var(--_warning);
+}
+
+.hdr-finding.info .hdr-level {
+  color: var(--_fg-muted);
+}
+
+.hdr-finding.ok .hdr-level {
+  color: var(--_success);
+}
+
+.hdr-message {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hdr-name {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.hdr-section {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.hdr-title {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hdr-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.hdr-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hdr-table th,
+.hdr-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.hdr-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.hdr-table thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+}
+
+.hdr-table tbody th {
+  width: 1%;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.hdr-table code {
+  font-family: var(--_font-mono);
+}
+
+.hdr-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.hdr-source {
+  padding: 0 4px;
+  border-radius: var(--_radius-sm);
+  overflow-wrap: anywhere;
+}
+
+.src-keyword {
+  color: var(--_syntax-keyword);
+}
+
+.src-nonce,
+.src-hash {
+  color: var(--_syntax-number);
+}
+
+.src-scheme,
+.src-wildcard {
+  color: var(--_syntax-type);
+}
+
+.src-host {
+  color: var(--_syntax-string);
+}
+
+.hdr-source.risky {
+  outline: 1px solid var(--_danger);
+  background: color-mix(in srgb, var(--_danger) 10%, transparent);
+  color: var(--_danger);
+}
+
+.hdr-value {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.hdr-all summary {
+  color: var(--_fg-muted);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hdr-all[open] summary {
+  margin-bottom: var(--_space-2);
+}
+
+.hdr-all p {
+  margin: 0 0 var(--_space-2);
+}
+
+.hdr-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .hdr-finding {
+    grid-template-columns: 1fr;
+    gap: var(--_space-1);
+  }
+}

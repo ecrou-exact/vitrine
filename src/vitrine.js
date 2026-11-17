@@ -62,6 +62,9 @@ import { VtVersion } from './components/version/vt-version.js';
 import { VtConsent } from './components/consent/vt-consent.js';
 import { VtChangelog } from './components/changelog/vt-changelog.js';
 import { VtRepo } from './components/repo/vt-repo.js';
+import { VtIoc } from './components/ioc/vt-ioc.js';
+import { VtCvss } from './components/cvss/vt-cvss.js';
+import { VtHeaders } from './components/headers/vt-headers.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -146,6 +149,9 @@ export {
   VtConsent,
   VtChangelog,
   VtRepo,
+  VtIoc,
+  VtCvss,
+  VtHeaders,
   registerIconSet,
   configure,
   getConfig,
@@ -241,6 +247,9 @@ export const registry = new Map(
     ['vt-consent', VtConsent],
     ['vt-changelog', VtChangelog],
     ['vt-repo', VtRepo],
+    ['vt-ioc', VtIoc],
+    ['vt-cvss', VtCvss],
+    ['vt-headers', VtHeaders],
   ]),
 );
 
@@ -312,6 +321,9 @@ const TYPES = /** @type {const} */ ({
   consent: 'vt-consent',
   changelog: 'vt-changelog',
   repo: 'vt-repo',
+  ioc: 'vt-ioc',
+  cvss: 'vt-cvss',
+  headers: 'vt-headers',
 });
 
 /**

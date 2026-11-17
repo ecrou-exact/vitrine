@@ -690,6 +690,34 @@ const MODES = [
     wrap: (p) =>
       `Text ${p} then $${p}$ and $$\\text{${p}}$$ and \\(\\href{javascript:alert(1)}{x}\\)`,
   },
+  {
+    tag: 'vt-ioc',
+    attrs: { variant: 'full', defang: 'false', label: '<b>x</b>' },
+    wrap: (p) =>
+      `${p} http://a.example.com/${p} ${p}@evil.xyz 1.2.3.4 ${p}.example.com CVE-2024-0001`,
+  },
+  {
+    tag: 'vt-ioc',
+    attrs: {},
+    wrap: (p) =>
+      JSON.stringify({ Attribute: [{ value: p }, { value: `http://x.example.com/?q=${p}` }] }),
+  },
+  {
+    tag: 'vt-cvss',
+    attrs: { variant: 'full', editable: '', score: '<img src=x onerror=alert(1)>' },
+    wrap: (p) => `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H/${p}`,
+  },
+  {
+    tag: 'vt-headers',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `HTTP/2 200\nserver: ${p}\ncontent-security-policy: script-src ${p} 'unsafe-inline'\nset-cookie: ${p}=1\nx-powered-by: ${p}`,
+  },
+  {
+    tag: 'vt-headers',
+    attrs: {},
+    wrap: (p) => JSON.stringify({ [p]: p, 'Set-Cookie': [p] }),
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */

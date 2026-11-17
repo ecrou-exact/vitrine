@@ -113,6 +113,10 @@ const SAMPLES = {
   countdown:
     '{\n  "to": "2027-01-01T00:00:00",\n  "timezone": "Europe/Paris",\n  "title": "Happy new year",\n  "description": "Midnight in Paris."\n}',
   cert: '-----BEGIN CERTIFICATE-----\nMIIB2zCCAYGgAwIBAgIBATAKBggqhkjOPQQDAjBDMQswCQYDVQQGEwJMVTEVMBMG\nA1UECgwMVml0cmluZSBUZXN0MR0wGwYDVQQDDBRWaXRyaW5lIFRlc3QgUm9vdCBD\nQTAeFw0yNjEwMTMyMTAxMzNaFw0zNjEwMTAyMTAxMzNaMEMxCzAJBgNVBAYTAkxV\nMRUwEwYDVQQKDAxWaXRyaW5lIFRlc3QxHTAbBgNVBAMMFFZpdHJpbmUgVGVzdCBS\nb290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE4YdSlv8ECRyl2eb6BbBg\nP+VrCt4ioK2xHAS6G4vVMaqXoCOx0yvBKlQ8QL6fruatUo1QDMi0HtwpAfq+YANE\nOKNmMGQwHQYDVR0OBBYEFAyqLSbgIuAbs8T2GzLmLPHmR9gFMB8GA1UdIwQYMBaA\nFAyqLSbgIuAbs8T2GzLmLPHmR9gFMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYDVR0P\nAQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/\n5wzI3kPSS255Ll+52AIgP8KKf2xF8fKiHq3YXWeXs1eLG+n2NMKpFwybkPhJPpE=\n-----END CERTIFICATE-----\n',
+  ioc: 'Phishing e-mails from billing[@]invoice-update[.]com lead to hxxps://login-secure[.]example-portal[.]xyz/auth.\nThe dropper (SHA-256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855) calls back to 45.33.32[.]156,\nthen moves to 10.0.4.17. Initial access: T1566.001, exploiting CVE-2024-3400.\n',
+  cvss: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N',
+  headers:
+    "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nx-frame-options: SAMEORIGIN\nset-cookie: PHPSESSID=8f2a; path=/; HttpOnly\n",
 };
 
 /** Boolean features shared by every component. */
@@ -821,6 +825,21 @@ const SCHEMA = {
       { name: 'now', type: 'text', placeholder: 'now' },
     ],
   },
+  ioc: {
+    tag: 'vt-ioc',
+    flags: ['defang', 'private', 'filters'],
+    fields: [{ name: 'types', type: 'text', placeholder: 'url, domain, ipv4' }],
+  },
+  cvss: {
+    tag: 'vt-cvss',
+    flags: ['editable', 'metrics', 'all'],
+    fields: [{ name: 'score', type: 'number', placeholder: '9.3' }],
+  },
+  headers: {
+    tag: 'vt-headers',
+    flags: ['https', 'passed', 'policy', 'headers'],
+    fields: [],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -1058,6 +1077,9 @@ function switchType(type) {
     changelog: 'CHANGELOG.md',
     repo: 'acme/rocket',
     countdown: 'countdown.json',
+    ioc: 'Phishing report',
+    cvss: 'CVE-2026-0001',
+    headers: 'shop.example.com',
   }[type];
   buildControls();
   render();
