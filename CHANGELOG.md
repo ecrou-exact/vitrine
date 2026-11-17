@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Examples page: a sticky, scrollable section menu beside the demos, with direct links and current-section highlighting. Smaller screens keep the compact dropdown.
 - `<vt-pivot>`: pivot tables from CSV or JSON. Fields in rows and columns, a value summed, counted, averaged, the smallest, the largest or the number of different values, totals, cells shaded by value, lists to change the fields as in a spreadsheet, and each cell a button that sends its records (`vt-select`). Copy and download as CSV, with formulas neutralized.
 - `<vt-heatmap>`: heat maps. Values by day as a calendar of weeks (a year by default, or `year`, `from`, `to`), or values by two categories as a matrix, in 3 to 9 shades of the theme. The squares follow the WAI-ARIA grid pattern, and each says its day and value.
 - `<vt-flame>`: flame graphs of CPU profiles: folded stacks (perf, py-spy, async-profiler…), Chrome and Node `.cpuprofile` files, or a JSON tree. Zoom into a function, search what share of the time matching functions take, move with the keyboard, and a Functions tab with the self and total time of each function.
@@ -39,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Docs component links and Examples navigation are sorted alphabetically. Examples sections follow the same order as their menu.
 - The budget of the full bundles is 520 KB, for the twenty-one new elements; `vt-markdown` 81 KB, for the icons shared by every element.
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
