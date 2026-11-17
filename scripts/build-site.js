@@ -179,7 +179,7 @@ async function searchIndex() {
     add(page, 'Page', file);
     // Headings in order, with the id of the nearest section or element before them.
     let anchor = '';
-    for (const match of html.matchAll(/<(section|article|h2|h3)\b([^>]*)>([\s\S]*?)(?=<)/g)) {
+    for (const match of html.matchAll(/<(section|article|h2|h3|h4)\b([^>]*)>([\s\S]*?)(?=<)/g)) {
       const [, tag, attrs] = match;
       const id = /\bid="([^"]+)"/.exec(attrs)?.[1];
       if (tag === 'section' || tag === 'article') {

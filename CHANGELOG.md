@@ -40,7 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Docs component links and Examples navigation are sorted alphabetically. Examples sections follow the same order as their menu.
+- Examples are grouped by need, with category descriptions, a grouped sidebar and mobile menu, and alphabetical ordering within each category.
+- Docs component links are sorted alphabetically.
 - The budget of the full bundles is 520 KB, for the twenty-one new elements; `vt-markdown` 81 KB, for the icons shared by every element.
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
