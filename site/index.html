@@ -23,21 +23,21 @@
                 ><span>anywhere<span class="cursor" aria-hidden="true">_</span></span></span
               >
             </h1>
-            <p class="lede intro">
+            <p class="lede">
               Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees,
               HTTP calls, logs, charts and API references on any site. One script tag, no framework, safe with content you did
               not write.
             </p>
-            <div class="hero-actions intro">
+            <div class="hero-actions">
               <a class="btn btn-primary" href="docs.html?page=getting-started">Get started</a>
               <a class="btn btn-secondary" href="playground.html">Open the playground</a>
             </div>
-            <vt-code class="install intro" language="html" copy label="Install">
+            <vt-code class="install" language="html" copy label="Install">
               <template><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script></template>
             </vt-code>
           </div>
 
-          <div class="showcase intro">
+          <div class="showcase">
             <div class="showcase-controls">
               <div class="segmented" role="group" aria-label="Content type">
                 <button type="button" data-type="code" aria-pressed="true">Code</button>
@@ -117,7 +117,7 @@
                 Syntax highlighting for 190 languages and 258 color themes, line numbers, diffs,
                 search, download, and an editor.
               </p>
-              <vt-code class="preview" language="js" line-numbers highlight-lines="2" data-type-in="chars">
+              <vt-code class="preview" language="js" line-numbers highlight-lines="2">
                 <script type="text/plain">
                   const user = await fetch('/me').then((r) => r.json());
                   greet(user.name);
@@ -131,7 +131,7 @@
                 GitHub Flavored Markdown, sanitized. Preview, source and split tabs, table of
                 contents and anchors.
               </p>
-              <vt-markdown class="preview" data-type-in="chars">
+              <vt-markdown class="preview">
                 <script type="text/markdown">
                   **Release notes**
 
@@ -157,7 +157,7 @@
             <article class="component">
               <h3>&lt;vt-csv&gt;</h3>
               <p>CSV and TSV as an accessible table: sorting by type, pagination and search.</p>
-              <vt-csv class="preview" page-size="10" data-type-in="lines">
+              <vt-csv class="preview" page-size="10">
                 <template>city,people
 Paris,2148000
 Berlin,3645000
@@ -209,7 +209,7 @@ $ git push</template>
                 File trees from <code>tree</code> output, paths or JSON, with icons, change markers
                 and keyboard navigation.
               </p>
-              <vt-tree class="preview" data-type-in="lines">
+              <vt-tree class="preview">
                 <template>src/
   + Button.tsx  # new
   app.ts
@@ -223,7 +223,7 @@ package.json</template>
                 HTTP requests and responses for API docs, with masked secrets and the same request
                 as curl, fetch or Python.
               </p>
-              <vt-http class="preview" data-type-in="lines">
+              <vt-http class="preview">
                 <template>GET /v1/users/42 HTTP/1.1
 Host: api.example.com
 
@@ -240,7 +240,7 @@ Content-Type: application/json
                 Application logs with levels, timestamps, fields and stack traces, filters and
                 live streaming.
               </p>
-              <vt-log class="preview" time="short" data-type-in="lines">
+              <vt-log class="preview" time="short">
                 <template>2026-10-07T18:00:00Z INFO  server listening on :8080
 {"level":40,"time":"2026-10-07T18:00:03Z","msg":"slow query","ms":812}
 2026-10-07T18:00:04Z ERROR payment failed: card declined
@@ -289,7 +289,7 @@ paths:
                 Dotenv, INI and properties files as a table, with references linked and secrets
                 masked until revealed.
               </p>
-              <vt-env class="preview" data-type-in="lines">
+              <vt-env class="preview">
                 <template># Database
 DATABASE_URL=postgres://app@db:5432/shop
 DB_PASSWORD=s3cr3t-value
@@ -1307,7 +1307,7 @@ pending Roll out</template>
                   ><span class="demo-title">Result</span>
                 </div>
                 <div class="demo-canvas">
-                  <vt-code language="python" label="hello.py" header data-type-in="chars">
+                  <vt-code language="python" label="hello.py" header>
                     <template>
                       def hello(name):
                           return f"Hello {name}"
@@ -1333,7 +1333,7 @@ pending Roll out</template>
                   ><span class="demo-title">Result</span>
                 </div>
                 <div class="demo-canvas">
-                  <vt-code language="python" label="hello.py" header data-type-in="chars">
+                  <vt-code language="python" label="hello.py" header>
                     <template>
                       def hello(name):
                           return f"Hello {name}"
