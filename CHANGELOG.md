@@ -84,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Website: the moving backdrop (drifting graph, pulses, pointer links, dot grid) is replaced by still waves along the bottom; the home page and other pages no longer animate on their own: no reveal on scroll, word-by-word titles, typed-in samples, drifting hero glow, blinking cursor or scroll cue. Content shows at once; hover feedback and the theme switch stay.
 - Website: the stress lab page. The XSS payload suite (`tests/security/xss.spec.js`) keeps checking every component.
 
 ### Changed
