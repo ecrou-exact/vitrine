@@ -107,6 +107,16 @@ export const EVENTS = Object.freeze({
   HASH: 'vt-hash',
   /** Hash: a fingerprint was compared. Detail: `{ state, algorithm }`. */
   VERIFY: 'vt-verify',
+  /** Loading indicator: became visible (after its delay). Detail: `{ type }`. */
+  LOADING_START: 'vt-loading-start',
+  /** Loading indicator: hidden again (after its minimum duration). Detail: `{ type, duration }`. */
+  LOADING_END: 'vt-loading-end',
+  /** Progress indicator: the value changed. Detail: `{ value, max, ratio }`. */
+  PROGRESS: 'vt-progress',
+  /** Progress indicator or task list: finished. Detail: `{ status }`. */
+  COMPLETE: 'vt-complete',
+  /** Loading overlay or task list: the reader asked to cancel. Detail: `{}`. */
+  CANCEL: 'vt-cancel',
   /** Content could not be loaded or displayed. Detail: `{ message, cause }`. */
   ERROR: 'vt-error',
 });

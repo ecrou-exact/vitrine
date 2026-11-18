@@ -252,6 +252,122 @@ const SCRIPTS = {
     viewer.data = { fetchedAt: new Date().toISOString(), items: [{ id: 1 }, { id: 2 }] };
     target.replaceChildren(viewer);
   },
+
+  loadingButtonSave(target) {
+    const button = document.createElement('vt-loading-button');
+    button.textContent = 'Save changes';
+    button.setAttribute('loading-text', 'Saving…');
+    button.setAttribute('success-text', 'Saved');
+    button.setAttribute('error-text', 'Could not save');
+    // A fake request: fails one time in three.
+    const save = () =>
+      new Promise((resolve, reject) =>
+        setTimeout(() => (Math.random() < 0.33 ? reject() : resolve()), 1500),
+      );
+    button.addEventListener('click', () => button.track(save()).catch(() => {}));
+    target.replaceChildren(button);
+  },
+
+  loadingOverlayToggle(target) {
+    const overlay = document.createElement('vt-loading-overlay');
+    overlay.setAttribute('active', 'false');
+    overlay.setAttribute('text', 'Saving your profile…');
+    overlay.setAttribute('cancelable', '');
+    overlay.setAttribute('value', '0');
+    const form = document.createElement('form');
+    form.className = 'demo-form';
+    for (const [label, name, value] of [
+      ['Name', 'name', 'Ada Lovelace'],
+      ['E-mail', 'email', 'ada@example.org'],
+    ]) {
+      const field = document.createElement('label');
+      const input = document.createElement('input');
+      input.name = name;
+      input.value = value;
+      field.append(label, input);
+      form.append(field);
+    }
+    const save = document.createElement('button');
+    save.textContent = 'Save';
+    form.append(save);
+    overlay.append(form);
+    let timer;
+    const finish = () => {
+      clearInterval(timer);
+      overlay.stop();
+    };
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let value = 0;
+      overlay.setAttribute('value', '0');
+      overlay.start();
+      timer = setInterval(() => {
+        value += 10;
+        overlay.setAttribute('value', String(value));
+        if (value >= 100) finish();
+      }, 300);
+    });
+    overlay.addEventListener('vt-cancel', finish);
+    target.replaceChildren(overlay);
+  },
+
+  pageProgressNavigate(target) {
+    // In a page, put one <vt-page-progress> in the body; here it stays in the demo box.
+    const box = document.createElement('div');
+    box.className = 'demo-frame';
+    const bar = document.createElement('vt-page-progress');
+    bar.setAttribute('placement', 'absolute');
+    const go = document.createElement('button');
+    go.textContent = 'Load the next page';
+    go.addEventListener('click', () => {
+      bar.start();
+      // Pretend the request takes 2.5 s.
+      setTimeout(() => bar.done(), 2500);
+    });
+    box.append(bar, go);
+    target.replaceChildren(box);
+  },
+
+  progressUpload(target) {
+    const bar = document.createElement('vt-progress');
+    bar.setAttribute('text', 'Uploading backup-2026-11.tar.gz');
+    bar.setAttribute('show-value', 'fraction');
+    bar.setAttribute('unit', 'MB');
+    bar.setAttribute('max', '840');
+    bar.setAttribute('value', '0');
+    let sent = 0;
+    const timer = setInterval(() => {
+      sent = Math.min(840, sent + 35 + Math.round(Math.random() * 40));
+      bar.value = sent;
+    }, 200);
+    bar.addEventListener('vt-complete', () => {
+      clearInterval(timer);
+      bar.setAttribute('status', 'success');
+      bar.setAttribute('text', 'Uploaded');
+    });
+    target.replaceChildren(bar);
+  },
+
+  stepsDeploy(target) {
+    const steps = document.createElement('vt-loading-steps');
+    steps.setAttribute('text', 'Deploying shop-api v2.4.0');
+    steps.steps = [
+      'Build image',
+      'Run tests',
+      'Push to registry',
+      'Migrate database',
+      'Roll out',
+    ].map((label, i) => ({ label, status: i === 0 ? 'running' : 'pending' }));
+    let current = 0;
+    const started = Date.now();
+    const timer = setInterval(() => {
+      steps.setStep(current, { status: 'done', duration: Date.now() - started });
+      current += 1;
+      if (current < steps.steps.length) steps.setStep(current, { status: 'running' });
+      else clearInterval(timer);
+    }, 1400);
+    target.replaceChildren(steps);
+  },
 };
 
 for (const example of document.querySelectorAll('.example[data-script]')) {

@@ -1,0 +1,252 @@
+/*
+ * Cookies: a summary, then a table with a row of issues under each cookie that has some.
+ * Flags and levels are always written in words; colors only repeat them.
+ */
+.cookies-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.cookies-summary {
+  --_tone-color: var(--_success);
+  display: grid;
+  gap: var(--_space-1);
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid color-mix(in srgb, var(--_tone-color) 40%, var(--_border));
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_tone-color) 6%, var(--_surface));
+}
+
+.cookies-summary.warn {
+  --_tone-color: var(--_warning);
+}
+
+.cookies-summary.bad {
+  --_tone-color: var(--_danger);
+}
+
+.cookies-summary p {
+  margin: 0;
+}
+
+.cookies-counts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-4);
+}
+
+.cookies-issue-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.cookies-issue-count.bad {
+  color: var(--_danger);
+}
+
+.cookies-issue-count.warn {
+  color: var(--_warning);
+}
+
+.cookies-issue-count svg,
+.cookies-level svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.cookies-muted {
+  color: var(--_fg-muted);
+}
+
+.cookies-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.cookies-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cookies-table th,
+.cookies-table td {
+  padding: 6px var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.cookies-table thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cookies-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.cookies-table tbody th {
+  font-weight: 500;
+}
+
+.cookies-table code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.cookie.bad > th {
+  box-shadow: inset 3px 0 0 var(--_danger);
+}
+
+.cookie.warn > th {
+  box-shadow: inset 3px 0 0 var(--_warning);
+}
+
+/* The issues belong to the cookie above: no line between them. */
+.cookie:has(+ .cookies-issues-row) > * {
+  border-bottom: 0;
+}
+
+.cookies-name {
+  font-weight: 600;
+}
+
+.cookies-url {
+  display: block;
+  max-width: 28ch;
+  overflow: hidden;
+  font-size: var(--_font-size-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cookies-value {
+  max-width: 32ch;
+}
+
+.cookies-masked {
+  color: var(--_fg-muted);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.cookies-long summary {
+  cursor: pointer;
+}
+
+.cookies-full {
+  display: block;
+  margin-top: var(--_space-1);
+}
+
+.cookies-path {
+  display: block;
+  color: var(--_fg-muted);
+}
+
+.cookies-expires {
+  white-space: nowrap;
+}
+
+.cookies-date {
+  display: block;
+  font-size: var(--_font-size-small);
+}
+
+.cookies-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cookies-flag,
+.cookies-party {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.cookies-flag.on {
+  border-color: color-mix(in srgb, var(--_success) 45%, var(--_border));
+  background: color-mix(in srgb, var(--_success) 10%, transparent);
+}
+
+.cookies-flag.off {
+  color: var(--_fg-muted);
+  border-style: dashed;
+}
+
+.cookies-party.third {
+  border-color: color-mix(in srgb, var(--_warning) 50%, var(--_border));
+  background: color-mix(in srgb, var(--_warning) 12%, transparent);
+  font-weight: 600;
+}
+
+.cookies-party.unknown {
+  border-color: transparent;
+  color: var(--_fg-muted);
+}
+
+.cookies-issues-row > td {
+  padding-top: 0;
+}
+
+.cookies-issues {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--_font-size-small);
+}
+
+.cookies-issue {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, auto) 1fr;
+  gap: var(--_space-2);
+}
+
+.cookies-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.cookies-issue.bad .cookies-level {
+  color: var(--_danger);
+}
+
+.cookies-issue.warn .cookies-level {
+  color: var(--_warning);
+}
+
+.cookies-issue.info .cookies-level {
+  color: var(--_fg-muted);
+}
+
+.cookies-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .cookies-issue {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

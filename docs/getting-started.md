@@ -1,6 +1,6 @@
 # Getting started
 
-Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, data tables, status pages, calendars, pricing plans and the other blocks of a site, form fields, SQL results, test reports, distributed traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories, dependency licenses, icon pickers, workflow runs, access logs, password fields, API key fields, version fields, cookie consent banners, changelogs, repository cards, indicators of compromise, CVSS scores, security headers, e-mail messages, DNS records, Nmap scans, URLs, hashes, network waterfalls, YARA rules, Sigma rules, packet captures, version ranges, color contrast, software bills of materials, Dockerfiles, Lighthouse reports and accessibility results on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-table>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-board>`, `<vt-field>`, `<vt-search>`, `<vt-date-picker>`, `<vt-menu>`, `<vt-upload>`, `<vt-testimonials>`, `<vt-countdown>`, `<vt-sql>`, `<vt-test-report>`, `<vt-trace>`, `<vt-notebook>`, `<vt-math>`, `<vt-diagram>`, `<vt-pivot>`, `<vt-heatmap>`, `<vt-flame>`, `<vt-treemap>`, `<vt-describe>`, `<vt-compare>`, `<vt-install>`, `<vt-download>`, `<vt-contributors>`, `<vt-lifecycle>`, `<vt-advisories>`, `<vt-licenses>`, `<vt-icon-picker>`, `<vt-workflow>`, `<vt-access-log>`, `<vt-ioc>`, `<vt-cvss>`, `<vt-headers>`, `<vt-email>`, `<vt-dns>`, `<vt-nmap>`, `<vt-url>`, `<vt-hash>`, `<vt-waterfall>`, `<vt-yara>`, `<vt-sigma>`, `<vt-pcap>`, `<vt-semver>`, `<vt-contrast>`, `<vt-sbom>`, `<vt-dockerfile>`, `<vt-lighthouse>` and `<vt-a11y>` elements in your HTML.
+Vitrine is a small library of standard web components that display and edit source code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, data tables, status pages, calendars, pricing plans and the other blocks of a site, form fields, SQL results, test reports, distributed traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories, dependency licenses, icon pickers, workflow runs, access logs, password fields, API key fields, version fields, cookie consent banners, changelogs, repository cards, indicators of compromise, CVSS scores, security headers, e-mail messages, DNS records, Nmap scans, URLs, hashes, network waterfalls, YARA rules, Sigma rules, packet captures, version ranges, color contrast, software bills of materials, Dockerfiles, Lighthouse reports, accessibility results, cookies, redirect chains and loading indicators (spinners, progress bars and rings, skeletons, overlays, page bars, task steps, typing indicators, loading buttons and messages) on any web page. It needs no framework and no build step: add one script, then use the `<vt-code>`, `<vt-markdown>`, `<vt-json>`, `<vt-csv>`, `<vt-tags>`, `<vt-diff>`, `<vt-terminal>`, `<vt-tree>`, `<vt-http>`, `<vt-log>`, `<vt-chart>`, `<vt-openapi>`, `<vt-env>`, `<vt-hex>`, `<vt-timeline>`, `<vt-job>`, `<vt-git>`, `<vt-regex>`, `<vt-yaml>`, `<vt-xml>`, `<vt-toml>`, `<vt-jwt>`, `<vt-cron>`, `<vt-cert>`, `<vt-table>`, `<vt-status>`, `<vt-calendar>`, `<vt-pricing>`, `<vt-faq>`, `<vt-gallery>`, `<vt-stats>`, `<vt-board>`, `<vt-field>`, `<vt-search>`, `<vt-date-picker>`, `<vt-menu>`, `<vt-upload>`, `<vt-testimonials>`, `<vt-countdown>`, `<vt-sql>`, `<vt-test-report>`, `<vt-trace>`, `<vt-notebook>`, `<vt-math>`, `<vt-diagram>`, `<vt-pivot>`, `<vt-heatmap>`, `<vt-flame>`, `<vt-treemap>`, `<vt-describe>`, `<vt-compare>`, `<vt-install>`, `<vt-download>`, `<vt-contributors>`, `<vt-lifecycle>`, `<vt-advisories>`, `<vt-licenses>`, `<vt-icon-picker>`, `<vt-workflow>`, `<vt-access-log>`, `<vt-ioc>`, `<vt-cvss>`, `<vt-headers>`, `<vt-email>`, `<vt-dns>`, `<vt-nmap>`, `<vt-url>`, `<vt-hash>`, `<vt-waterfall>`, `<vt-yara>`, `<vt-sigma>`, `<vt-pcap>`, `<vt-semver>`, `<vt-contrast>`, `<vt-sbom>`, `<vt-dockerfile>`, `<vt-lighthouse>`, `<vt-a11y>`, `<vt-cookies>`, `<vt-redirects>`, `<vt-loading-button>`, `<vt-loading-message>`, `<vt-loading-overlay>`, `<vt-loading-steps>`, `<vt-page-progress>`, `<vt-progress>`, `<vt-progress-ring>`, `<vt-skeleton>`, `<vt-spinner>` and `<vt-typing>` elements in your HTML.
 
 This page covers installation, a first example for each component, and the ways to give content to an element.
 
@@ -104,95 +104,108 @@ configure({ syntaxTheme: 'github', syntaxThemeDark: 'github-dark' });
 
 Download size (minified and gzipped), each module counted with every chunk it loads:
 
-| File                          | Size (gzip) |
-| ----------------------------- | ----------- |
-| `dist/vitrine.min.js`         | 646.1 KB    |
-| `dist/vitrine.esm.js`         | 645.9 KB    |
-| `dist/vitrine-loader.js`      | 1.3 KB      |
-| `dist/esm/vt-code.js`         | 60.0 KB     |
-| `dist/esm/vt-markdown.js`     | 79.4 KB     |
-| `dist/esm/vt-json.js`         | 64.1 KB     |
-| `dist/esm/vt-csv.js`          | 61.0 KB     |
-| `dist/esm/vt-tags.js`         | 30.7 KB     |
-| `dist/esm/vt-diff.js`         | 66.6 KB     |
-| `dist/esm/vt-terminal.js`     | 63.2 KB     |
-| `dist/esm/vt-tree.js`         | 62.3 KB     |
-| `dist/esm/vt-http.js`         | 67.6 KB     |
-| `dist/esm/vt-log.js`          | 64.7 KB     |
-| `dist/esm/vt-env.js`          | 61.2 KB     |
-| `dist/esm/vt-chart.js`        | 61.7 KB     |
-| `dist/esm/vt-openapi.js`      | 64.4 KB     |
-| `dist/esm/vt-timeline.js`     | 60.5 KB     |
-| `dist/esm/vt-git.js`          | 64.1 KB     |
-| `dist/esm/vt-job.js`          | 63.7 KB     |
-| `dist/esm/vt-hex.js`          | 28.6 KB     |
-| `dist/esm/vt-regex.js`        | 64.2 KB     |
-| `dist/esm/vt-toml.js`         | 67.9 KB     |
-| `dist/esm/vt-cron.js`         | 66.0 KB     |
-| `dist/esm/vt-jwt.js`          | 65.2 KB     |
-| `dist/esm/vt-xml.js`          | 65.9 KB     |
-| `dist/esm/vt-cert.js`         | 67.0 KB     |
-| `dist/esm/vt-yaml.js`         | 65.7 KB     |
-| `dist/esm/vt-table.js`        | 57.1 KB     |
-| `dist/esm/vt-status.js`       | 62.5 KB     |
-| `dist/esm/vt-calendar.js`     | 66.9 KB     |
-| `dist/esm/vt-pricing.js`      | 61.3 KB     |
-| `dist/esm/vt-faq.js`          | 58.8 KB     |
-| `dist/esm/vt-gallery.js`      | 59.3 KB     |
-| `dist/esm/vt-stats.js`        | 59.7 KB     |
-| `dist/esm/vt-testimonials.js` | 59.5 KB     |
-| `dist/esm/vt-countdown.js`    | 59.4 KB     |
-| `dist/esm/vt-field.js`        | 64.0 KB     |
-| `dist/esm/vt-board.js`        | 68.1 KB     |
-| `dist/esm/vt-search.js`       | 61.9 KB     |
-| `dist/esm/vt-upload.js`       | 63.4 KB     |
-| `dist/esm/vt-menu.js`         | 61.2 KB     |
-| `dist/esm/vt-date-picker.js`  | 65.2 KB     |
-| `dist/esm/vt-install.js`      | 28.8 KB     |
-| `dist/esm/vt-download.js`     | 63.2 KB     |
-| `dist/esm/vt-contributors.js` | 62.6 KB     |
-| `dist/esm/vt-lifecycle.js`    | 62.3 KB     |
-| `dist/esm/vt-advisories.js`   | 63.1 KB     |
-| `dist/esm/vt-licenses.js`     | 63.4 KB     |
-| `dist/esm/vt-icon-picker.js`  | 30.9 KB     |
-| `dist/esm/vt-workflow.js`     | 67.1 KB     |
-| `dist/esm/vt-access-log.js`   | 65.7 KB     |
-| `dist/esm/vt-password.js`     | 39.0 KB     |
-| `dist/esm/vt-secret.js`       | 35.4 KB     |
-| `dist/esm/vt-version.js`      | 35.1 KB     |
-| `dist/esm/vt-consent.js`      | 30.5 KB     |
-| `dist/esm/vt-changelog.js`    | 65.1 KB     |
-| `dist/esm/vt-repo.js`         | 62.2 KB     |
-| `dist/esm/vt-ioc.js`          | 60.7 KB     |
-| `dist/esm/vt-cvss.js`         | 62.4 KB     |
-| `dist/esm/vt-headers.js`      | 62.1 KB     |
-| `dist/esm/vt-email.js`        | 64.2 KB     |
-| `dist/esm/vt-dns.js`          | 63.5 KB     |
-| `dist/esm/vt-nmap.js`         | 62.4 KB     |
-| `dist/esm/vt-url.js`          | 66.8 KB     |
-| `dist/esm/vt-hash.js`         | 61.0 KB     |
-| `dist/esm/vt-waterfall.js`    | 65.7 KB     |
-| `dist/esm/vt-yara.js`         | 65.3 KB     |
-| `dist/esm/vt-sigma.js`        | 65.0 KB     |
-| `dist/esm/vt-pcap.js`         | 40.6 KB     |
-| `dist/esm/vt-semver.js`       | 61.7 KB     |
-| `dist/esm/vt-contrast.js`     | 62.2 KB     |
-| `dist/esm/vt-sbom.js`         | 64.6 KB     |
-| `dist/esm/vt-dockerfile.js`   | 64.1 KB     |
-| `dist/esm/vt-lighthouse.js`   | 62.3 KB     |
-| `dist/esm/vt-a11y.js`         | 60.7 KB     |
-| `dist/esm/vt-compare.js`      | 30.5 KB     |
-| `dist/esm/vt-describe.js`     | 62.3 KB     |
-| `dist/esm/vt-treemap.js`      | 62.3 KB     |
-| `dist/esm/vt-flame.js`        | 60.6 KB     |
-| `dist/esm/vt-heatmap.js`      | 60.4 KB     |
-| `dist/esm/vt-pivot.js`        | 61.4 KB     |
-| `dist/esm/vt-sql.js`          | 68.0 KB     |
-| `dist/esm/vt-test-report.js`  | 67.7 KB     |
-| `dist/esm/vt-trace.js`        | 63.4 KB     |
-| `dist/esm/vt-notebook.js`     | 83.7 KB     |
-| `dist/esm/vt-math.js`         | 61.0 KB     |
-| `dist/esm/vt-diagram.js`      | 59.6 KB     |
+| File                             | Size (gzip) |
+| -------------------------------- | ----------- |
+| `dist/vitrine.min.js`            | 646.1 KB    |
+| `dist/vitrine.esm.js`            | 645.9 KB    |
+| `dist/vitrine-loader.js`         | 1.3 KB      |
+| `dist/esm/vt-code.js`            | 60.0 KB     |
+| `dist/esm/vt-markdown.js`        | 79.4 KB     |
+| `dist/esm/vt-json.js`            | 64.1 KB     |
+| `dist/esm/vt-csv.js`             | 61.0 KB     |
+| `dist/esm/vt-tags.js`            | 30.7 KB     |
+| `dist/esm/vt-diff.js`            | 66.6 KB     |
+| `dist/esm/vt-terminal.js`        | 63.2 KB     |
+| `dist/esm/vt-tree.js`            | 62.3 KB     |
+| `dist/esm/vt-http.js`            | 71.2 KB     |
+| `dist/esm/vt-log.js`             | 64.7 KB     |
+| `dist/esm/vt-env.js`             | 61.2 KB     |
+| `dist/esm/vt-chart.js`           | 61.7 KB     |
+| `dist/esm/vt-openapi.js`         | 64.4 KB     |
+| `dist/esm/vt-timeline.js`        | 60.5 KB     |
+| `dist/esm/vt-git.js`             | 64.1 KB     |
+| `dist/esm/vt-job.js`             | 63.7 KB     |
+| `dist/esm/vt-hex.js`             | 28.6 KB     |
+| `dist/esm/vt-regex.js`           | 64.2 KB     |
+| `dist/esm/vt-toml.js`            | 67.9 KB     |
+| `dist/esm/vt-cron.js`            | 66.0 KB     |
+| `dist/esm/vt-jwt.js`             | 65.2 KB     |
+| `dist/esm/vt-xml.js`             | 65.9 KB     |
+| `dist/esm/vt-cert.js`            | 67.0 KB     |
+| `dist/esm/vt-yaml.js`            | 65.7 KB     |
+| `dist/esm/vt-table.js`           | 57.1 KB     |
+| `dist/esm/vt-status.js`          | 62.5 KB     |
+| `dist/esm/vt-calendar.js`        | 66.9 KB     |
+| `dist/esm/vt-pricing.js`         | 61.3 KB     |
+| `dist/esm/vt-faq.js`             | 58.8 KB     |
+| `dist/esm/vt-gallery.js`         | 59.3 KB     |
+| `dist/esm/vt-stats.js`           | 59.7 KB     |
+| `dist/esm/vt-testimonials.js`    | 59.5 KB     |
+| `dist/esm/vt-countdown.js`       | 59.4 KB     |
+| `dist/esm/vt-field.js`           | 64.0 KB     |
+| `dist/esm/vt-board.js`           | 68.1 KB     |
+| `dist/esm/vt-search.js`          | 61.9 KB     |
+| `dist/esm/vt-upload.js`          | 63.4 KB     |
+| `dist/esm/vt-menu.js`            | 61.2 KB     |
+| `dist/esm/vt-date-picker.js`     | 65.2 KB     |
+| `dist/esm/vt-install.js`         | 28.8 KB     |
+| `dist/esm/vt-download.js`        | 63.2 KB     |
+| `dist/esm/vt-contributors.js`    | 62.6 KB     |
+| `dist/esm/vt-lifecycle.js`       | 62.3 KB     |
+| `dist/esm/vt-advisories.js`      | 63.1 KB     |
+| `dist/esm/vt-licenses.js`        | 63.4 KB     |
+| `dist/esm/vt-icon-picker.js`     | 30.9 KB     |
+| `dist/esm/vt-workflow.js`        | 67.1 KB     |
+| `dist/esm/vt-access-log.js`      | 65.7 KB     |
+| `dist/esm/vt-password.js`        | 39.0 KB     |
+| `dist/esm/vt-secret.js`          | 35.4 KB     |
+| `dist/esm/vt-version.js`         | 35.1 KB     |
+| `dist/esm/vt-consent.js`         | 30.5 KB     |
+| `dist/esm/vt-changelog.js`       | 65.1 KB     |
+| `dist/esm/vt-repo.js`            | 62.2 KB     |
+| `dist/esm/vt-ioc.js`             | 60.7 KB     |
+| `dist/esm/vt-cvss.js`            | 62.4 KB     |
+| `dist/esm/vt-headers.js`         | 62.1 KB     |
+| `dist/esm/vt-email.js`           | 64.2 KB     |
+| `dist/esm/vt-dns.js`             | 63.5 KB     |
+| `dist/esm/vt-nmap.js`            | 62.4 KB     |
+| `dist/esm/vt-url.js`             | 66.8 KB     |
+| `dist/esm/vt-hash.js`            | 61.0 KB     |
+| `dist/esm/vt-waterfall.js`       | 65.7 KB     |
+| `dist/esm/vt-yara.js`            | 65.3 KB     |
+| `dist/esm/vt-sigma.js`           | 65.0 KB     |
+| `dist/esm/vt-pcap.js`            | 40.6 KB     |
+| `dist/esm/vt-semver.js`          | 61.7 KB     |
+| `dist/esm/vt-contrast.js`        | 62.2 KB     |
+| `dist/esm/vt-sbom.js`            | 64.6 KB     |
+| `dist/esm/vt-dockerfile.js`      | 64.1 KB     |
+| `dist/esm/vt-lighthouse.js`      | 62.3 KB     |
+| `dist/esm/vt-a11y.js`            | 60.7 KB     |
+| `dist/esm/vt-nmap.js`            | 62.9 KB     |
+| `dist/esm/vt-cookies.js`         | 62.5 KB     |
+| `dist/esm/vt-redirects.js`       | 61.4 KB     |
+| `dist/esm/vt-loading-button.js`  | 19.9 KB     |
+| `dist/esm/vt-loading-message.js` | 16.5 KB     |
+| `dist/esm/vt-loading-overlay.js` | 17.0 KB     |
+| `dist/esm/vt-loading-steps.js`   | 21.9 KB     |
+| `dist/esm/vt-page-progress.js`   | 15.7 KB     |
+| `dist/esm/vt-progress.js`        | 16.6 KB     |
+| `dist/esm/vt-progress-ring.js`   | 16.2 KB     |
+| `dist/esm/vt-skeleton.js`        | 16.2 KB     |
+| `dist/esm/vt-spinner.js`         | 15.7 KB     |
+| `dist/esm/vt-typing.js`          | 15.1 KB     |
+| `dist/esm/vt-compare.js`         | 30.5 KB     |
+| `dist/esm/vt-describe.js`        | 62.3 KB     |
+| `dist/esm/vt-treemap.js`         | 62.3 KB     |
+| `dist/esm/vt-flame.js`           | 60.6 KB     |
+| `dist/esm/vt-heatmap.js`         | 60.4 KB     |
+| `dist/esm/vt-pivot.js`           | 61.4 KB     |
+| `dist/esm/vt-sql.js`             | 68.0 KB     |
+| `dist/esm/vt-test-report.js`     | 67.7 KB     |
+| `dist/esm/vt-trace.js`           | 63.4 KB     |
+| `dist/esm/vt-notebook.js`        | 83.7 KB     |
+| `dist/esm/vt-math.js`            | 61.0 KB     |
+| `dist/esm/vt-diagram.js`         | 59.6 KB     |
 
 These are the sizes of the current build, measured by `npm run size`, which fails when a file goes over its budget (660 KB for the full bundles; 2 KB for the loader; 62, 81, 66, 63, 34, 68, 64, 64, 69, 66, 62, 64, 66, 64, 66, 66, 58, 66, 69, 67, 66, 67, 68, 67, 74, 64, 69, 63, 61, 62, 62, 62, 62, 66, 71, 64, 66, 64, 68, 31, 66, 65, 65, 66, 66, 33, 70, 68, 42, 38, 38, 36, 66, 64, 33, 65, 65, 63, 63, 64, 70, 70, 66, 86, 63 and 62 KB for the modules above). Language files, syntax themes and the files of `dist/vendor/` are loaded on demand and are not included: `dist/vendor/echarts.js` (about 225 KB gzipped) is loaded only by `<vt-chart>`, the first time a page shows a chart, and `dist/vendor/yaml.js` (about 15 KB gzipped) only by `<vt-openapi>` and `<vt-sigma>`, the first time a page shows YAML. Loading two modules downloads their shared chunks only once, so the total is less than the sum.
 
@@ -524,7 +537,7 @@ While content loads from `src`, the element shows a loading placeholder. If cont
 ## Next steps
 
 - [Common attributes and events](common-attributes.md)
-- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md), [`<vt-env>`](components/env.md), [`<vt-hex>`](components/hex.md), [`<vt-timeline>`](components/timeline.md), [`<vt-job>`](components/job.md), [`<vt-git>`](components/git.md), [`<vt-regex>`](components/regex.md), [`<vt-yaml>`](components/yaml.md), [`<vt-xml>`](components/xml.md), [`<vt-toml>`](components/toml.md), [`<vt-jwt>`](components/jwt.md), [`<vt-cron>`](components/cron.md), [`<vt-cert>`](components/cert.md), [`<vt-status>`](components/status.md), [`<vt-calendar>`](components/calendar.md), [`<vt-pricing>`](components/pricing.md), [`<vt-faq>`](components/faq.md), [`<vt-gallery>`](components/gallery.md), [`<vt-stats>`](components/stats.md), [`<vt-board>`](components/board.md), [`<vt-field>`](components/field.md), [`<vt-search>`](components/search.md), [`<vt-date-picker>`](components/date-picker.md), [`<vt-menu>`](components/menu.md), [`<vt-upload>`](components/upload.md), [`<vt-testimonials>`](components/testimonials.md), [`<vt-countdown>`](components/countdown.md), [`<vt-sql>`](components/sql.md), [`<vt-test-report>`](components/test-report.md), [`<vt-trace>`](components/trace.md), [`<vt-notebook>`](components/notebook.md), [`<vt-math>`](components/math.md), [`<vt-diagram>`](components/diagram.md), [`<vt-pivot>`](components/pivot.md), [`<vt-heatmap>`](components/heatmap.md), [`<vt-flame>`](components/flame.md), [`<vt-treemap>`](components/treemap.md), [`<vt-describe>`](components/describe.md), [`<vt-compare>`](components/compare.md), [`<vt-install>`](components/install.md), [`<vt-download>`](components/download.md), [`<vt-contributors>`](components/contributors.md), [`<vt-lifecycle>`](components/lifecycle.md), [`<vt-advisories>`](components/advisories.md), [`<vt-licenses>`](components/licenses.md), [`<vt-icon-picker>`](components/icon-picker.md), [`<vt-workflow>`](components/workflow.md), [`<vt-access-log>`](components/access-log.md), [`<vt-password>`](components/password.md), [`<vt-secret>`](components/secret.md), [`<vt-version>`](components/version.md), [`<vt-consent>`](components/consent.md), [`<vt-changelog>`](components/changelog.md), [`<vt-repo>`](components/repo.md), [`<vt-ioc>`](components/ioc.md), [`<vt-cvss>`](components/cvss.md), [`<vt-headers>`](components/headers.md), [`<vt-email>`](components/email.md), [`<vt-dns>`](components/dns.md), [`<vt-nmap>`](components/nmap.md), [`<vt-url>`](components/url.md), [`<vt-hash>`](components/hash.md), [`<vt-waterfall>`](components/waterfall.md), [`<vt-yara>`](components/yara.md), [`<vt-sigma>`](components/sigma.md), [`<vt-pcap>`](components/pcap.md), [`<vt-semver>`](components/semver.md), [`<vt-contrast>`](components/contrast.md), [`<vt-sbom>`](components/sbom.md), [`<vt-dockerfile>`](components/dockerfile.md), [`<vt-lighthouse>`](components/lighthouse.md), [`<vt-a11y>`](components/a11y.md)
+- Component references: [`<vt-code>`](components/code.md), [`<vt-markdown>`](components/markdown.md), [`<vt-json>`](components/json.md), [`<vt-csv>`](components/csv.md), [`<vt-tags>`](components/tags.md), [`<vt-diff>`](components/diff.md), [`<vt-terminal>`](components/terminal.md), [`<vt-tree>`](components/tree.md), [`<vt-http>`](components/http.md), [`<vt-log>`](components/log.md), [`<vt-chart>`](components/chart.md), [`<vt-openapi>`](components/openapi.md), [`<vt-env>`](components/env.md), [`<vt-hex>`](components/hex.md), [`<vt-timeline>`](components/timeline.md), [`<vt-job>`](components/job.md), [`<vt-git>`](components/git.md), [`<vt-regex>`](components/regex.md), [`<vt-yaml>`](components/yaml.md), [`<vt-xml>`](components/xml.md), [`<vt-toml>`](components/toml.md), [`<vt-jwt>`](components/jwt.md), [`<vt-cron>`](components/cron.md), [`<vt-cert>`](components/cert.md), [`<vt-status>`](components/status.md), [`<vt-calendar>`](components/calendar.md), [`<vt-pricing>`](components/pricing.md), [`<vt-faq>`](components/faq.md), [`<vt-gallery>`](components/gallery.md), [`<vt-stats>`](components/stats.md), [`<vt-board>`](components/board.md), [`<vt-field>`](components/field.md), [`<vt-search>`](components/search.md), [`<vt-date-picker>`](components/date-picker.md), [`<vt-menu>`](components/menu.md), [`<vt-upload>`](components/upload.md), [`<vt-testimonials>`](components/testimonials.md), [`<vt-countdown>`](components/countdown.md), [`<vt-sql>`](components/sql.md), [`<vt-test-report>`](components/test-report.md), [`<vt-trace>`](components/trace.md), [`<vt-notebook>`](components/notebook.md), [`<vt-math>`](components/math.md), [`<vt-diagram>`](components/diagram.md), [`<vt-pivot>`](components/pivot.md), [`<vt-heatmap>`](components/heatmap.md), [`<vt-flame>`](components/flame.md), [`<vt-treemap>`](components/treemap.md), [`<vt-describe>`](components/describe.md), [`<vt-compare>`](components/compare.md), [`<vt-install>`](components/install.md), [`<vt-download>`](components/download.md), [`<vt-contributors>`](components/contributors.md), [`<vt-lifecycle>`](components/lifecycle.md), [`<vt-advisories>`](components/advisories.md), [`<vt-licenses>`](components/licenses.md), [`<vt-icon-picker>`](components/icon-picker.md), [`<vt-workflow>`](components/workflow.md), [`<vt-access-log>`](components/access-log.md), [`<vt-password>`](components/password.md), [`<vt-secret>`](components/secret.md), [`<vt-version>`](components/version.md), [`<vt-consent>`](components/consent.md), [`<vt-changelog>`](components/changelog.md), [`<vt-repo>`](components/repo.md), [`<vt-ioc>`](components/ioc.md), [`<vt-cvss>`](components/cvss.md), [`<vt-headers>`](components/headers.md), [`<vt-email>`](components/email.md), [`<vt-dns>`](components/dns.md), [`<vt-nmap>`](components/nmap.md), [`<vt-url>`](components/url.md), [`<vt-hash>`](components/hash.md), [`<vt-waterfall>`](components/waterfall.md), [`<vt-yara>`](components/yara.md), [`<vt-sigma>`](components/sigma.md), [`<vt-pcap>`](components/pcap.md), [`<vt-semver>`](components/semver.md), [`<vt-contrast>`](components/contrast.md), [`<vt-sbom>`](components/sbom.md), [`<vt-dockerfile>`](components/dockerfile.md), [`<vt-lighthouse>`](components/lighthouse.md), [`<vt-a11y>`](components/a11y.md), [`<vt-cookies>`](components/cookies.md), [`<vt-redirects>`](components/redirects.md), [`<vt-loading-button>`](components/loading-button.md), [`<vt-loading-message>`](components/loading-message.md), [`<vt-loading-overlay>`](components/loading-overlay.md), [`<vt-loading-steps>`](components/loading-steps.md), [`<vt-page-progress>`](components/page-progress.md), [`<vt-progress>`](components/progress.md), [`<vt-progress-ring>`](components/progress-ring.md), [`<vt-skeleton>`](components/skeleton.md), [`<vt-spinner>`](components/spinner.md), [`<vt-typing>`](components/typing.md)
 - [Editing](editing.md)
 - [Theming](theming.md) and [Configuration](configuration.md)
 - [Security](security.md) before displaying untrusted content

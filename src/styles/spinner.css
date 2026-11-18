@@ -1,0 +1,173 @@
+/*
+ * Spinner shapes (components/loading/shapes.js). Everything scales with --_ind-size and
+ * runs at --_ind-duration; the color is --_ind-color, the track --_ind-track.
+ */
+.spinner {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--_ind-size);
+  height: var(--_ind-size);
+}
+
+/* A full track with one colored quarter. */
+.spinner.ring {
+  border: max(2px, calc(var(--_ind-size) / 9)) solid var(--_ind-track);
+  border-top-color: var(--_ind-color);
+  border-radius: 50%;
+  animation: vt-rotate calc(var(--_ind-duration) * 0.8) linear infinite;
+}
+
+/* A fading tail, drawn with a conic gradient masked to a ring. */
+.spinner.arc {
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 10%, var(--_ind-color));
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - max(2px, var(--_ind-size) / 8) - 0.5px),
+    #000 calc(100% - max(2px, var(--_ind-size) / 8))
+  );
+  animation: vt-rotate calc(var(--_ind-duration) * 0.9) linear infinite;
+}
+
+/* Two arcs turning in opposite directions. */
+.spinner.dual-ring .spinner-part {
+  position: absolute;
+  inset: 0;
+  border: max(2px, calc(var(--_ind-size) / 10)) solid transparent;
+  border-radius: 50%;
+}
+
+.spinner.dual-ring .p1 {
+  border-top-color: var(--_ind-color);
+  border-bottom-color: var(--_ind-color);
+  animation: vt-rotate calc(var(--_ind-duration) * 1.1) linear infinite;
+}
+
+.spinner.dual-ring .p2 {
+  inset: 22%;
+  border-left-color: color-mix(in srgb, var(--_ind-color) 55%, transparent);
+  border-right-color: color-mix(in srgb, var(--_ind-color) 55%, transparent);
+  animation: vt-rotate calc(var(--_ind-duration) * 0.8) linear infinite reverse;
+}
+
+/* Three dots fading in turn. */
+.spinner.dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(var(--_ind-size) * 1.6);
+}
+
+.spinner.dots .spinner-part {
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--_ind-color);
+  animation: vt-pulse var(--_ind-duration) ease-in-out infinite;
+}
+
+.spinner.dots .p2 {
+  animation-delay: calc(var(--_ind-duration) * 0.16);
+}
+
+.spinner.dots .p3 {
+  animation-delay: calc(var(--_ind-duration) * 0.32);
+}
+
+/* Four bars rising in turn, as an equalizer. */
+.spinner.bars {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spinner.bars .spinner-part {
+  width: 16%;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--_ind-color);
+  transform-origin: center;
+  animation: vt-bar var(--_ind-duration) ease-in-out infinite;
+}
+
+.spinner.bars .p2 {
+  animation-delay: calc(var(--_ind-duration) * 0.12);
+}
+
+.spinner.bars .p3 {
+  animation-delay: calc(var(--_ind-duration) * 0.24);
+}
+
+.spinner.bars .p4 {
+  animation-delay: calc(var(--_ind-duration) * 0.36);
+}
+
+@keyframes vt-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Two waves growing from the center. */
+.spinner.pulse .spinner-part {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--_ind-color);
+  opacity: 0;
+  animation: vt-wave calc(var(--_ind-duration) * 1.4) cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+.spinner.pulse .p2 {
+  animation-delay: calc(var(--_ind-duration) * 0.7);
+}
+
+@keyframes vt-wave {
+  from {
+    opacity: 0.85;
+    transform: scale(0.1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* A dot circling a faint track. */
+.spinner.orbit {
+  border: max(1px, calc(var(--_ind-size) / 16)) solid var(--_ind-track);
+  border-radius: 50%;
+  animation: vt-rotate calc(var(--_ind-duration) * 1.2) linear infinite;
+}
+
+.spinner.orbit .spinner-part {
+  position: absolute;
+  top: -12%;
+  left: 50%;
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--_ind-color);
+  transform: translateX(-50%);
+}
+
+/* Reduced motion: no turning or sliding, a slow fade instead. */
+.indicator[data-motion='reduce'] .spinner,
+.indicator[data-motion='reduce'] .spinner-part {
+  animation-name: vt-fade !important;
+}
+
+/* <vt-spinner>: text under the shape. */
+.indicator.below {
+  flex-direction: column;
+  gap: var(--_space-2);
+}

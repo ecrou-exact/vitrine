@@ -80,6 +80,18 @@ import { VtSbom } from './components/sbom/vt-sbom.js';
 import { VtDockerfile } from './components/dockerfile/vt-dockerfile.js';
 import { VtLighthouse } from './components/lighthouse/vt-lighthouse.js';
 import { VtA11y } from './components/a11y/vt-a11y.js';
+import { VtCookies } from './components/cookies/vt-cookies.js';
+import { VtRedirects } from './components/redirects/vt-redirects.js';
+import { VtLoadingButton } from './components/loading-button/vt-loading-button.js';
+import { VtLoadingMessage } from './components/loading-message/vt-loading-message.js';
+import { VtLoadingOverlay } from './components/loading-overlay/vt-loading-overlay.js';
+import { VtLoadingSteps } from './components/loading-steps/vt-loading-steps.js';
+import { VtPageProgress } from './components/page-progress/vt-page-progress.js';
+import { VtProgress } from './components/progress/vt-progress.js';
+import { VtProgressRing } from './components/progress-ring/vt-progress-ring.js';
+import { VtSkeleton } from './components/skeleton/vt-skeleton.js';
+import { VtSpinner } from './components/spinner/vt-spinner.js';
+import { VtTyping } from './components/typing/vt-typing.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -182,6 +194,18 @@ export {
   VtDockerfile,
   VtLighthouse,
   VtA11y,
+  VtCookies,
+  VtRedirects,
+  VtLoadingButton,
+  VtLoadingMessage,
+  VtLoadingOverlay,
+  VtLoadingSteps,
+  VtPageProgress,
+  VtProgress,
+  VtProgressRing,
+  VtSkeleton,
+  VtSpinner,
+  VtTyping,
   registerIconSet,
   configure,
   getConfig,
@@ -295,6 +319,18 @@ export const registry = new Map(
     ['vt-dockerfile', VtDockerfile],
     ['vt-lighthouse', VtLighthouse],
     ['vt-a11y', VtA11y],
+    ['vt-cookies', VtCookies],
+    ['vt-redirects', VtRedirects],
+    ['vt-loading-button', VtLoadingButton],
+    ['vt-loading-message', VtLoadingMessage],
+    ['vt-loading-overlay', VtLoadingOverlay],
+    ['vt-loading-steps', VtLoadingSteps],
+    ['vt-page-progress', VtPageProgress],
+    ['vt-progress', VtProgress],
+    ['vt-progress-ring', VtProgressRing],
+    ['vt-skeleton', VtSkeleton],
+    ['vt-spinner', VtSpinner],
+    ['vt-typing', VtTyping],
   ]),
 );
 
@@ -384,6 +420,18 @@ const TYPES = /** @type {const} */ ({
   dockerfile: 'vt-dockerfile',
   lighthouse: 'vt-lighthouse',
   a11y: 'vt-a11y',
+  cookies: 'vt-cookies',
+  redirects: 'vt-redirects',
+  'loading-button': 'vt-loading-button',
+  'loading-message': 'vt-loading-message',
+  'loading-overlay': 'vt-loading-overlay',
+  'loading-steps': 'vt-loading-steps',
+  'page-progress': 'vt-page-progress',
+  progress: 'vt-progress',
+  'progress-ring': 'vt-progress-ring',
+  skeleton: 'vt-skeleton',
+  spinner: 'vt-spinner',
+  typing: 'vt-typing',
 });
 
 /**

@@ -233,6 +233,27 @@ const MORE = {
     '{"testEngine":{"name":"axe-core","version":"4.10.2"},"timestamp":"2026-11-17T10:00:00.000Z","url":"https://shop.example/checkout","violations":[{"id":"color-contrast","impact":"serious","tags":["cat.color","wcag2aa","wcag143","TTv5","EN-301-549"],"description":"Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds","help":"Elements must meet minimum color contrast ratio thresholds","helpUrl":"https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI","nodes":[{"impact":"serious","html":"<a class=\\"muted\\" href=\\"/terms\\">Terms</a>","target":["footer > a.muted"],"failureSummary":"Fix any of the following:\\n  Element has insufficient color contrast of 2.84 (foreground color: #999999, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"},{"impact":"serious","html":"<span class=\\"hint\\">Optional</span>","target":["#email-hint"],"failureSummary":"Fix any of the following:\\n  Element has insufficient color contrast of 3.1"}]},{"id":"label","impact":"critical","tags":["cat.forms","wcag2a","wcag412","wcag131"],"description":"Ensure every form element has a label","help":"Form elements must have labels","helpUrl":"https://dequeuniversity.com/rules/axe/4.10/label?application=axeAPI","nodes":[{"impact":"critical","html":"<input type=\\"text\\" name=\\"zip\\">","target":[["#payment-frame","input[name=\\"zip\\"]"]],"failureSummary":"Fix any of the following:\\n  Form element does not have an implicit (wrapped) <label>\\n  Form element does not have an explicit <label>\\n  Element has no title attribute"}]},{"id":"region","impact":"moderate","tags":["cat.keyboard","best-practice"],"description":"Ensure all page content is contained by landmarks","help":"All page content should be contained by landmarks","helpUrl":"javascript:alert(1)","nodes":[{"impact":"moderate","html":"<div class=\\"promo\\">Free shipping</div>","target":[".promo"],"failureSummary":"Fix all of the following:\\n  Some page content is not contained by landmarks"}]}],"incomplete":[{"id":"color-contrast","impact":"serious","tags":["wcag2aa","wcag143"],"help":"Elements must meet minimum color contrast ratio thresholds","nodes":[{"html":"<h1 class=\\"over-image\\">Sale</h1>","target":["h1.over-image"],"failureSummary":"Fix any of the following:\\n  Element\'s background color could not be determined due to a background image"}]}],"passes":[{"id":"document-title"},{"id":"html-has-lang"},{"id":"image-alt"}],"inapplicable":[{"id":"video-caption"}]}',
     { variant: 'full' },
   ],
+  'vt-cookies': [
+    'Set-Cookie: __Host-sid=abc123; Domain=example.com; Path=/; Secure; HttpOnly; SameSite=Lax\nSet-Cookie: sessionid=1; Max-Age=63072000\nSet-Cookie: theme=dark; Path=/; Secure; HttpOnly; SameSite=Strict',
+    { variant: 'full', url: 'https://shop.example.com/', 'mask-values': 'false' },
+  ],
+  'vt-spinner': ['', { type: 'dots', text: 'Loading results…' }],
+  'vt-progress': ['', { value: '42', text: 'Uploading', 'show-value': 'percent', buffer: '60' }],
+  'vt-progress-ring': ['', { value: '72', text: 'Storage', status: 'warning' }],
+  'vt-skeleton': ['', { shape: 'card', media: '', avatar: '' }],
+  'vt-loading-overlay': ['', { text: 'Saving…', value: '40', cancelable: '' }],
+  'vt-page-progress': ['', { active: '', value: '0.4' }],
+  'vt-loading-steps': [
+    'done Build (42s)\nrunning Push — layer 3\nerror Migrate — timeout\nskipped Notify\npending Roll out',
+    { text: 'Deploying', cancelable: '' },
+  ],
+  'vt-typing': ['', { name: 'Ada', 'show-text': '' }],
+  'vt-loading-button': ['', { loading: '', 'loading-text': 'Saving…' }],
+  'vt-loading-message': ['Connecting…\nFetching…', { elapsed: '', 'slow-after': '1ms' }],
+  'vt-redirects': [
+    '301 http://a.example/\n302 https://a.example/?utm_source=x\n302 http://b.example.net/ (js)\n404 https://b.example.net/x',
+    { variant: 'full' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {

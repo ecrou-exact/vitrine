@@ -9,6 +9,8 @@
  * @module components/email/email
  */
 
+import { baseDomain } from '../../core/urls.js';
+
 /**
  * @typedef {{ name: string, value: string }} Header
  * @typedef {{ name: string, address: string }} Address
@@ -214,18 +216,7 @@ export function domainOf(address) {
         .toLowerCase();
 }
 
-/**
- * The registrable part of a domain, roughly: its last two labels, or three for common
- * second-level endings (`co.uk`, `com.au`…).
- *
- * @param {string} domain
- */
-export function baseDomain(domain) {
-  const labels = domain.toLowerCase().split('.').filter(Boolean);
-  const two = labels.slice(-2).join('.');
-  if (labels.length > 2 && /^(?:co|com|net|org|gov|ac|edu|ne|or)\.[a-z]{2}$/.test(two)) return labels.slice(-3).join('.'); // prettier-ignore
-  return two;
-}
+export { baseDomain };
 
 /**
  * @param {string} value

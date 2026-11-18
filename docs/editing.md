@@ -167,6 +167,8 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-headers>`      | `content`                                                                                |
 | `<vt-email>`        | `content`                                                                                |
 | `<vt-dns>`          | `content`                                                                                |
+| `<vt-cookies>`      | `content`, `cookies` (read only)                                                         |
+| `<vt-redirects>`    | `content`, `hops` (read only)                                                            |
 | `<vt-nmap>`         | `content`                                                                                |
 | `<vt-url>`          | `content`                                                                                |
 | `<vt-hash>`         | `content`; the hashes follow as you type                                                 |

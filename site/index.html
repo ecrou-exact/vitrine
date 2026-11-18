@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Thirty-nine elements, view or edit</h2>
+            <h2 id="components-title">Eighty-six elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -1067,6 +1067,109 @@ CMD npm start</template>
                 <template>{"testEngine":{"name":"axe-core","version":"4.10.2"},"violations":[{"id":"label","impact":"critical","tags":["wcag2a","wcag412"],"help":"Form elements must have labels","nodes":[{"html":"&lt;input name=\"zip\">","target":["input[name=\"zip\"]"],"failureSummary":"Fix any of the following:\n  Form element does not have an explicit &lt;label>"}]}],"incomplete":[],"passes":[{},{}]}</template>
               </vt-a11y>
               <a href="examples.html#a11y">Accessibility examples</a>
+              <h3>&lt;vt-cookies&gt;</h3>
+              <p>
+                Cookies with their flags, lifetime and party, each one checked.
+              </p>
+              <vt-cookies class="preview" lang-ui="en" url="https://shop.example.com/" issues="false">
+                <template>Set-Cookie: __Host-sid=4f2a9c; Path=/; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: _ga=GA1.2.1234; Domain=example.com; Max-Age=63072000
+Set-Cookie: track=7; SameSite=None</template>
+              </vt-cookies>
+              <a href="examples.html#cookies">Cookies examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-redirects&gt;</h3>
+              <p>
+                Redirect chains hop by hop: other sites, HTTPS changes, tracking parameters.
+              </p>
+              <vt-redirects class="preview" lang-ui="en">
+                <template>301 http://example.com/
+302 https://example.com/promo
+200 https://shop.example.net/offer?utm_source=mail</template>
+              </vt-redirects>
+              <a href="examples.html#redirects">Redirects examples</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="loading-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="loading-title">Loading &amp; feedback</h2>
+            <p>
+              Ten light indicators (15 to 22 KB each) to show that something is happening: with a
+              delay so fast loads show nothing, a minimum duration so nothing flickers, theme colors,
+              reduced motion and screen reader announcements built in.
+            </p>
+          </div>
+          <div class="components">
+            <article class="component">
+              <h3>&lt;vt-loading-button&gt;</h3>
+              <p>A button that shows its wait, then "Saved".</p>
+              <vt-loading-button class="preview" lang-ui="en" loading loading-text="Saving…">Save</vt-loading-button>
+              <a href="examples.html#loading-button">Loading button examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-message&gt;</h3>
+              <p>Messages in turn, elapsed time, and a slow notice.</p>
+              <vt-loading-message class="preview" lang-ui="en" elapsed messages="Connecting…|Fetching your invoices…|Preparing the PDF…"></vt-loading-message>
+              <a href="examples.html#loading-message">Loading message examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-overlay&gt;</h3>
+              <p>Covers content while it saves: made inert, with progress.</p>
+              <vt-loading-overlay class="preview" lang-ui="en" text="Saving…" value="60">
+                <p>Profile settings, notifications and billing details.</p>
+              </vt-loading-overlay>
+              <a href="examples.html#loading-overlay">Loading overlay examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-steps&gt;</h3>
+              <p>The steps of a long task, with status and durations.</p>
+              <vt-loading-steps class="preview" lang-ui="en" progress="false">
+                <template>done Build image (42s)
+running Push to registry
+pending Roll out</template>
+              </vt-loading-steps>
+              <a href="examples.html#loading-steps">Task steps examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-page-progress&gt;</h3>
+              <p>The thin bar along the top of the page: start, trickle, done.</p>
+              <vt-progress class="preview" lang-ui="en" value="62" thickness="xs" label="Page loading"></vt-progress>
+              <a href="examples.html#page-progress">Page progress examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-progress&gt;</h3>
+              <p>Linear progress with buffer, segments and stripes.</p>
+              <vt-progress class="preview" lang-ui="en" value="42" buffer="70" text="Uploading report.pdf" show-value="percent"></vt-progress>
+              <a href="examples.html#progress">Progress bar examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-progress-ring&gt;</h3>
+              <p>A circular gauge with the value in its center.</p>
+              <vt-progress-ring class="preview" lang-ui="en" value="72" text="Storage"></vt-progress-ring>
+              <a href="examples.html#progress-ring">Progress ring examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-skeleton&gt;</h3>
+              <p>Placeholders in the shape of the content to come.</p>
+              <vt-skeleton class="preview" lang-ui="en" shape="list" rows="2" avatar></vt-skeleton>
+              <a href="examples.html#skeleton">Skeleton examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-spinner&gt;</h3>
+              <p>Seven shapes, any size, tone and speed.</p>
+              <span class="preview"><vt-spinner></vt-spinner> <vt-spinner type="arc"></vt-spinner> <vt-spinner type="dots"></vt-spinner> <vt-spinner type="bars"></vt-spinner> <vt-spinner type="orbit"></vt-spinner></span>
+              <a href="examples.html#spinner">Spinner examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-typing&gt;</h3>
+              <p>"Ada is typing…" for chats and assistants.</p>
+              <vt-typing class="preview" lang-ui="en" name="Ada" show-text></vt-typing>
+              <a href="examples.html#typing">Typing indicator examples</a>
             </article>
           </div>
         </div>

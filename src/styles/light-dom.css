@@ -109,6 +109,8 @@ vt-sbom:not(:defined),
 vt-dockerfile:not(:defined),
 vt-lighthouse:not(:defined),
 vt-a11y:not(:defined),
+vt-cookies:not(:defined),
+vt-redirects:not(:defined),
 vt-flame:not(:defined),
 vt-heatmap:not(:defined),
 vt-pivot:not(:defined),
@@ -190,6 +192,8 @@ vt-yaml:not(:defined) {
     vt-dockerfile,
     vt-lighthouse,
     vt-a11y,
+    vt-cookies,
+    vt-redirects,
     vt-flame,
     vt-heatmap,
     vt-pivot,
@@ -281,6 +285,8 @@ vt-yaml:not(:defined) {
     vt-dockerfile,
     vt-lighthouse,
     vt-a11y,
+    vt-cookies,
+    vt-redirects,
     vt-flame,
     vt-heatmap,
     vt-pivot,
@@ -387,6 +393,8 @@ vt-yaml:not(:defined) {
       vt-dockerfile,
       vt-lighthouse,
       vt-a11y,
+      vt-cookies,
+      vt-redirects,
       vt-flame,
       vt-heatmap,
       vt-pivot,
@@ -406,5 +414,32 @@ vt-yaml:not(:defined) {
 
 /* The consent banner takes no room in the page: nothing is shown until it is defined. */
 vt-consent:not(:defined) {
+  display: none;
+}
+
+/*
+ * Loading indicators: no placeholder frame. Small ones keep their place in the line,
+ * wrappers show their content, and the page bar takes no room.
+ */
+:is(vt-spinner, vt-progress-ring, vt-typing, vt-loading-message, vt-loading-button):not(:defined) {
+  display: inline-block;
+}
+
+:is(vt-progress, vt-skeleton, vt-loading-overlay, vt-loading-steps):not(:defined) {
+  display: block;
+}
+
+vt-spinner:not(:defined),
+vt-typing:not(:defined) {
+  min-width: 1em;
+  min-height: 1em;
+}
+
+vt-progress:not(:defined) {
+  min-height: 4px;
+}
+
+vt-page-progress:not(:defined),
+vt-loading-message:not(:defined) {
   display: none;
 }

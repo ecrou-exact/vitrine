@@ -51,6 +51,8 @@ export const ELEMENTS = Object.freeze({
   dockerfile: 'vt-dockerfile', docker: 'vt-dockerfile', containerfile: 'vt-dockerfile',
   lighthouse: 'vt-lighthouse',
   axe: 'vt-a11y', a11y: 'vt-a11y',
+  cookies: 'vt-cookies', 'set-cookie': 'vt-cookies', 'cookies.txt': 'vt-cookies',
+  redirects: 'vt-redirects',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

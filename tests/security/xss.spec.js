@@ -439,6 +439,26 @@ const MODES = [
   },
   {
     tag: 'vt-http',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        serverIPAddress: p,
+        _securityDetails: { protocol: p, subjectName: p, issuer: p, sanList: [p] },
+        request: { method: 'GET', url: `https://x.dev/${p}`, headers: [] },
+        response: {
+          status: 200,
+          httpVersion: p,
+          headers: [],
+          content: {
+            mimeType: 'image/svg+xml',
+            encoding: 'base64',
+            text: Buffer.from(p).toString('base64'),
+          },
+        },
+      }),
+  },
+  {
+    tag: 'vt-http',
     attrs: { variant: 'full', view: 'code' },
     wrap: (p) =>
       JSON.stringify({ request: { method: 'POST', url: `https://x.dev/${p}`, body: p } }),
@@ -933,6 +953,61 @@ ${p}`,
     wrap: (p) =>
       JSON.stringify({ url: p, testEngine: { name: p, version: p }, violations: [{ id: p, impact: 'critical', tags: [p, 'wcag143'], help: p, description: p, helpUrl: `javascript:${p}`, nodes: [{ html: p, target: [p, [p, p]], failureSummary: `Fix any of the following:\n  ${p}` }] }], incomplete: [{ id: p, help: p, nodes: [{ html: p, target: [p] }] }], passes: [] }), // prettier-ignore
   },
+  {
+    tag: 'vt-cookies',
+    attrs: { variant: 'full', 'mask-values': 'false', url: 'https://x.dev/' },
+    wrap: (p) =>
+      `Set-Cookie: ${p.replace(/[;=\n]/g, '')}=${p.replace(/[;\n]/g, '')}; Domain=${p.replace(/[;\n]/g, '')}; Path=${p.replace(/[;\n]/g, '')}`,
+  },
+  {
+    tag: 'vt-cookies',
+    attrs: { variant: 'full', 'mask-values': 'false' },
+    wrap: (p) =>
+      JSON.stringify({
+        log: {
+          entries: [
+            {
+              request: { url: `https://x.dev/${p}` },
+              response: {
+                headers: [],
+                cookies: [{ name: p, value: p, domain: p, path: p, expires: p }],
+              },
+            },
+          ],
+        },
+      }),
+  },
+  {
+    tag: 'vt-redirects',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify([
+        { url: `https://x.dev/?${p}`, status: 302, ip: p },
+        { url: `javascript:${p}`, type: 'js' },
+        { url: p, status: 200, location: p },
+      ]),
+  },
+  {
+    tag: 'vt-redirects',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `$ curl -sIL https://x.dev/\nHTTP/1.1 301 ${p}\nLocation: ${p.replace(/\s/g, '')}\n\nHTTP/1.1 200 OK`,
+  },
+  {
+    tag: 'vt-loading-steps',
+    attrs: { text: 'Steps' },
+    wrap: (p) => `done ${p} — ${p} (42s)\nrunning ${p}\n${p}`,
+  },
+  {
+    tag: 'vt-loading-steps',
+    attrs: {},
+    wrap: (p) => JSON.stringify([{ label: p, status: p, detail: p, duration: p }]),
+  },
+  {
+    tag: 'vt-loading-message',
+    attrs: { elapsed: '', 'slow-after': '1ms' },
+    wrap: (p) => `${p}\n${p}`,
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */
@@ -1022,6 +1097,39 @@ test.describe('XSS payloads', () => {
       expect(await page.evaluate(() => window.__xss), 'a payload executed').toBeUndefined();
     });
   }
+
+  test('loading indicators render their text attributes as text', async ({ page }) => {
+    const TEXT = {
+      'vt-spinner': ['text', 'label'],
+      'vt-progress': ['text', 'label', 'unit', 'value-text'],
+      'vt-progress-ring': ['text', 'unit', 'value-text'],
+      'vt-skeleton': ['label', 'width'],
+      'vt-loading-overlay': ['text', 'cancel-text'],
+      'vt-page-progress': ['label', 'thickness'],
+      'vt-typing': ['name', 'text'],
+      'vt-loading-button': ['loading-text', 'label'],
+      'vt-loading-message': ['messages', 'slow-text'],
+    };
+    for (const payload of PAYLOADS.slice(0, 30)) {
+      for (const [tag, names] of Object.entries(TEXT)) {
+        const attrs = Object.fromEntries(names.map((name) => [name, payload]));
+        await mount(page, tag, {
+          ...attrs,
+          value: '40',
+          'show-value': 'value',
+          'show-text': '',
+          active: '',
+          loading: '',
+          cancelable: '',
+          'slow-after': '1ms',
+        });
+        const problems = await page.evaluate(audit);
+        expect(problems, `${tag}, payload: ${payload}`).toEqual([]);
+      }
+    }
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => window.__xss), 'a payload executed').toBeUndefined();
+  });
 
   test('label and title attributes are rendered as text', async ({ page }) => {
     for (const payload of PAYLOADS.slice(0, 20)) {

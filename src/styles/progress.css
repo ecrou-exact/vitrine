@@ -1,0 +1,139 @@
+/*
+ * <vt-progress>: a track and a bar scaled to --_ratio. Indeterminate: a bar sliding across.
+ * Segments are cut with a repeating mask, so the bar keeps one element.
+ */
+:host {
+  display: block;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--_space-3);
+  margin-bottom: var(--_space-1);
+}
+
+.head .indicator-text {
+  min-width: 0;
+  overflow: hidden;
+  opacity: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
+  flex: none;
+  opacity: var(--_dim);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  position: relative;
+  height: var(--_thickness, 4px);
+  overflow: hidden;
+  border-radius: var(--_radius-full, 999px);
+  background: var(--_ind-track);
+}
+
+.track.square,
+.track.square .bar,
+.track.square .buffer {
+  border-radius: 0;
+}
+
+.bar,
+.buffer {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+:host(:dir(rtl)) .bar,
+:host(:dir(rtl)) .buffer {
+  transform-origin: right center;
+}
+
+.bar {
+  background-color: var(--_ind-color);
+  transform: scaleX(var(--_ratio));
+}
+
+.buffer {
+  background: color-mix(in srgb, var(--_ind-color) 35%, transparent);
+  transform: scaleX(var(--_buffer));
+}
+
+.track.segmented {
+  mask: repeating-linear-gradient(
+    to right,
+    #000 0 calc(100% / var(--_segments) - 3px),
+    transparent calc(100% / var(--_segments) - 3px) calc(100% / var(--_segments))
+  );
+}
+
+/* Stripes are drawn on the bar; scaling would stretch them, so the bar is clipped instead. */
+.bar.striped {
+  width: calc(var(--_ratio) * 100%);
+  transform: none;
+  background-image: linear-gradient(
+    45deg,
+    rgb(255 255 255 / 22%) 25%,
+    transparent 25% 50%,
+    rgb(255 255 255 / 22%) 50% 75%,
+    transparent 75%
+  );
+  background-size: calc(var(--_thickness) * 2.5) calc(var(--_thickness) * 2.5);
+  transition: width 0.25s ease;
+}
+
+.bar.animated {
+  animation: vt-stripes calc(var(--_ind-duration) * 0.8) linear infinite;
+}
+
+@keyframes vt-stripes {
+  to {
+    background-position: calc(var(--_thickness) * 2.5) 0;
+  }
+}
+
+.track.indeterminate .bar {
+  width: 40%;
+  transform: none;
+  animation: vt-slide calc(var(--_ind-duration) * 1.6) cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes vt-slide {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.indicator[data-motion='reduce'] .track.indeterminate .bar {
+  width: 100%;
+  animation-name: vt-fade;
+}
+
+.indicator[data-motion='reduce'] .bar,
+.indicator[data-motion='reduce'] .buffer {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .track {
+    border: 1px solid CanvasText;
+  }
+
+  .bar {
+    background-color: Highlight;
+  }
+}

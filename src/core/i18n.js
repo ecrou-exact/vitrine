@@ -84,7 +84,10 @@
  *   | keyof typeof import('../components/sbom/strings.js').en
  *   | keyof typeof import('../components/dockerfile/strings.js').en
  *   | keyof typeof import('../components/lighthouse/strings.js').en
- *   | keyof typeof import('../components/a11y/strings.js').en} StringKey
+ *   | keyof typeof import('../components/a11y/strings.js').en
+ *   | keyof typeof import('../components/cookies/strings.js').en
+ *   | keyof typeof import('../components/redirects/strings.js').en
+ *   | keyof typeof import('../components/loading/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */
 
@@ -184,6 +187,27 @@ const en = Object.freeze({
   httpQuery: 'Query',
   httpNone: 'None',
   httpNoBody: 'No body',
+  httpConnection: 'Connection',
+  httpEntry: 'Entry',
+  httpEntryPrevious: 'Previous entry',
+  httpEntryNext: 'Next entry',
+  httpEntryCount: '{index} of {total}',
+  httpServerIp: 'Server IP',
+  httpVersion: 'HTTP version',
+  httpMimeType: 'MIME type',
+  httpBodySize: 'Body size (on the wire)',
+  httpContentSize: 'Content size (decoded)',
+  httpTransferSize: 'Transfer size',
+  httpTlsProtocol: 'TLS protocol',
+  httpTlsCipher: 'Cipher',
+  httpTlsSubject: 'Certificate subject',
+  httpTlsSans: 'Alternative names',
+  httpTlsIssuer: 'Issuer',
+  httpTlsValidFrom: 'Valid from',
+  httpTlsValidTo: 'Valid to',
+  httpTlsExpired: 'expired',
+  httpBinary: 'Binary content ({type})',
+  httpImage: 'Response image ({type})',
   copyUrl: 'Copy URL',
   codeLanguage: 'Language',
   showSecrets: 'Show secrets',
@@ -383,6 +407,27 @@ const fr = Object.freeze({
   httpQuery: 'Paramètres',
   httpNone: 'Aucun',
   httpNoBody: 'Pas de corps',
+  httpConnection: 'Connexion',
+  httpEntry: 'Entrée',
+  httpEntryPrevious: 'Entrée précédente',
+  httpEntryNext: 'Entrée suivante',
+  httpEntryCount: '{index} sur {total}',
+  httpServerIp: 'IP du serveur',
+  httpVersion: 'Version HTTP',
+  httpMimeType: 'Type MIME',
+  httpBodySize: 'Taille du corps (transmise)',
+  httpContentSize: 'Taille du contenu (décodé)',
+  httpTransferSize: 'Taille transférée',
+  httpTlsProtocol: 'Protocole TLS',
+  httpTlsCipher: 'Chiffrement',
+  httpTlsSubject: 'Sujet du certificat',
+  httpTlsSans: 'Noms alternatifs',
+  httpTlsIssuer: 'Émetteur',
+  httpTlsValidFrom: 'Valide à partir du',
+  httpTlsValidTo: 'Valide jusqu’au',
+  httpTlsExpired: 'expiré',
+  httpBinary: 'Contenu binaire ({type})',
+  httpImage: 'Image de la réponse ({type})',
   copyUrl: "Copier l'URL",
   codeLanguage: 'Langage',
   showSecrets: 'Afficher les secrets',

@@ -679,6 +679,8 @@ vt-sbom:not(:defined),
 vt-dockerfile:not(:defined),
 vt-lighthouse:not(:defined),
 vt-a11y:not(:defined) {
+vt-cookies:not(:defined),
+vt-redirects:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

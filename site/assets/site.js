@@ -119,8 +119,6 @@ syncComponents();
     '.playground > *',
     '.theme-grid > *',
     '.syntax-explorer > *',
-    '.trials > .trial',
-    '.lab > .verdict',
     '.docs-nav',
     '.docs-content',
     '.legal > .legal-card',
@@ -128,7 +126,7 @@ syncComponents();
   ].join(', ');
   /** Grids whose items follow each other. */
   const STAGGERED =
-    '.component, .reason, .builder > *, .theme-grid > *, .trials > .trial, .page-head > *, .site-footer .wrap > *';
+    '.component, .reason, .builder > *, .theme-grid > *, .page-head > *, .site-footer .wrap > *';
 
   if (motion && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
