@@ -82,6 +82,7 @@ function s(tag, attrs = {}) {
  * @attr {boolean} scroll-zoom - The wheel zooms the map. Default: on.
  * @attr {string} coords-format - `decimal` (default) or `dms`.
  * @attr {string} height - CSS height of the map.
+ * @attr {string} movie - A film sequence that tracks a target: a button, or `track()`. Its value is the target; empty, the first place.
  *
  * @prop {string} content - One item per line, or JSON / GeoJSON.
  * @prop {{ kind: string, label: string, lat?: number, lon?: number, code?: string, value?: number | null }[]} items - What the map shows (read-only).
@@ -98,6 +99,8 @@ function s(tag, attrs = {}) {
  * @csspart legend - The color scale of values.
  * @csspart list - The list of items.
  * @csspart tooltip - The name under the pointer.
+ * @csspart hud - The surveillance screen of the film sequence.
+ * @csspart track-button - The button that starts the film sequence.
  *
  * @example
  * <vt-map projection="globe" center="Paris" highlight="FR DE IT">
@@ -109,7 +112,7 @@ function s(tag, attrs = {}) {
 export class VtMap extends VtBase {
   static type = 'map';
 
-  static componentAttributes = Object.freeze(['projection', 'basemap', 'center', 'zoom', 'highlight', 'geocoder', 'graticule', 'labels', 'controls', 'list', 'pick', 'scroll-zoom', 'coords-format', 'height']); // prettier-ignore
+  static componentAttributes = Object.freeze(['projection', 'basemap', 'center', 'zoom', 'highlight', 'geocoder', 'graticule', 'labels', 'controls', 'list', 'pick', 'scroll-zoom', 'coords-format', 'height', 'movie']); // prettier-ignore
 
   static presets = {
     simple: {},
@@ -164,6 +167,8 @@ export class VtMap extends VtBase {
     this.previewTimer = undefined;
     /** @type {AbortController | null} */
     this.geocoding = null;
+    /** @type {AbortController | null} The film sequence running. */
+    this.movie = null;
     /** @type {ReturnType<typeof setTimeout> | undefined} */
     this.changeTimer = undefined;
   }
@@ -171,6 +176,7 @@ export class VtMap extends VtBase {
   disconnectedCallback() {
     cancelAnimationFrame(this.frameRequest);
     cancelAnimationFrame(this.flight);
+    this.movie?.abort();
     clearTimeout(this.previewTimer);
     clearTimeout(this.changeTimer);
     this.geocoding?.abort();
@@ -636,6 +642,7 @@ export class VtMap extends VtBase {
       iconButton({ icon: 'plus', label: t('mapZoomIn'), key: 'zoom-in', onClick: () => this.zoomBy(2) }), // prettier-ignore
       iconButton({ icon: 'minus', label: t('mapZoomOut'), key: 'zoom-out', onClick: () => this.zoomBy(0.5) }), // prettier-ignore
       iconButton({ icon: 'refresh', label: t('mapReset'), key: 'reset', onClick: () => this.reset() }), // prettier-ignore
+      this.hasAttribute('movie') ? this.trackButton() : null,
     );
     const help = h('p', { class: 'sr-only', attrs: { id: helpId }, text: t('mapKeyboardHelp') });
     this.tooltip = tooltip;
@@ -1069,6 +1076,12 @@ export class VtMap extends VtBase {
     const t = this.t;
     const text = query.trim();
     if (!text || !this.geo) return;
+    // Easter egg: "track Paris", "locate 48.85, 2.35" run the film sequence.
+    const tracked = text.match(/^(?:track|locate|traquer|localiser)\s+(.+)$/i);
+    if (tracked) {
+      this.track(tracked[1]);
+      return;
+    }
     const country = findCountry(text, this.locale);
     const place = country ? { country } : readPlace(text, this.locale);
     if (place && 'country' in place) {
@@ -1093,6 +1106,197 @@ export class VtMap extends VtBase {
       return;
     }
     this.status(t('mapNotFound', { query: text }));
+  }
+
+  /** @returns {HTMLButtonElement} The button of the film sequence, with a crosshair. */
+  trackButton() {
+    const button = iconButton({ icon: 'search', label: this.t('mapTrack'), key: 'track', part: 'track-button', onClick: () => this.track(this.movieTarget()) }); // prettier-ignore
+    const svg = s('svg', { class: 'icon', viewBox: '0 0 24 24', width: '16', height: '16', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.1', 'stroke-linecap': 'round', 'aria-hidden': 'true' }); // prettier-ignore
+    svg.append(s('circle', { cx: '12', cy: '12', r: '10' }), s('path', { d: 'M22 12h-4M6 12H2M12 6V2M12 22v-4' }), s('circle', { cx: '12', cy: '12', r: '1.5' })); // prettier-ignore
+    button.replaceChildren(svg);
+    return button;
+  }
+
+  /** @returns {string} The `movie` attribute, or the first place of the content. */
+  movieTarget() {
+    const value = this.getAttribute('movie')?.trim();
+    if (value && !/^(?:true|on|yes|1)$/i.test(value)) return value;
+    const first = this.input().items.find((i) => i.kind === 'marker');
+    if (first && first.kind === 'marker') {
+      const at = this.locate(first.place);
+      if (at) return `${this.markerLabel(first)}: ${at.lat}, ${at.lon}`;
+    }
+    return '0, 0';
+  }
+
+  /**
+   * Film sequence: the globe turns to the target, zooms in by stages under a surveillance
+   * screen (reticle, scan lines, log, coordinates settling), then "TARGET LOCATED". Escape
+   * or the Stop button ends it; with reduced motion it goes straight to the end.
+   *
+   * @param {string} query - Coordinates, a city, a country or an address (with a geocoder).
+   * @returns {Promise<boolean>} Whether the target was found.
+   */
+  async track(query) {
+    const t = this.t;
+    if (!this.geo || !this.stage) return false;
+    const named = query.match(/^([^:]{1,80}?)\s*:\s+(.+)$/);
+    const place = readPlace(named ? named[2] : query, this.locale);
+    /** @type {LatLon | null} */
+    let at = null;
+    let label = (named ? named[1] : query).trim();
+    if (place && 'lat' in place) [at, label] = [place, named ? label : (place.name ?? label)];
+    else if (place && 'country' in place)
+      [at, label] = [this.countryCenter(place.country), countryName(place.country, this.locale)]; // prettier-ignore
+    else if (place && 'address' in place && this.getAttribute('geocoder')) {
+      const hit = await this.geocode(place.address);
+      if (hit) at = hit;
+    }
+    if (!at) {
+      this.status(t('mapNotFound', { query: label }));
+      return false;
+    }
+    const target = /** @type {LatLon} */ (at);
+    this.movie?.abort();
+    cancelAnimationFrame(this.flight);
+    const controller = new AbortController();
+    this.movie = controller;
+    const { signal } = controller;
+    if (!AZIMUTHAL.has(this.projectionName)) {
+      this.projectionState = 'globe';
+      this.viewState = { lon: target.lon - 70, lat: 10, zoom: 1 };
+      this.pins = [];
+      this.build(this.geo);
+    }
+    const hud = this.hudView();
+    this.stage.append(hud.root);
+    this.stage.classList.add('movie');
+    const stop = () => controller.abort();
+    const onKey = (/** @type {KeyboardEvent} */ e) => e.key === 'Escape' && stop();
+    this.root.addEventListener('keydown', /** @type {EventListener} */ (onKey));
+    hud.stop.addEventListener('click', stop);
+    this.announce(t('mapTracking', { label }));
+    const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches; // prettier-ignore
+    const coords = (/** @type {number} */ noise) => {
+      const jitter = () => (Math.random() - 0.5) * noise;
+      hud.coords.textContent = formatCoords(
+        target.lat + jitter(),
+        target.lon + jitter() * 2,
+        'dms',
+      );
+    };
+    try {
+      if (!reduced) {
+        const steps = /** @type {[string, number, number, number][]} */ ([
+          // message, zoom, duration (ms), noise of the coordinates (degrees)
+          ['ESTABLISHING SATELLITE UPLINK', 1, 1800, 60],
+          ['SIGNAL ACQUIRED — TRIANGULATING', 2.5, 1700, 20],
+          ['CROSS-REFERENCING RELAY NODES', 6, 1600, 5],
+          ['ENHANCE', 14, 1400, 1],
+          ['ENHANCE', 32, 1300, 0.1],
+        ]);
+        for (const [message, zoom, duration, noise] of steps) {
+          hud.log(message);
+          await this.animateView({ lon: target.lon, lat: target.lat, zoom }, duration, signal, (p) => coords(noise * (1 - p) + noise * 0.15)); // prettier-ignore
+        }
+      } else {
+        this.viewState = {
+          lon: target.lon,
+          lat: Math.max(-85, Math.min(85, target.lat)),
+          zoom: 32,
+        };
+        this.update();
+      }
+      if (signal.aborted) throw new Error('stopped');
+      coords(0);
+      hud.log('TARGET LOCATED');
+      hud.root.classList.add('locked');
+      const known = this.input().items.some((i) => {
+        const p = i.kind === 'marker' ? this.locate(i.place) : null;
+        return p && Math.abs(p.lat - target.lat) < 1e-4 && Math.abs(p.lon - target.lon) < 1e-4;
+      });
+      if (!known) {
+        this.pins = [{ lat: target.lat, lon: target.lon, label }];
+        this.build(this.geo);
+        this.stage.append(hud.root);
+      }
+      this.renderSide();
+      this.announce(t('mapTargetLocated', { label, coords: formatCoords(target.lat, target.lon, this.coordsFormat) })); // prettier-ignore
+      emit(this, EVENTS.SELECT, { type: 'target', label, lat: target.lat, lon: target.lon });
+      this.changed();
+      await wait(6000, signal);
+    } catch {
+      // Stopped: the map stays where it is.
+    } finally {
+      this.root.removeEventListener('keydown', /** @type {EventListener} */ (onKey));
+      hud.root.remove();
+      this.stage?.classList.remove('movie');
+      if (this.movie === controller) this.movie = null;
+    }
+    return true;
+  }
+
+  /**
+   * The surveillance screen laid over the map during the film sequence.
+   *
+   * @returns {{ root: HTMLElement, coords: HTMLElement, stop: HTMLButtonElement, log: (text: string) => void }} // prettier-ignore
+   */
+  hudView() {
+    const lines = h('ol', { class: 'hud-log', attrs: { 'aria-hidden': 'true' } });
+    const coords = h('div', { class: 'hud-coords', attrs: { 'aria-hidden': 'true' } });
+    const stop = /** @type {HTMLButtonElement} */ (h('button', { class: 'hud-stop', attrs: { type: 'button' }, text: this.t('mapStop') })); // prettier-ignore
+    const time = h('div', { class: 'hud-time', attrs: { 'aria-hidden': 'true' } });
+    time.textContent = `${new Date().toISOString().slice(0, 19).replace('T', ' ')} UTC`;
+    const root = h(
+      'div',
+      { class: 'map-hud', part: 'hud' },
+      h('div', { class: 'hud-scan', attrs: { 'aria-hidden': 'true' } }),
+      h('div', { class: 'hud-corners', attrs: { 'aria-hidden': 'true' } }),
+      h('div', { class: 'hud-reticle', attrs: { 'aria-hidden': 'true' } }, h('span', { class: 'hud-ring' }), h('span', { class: 'hud-box' })), // prettier-ignore
+      h('div', { class: 'hud-top', attrs: { 'aria-hidden': 'true' } }, h('span', { class: 'hud-rec', text: 'REC' }), h('span', { text: 'SAT-7 // ORBITAL FEED' }), time), // prettier-ignore
+      lines,
+      coords,
+      h('div', { class: 'hud-locked', attrs: { 'aria-hidden': 'true' } }, h('strong', { text: 'TARGET LOCATED' })), // prettier-ignore
+      stop,
+    );
+    return {
+      root,
+      coords,
+      stop,
+      log: (text) => {
+        lines.append(h('li', { text: `> ${text}` }));
+        while (lines.children.length > 5) lines.firstElementChild?.remove();
+      },
+    };
+  }
+
+  /**
+   * Moves the view to a place over a duration, eased; resolves at the end or when stopped.
+   *
+   * @param {{ lon: number, lat: number, zoom: number }} to
+   * @param {number} duration
+   * @param {AbortSignal} signal
+   * @param {(progress: number) => void} [onFrame]
+   * @returns {Promise<void>}
+   */
+  animateView(to, duration, signal, onFrame) {
+    const from = { ...(this.viewState ?? this.initialView()) };
+    const dLon = wrap(to.lon - from.lon);
+    const lat = Math.max(-85, Math.min(85, to.lat));
+    return new Promise((resolve) => {
+      const start = performance.now();
+      const step = (/** @type {number} */ now) => {
+        if (signal.aborted) return resolve();
+        const p = Math.min(1, (now - start) / duration);
+        const e = p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 3 / 2;
+        this.viewState = { lon: wrap(from.lon + dLon * e), lat: from.lat + (lat - from.lat) * e, zoom: from.zoom * (to.zoom / from.zoom) ** e }; // prettier-ignore
+        this.update();
+        onFrame?.(p);
+        if (p < 1) this.flight = requestAnimationFrame(step);
+        else resolve();
+      };
+      this.flight = requestAnimationFrame(step);
+    });
   }
 
   /**
@@ -1352,6 +1556,21 @@ function climate(geo, feature, code) {
   if (a > 35) return 'forest';
   if (a > 20) return 'steppe';
   return 'tropic';
+}
+
+/**
+ * @param {number} ms
+ * @param {AbortSignal} signal
+ * @returns {Promise<void>}
+ */
+function wait(ms, signal) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(resolve, ms);
+    signal.addEventListener('abort', () => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
 }
 
 /**

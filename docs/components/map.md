@@ -81,6 +81,16 @@ Flat maps scroll around the world from east to west; the globe and the azimuthal
 - **Search** (`controls`): coordinates, a city, a country, or an address with a geocoder. The map flies there (instantly with reduced motion).
 - **List** (`list`): every place, country, route and shape in words, with coordinates, values and distances; each one moves the map to it.
 
+## Film mode
+
+With `movie`, a crosshair button tracks a target as in the movies: the globe turns toward it, zooms in by stages under a surveillance screen (reticle, scan lines, a log, coordinates settling on the target), and **TARGET LOCATED** shows in red. A flat map switches to the globe first. Escape or the Stop button ends it; with reduced motion the map goes straight to the target.
+
+```html
+<vt-map projection="globe" basemap="satellite" movie="Eiffel Tower: 48.8584, 2.2945"></vt-map>
+```
+
+The value of `movie` is the target (coordinates, a city, a country, an address with a geocoder, `Label: place` for a name); empty, it is the first place of the content. The sequence is also started from script with `map.track('Tokyo')` (it resolves to whether the target was found), and from the search field by typing `track` or `locate` before a place, on any map.
+
 ## Attributes
 
 | Attribute       | Values                                         | Default         | Description                                            |
@@ -99,6 +109,7 @@ Flat maps scroll around the world from east to west; the globe and the azimuthal
 | `scroll-zoom`   | boolean                                        | on              | The wheel zooms.                                       |
 | `coords-format` | `decimal`, `dms`                               | `decimal`       | How coordinates are written.                           |
 | `height`        | CSS length                                     | 16:9            | Height of the map.                                     |
+| `movie`         | target, or empty                               | off             | The film mode button and its target.                   |
 
 The shared attributes (`variant`, `theme`, `src`, `label`, `copy`, `mode`…) are described in [common attributes](../common-attributes.md).
 
@@ -121,14 +132,21 @@ Nothing leaves the page by default. With `geocoder`, addresses of the content (a
 | `items`   | `object[]` | Read-only: `{ kind, label, lat?, lon?, code?, value? }` per item. |
 | `view`    | `object`   | Read-only: `{ lat, lon, zoom, projection, basemap }`.             |
 
+## Methods
+
+| Method         | Description                                                     |
+| -------------- | --------------------------------------------------------------- |
+| `track(place)` | Runs the film sequence to a place. Resolves to `true` if found. |
+
 ## Events
 
-| Event       | Detail                                                           | When                                |
-| ----------- | ---------------------------------------------------------------- | ----------------------------------- |
-| `vt-ready`  | `{ type: "map" }`                                                | Rendered.                           |
-| `vt-select` | `{ type: "country" \| "point", label, lat, lon, code?, value? }` | A country, a pin or a picked point. |
-| `vt-change` | `{ lat, lon, zoom, projection, basemap }`                        | The view changed.                   |
-| `vt-copy`   | `{ text }`                                                       | Places copied.                      |
+| Event       | Detail                                                           | When                                  |
+| ----------- | ---------------------------------------------------------------- | ------------------------------------- |
+| `vt-ready`  | `{ type: "map" }`                                                | Rendered.                             |
+| `vt-select` | `{ type: "country" \| "point", label, lat, lon, code?, value? }` | A country, a pin or a picked point.   |
+| `vt-select` | `{ type: "target", label, lat, lon }`                            | The film sequence located its target. |
+| `vt-change` | `{ lat, lon, zoom, projection, basemap }`                        | The view changed.                     |
+| `vt-copy`   | `{ text }`                                                       | Places copied.                        |
 
 ## Accessibility
 

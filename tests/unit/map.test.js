@@ -67,4 +67,16 @@ describe('map', () => {
     expect(readGeocoder([{ lat: '1', lon: '2', display_name: 'X' }])).toEqual({ lat: 1, lon: 2, name: 'X' }); // prettier-ignore
     expect(readGeocoder({ features: [{ geometry: { coordinates: [2, 1] }, properties: { label: 'Y' } }] })).toEqual({ lat: 1, lon: 2, name: 'Y' }); // prettier-ignore
   });
+
+  it('reads the target of the film mode', async () => {
+    const { VtMap } = await import('../../src/components/map/vt-map.js');
+    if (!customElements.get('vt-map')) customElements.define('vt-map', VtMap);
+    const el = /** @type {any} */ (document.createElement('vt-map'));
+    el.setAttribute('movie', '');
+    el.content = 'HQ: 48.85, 2.35';
+    document.body.append(el);
+    expect(el.movieTarget()).toBe('HQ: 48.85, 2.35');
+    el.setAttribute('movie', 'Tokyo');
+    expect(el.movieTarget()).toBe('Tokyo');
+  });
 });

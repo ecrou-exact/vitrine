@@ -105,7 +105,7 @@ const COMPONENTS = {
   'vt-a11y': 62 * KB,
   'vt-cookies': 64 * KB,
   'vt-redirects': 63 * KB,
-  'vt-map': 80 * KB,
+  'vt-map': 83 * KB,
   'vt-loading-button': 21 * KB,
   'vt-loading-message': 18 * KB,
   'vt-loading-overlay': 18 * KB,

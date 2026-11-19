@@ -61,6 +61,10 @@ export const en = Object.freeze({
   mapSelectedCountry: '{name} selected',
   mapInvalidLines: 'Lines not understood: {list}',
   mapLoadFailed: 'The map could not be loaded: {message}',
+  mapTrack: 'Track the target',
+  mapTracking: 'Tracking {label}…',
+  mapTargetLocated: 'Target located: {label}, {coords}',
+  mapStop: 'Stop',
 });
 
 /** @type {Partial<Record<keyof typeof en, string>>} */
@@ -115,4 +119,8 @@ export const fr = {
   mapSelectedCountry: '{name} sélectionné',
   mapInvalidLines: 'Lignes non comprises : {list}',
   mapLoadFailed: 'La carte n’a pas pu être chargée : {message}',
+  mapTrack: 'Traquer la cible',
+  mapTracking: 'Traque de {label}…',
+  mapTargetLocated: 'Cible localisée : {label}, {coords}',
+  mapStop: 'Arrêter',
 };

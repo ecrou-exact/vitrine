@@ -675,7 +675,7 @@ const SCHEMA = {
   },
   map: {
     tag: 'vt-map',
-    flags: ['controls', 'list', 'graticule', 'labels', 'pick'],
+    flags: ['controls', 'list', 'graticule', 'labels', 'pick', 'movie'],
     fields: [
       {
         name: 'projection',
