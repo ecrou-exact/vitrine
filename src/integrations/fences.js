@@ -53,6 +53,7 @@ export const ELEMENTS = Object.freeze({
   axe: 'vt-a11y', a11y: 'vt-a11y',
   cookies: 'vt-cookies', 'set-cookie': 'vt-cookies', 'cookies.txt': 'vt-cookies',
   redirects: 'vt-redirects',
+  map: 'vt-map', geojson: 'vt-map',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

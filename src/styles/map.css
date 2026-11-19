@@ -1,0 +1,582 @@
+/*
+ * World map: menus and search, the SVG map with its base map colors, zoom buttons, the
+ * tooltip and coordinates under the pointer, the legend of values and the list of items.
+ * Each base map sets the same --map-* colors; item colors are set through CSSOM.
+ */
+.map-body {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-3);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.map-muted,
+.map-status {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.map-status:empty {
+  display: none;
+}
+
+/* ---- menus and search ---- */
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2) var(--_space-3);
+}
+
+.map-search {
+  display: flex;
+  flex: 1 1 16em;
+  min-width: 0;
+}
+
+.map-search-input,
+.map-select {
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font: inherit;
+}
+
+.map-search-input {
+  flex: 1;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.map-go {
+  border: 1px solid var(--_border-strong);
+  border-inline-start: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.map-control,
+.map-check {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.map-control label {
+  color: var(--_fg-muted);
+}
+
+.map-search-input:focus-visible,
+.map-select:focus-visible,
+.map-check input:focus-visible,
+.map-item-go:focus-visible,
+.map-svg:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+/* ---- the map ---- */
+.map-stage {
+  --map-ocean: color-mix(in oklab, var(--_accent) 10%, var(--_surface));
+  --map-ocean-edge: color-mix(in oklab, var(--_accent) 18%, var(--_surface));
+  --map-land: var(--_surface-sunken, color-mix(in oklab, var(--_fg) 8%, var(--_surface)));
+  --map-border: var(--_border-strong);
+  --map-graticule: color-mix(in oklab, var(--_fg) 12%, transparent);
+  --map-highlight: var(--_accent);
+  --map-low: color-mix(in oklab, var(--_accent) 18%, var(--_surface));
+  --map-high: var(--_accent);
+  --map-pin: var(--_danger);
+  --map-route: var(--_accent);
+  --map-label: var(--_fg);
+  --map-halo: var(--_surface);
+  --map-space: transparent;
+  --map-atmosphere: color-mix(in oklab, var(--_accent) 35%, transparent);
+
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--map-space);
+  aspect-ratio: 16 / 9;
+  min-height: 200px;
+  touch-action: none;
+}
+
+.map-stage > .loading,
+.map-stage > .notice {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  user-select: none;
+}
+
+.map-svg.dragging {
+  cursor: grabbing;
+}
+
+.map-sphere {
+  stroke: var(--map-border);
+  stroke-width: 0.5;
+}
+
+.ocean-a {
+  stop-color: var(--map-ocean);
+}
+
+.ocean-b {
+  stop-color: var(--map-ocean-edge);
+}
+
+.map-atmosphere {
+  fill: var(--map-atmosphere);
+  transform-box: fill-box;
+  transform-origin: center;
+  scale: 1.04;
+}
+
+.map-shading {
+  pointer-events: none;
+}
+
+.shade-a {
+  stop-color: #fff;
+  stop-opacity: 0.18;
+}
+
+.shade-b {
+  stop-color: #000;
+  stop-opacity: 0;
+}
+
+.shade-c {
+  stop-color: #000;
+  stop-opacity: 0.35;
+}
+
+.map-graticule {
+  fill: none;
+  stroke: var(--map-graticule);
+  stroke-width: 0.6;
+  pointer-events: none;
+}
+
+.map-country {
+  fill: var(--map-land);
+  stroke: none;
+  transition: fill var(--_duration-fast, 0.12s);
+}
+
+.map-stage[data-basemap] .map-country.highlighted {
+  fill: var(--map-highlight);
+}
+
+.map-country.hover {
+  filter: brightness(0.9);
+}
+
+.map-country.selected {
+  stroke: var(--_fg);
+  stroke-width: 1.6;
+  paint-order: stroke;
+}
+
+.map-borders {
+  fill: none;
+  stroke: var(--map-border);
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.map-shape {
+  --map-item: var(--map-route);
+  stroke: var(--map-item);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.map-shape.area {
+  fill: color-mix(in oklab, var(--map-item) 30%, transparent);
+}
+
+.map-shape.line {
+  fill: none;
+}
+
+.map-route {
+  --map-item: var(--map-route);
+  fill: none;
+  stroke: var(--map-item);
+  stroke-width: 2.2;
+  stroke-dasharray: 7 4;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.map-pin {
+  --map-item: var(--map-pin);
+  cursor: pointer;
+}
+
+.map-pin.dropped {
+  --map-item: var(--_fg);
+}
+
+.map-pin-shape {
+  fill: var(--map-item);
+  stroke: var(--map-halo);
+  stroke-width: 1.5;
+}
+
+.map-pin-dot {
+  fill: var(--map-halo);
+}
+
+.map-label,
+.map-country-label {
+  fill: var(--map-label);
+  stroke: var(--map-halo);
+  stroke-width: 3px;
+  paint-order: stroke;
+  font-family: var(--_font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.map-country-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.map-stars circle {
+  fill: #fff;
+}
+
+.map-zoom {
+  position: absolute;
+  inset-block-start: var(--_space-2);
+  inset-inline-end: var(--_space-2);
+  display: grid;
+  gap: 2px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+}
+
+.map-tooltip {
+  position: absolute;
+  z-index: 1;
+  max-width: 16em;
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.map-tooltip[hidden] {
+  display: none;
+}
+
+.map-readout {
+  position: absolute;
+  inset-block-end: var(--_space-1);
+  inset-inline-start: var(--_space-2);
+  padding: 0 var(--_space-1);
+  border-radius: var(--_radius-sm);
+  background: color-mix(in oklab, var(--_surface) 80%, transparent);
+  color: var(--_fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  pointer-events: none;
+}
+
+.map-readout:empty {
+  display: none;
+}
+
+/* ---- base maps ---- */
+.map-stage[data-basemap='dark'] {
+  --map-ocean: #0f1b2b;
+  --map-ocean-edge: #0a1320;
+  --map-land: #2a3442;
+  --map-border: #475569;
+  --map-graticule: rgb(255 255 255 / 0.08);
+  --map-highlight: #38bdf8;
+  --map-low: #1e3a5f;
+  --map-high: #38bdf8;
+  --map-pin: #f43f5e;
+  --map-route: #fbbf24;
+  --map-label: #f1f5f9;
+  --map-halo: #0f172a;
+  --map-space: #0b1220;
+}
+
+.map-stage[data-basemap='political'] {
+  --map-ocean: #cfe8f7;
+  --map-ocean-edge: #b4d8ef;
+  --map-border: #ffffff;
+  --map-graticule: rgb(30 64 120 / 0.12);
+  --map-highlight: #dc2626;
+  --map-low: #fde68a;
+  --map-high: #b91c1c;
+  --map-pin: #111827;
+  --map-route: #111827;
+  --map-label: #111827;
+  --map-halo: #ffffff;
+}
+
+.map-stage[data-basemap='political'] .c0 {
+  fill: #f4c7a1;
+}
+.map-stage[data-basemap='political'] .c1 {
+  fill: #c9e4a7;
+}
+.map-stage[data-basemap='political'] .c2 {
+  fill: #f7e3a1;
+}
+.map-stage[data-basemap='political'] .c3 {
+  fill: #d7c4ec;
+}
+.map-stage[data-basemap='political'] .c4 {
+  fill: #f3b7c2;
+}
+.map-stage[data-basemap='political'] .c5 {
+  fill: #b8dcd4;
+}
+.map-stage[data-basemap='political'] .c6 {
+  fill: #e9d1b5;
+}
+.map-stage[data-basemap='political'] .c7 {
+  fill: #c5d3ee;
+}
+
+.map-stage[data-basemap='satellite'] {
+  --map-ocean: #1d4f80;
+  --map-ocean-edge: #0c2748;
+  --map-border: rgb(255 255 255 / 0.25);
+  --map-graticule: rgb(255 255 255 / 0.1);
+  --map-highlight: #facc15;
+  --map-low: #fef08a;
+  --map-high: #dc2626;
+  --map-pin: #f43f5e;
+  --map-route: #fde047;
+  --map-label: #ffffff;
+  --map-halo: #0b1a2c;
+  --map-space: #050a14;
+  --map-atmosphere: rgb(125 200 255 / 0.55);
+}
+
+.map-stage[data-basemap='satellite'] .ice {
+  fill: #eef3f6;
+}
+.map-stage[data-basemap='satellite'] .tundra {
+  fill: #7d8a6a;
+}
+.map-stage[data-basemap='satellite'] .forest {
+  fill: #3f6b3a;
+}
+.map-stage[data-basemap='satellite'] .steppe {
+  fill: #8f9256;
+}
+.map-stage[data-basemap='satellite'] .desert {
+  fill: #c9a86a;
+}
+.map-stage[data-basemap='satellite'] .tropic {
+  fill: #2f6d34;
+}
+
+.map-stage[data-basemap='night'] {
+  --map-ocean: #030712;
+  --map-ocean-edge: #020409;
+  --map-land: #0b1324;
+  --map-border: #22d3ee;
+  --map-graticule: rgb(34 211 238 / 0.12);
+  --map-highlight: #0e7490;
+  --map-low: #083344;
+  --map-high: #22d3ee;
+  --map-pin: #f0abfc;
+  --map-route: #f0abfc;
+  --map-label: #e0f2fe;
+  --map-halo: #020617;
+  --map-space: #000000;
+  --map-atmosphere: rgb(34 211 238 / 0.35);
+}
+
+.map-stage[data-basemap='blueprint'] {
+  --map-ocean: #1e3a8a;
+  --map-ocean-edge: #1e3a8a;
+  --map-land: #2747a3;
+  --map-border: #dbeafe;
+  --map-graticule: rgb(219 234 254 / 0.25);
+  --map-highlight: #60a5fa;
+  --map-low: #3b5fc0;
+  --map-high: #bfdbfe;
+  --map-pin: #fde047;
+  --map-route: #fde047;
+  --map-label: #eff6ff;
+  --map-halo: #1e3a8a;
+  --map-space: #1e3a8a;
+}
+
+.map-stage[data-basemap='vintage'] {
+  --map-ocean: #d9cfae;
+  --map-ocean-edge: #c7b98f;
+  --map-land: #efe4c4;
+  --map-border: #8b6f47;
+  --map-graticule: rgb(110 80 40 / 0.22);
+  --map-highlight: #b45309;
+  --map-low: #f5d9a8;
+  --map-high: #9a3412;
+  --map-pin: #7f1d1d;
+  --map-route: #7f1d1d;
+  --map-label: #3f2d14;
+  --map-halo: #efe4c4;
+  --map-space: #e8dcb8;
+}
+
+.map-stage[data-basemap='mono'] {
+  --map-ocean: var(--_surface);
+  --map-ocean-edge: var(--_surface);
+  --map-land: color-mix(in oklab, var(--_fg) 14%, var(--_surface));
+  --map-border: var(--_surface);
+  --map-highlight: var(--_fg);
+  --map-low: color-mix(in oklab, var(--_fg) 20%, var(--_surface));
+  --map-high: var(--_fg);
+  --map-pin: var(--_fg);
+  --map-route: var(--_fg);
+}
+
+/* ---- legend and list ---- */
+.map-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  font-size: var(--_font-size-small);
+}
+
+.map-legend-bar {
+  flex: 0 1 14em;
+  height: 10px;
+  border-radius: var(--_radius-full);
+  background: linear-gradient(
+    to right,
+    var(--map-low, var(--_accent-soft)),
+    var(--map-high, var(--_accent))
+  );
+}
+
+.map-legend-host:empty,
+.map-list-host:empty {
+  display: none;
+}
+
+.map-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+  gap: 2px var(--_space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-item {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.map-item.pending {
+  color: var(--_fg-muted);
+}
+
+.map-swatch {
+  --map-item: var(--_danger);
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--map-item);
+}
+
+.map-swatch.country {
+  --map-item: var(--_accent);
+  border-radius: 2px;
+}
+
+.map-swatch.route,
+.map-swatch.shape {
+  --map-item: var(--_accent);
+  height: 3px;
+  border-radius: 0;
+}
+
+.map-swatch.pin {
+  --map-item: var(--_fg);
+}
+
+.map-item-go,
+.map-item-name {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-item-go {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--_accent-fg);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.map-item-go:hover {
+  text-decoration: underline;
+}
+
+.map-item-note {
+  margin-inline-start: auto;
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.map-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+
+@media (max-width: 640px) {
+  .map-edit {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-country {
+    transition: none;
+  }
+}

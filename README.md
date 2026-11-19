@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories, dependency licenses, icon pickers, workflow runs, access logs, password fields, API key fields, version fields, cookie consent banners, changelogs, repository cards, indicators of compromise, CVSS scores, security headers, e-mail messages, DNS records, Nmap scans, URLs, hashes, network waterfalls, YARA rules, Sigma rules, packet captures, version ranges, color contrast, software bills of materials, Dockerfiles, Lighthouse reports, accessibility results, cookies, redirect chains and loading indicators (spinners, progress bars and rings, skeletons, overlays, page bars, task steps, typing indicators, loading buttons and messages) — on any website, with zero framework.
+  Drop-in web components to display code, Markdown, JSON, CSV, tags, diffs, terminal sessions, file trees, HTTP exchanges, application logs, charts, OpenAPI descriptions, configuration files, hex dumps, timelines, jobs, Git histories, regular expressions, YAML, XML, TOML, JSON Web Tokens, cron schedules, X.509 certificates, service status pages, event calendars, pricing plans, FAQs, image galleries, key figures, task boards, form fields, site search, date pickers, menus, file uploads, testimonials, countdowns, SQL results, test reports, traces, Jupyter notebooks, math, diagrams, pivot tables, heat maps, flame graphs, treemaps, dataset profiles, dataset comparisons, install commands, download pages, contributors, support schedules, security advisories, dependency licenses, icon pickers, workflow runs, access logs, password fields, API key fields, version fields, cookie consent banners, changelogs, repository cards, indicators of compromise, CVSS scores, security headers, e-mail messages, DNS records, Nmap scans, URLs, hashes, network waterfalls, YARA rules, Sigma rules, packet captures, version ranges, color contrast, software bills of materials, Dockerfiles, Lighthouse reports, accessibility results, cookies, redirect chains, world maps and loading indicators (spinners, progress bars and rings, skeletons, overlays, page bars, task steps, typing indicators, loading buttons and messages) — on any website, with zero framework.
 </p>
 
 <p align="center">
@@ -83,6 +83,7 @@
 - **`<vt-loading-steps>`** — the steps of a long task with their status (pending, running, done, warnings, failed, skipped), details, durations and an overall bar, from text or JSON.
 - **`<vt-log>`** — application logs in plain text, JSON lines or logfmt, with levels, fields, stack traces kept with their entry, level buttons, a search that filters entries, and live streaming with `write()`.
 - **`<vt-markdown>`** — sanitized GitHub Flavored Markdown, Preview / Source / Split tabs, table of contents, heading anchors, image and link policies.
+- **`<vt-map>`** — a world map: places from coordinates (decimal, degrees-minutes-seconds, map links), built-in cities or addresses through a geocoder you choose, countries highlighted or shaded by value, great-circle routes and GeoJSON; twelve projections from flat maps to a 3D globe, eight styles from political to the Earth seen from the sky.
 - **`<vt-math>`** — TeX drawn as native MathML (Temml, loaded on demand): equations, numbered or not, inline math in text, `$…$` delimiters and macros.
 - **`<vt-menu>`** — a dropdown, "⋮" or right-click menu of actions: links, check boxes, radio groups, shortcuts, icons and submenus, with the full keyboard of WAI-ARIA, always inside the window.
 - **`<vt-nmap>`** — Nmap results from XML, normal or grepable output: hosts with OS and MAC vendor, ports with state, service, version and script output, risky exposed services marked, copy as CSV.
@@ -256,6 +257,7 @@ document.querySelector('vt-markdown').content = commentFromUser;
 | `<vt-loading-overlay>` | Covers content while it loads                       | Scrims, progress, cancel, full screen, content made inert                                               | [docs/components/loading-overlay.md](docs/components/loading-overlay.md) |
 | `<vt-loading-steps>`   | Steps of a long task                                | List, compact or horizontal, durations, `setStep()`, cancel                                             | [docs/components/loading-steps.md](docs/components/loading-steps.md)     |
 | `<vt-log>`             | Entries with times, levels, fields and stack traces | Title bar, level buttons with counts, search that filters entries, follow, line numbers, download, copy | [docs/components/log.md](docs/components/log.md)                         |
+| `<vt-map>`             | World map with places, countries and routes         | Projections and 3D globe, styles, search a place, drag and zoom, list, legend, copy, GeoJSON download   | [docs/components/map.md](docs/components/map.md)                         |
 | `<vt-markdown>`        | Rendered, sanitized Markdown                        | Preview / Source / Split tabs, TOC, anchors, search, copy                                               | [docs/components/markdown.md](docs/components/markdown.md)               |
 | `<vt-math>`            | Equations as MathML                                 | Copy TeX, copy MathML, full screen                                                                      | [docs/components/math.md](docs/components/math.md)                       |
 | `<vt-menu>`            | A button, a "⋮" or a right click that opens a menu  | Submenus, check boxes, radio groups, shortcuts                                                          | [docs/components/menu.md](docs/components/menu.md)                       |
@@ -357,20 +359,21 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT
 
 ## Credits and third-party licenses
 
-| Component                                                          | License                               | Used for                                               |
-| ------------------------------------------------------------------ | ------------------------------------- | ------------------------------------------------------ |
-| [highlight.js](https://github.com/highlightjs/highlight.js)        | BSD-3-Clause                          | Syntax highlighting                                    |
-| [marked](https://github.com/markedjs/marked)                       | MIT                                   | Markdown parsing (GFM)                                 |
-| [DOMPurify](https://github.com/cure53/DOMPurify)                   | Apache-2.0 OR MPL-2.0                 | HTML sanitization                                      |
-| [Lucide](https://lucide.dev)                                       | ISC (icons derived from Feather: MIT) | Interface icons                                        |
-| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono)       | SIL OFL 1.1                           | Website font, logo wordmark                            |
-| [Temml](https://github.com/ronkok/Temml)                           | MIT                                   | TeX to MathML for `<vt-math>` (loaded on demand)       |
-| [Mermaid](https://github.com/mermaid-js/mermaid) and its libraries | MIT, ISC, BSD-3-Clause, Apache-2.0    | Diagrams for `<vt-diagram>` (loaded on demand)         |
-| [IBM Plex Sans](https://github.com/IBM/plex)                       | SIL OFL 1.1                           | Website font                                           |
-| [Font Awesome Free](https://fontawesome.com)                       | Icons CC BY 4.0, code MIT             | Icons of `<vt-icon-picker>` (loaded on demand)         |
-| [Lucide](https://lucide.dev) icon set                              | ISC (icons derived from Feather: MIT) | Icons of `<vt-icon-picker>` (loaded on demand)         |
-| [Bootstrap Icons](https://icons.getbootstrap.com)                  | MIT                                   | Icons of `<vt-icon-picker>` (loaded on demand)         |
-| [flag-icons](https://github.com/lipis/flag-icons)                  | MIT                                   | Country flags of `<vt-icon-picker>` (loaded on demand) |
+| Component                                                                                         | License                               | Used for                                                         |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| [highlight.js](https://github.com/highlightjs/highlight.js)                                       | BSD-3-Clause                          | Syntax highlighting                                              |
+| [marked](https://github.com/markedjs/marked)                                                      | MIT                                   | Markdown parsing (GFM)                                           |
+| [DOMPurify](https://github.com/cure53/DOMPurify)                                                  | Apache-2.0 OR MPL-2.0                 | HTML sanitization                                                |
+| [Lucide](https://lucide.dev)                                                                      | ISC (icons derived from Feather: MIT) | Interface icons                                                  |
+| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono)                                      | SIL OFL 1.1                           | Website font, logo wordmark                                      |
+| [d3-geo](https://github.com/d3/d3-geo) and [world-atlas](https://github.com/topojson/world-atlas) | ISC; Natural Earth: public domain     | Projections and country shapes for `<vt-map>` (loaded on demand) |
+| [Temml](https://github.com/ronkok/Temml)                                                          | MIT                                   | TeX to MathML for `<vt-math>` (loaded on demand)                 |
+| [Mermaid](https://github.com/mermaid-js/mermaid) and its libraries                                | MIT, ISC, BSD-3-Clause, Apache-2.0    | Diagrams for `<vt-diagram>` (loaded on demand)                   |
+| [IBM Plex Sans](https://github.com/IBM/plex)                                                      | SIL OFL 1.1                           | Website font                                                     |
+| [Font Awesome Free](https://fontawesome.com)                                                      | Icons CC BY 4.0, code MIT             | Icons of `<vt-icon-picker>` (loaded on demand)                   |
+| [Lucide](https://lucide.dev) icon set                                                             | ISC (icons derived from Feather: MIT) | Icons of `<vt-icon-picker>` (loaded on demand)                   |
+| [Bootstrap Icons](https://icons.getbootstrap.com)                                                 | MIT                                   | Icons of `<vt-icon-picker>` (loaded on demand)                   |
+| [flag-icons](https://github.com/lipis/flag-icons)                                                 | MIT                                   | Country flags of `<vt-icon-picker>` (loaded on demand)           |
 
 Full license texts, with exact versions: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

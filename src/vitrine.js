@@ -82,6 +82,7 @@ import { VtLighthouse } from './components/lighthouse/vt-lighthouse.js';
 import { VtA11y } from './components/a11y/vt-a11y.js';
 import { VtCookies } from './components/cookies/vt-cookies.js';
 import { VtRedirects } from './components/redirects/vt-redirects.js';
+import { VtMap } from './components/map/vt-map.js';
 import { VtLoadingButton } from './components/loading-button/vt-loading-button.js';
 import { VtLoadingMessage } from './components/loading-message/vt-loading-message.js';
 import { VtLoadingOverlay } from './components/loading-overlay/vt-loading-overlay.js';
@@ -196,6 +197,7 @@ export {
   VtA11y,
   VtCookies,
   VtRedirects,
+  VtMap,
   VtLoadingButton,
   VtLoadingMessage,
   VtLoadingOverlay,
@@ -321,6 +323,7 @@ export const registry = new Map(
     ['vt-a11y', VtA11y],
     ['vt-cookies', VtCookies],
     ['vt-redirects', VtRedirects],
+    ['vt-map', VtMap],
     ['vt-loading-button', VtLoadingButton],
     ['vt-loading-message', VtLoadingMessage],
     ['vt-loading-overlay', VtLoadingOverlay],
@@ -422,6 +425,7 @@ const TYPES = /** @type {const} */ ({
   a11y: 'vt-a11y',
   cookies: 'vt-cookies',
   redirects: 'vt-redirects',
+  map: 'vt-map',
   'loading-button': 'vt-loading-button',
   'loading-message': 'vt-loading-message',
   'loading-overlay': 'vt-loading-overlay',

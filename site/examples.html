@@ -37,7 +37,7 @@
         <a href="#browse-visuals-planning">
           <strong>Visuals &amp; planning</strong>
           <span>Show patterns, relationships, images, events and progress visually.</span>
-          <small>13 sections</small>
+          <small>14 sections</small>
         </a>
         <a href="#browse-forms-navigation">
           <strong>Forms &amp; navigation</strong>
@@ -107,6 +107,7 @@
             <option value="gallery">Gallery</option>
             <option value="git">Git</option>
             <option value="heatmap">Heat map</option>
+            <option value="map">Map</option>
             <option value="stats">Stats</option>
             <option value="timeline">Timeline</option>
             <option value="treemap">Treemap</option>
@@ -2075,6 +2076,68 @@ Helsinki;656000;FI</template>
                 Fri,20h,140
               </template>
             </vt-heatmap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="map" aria-labelledby="map-title">
+        <h3 id="map-title">&lt;vt-map&gt;</h3>
+        <p class="muted prose">Drag to move, use the wheel or + and - to zoom, and change the projection or the style from the menus.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Offices and routes</h4>
+            <p>Cities by name, coordinates in decimal degrees or in degrees, minutes and seconds, and routes along great circles with their distance.</p>
+          </div>
+          <template>
+            <vt-map variant="full" label="Offices" highlight="FR JP BR" lang-ui="en">
+              <template>
+                Paris
+                Tokyo office: 35.6762, 139.6503
+                48°51′30″N 2°17′40″E Eiffel Tower
+                São Paulo #16a34a
+                Paris -> New York -> São Paulo
+                Paris -> Tokyo #e11d48
+              </template>
+            </vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>The Earth seen from the sky</h4>
+            <p>A globe that turns, with land colored by climate. With <code>pick</code>, a click drops a pin and gives its coordinates.</p>
+          </div>
+          <template>
+            <vt-map variant="full" projection="globe" basemap="satellite" center="Nairobi" pick lang-ui="en">
+              <template>
+                Nairobi
+                Cape Town
+                Cairo
+                Cape Town -> Cairo #fde047
+              </template>
+            </vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Values by country</h4>
+            <p>A number after a country shades it on a scale, with a legend. Names work in English, in French or as ISO codes.</p>
+          </div>
+          <template>
+            <vt-map variant="full" projection="equal-earth" basemap="political" label="Population (millions)" lang-ui="en">
+              <template>
+                China 1410
+                India 1430
+                USA 335
+                Indonésie 278
+                BRA 216
+                Nigeria 224
+                Pakistan 240
+                Russia 144
+              </template>
+            </vt-map>
           </template>
         </article>
       </section>

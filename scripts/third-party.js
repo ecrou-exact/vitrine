@@ -27,6 +27,9 @@ export async function thirdParty() {
     lucide,
     bootstrap,
     flags,
+    d3geo,
+    topojson,
+    atlas,
   ] = await Promise.all(
     [
       'highlight.js',
@@ -42,6 +45,9 @@ export async function thirdParty() {
       'lucide-static',
       'bootstrap-icons',
       'flag-icons',
+      'd3-geo',
+      'topojson-client',
+      'world-atlas',
     ].map(pkg),
   );
   return [
@@ -154,6 +160,33 @@ export async function thirdParty() {
       use: 'Country flags of `<vt-icon-picker>`',
       where: 'dist/vendor/icons/flags.js, loaded by `<vt-icon-picker>` only',
       licenseFile: 'node_modules/flag-icons/LICENSE',
+    },
+    {
+      name: 'd3-geo',
+      version: d3geo.version,
+      license: 'ISC',
+      url: 'https://github.com/d3/d3-geo',
+      use: 'Map projections and paths of `<vt-map>`',
+      where: 'dist/vendor/geo.js, loaded by `<vt-map>` only',
+      licenseFile: 'node_modules/d3-geo/LICENSE',
+    },
+    {
+      name: 'TopoJSON Client',
+      version: topojson.version,
+      license: 'ISC',
+      url: 'https://github.com/topojson/topojson-client',
+      use: 'Decoding the world shapes of `<vt-map>`',
+      where: 'dist/vendor/geo.js, loaded by `<vt-map>` only',
+      licenseFile: 'node_modules/topojson-client/LICENSE',
+    },
+    {
+      name: 'World Atlas TopoJSON (Natural Earth 1:110m)',
+      version: atlas.version,
+      license: 'ISC; Natural Earth data: public domain',
+      url: 'https://github.com/topojson/world-atlas',
+      use: 'Country shapes of `<vt-map>`',
+      where: 'dist/vendor/geo.js, loaded by `<vt-map>` only',
+      licenseFile: 'node_modules/world-atlas/LICENSE',
     },
     ...(await mermaidParts()),
     {

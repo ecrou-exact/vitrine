@@ -87,6 +87,7 @@
  *   | keyof typeof import('../components/a11y/strings.js').en
  *   | keyof typeof import('../components/cookies/strings.js').en
  *   | keyof typeof import('../components/redirects/strings.js').en
+ *   | keyof typeof import('../components/map/strings.js').en
  *   | keyof typeof import('../components/loading/strings.js').en} StringKey
  */
 /** @typedef {Readonly<Record<StringKey, string>>} Strings */

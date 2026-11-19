@@ -72,7 +72,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'consent', 'changelog', 'repo', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql', 'ioc', 'cvss', 'headers', 'email', 'dns', 'nmap', 'url', 'hash', 'waterfall', 'yara', 'sigma', 'pcap', 'semver', 'contrast', 'sbom', 'dockerfile', 'lighthouse', 'a11y', 'cookies', 'redirects', 'loading-button', 'loading-message', 'loading-overlay', 'loading-steps', 'page-progress', 'progress', 'progress-ring', 'skeleton', 'spinner', 'typing',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'consent', 'changelog', 'repo', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql', 'ioc', 'cvss', 'headers', 'email', 'dns', 'nmap', 'url', 'hash', 'waterfall', 'yara', 'sigma', 'pcap', 'semver', 'contrast', 'sbom', 'dockerfile', 'lighthouse', 'a11y', 'cookies', 'redirects', 'map', 'loading-button', 'loading-message', 'loading-overlay', 'loading-steps', 'page-progress', 'progress', 'progress-ring', 'skeleton', 'spinner', 'typing',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {
@@ -231,6 +231,7 @@ const VENDOR = {
   echarts: { entry: 'src/vendor/echarts.js' },
   yaml: { entry: 'src/vendor/yaml.js' },
   temml: { entry: 'src/vendor/temml.js' },
+  geo: { entry: 'src/vendor/geo.js' },
   mermaid: { entry: 'src/vendor/mermaid.js', also: ['DOMPurify'], split: true },
 };
 

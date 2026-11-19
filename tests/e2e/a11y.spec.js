@@ -250,6 +250,10 @@ const MORE = {
   'vt-typing': ['', { name: 'Ada', 'show-text': '' }],
   'vt-loading-button': ['', { loading: '', 'loading-text': 'Saving…' }],
   'vt-loading-message': ['Connecting…\nFetching…', { elapsed: '', 'slow-after': '1ms' }],
+  'vt-map': [
+    'Paris\nOffice: 35.6762, 139.6503\nBrazil 213\nParis -> New York',
+    { variant: 'full' },
+  ],
   'vt-redirects': [
     '301 http://a.example/\n302 https://a.example/?utm_source=x\n302 http://b.example.net/ (js)\n404 https://b.example.net/x',
     { variant: 'full' },

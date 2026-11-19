@@ -994,6 +994,23 @@ ${p}`,
       `$ curl -sIL https://x.dev/\nHTTP/1.1 301 ${p}\nLocation: ${p.replace(/\s/g, '')}\n\nHTTP/1.1 200 OK`,
   },
   {
+    tag: 'vt-map',
+    slow: true,
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p}: 48.85, 2.35\nFR 12\nParis -> ${p}`,
+  },
+  {
+    tag: 'vt-map',
+    slow: true,
+    attrs: { variant: 'full', projection: 'globe' },
+    wrap: (p) =>
+      JSON.stringify({
+        type: 'Feature',
+        properties: { name: p, color: p },
+        geometry: { type: 'Point', coordinates: [2, 48] },
+      }),
+  },
+  {
     tag: 'vt-loading-steps',
     attrs: { text: 'Steps' },
     wrap: (p) => `done ${p} — ${p} (42s)\nrunning ${p}\n${p}`,
@@ -1081,6 +1098,8 @@ test.describe('XSS payloads', () => {
     test(`${mode.tag} ${JSON.stringify(mode.attrs)} (#${modeIndex}) neutralizes every payload`, async ({
       page,
     }) => {
+      // A map draws every country of the world for each payload.
+      if (mode.slow) test.slow();
       for (const payload of PAYLOADS) {
         const content = mode.wrap ? mode.wrap(payload) : payload;
         // `data` modes go through the json attribute, so the JSON layer is tested too.

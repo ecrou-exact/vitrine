@@ -8,3 +8,6 @@ declare module 'highlight.js/lib/languages/*' {
   const language: LanguageFn;
   export default language;
 }
+
+/** TopoJSON decoding for the world shapes of <vt-map> (src/vendor/geo.js). */
+declare module 'topojson-client';
