@@ -1166,7 +1166,9 @@ export class VtMap extends VtBase {
       this.projectionState = 'globe';
       this.viewState = { lon: target.lon - 70, lat: 10, zoom: 1 };
       this.pins = [];
-      this.build(this.geo);
+      this.redrawAll();
+      const menu = /** @type {HTMLSelectElement | null} */ (this.root.querySelector('[data-focus-key="projection"]')); // prettier-ignore
+      if (menu) menu.value = 'globe';
     }
     const hud = this.hudView();
     this.stage.append(hud.root);
