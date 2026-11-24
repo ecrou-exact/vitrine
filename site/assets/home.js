@@ -121,30 +121,7 @@ function renderShowcase() {
   el.setAttribute('max-height', '340px');
   if (theme) el.setAttribute('theme', theme);
   stage.replaceChildren(el);
-  // The content is typed in, like someone writing it. JSON is typed as code, then shown
-  // as the interactive tree once complete (half-written JSON is not valid).
-  const typing = /** @type {any} */ (window).siteTyping;
-  if (!typing || sample.tag === 'vt-terminal') {
-    el.content = sample.content;
-  } else if (sample.tag === 'vt-json') {
-    const draft = document.createElement('vt-code');
-    for (const [name, value] of Object.entries(sample.attrs)) draft.setAttribute(name, value);
-    draft.setAttribute('language', 'json');
-    draft.setAttribute('max-height', '340px');
-    if (theme) draft.setAttribute('theme', theme);
-    stage.replaceChildren(draft);
-    typing.typeInto(draft, sample.content, 'chars', 1100).then(() => {
-      if (stage.firstElementChild !== draft) return;
-      el.content = sample.content;
-      stage.replaceChildren(el);
-    });
-  } else {
-    const mode = sample.tag === 'vt-code' || sample.tag === 'vt-markdown' ? 'chars' : 'lines';
-    typing.typeInto(el, sample.content, mode, mode === 'chars' ? 1500 : 1000);
-  }
-  // Brief entrance so the switch reads as one window changing content.
-  el.classList.add('entering');
-  el.addEventListener('animationend', () => el.classList.remove('entering'), { once: true });
+  el.content = sample.content;
   const attrs = Object.entries({ ...sample.attrs, ...(theme ? { theme } : {}) })
     .map(([name, value]) => ` ${name}="${value}"`)
     .join('');

@@ -1,0 +1,228 @@
+/*
+ * Version ranges: the range field, the range in words, what to watch, the version installed,
+ * the versions that match and a field to test one. Matches are marked with a check and in
+ * words for screen readers; colors only repeat them.
+ */
+.semver-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.semver-results {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.semver-field,
+.semver-test {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.semver-field label,
+.semver-test label {
+  font-weight: 600;
+}
+
+.semver-input {
+  flex: 1 1 14em;
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size);
+}
+
+.semver-input:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.semver-label {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.semver-muted {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.semver-reading {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.semver-reading ul {
+  display: grid;
+  gap: var(--_space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.semver-reading li {
+  display: grid;
+  gap: 2px;
+  padding: var(--_space-2) var(--_space-3);
+  border-inline-start: 3px solid var(--_accent);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.semver-reading li.empty {
+  border-inline-start-color: var(--_danger);
+}
+
+.semver-set,
+.semver-versions code,
+.semver-bounds {
+  font-family: var(--_font-mono);
+}
+
+.semver-set {
+  font-weight: 700;
+}
+
+.semver-bounds {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.semver-warnings {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.semver-warnings li,
+.semver-resolved,
+.semver-test-result {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.semver-warnings svg,
+.semver-resolved svg,
+.semver-test-result svg,
+.semver-versions svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+}
+
+.semver-warnings .warning svg {
+  color: var(--_warning);
+}
+
+.semver-warnings .danger {
+  font-weight: 600;
+}
+
+.semver-warnings .danger svg,
+.semver-resolved.none svg,
+.semver-test-result.no svg {
+  color: var(--_danger);
+}
+
+.semver-resolved svg,
+.semver-test-result.ok svg {
+  color: var(--_success);
+}
+
+.semver-versions-box,
+.semver-result {
+  display: grid;
+  gap: var(--_space-1);
+}
+
+.semver-test-result {
+  flex-basis: 100%;
+  min-height: 1.4em;
+}
+
+.semver-versions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+  max-height: 240px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.semver-versions li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px var(--_space-2);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.semver-versions svg {
+  margin-top: 0;
+  width: 12px;
+  height: 12px;
+}
+
+.semver-versions li.ok {
+  border-color: var(--_success);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+}
+
+.semver-versions li.ok svg {
+  color: var(--_success);
+}
+
+.semver-versions li.resolved {
+  border-width: 2px;
+  font-weight: 700;
+}
+
+.semver-versions li.pre code {
+  font-style: italic;
+}
+
+.semver-tag {
+  padding: 0 4px;
+  border-radius: var(--_radius-sm);
+  background: var(--_accent-soft);
+  color: var(--_fg);
+  font-size: 0.9em;
+}
+
+.semver-edit > .editor-body {
+  max-height: min(35vh, 240px);
+  border-bottom: 1px solid var(--_border);
+}
+
+/* Ranges are shown as typed: no `>=` → `≥` ligature. */
+.semver-input,
+.semver-set,
+.semver-versions code {
+  font-variant-ligatures: none;
+}

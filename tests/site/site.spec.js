@@ -27,7 +27,6 @@ const PAGES = [
   '/integrations.html',
   '/playground.html',
   '/themes.html',
-  '/lab.html',
 ];
 
 for (const path of PAGES) {
@@ -56,23 +55,6 @@ test('pages have no horizontal overflow on a phone', async ({ page }) => {
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
     expect(overflow, path).toBeLessThanOrEqual(0);
-  }
-});
-
-test('every stress lab trial ends safely', async ({ page }) => {
-  test.setTimeout(180_000);
-  await page.goto(`${SITE}/lab.html`);
-  const trials = page.locator('.trial');
-  const count = await trials.count();
-  expect(count).toBeGreaterThan(5);
-  for (let i = 0; i < count; i += 1) {
-    const title = (await trials.nth(i).locator('strong').textContent()) ?? `trial ${i}`;
-    await test.step(title, async () => {
-      await trials.nth(i).click();
-      const verdict = page.locator('#verdict');
-      await expect(verdict).toContainText('Scripts executed', { timeout: 30_000 });
-      await expect(verdict.locator('.bad'), title).toHaveCount(0);
-    });
   }
 });
 
@@ -242,7 +224,10 @@ test('every component doc has a closed preview that renders its real example', a
         name,
       );
       expect(rendered, component).toEqual({ type: 'vt-ready', message: undefined });
-      await expect(page.locator(`#doc-preview-canvas vt-${name}`)).toBeVisible();
+      // A preview may show several variants of the element: the first one is enough.
+      // The page bar's host takes no room: check the bar itself.
+      const shown = name === 'page-progress' ? `vt-${name} [part~="bar"]` : `vt-${name}`;
+      await expect(page.locator(`#doc-preview-canvas ${shown}`).first()).toBeVisible();
     });
   }
   await page.locator('.docs-nav a[data-page="security"]').click();

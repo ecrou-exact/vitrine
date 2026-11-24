@@ -1,0 +1,267 @@
+/*
+ * A redirect chain: a summary, the issues, then the hops as a numbered list joined by a
+ * line. Each step says how it redirects; changes are written in words, colors repeat them.
+ */
+.redirects-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.redirects-summary {
+  --_tone-color: var(--_success);
+  display: grid;
+  gap: var(--_space-1);
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid color-mix(in srgb, var(--_tone-color) 40%, var(--_border));
+  border-radius: var(--_radius-sm);
+  background: color-mix(in srgb, var(--_tone-color) 6%, var(--_surface));
+}
+
+.redirects-summary.warn {
+  --_tone-color: var(--_warning);
+}
+
+.redirects-summary.bad {
+  --_tone-color: var(--_danger);
+}
+
+.redirects-summary p {
+  margin: 0;
+}
+
+.redirects-counts,
+.redirects-final {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.redirects-muted {
+  color: var(--_fg-muted);
+}
+
+.redirects-issues {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  list-style: none;
+}
+
+.redirects-issue {
+  display: grid;
+  grid-template-columns: minmax(8rem, auto) 1fr;
+  gap: var(--_space-3);
+  padding: var(--_space-2) var(--_space-3);
+  border-bottom: 1px solid var(--_border);
+}
+
+.redirects-issue:last-child {
+  border-bottom: 0;
+}
+
+.redirects-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.redirects-level svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.redirects-issue.bad .redirects-level {
+  color: var(--_danger);
+}
+
+.redirects-issue.warn .redirects-level {
+  color: var(--_warning);
+}
+
+.redirects-issue.info .redirects-level {
+  color: var(--_fg-muted);
+}
+
+.redirects-chain {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.redirects-hop {
+  position: relative;
+  display: grid;
+  gap: var(--_space-1);
+  padding-inline-start: 36px;
+}
+
+/* The line joining a hop to the next one. */
+.redirects-hop:not(.final)::before {
+  content: '';
+  position: absolute;
+  inset-block: 26px 0;
+  inset-inline-start: 13px;
+  border-inline-start: 2px solid var(--_border);
+}
+
+.redirects-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+  min-width: 0;
+}
+
+.redirects-index {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--_border);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.redirects-hop.final .redirects-index {
+  border-color: var(--_accent);
+  color: var(--_accent);
+}
+
+.status {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--_radius-sm);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+  line-height: 1.5;
+  --_tone: var(--_fg-muted);
+  background: color-mix(in srgb, var(--_tone) 16%, transparent);
+  /* Mixed toward the text color for AA contrast on the tinted background. */
+  color: color-mix(in srgb, var(--_tone) 62%, var(--_fg));
+}
+
+.status-2xx {
+  --_tone: var(--_success);
+}
+
+.status-3xx {
+  --_tone: var(--_info);
+}
+
+.status-4xx {
+  --_tone: var(--_warning);
+}
+
+.status-5xx {
+  --_tone: var(--_danger);
+}
+
+.status-none {
+  font-family: var(--_font-ui);
+  font-weight: 500;
+}
+
+.url {
+  flex: 1 1 16rem;
+  min-width: 0;
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+.url .origin {
+  font-weight: 600;
+}
+
+.url .rest {
+  color: var(--_fg-muted);
+}
+
+.redirects-meta {
+  margin: 0;
+  font-size: var(--_font-size-small);
+}
+
+.redirects-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  padding-block: var(--_space-2) var(--_space-3);
+  font-size: var(--_font-size-small);
+}
+
+.redirects-step svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--_fg-muted);
+}
+
+.redirects-kind {
+  color: var(--_fg-muted);
+  font-weight: 600;
+}
+
+.redirects-step.meta .redirects-kind,
+.redirects-step.script .redirects-kind {
+  color: color-mix(in srgb, var(--_warning) 62%, var(--_fg));
+}
+
+.redirects-change {
+  padding: 1px 6px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-full);
+  white-space: nowrap;
+}
+
+.redirects-change.bad {
+  border-color: color-mix(in srgb, var(--_danger) 50%, var(--_border));
+  background: color-mix(in srgb, var(--_danger) 10%, transparent);
+  color: color-mix(in srgb, var(--_danger) 62%, var(--_fg));
+  font-weight: 600;
+}
+
+.redirects-change.warn {
+  border-color: color-mix(in srgb, var(--_warning) 50%, var(--_border));
+  background: color-mix(in srgb, var(--_warning) 10%, transparent);
+}
+
+.redirects-change.ok {
+  border-color: color-mix(in srgb, var(--_success) 45%, var(--_border));
+  background: color-mix(in srgb, var(--_success) 10%, transparent);
+}
+
+.redirects-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (max-width: 560px) {
+  .redirects-issue {
+    grid-template-columns: 1fr;
+    gap: var(--_space-1);
+  }
+
+  .redirects-change {
+    white-space: normal;
+  }
+}

@@ -1,0 +1,252 @@
+/*
+ * Accessibility results: a summary by impact, filters, and a card per rule with its WCAG
+ * criteria, elements and fixes. Impacts are written in words; colors only repeat them.
+ */
+.a11y-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.a11y-muted {
+  color: var(--_fg-muted);
+}
+
+.a11y-summary {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.a11y-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+}
+
+.a11y-url,
+.a11y-id,
+.a11y-target code,
+.a11y-html {
+  font-family: var(--_font-mono);
+}
+
+.a11y-url {
+  overflow-wrap: anywhere;
+}
+
+.a11y-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a11y-impact {
+  display: inline-block;
+  padding: 1px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-inline-start-width: 4px;
+  border-radius: var(--_radius-sm);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.a11y-impact.i-critical {
+  border-width: 2px;
+  border-inline-start-width: 6px;
+  border-color: var(--_danger);
+}
+
+.a11y-impact.i-serious {
+  border-color: var(--_danger);
+}
+
+.a11y-impact.i-moderate {
+  border-color: var(--_warning);
+}
+
+.a11y-impact.i-minor {
+  border-color: var(--_info);
+}
+
+.a11y-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.a11y-chip {
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--_font-size-small);
+  cursor: pointer;
+}
+
+.a11y-chip.on {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  font-weight: 600;
+}
+
+.a11y-chip:focus-visible,
+.a11y-query:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.a11y-query {
+  flex: 1 1 14em;
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font: inherit;
+}
+
+.a11y-rules {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.a11y-rule {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 4px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.a11y-rule.i-critical,
+.a11y-rule.i-serious {
+  border-inline-start-color: var(--_danger);
+}
+
+.a11y-rule.i-moderate {
+  border-inline-start-color: var(--_warning);
+}
+
+.a11y-rule.i-minor {
+  border-inline-start-color: var(--_info);
+}
+
+.a11y-rule-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.a11y-rule-head h3 {
+  flex: 1 1 16em;
+  margin: 0;
+  font-size: 1em;
+}
+
+.a11y-id {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.a11y-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  margin: 0;
+  font-size: var(--_font-size-small);
+}
+
+.a11y-meta a {
+  color: var(--_accent-fg);
+}
+
+.a11y-tag {
+  padding: 0 6px;
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+}
+
+.a11y-desc {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.a11y-nodes {
+  display: grid;
+  gap: var(--_space-2);
+  margin: 0;
+  padding-inline-start: 1.5em;
+}
+
+.a11y-node {
+  display: grid;
+  gap: var(--_space-1);
+  min-width: 0;
+}
+
+.a11y-target {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.a11y-html {
+  margin: 0;
+  padding: var(--_space-1) var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.a11y-fix {
+  font-size: var(--_font-size-small);
+}
+
+.a11y-fix-title {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-1);
+  margin: 0;
+  font-weight: 600;
+}
+
+.a11y-fix-title svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--_info);
+}
+
+.a11y-fix ul {
+  margin: 2px 0 0;
+  padding-inline-start: 1.5em;
+}
+
+.a11y-more {
+  justify-self: start;
+  color: var(--_accent-fg);
+}
+
+.a11y-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

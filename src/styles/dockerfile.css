@@ -1,0 +1,258 @@
+/*
+ * Dockerfiles: a summary, the problems, a card per build stage with its instructions and the
+ * problems found on each, and the colored source. Problems are written in words; colors only
+ * repeat them.
+ */
+.docker-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.docker-muted {
+  color: var(--_fg-muted);
+}
+
+.docker-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.docker-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  margin-inline-start: auto;
+  font-weight: 600;
+}
+
+.docker-verdict svg,
+.docker-finding svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.docker-verdict.danger,
+.docker-finding.danger svg {
+  color: var(--_danger);
+}
+
+.docker-verdict.warning,
+.docker-finding.warning svg {
+  color: var(--_warning);
+}
+
+.docker-verdict.none,
+.docker-verdict.info {
+  color: var(--_success);
+}
+
+.docker-finding.info svg {
+  color: var(--_info);
+}
+
+.docker-findings {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docker-finding {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.docker-finding svg {
+  margin-top: 2px;
+}
+
+.docker-finding.danger {
+  font-weight: 600;
+}
+
+.docker-stage {
+  display: grid;
+  gap: var(--_space-2);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.docker-stage.final {
+  border-inline-start-color: var(--_accent);
+}
+
+.docker-stage-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+}
+
+.docker-stage-head h3 {
+  margin: 0;
+  font-size: 1em;
+}
+
+.docker-stage-head code,
+.docker-code,
+.docker-heredoc,
+.docker-source {
+  font-family: var(--_font-mono);
+}
+
+.docker-image {
+  font-weight: 600;
+}
+
+.docker-chip {
+  padding: 0 var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+}
+
+.docker-chip.final {
+  border-color: var(--_accent);
+  font-weight: 600;
+}
+
+.docker-chip.warn {
+  border-color: var(--_warning);
+}
+
+.docker-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docker-ins {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr);
+  gap: var(--_space-2);
+  padding: 3px var(--_space-2);
+  border-inline-start: 3px solid transparent;
+  border-radius: var(--_radius-sm);
+}
+
+.docker-ins.danger {
+  border-inline-start-color: var(--_danger);
+  background: var(--_surface-sunken);
+}
+
+.docker-ins.warning {
+  border-inline-start-color: var(--_warning);
+  background: var(--_surface-sunken);
+}
+
+.docker-ins.info {
+  border-inline-start-color: var(--_info);
+}
+
+.docker-line {
+  color: var(--_fg-muted);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  text-align: end;
+  user-select: none;
+}
+
+.docker-ins-body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.docker-code {
+  font-size: var(--_font-size);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.d-kw {
+  color: var(--_syntax-keyword);
+  font-weight: 700;
+  cursor: help;
+}
+
+.d-kw.layer {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.d-flag {
+  color: var(--_syntax-attr);
+}
+
+.d-var {
+  color: var(--_syntax-number);
+}
+
+.d-str {
+  color: var(--_syntax-string);
+}
+
+.d-comment {
+  color: var(--_syntax-comment);
+  font-style: italic;
+}
+
+.docker-heredoc {
+  margin: 0;
+  padding: var(--_space-1) var(--_space-2);
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-size: var(--_font-size-small);
+  white-space: pre-wrap;
+}
+
+.docker-source {
+  margin: 0;
+  padding: var(--_space-2) var(--_space-3);
+  overflow-x: auto;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-size: var(--_font-size);
+  line-height: var(--_line-height);
+}
+
+.docker-src-line .docker-line {
+  display: inline-block;
+  width: 4ch;
+  margin-inline-end: var(--_space-2);
+}
+
+.docker-src-line.danger .docker-line {
+  color: var(--_danger);
+  font-weight: 700;
+}
+
+.docker-src-line.warning .docker-line {
+  color: var(--_warning);
+  font-weight: 700;
+}
+
+.docker-edit > .editor-body {
+  max-height: min(40vh, 320px);
+  border-bottom: 1px solid var(--_border);
+}

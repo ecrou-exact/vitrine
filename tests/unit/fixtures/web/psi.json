@@ -1,0 +1,192 @@
+{
+  "id": "https://shop.example/",
+  "loadingExperience": {
+    "id": "https://shop.example/",
+    "overall_category": "AVERAGE",
+    "metrics": {
+      "LARGEST_CONTENTFUL_PAINT_MS": {
+        "percentile": 2900,
+        "category": "AVERAGE",
+        "distributions": [
+          { "min": 0, "max": 2500, "proportion": 0.68 },
+          { "min": 2500, "max": 4000, "proportion": 0.2 },
+          { "min": 4000, "proportion": 0.12 }
+        ]
+      },
+      "INTERACTION_TO_NEXT_PAINT": {
+        "percentile": 180,
+        "category": "FAST",
+        "distributions": [{ "proportion": 0.8 }, { "proportion": 0.15 }, { "proportion": 0.05 }]
+      },
+      "CUMULATIVE_LAYOUT_SHIFT_SCORE": {
+        "percentile": 31,
+        "category": "SLOW",
+        "distributions": [{ "proportion": 0.55 }, { "proportion": 0.2 }, { "proportion": 0.25 }]
+      }
+    }
+  },
+  "lighthouseResult": {
+    "requestedUrl": "https://shop.example/",
+    "finalDisplayedUrl": "https://shop.example/",
+    "lighthouseVersion": "12.2.1",
+    "fetchTime": "2026-11-17T10:00:00.000Z",
+    "configSettings": { "formFactor": "mobile" },
+    "runWarnings": ["The page loaded too slowly to finish within the time limit."],
+    "categories": {
+      "performance": {
+        "title": "Performance",
+        "score": 0.62,
+        "auditRefs": [
+          { "id": "first-contentful-paint", "weight": 10, "group": "metrics" },
+          { "id": "largest-contentful-paint", "weight": 25, "group": "metrics" },
+          { "id": "total-blocking-time", "weight": 30, "group": "metrics" },
+          { "id": "cumulative-layout-shift", "weight": 25, "group": "metrics" },
+          { "id": "speed-index", "weight": 10, "group": "metrics" },
+          { "id": "render-blocking-resources", "weight": 0, "group": "load-opportunities" },
+          { "id": "uses-optimized-images", "weight": 0, "group": "load-opportunities" },
+          { "id": "dom-size", "weight": 0, "group": "diagnostics" }
+        ]
+      },
+      "accessibility": {
+        "title": "Accessibility",
+        "score": 0.88,
+        "auditRefs": [
+          { "id": "color-contrast", "weight": 7, "group": "a11y-color-contrast" },
+          { "id": "image-alt", "weight": 10, "group": "a11y-names-labels" }
+        ]
+      },
+      "best-practices": {
+        "title": "Best Practices",
+        "score": 0.96,
+        "auditRefs": [{ "id": "is-on-https", "weight": 5 }]
+      },
+      "seo": { "title": "SEO", "score": 1, "auditRefs": [{ "id": "document-title", "weight": 1 }] }
+    },
+    "audits": {
+      "first-contentful-paint": {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "score": 0.72,
+        "scoreDisplayMode": "numeric",
+        "numericValue": 2210,
+        "displayValue": "2.2 s"
+      },
+      "largest-contentful-paint": {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "score": 0.31,
+        "scoreDisplayMode": "numeric",
+        "numericValue": 4630,
+        "displayValue": "4.6 s"
+      },
+      "total-blocking-time": {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "score": 0.58,
+        "scoreDisplayMode": "numeric",
+        "numericValue": 420,
+        "displayValue": "420 ms"
+      },
+      "cumulative-layout-shift": {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "score": 0.9,
+        "scoreDisplayMode": "numeric",
+        "numericValue": 0.08,
+        "displayValue": "0.08"
+      },
+      "speed-index": {
+        "id": "speed-index",
+        "title": "Speed Index",
+        "score": 0.66,
+        "scoreDisplayMode": "numeric",
+        "numericValue": 4900,
+        "displayValue": "4.9 s"
+      },
+      "render-blocking-resources": {
+        "id": "render-blocking-resources",
+        "title": "Eliminate render-blocking resources",
+        "description": "Resources are blocking the first paint of your page. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+        "score": 0.3,
+        "scoreDisplayMode": "metricSavings",
+        "displayValue": "Potential savings of 780 ms",
+        "details": {
+          "type": "opportunity",
+          "overallSavingsMs": 780,
+          "headings": [
+            { "key": "url", "valueType": "url", "label": "URL" },
+            { "key": "totalBytes", "valueType": "bytes", "label": "Transfer Size" },
+            { "key": "wastedMs", "valueType": "timespanMs", "label": "Potential Savings" }
+          ],
+          "items": [
+            { "url": "https://shop.example/css/app.css", "totalBytes": 48200, "wastedMs": 540 },
+            {
+              "url": "https://fonts.example/css2?family=Inter",
+              "totalBytes": 1300,
+              "wastedMs": 240
+            }
+          ]
+        }
+      },
+      "uses-optimized-images": {
+        "id": "uses-optimized-images",
+        "title": "Efficiently encode images",
+        "description": "Optimized images load faster.",
+        "score": 0.5,
+        "scoreDisplayMode": "metricSavings",
+        "displayValue": "Potential savings of 312 KiB",
+        "details": {
+          "type": "opportunity",
+          "overallSavingsMs": 300,
+          "overallSavingsBytes": 319488,
+          "headings": [{ "key": "url", "valueType": "url", "label": "URL" }],
+          "items": [{ "url": "https://shop.example/img/hero.jpg" }]
+        }
+      },
+      "dom-size": {
+        "id": "dom-size",
+        "title": "Avoid an excessive DOM size",
+        "score": 0.6,
+        "scoreDisplayMode": "numeric",
+        "displayValue": "1,840 elements"
+      },
+      "color-contrast": {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "score": 0,
+        "scoreDisplayMode": "binary",
+        "details": {
+          "type": "table",
+          "headings": [{ "key": "node", "valueType": "node", "label": "Failing Elements" }],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "snippet": "<a class=\"muted\">Terms</a>",
+                "selector": "footer a.muted"
+              }
+            }
+          ]
+        }
+      },
+      "image-alt": {
+        "id": "image-alt",
+        "title": "Image elements have [alt] attributes",
+        "score": 1,
+        "scoreDisplayMode": "binary"
+      },
+      "is-on-https": {
+        "id": "is-on-https",
+        "title": "Uses HTTPS",
+        "score": 1,
+        "scoreDisplayMode": "binary"
+      },
+      "document-title": {
+        "id": "document-title",
+        "title": "Document has a <title> element",
+        "score": 1,
+        "scoreDisplayMode": "binary"
+      }
+    }
+  }
+}

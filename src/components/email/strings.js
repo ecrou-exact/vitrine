@@ -1,0 +1,130 @@
+// @ts-check
+/**
+ * Interface strings of <vt-email>, registered by its module with `defineStrings()`
+ * so other modules do not carry them.
+ *
+ * @module components/email/strings
+ */
+
+export const en = Object.freeze({
+  emailTabs: 'Message views',
+  emailSummary: 'Summary',
+  emailPath: 'Path',
+  emailBody: 'Body',
+  emailLinks: 'Links ({count})',
+  emailAttachments: 'Attachments ({count})',
+  emailHeaders: 'Headers ({count})',
+  emailFrom: 'From',
+  emailTo: 'To',
+  emailCc: 'Cc',
+  emailReplyTo: 'Reply-To',
+  emailReturnPath: 'Return-Path',
+  emailSubject: 'Subject',
+  emailDate: 'Date',
+  emailMessageId: 'Message-ID',
+  emailAuth: 'Authentication',
+  emailFindings: 'Findings',
+  emailNoFindings: 'Nothing suspicious found in the headers, links and attachments.',
+  emailNotRun:
+    'Read only: links are not opened, images are not loaded, attachments are not opened.',
+  emailInvalid: 'No message headers found. Paste a raw message (.eml), headers first.',
+  emailHop: 'Hop',
+  emailHopFrom: 'From',
+  emailHopBy: 'By',
+  emailHopWith: 'With',
+  emailHopIp: 'IP',
+  emailHopTime: 'Time',
+  emailHopDelay: 'Delay',
+  emailNoHops: 'No Received header.',
+  emailFromHtml: 'Shown as text from the HTML part: nothing in it is rendered or loaded.',
+  emailNoBody: 'No text body.',
+  emailLinkText: 'Text',
+  emailLinkUrl: 'Opens',
+  emailDeceptive: 'Deceptive',
+  emailNoLinks: 'No link.',
+  emailName: 'Name',
+  emailType: 'Type',
+  emailSize: 'Size',
+  emailSha256: 'SHA-256',
+  emailRisky: 'Risky',
+  emailNoAttachments: 'No attachment.',
+  emailHeaderName: 'Name',
+  emailHeaderValue: 'Value',
+  emailCopyHeaders: 'Copy headers',
+  emailLevel_bad: 'Problem',
+  emailLevel_warn: 'Warning',
+  emailLevel_info: 'Note',
+  email_authFail: '{method} {result}: the message is not authenticated for its sender.',
+  email_authWeak: '{method} {result}: the sender is not confirmed.',
+  email_authMissing:
+    'No Authentication-Results header: the checks of the receiving server are unknown.',
+  email_displaySpoof: 'The sender name shows {shown}, but the message comes from {address}.',
+  email_replyTo: 'Replies go to {address}, another domain than the sender.',
+  email_returnPath:
+    'Bounces go to {address}, another domain than the sender (common with mailing services).',
+  email_deceptiveLinks:
+    'Deceptive links: {count}. Their text shows one site, but they open another.',
+  email_riskyAttachment: 'Attachment {name} can run code.',
+  email_doubleExtension: 'Attachment {name} hides its real type behind a double extension.',
+  email_remoteImages:
+    'Remote images: {count}. Opening the message in a mail client would tell the sender it was read.',
+});
+
+/** @type {Partial<Record<keyof typeof en, string>>} */
+export const fr = {
+  emailTabs: 'Vues du message',
+  emailSummary: 'Résumé',
+  emailPath: 'Parcours',
+  emailBody: 'Corps',
+  emailLinks: 'Liens ({count})',
+  emailAttachments: 'Pièces jointes ({count})',
+  emailHeaders: 'En-têtes ({count})',
+  emailFrom: 'De',
+  emailTo: 'À',
+  emailReplyTo: 'Répondre à',
+  emailSubject: 'Objet',
+  emailAuth: 'Authentification',
+  emailFindings: 'Résultats',
+  emailNoFindings: 'Rien de suspect dans les en-têtes, les liens et les pièces jointes.',
+  emailNotRun:
+    'Lecture seule : les liens ne sont pas ouverts, les images pas chargées, les pièces jointes pas ouvertes.',
+  emailInvalid: 'Aucun en-tête de message. Collez un message brut (.eml), en-têtes d’abord.',
+  emailHop: 'Étape',
+  emailHopFrom: 'De',
+  emailHopBy: 'Par',
+  emailHopWith: 'Avec',
+  emailHopTime: 'Heure',
+  emailHopDelay: 'Délai',
+  emailNoHops: 'Aucun en-tête Received.',
+  emailFromHtml: 'Affiché en texte depuis la partie HTML : rien n’y est rendu ni chargé.',
+  emailNoBody: 'Pas de corps texte.',
+  emailLinkText: 'Texte',
+  emailLinkUrl: 'Ouvre',
+  emailDeceptive: 'Trompeur',
+  emailNoLinks: 'Aucun lien.',
+  emailName: 'Nom',
+  emailSize: 'Taille',
+  emailRisky: 'Risqué',
+  emailNoAttachments: 'Aucune pièce jointe.',
+  emailHeaderName: 'Nom',
+  emailHeaderValue: 'Valeur',
+  emailCopyHeaders: 'Copier les en-têtes',
+  emailLevel_bad: 'Problème',
+  emailLevel_warn: 'Avertissement',
+  emailLevel_info: 'Remarque',
+  email_authFail: '{method} {result} : le message n’est pas authentifié pour son expéditeur.',
+  email_authWeak: '{method} {result} : l’expéditeur n’est pas confirmé.',
+  email_authMissing:
+    'Pas d’en-tête Authentication-Results : les vérifications du serveur de réception sont inconnues.',
+  email_displaySpoof: 'Le nom de l’expéditeur affiche {shown}, mais le message vient de {address}.',
+  email_replyTo: 'Les réponses partent vers {address}, un autre domaine que l’expéditeur.',
+  email_returnPath:
+    'Les retours partent vers {address}, un autre domaine que l’expéditeur (courant avec les services d’envoi).',
+  email_deceptiveLinks:
+    'Liens trompeurs : {count}. Leur texte affiche un site, mais ils en ouvrent un autre.',
+  email_riskyAttachment: 'La pièce jointe {name} peut exécuter du code.',
+  email_doubleExtension:
+    'La pièce jointe {name} cache son vrai type derrière une double extension.',
+  email_remoteImages:
+    'Images distantes : {count}. Ouvrir le message dans un client de messagerie signalerait la lecture à l’expéditeur.',
+};

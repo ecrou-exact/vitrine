@@ -1,0 +1,125 @@
+/* <vt-loading-button>: a native button styled with theme tokens; spinner and text inside. */
+.indicator {
+  display: inline-flex;
+}
+
+.indicator.block {
+  display: flex;
+}
+
+:host([block]) {
+  display: block;
+}
+
+.button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_space-2);
+  min-height: 36px;
+  padding: 0 var(--_space-4);
+  border: 1px solid transparent;
+  border-radius: var(--_radius-sm, 6px);
+  background: var(--_accent);
+  color: var(--_on-accent, #fff);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.button:hover {
+  background: color-mix(in srgb, var(--_accent) 88%, var(--_fg));
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.indicator.loading .button {
+  cursor: progress;
+}
+
+.indicator[data-variant='secondary'] .button {
+  border-color: var(--_border-strong, var(--_border));
+  background: var(--_surface, transparent);
+  color: var(--_fg);
+}
+
+.indicator[data-variant='secondary'] .button:hover {
+  background: var(--_surface-sunken);
+}
+
+.indicator[data-variant='ghost'] .button {
+  background: transparent;
+  color: var(--_accent-fg, var(--_accent));
+}
+
+.indicator[data-variant='ghost'] .button:hover {
+  background: var(--_accent-soft);
+}
+
+.indicator[data-variant='danger'] .button {
+  background: var(--_danger);
+  color: #fff;
+}
+
+.indicator[data-variant='danger'] .button:hover {
+  background: color-mix(in srgb, var(--_danger) 85%, #000);
+}
+
+/* The spinner takes the text color of the button. */
+.button .spinner {
+  --_ind-color: currentColor;
+  --_ind-track: color-mix(in srgb, currentColor 28%, transparent);
+  --_ind-size: 1.05em;
+}
+
+.indicator[data-place='replace'] .button {
+  display: inline-grid;
+  grid-template-areas: 'stack';
+}
+
+.indicator[data-place='replace'] .button > * {
+  grid-area: stack;
+  justify-self: center;
+}
+
+.ghost {
+  visibility: hidden;
+}
+
+.indicator[data-outcome='success'] .button {
+  background: var(--_success);
+  color: #fff;
+}
+
+.indicator[data-outcome='error'] .button {
+  background: var(--_danger);
+  color: #fff;
+}
+
+.button svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.indicator[data-motion='reduce'] .button {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .button {
+    border-color: ButtonText;
+  }
+}

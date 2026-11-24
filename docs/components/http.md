@@ -81,7 +81,44 @@ Quotes, backslashes, `$'…'` strings and line continuations are read like a she
 }
 ```
 
-Headers are an object or `[name, value]` pairs; a body that is not a string is shown as JSON; `time` (milliseconds) is shown next to the status. A HAR entry, or a whole HAR file (its first entry), as exported by the Network panel of browser developer tools, works as is.
+Headers are an object or `[name, value]` pairs; a body that is not a string is shown as JSON; `time` (milliseconds) is shown next to the status. A HAR entry, or a whole HAR file (with a list of its entries, see below), as exported by the Network panel of browser developer tools, works as is.
+
+### Entries of a HAR file
+
+A whole HAR file keeps all its entries: a bar above the exchange lists them (number, status, method, URL without its scheme, MIME type), with previous and next buttons. `entry` chooses the entry shown first, by index or by URL:
+
+```html
+<vt-http variant="full" src="capture.har" entry="/static/app.js"></vt-http>
+```
+
+At most 5,000 entries are listed.
+
+### Connection, TLS and sizes
+
+From a HAR entry, Vitrine also reads the server address (`serverIPAddress`), the HTTP version, the sizes (`bodySize`, `content.size`, `_transferSize`; `-1` means unknown) and the TLS details recorded by Chromium and Playwright (`_securityDetails`: `protocol`, `cipher`, `subjectName`, `sanList`, `issuer`, `validFrom`, `validTo` as Unix seconds or ISO dates). They appear in a **Connection** tab of the response, and the TLS protocol next to the status. An expired certificate is marked. Nothing is verified: these are the values recorded in the file.
+
+In plain JSON, the same details go in a `connection` object:
+
+```json
+{
+  "request": { "method": "GET", "url": "https://static.example.org/app.css" },
+  "response": { "status": 200, "headers": { "Content-Type": "text/css" }, "body": "a{color:red}" },
+  "connection": {
+    "serverIp": "192.0.2.10",
+    "httpVersion": "HTTP/2",
+    "bodySize": 2252,
+    "tls": {
+      "protocol": "TLS 1.3",
+      "subject": "static.example.org",
+      "issuer": "R11",
+      "validFrom": "2026-09-27T00:43:33Z",
+      "validTo": "2026-12-25T23:43:32Z"
+    }
+  }
+}
+```
+
+To see the whole certificate, give its PEM to [`<vt-cert>`](cert.md); to grade the response headers, give them to [`<vt-headers>`](headers.md).
 
 The `exchange` property returns the parsed exchange and accepts the JSON shape above:
 
@@ -96,8 +133,9 @@ http.exchange = {
 ## Display
 
 - **Request**: the method (colored by kind: GET blue, POST green, PUT and PATCH amber, DELETE red), then the URL with its origin muted, path parameters (`{id}` or `:id`) highlighted and the query string colored. A button copies the absolute URL. Below, **Body**, **Headers** and **Query** tabs (with counts).
-- **Response**: the status, colored by class (2xx green, 3xx blue, 4xx amber, 5xx red), the duration and the body size. Below, **Body** and **Headers** tabs.
-- **Bodies** are formatted by content type: JSON is indented and highlighted (numbers kept exactly), XML, HTML, SVG, JavaScript and YAML are highlighted, form data (`application/x-www-form-urlencoded`) is shown as a table, anything else as text. Without a content type, JSON and markup are recognized from the text.
+- **Response**: the status, colored by class (2xx green, 3xx blue, 4xx amber, 5xx red), the duration, the body size and the TLS protocol. Below, **Body** and **Headers** tabs, and **Connection** when the exchange has [connection details](#connection-tls-and-sizes).
+- **Bodies** are formatted by content type: JSON is indented and highlighted (numbers kept exactly), XML, HTML, SVG, JavaScript, CSS and YAML are highlighted, form data (`application/x-www-form-urlencoded`) is shown as a table, anything else as text. Without a content type, JSON and markup are recognized from the text.
+- **Binary bodies** (`content.encoding: "base64"` in a HAR): images and icons (PNG, GIF, JPEG, WebP, AVIF, BMP, ICO) are shown on a checkerboard with their type and size; SVG and text types are decoded and shown as source, never rendered; anything else (fonts, archives…) is summed up by type and size.
 
 `layout="columns"` puts the response next to the request when the element is at least 760px wide (below that, it stays under it).
 
@@ -149,33 +187,35 @@ With `mode="edit"`, an editor holds the source and the exchange is updated live 
 
 This table lists the attributes specific to `<vt-http>`. The shared attributes are described in [Common attributes](../common-attributes.md).
 
-| Attribute      | Type                          | Default                    | Description                                   |
-| -------------- | ----------------------------- | -------------------------- | --------------------------------------------- |
-| `view`         | `exchange` or `code`          | `exchange`                 | Initial view.                                 |
-| `tabs`         | boolean                       | preset                     | Exchange / Code tabs.                         |
-| `snippets`     | languages separated by spaces | `curl fetch python httpie` | Code languages and their order.               |
-| `mask-secrets` | boolean                       | on                         | Mask credentials until the reader shows them. |
-| `layout`       | `stacked` or `columns`        | `stacked`                  | Response under the request, or next to it.    |
+| Attribute      | Type                          | Default                    | Description                                                                                                    |
+| -------------- | ----------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `view`         | `exchange` or `code`          | `exchange`                 | Initial view.                                                                                                  |
+| `tabs`         | boolean                       | preset                     | Exchange / Code tabs.                                                                                          |
+| `snippets`     | languages separated by spaces | `curl fetch python httpie` | Code languages and their order.                                                                                |
+| `mask-secrets` | boolean                       | on                         | Mask credentials until the reader shows them.                                                                  |
+| `layout`       | `stacked` or `columns`        | `stacked`                  | Response under the request, or next to it.                                                                     |
+| `entry`        | index or URL                  | the first entry            | In a whole HAR file, the entry shown: its index (from 0), or its URL (exact, else the first that contains it). |
 
 ## Properties
 
-| Property   | Type     | Description                                                                     |
-| ---------- | -------- | ------------------------------------------------------------------------------- |
-| `content`  | `string` | The exchange as raw HTTP, a curl command or JSON.                               |
-| `exchange` | `object` | `{ request, response }`, parsed. Setting it replaces the content. Never masked. |
+| Property     | Type             | Description                                                                           |
+| ------------ | ---------------- | ------------------------------------------------------------------------------------- |
+| `content`    | `string`         | The exchange as raw HTTP, a curl command or JSON.                                     |
+| `exchange`   | `object`         | `{ request, response }`, parsed. Setting it replaces the content. Never masked.       |
+| `entryIndex` | `number \| null` | The HAR entry shown, `null` without a whole HAR file. Setting it shows another entry. |
 
 `content` and `exchange` can be set before the element is defined.
 
 ## Events
 
-| Event                   | `detail`                                   | When                                    |
-| ----------------------- | ------------------------------------------ | --------------------------------------- |
-| `vt-ready`              | `{ type: "http" }`                         | The exchange was rendered               |
-| `vt-tab-change`         | `{ tab }`: a view, a section or a language | The reader chose a tab                  |
-| `vt-copy`               | `{ text }`                                 | Something was copied                    |
-| `vt-search`             | `{ query, matches }`                       | A search ran                            |
-| `vt-input`, `vt-change` | `{ value }`                                | The source was edited (edit mode)       |
-| `vt-error`              | `{ message, cause }`                       | Loading failed or the text is too large |
+| Event                   | `detail`                                                               | When                                    |
+| ----------------------- | ---------------------------------------------------------------------- | --------------------------------------- |
+| `vt-ready`              | `{ type: "http" }`                                                     | The exchange was rendered               |
+| `vt-tab-change`         | `{ tab }`: a view, a section, a language, or `entry-3` for a HAR entry | The reader chose a tab                  |
+| `vt-copy`               | `{ text }`                                                             | Something was copied                    |
+| `vt-search`             | `{ query, matches }`                                                   | A search ran                            |
+| `vt-input`, `vt-change` | `{ value }`                                                            | The source was edited (edit mode)       |
+| `vt-error`              | `{ message, cause }`                                                   | Loading failed or the text is too large |
 
 A message that cannot be read is shown as a notice that says why (for example "The curl command has no URL.").
 
@@ -193,6 +233,9 @@ In addition to the [shared parts](../common-attributes.md#shared-css-parts):
 | `section-tabs`   | The Body / Headers / Query tabs, and the language tabs |
 | `headers`        | A table of headers, query parameters or form fields    |
 | `message-body`   | A formatted body                                       |
+| `body-image`     | An image body                                          |
+| `entries`        | The bar to pick an entry of a HAR file                 |
+| `connection`     | The Connection table                                   |
 | `snippet`        | The generated code                                     |
 | `secrets-button` | The show / hide secrets button                         |
 

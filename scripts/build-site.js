@@ -171,7 +171,6 @@ async function searchIndex() {
     'integrations.html': 'Integrations',
     'playground.html': 'Playground',
     'themes.html': 'Themes',
-    'lab.html': 'Stress lab',
     'legal.html': 'Legal',
   };
   for (const [file, page] of Object.entries(PAGES)) {

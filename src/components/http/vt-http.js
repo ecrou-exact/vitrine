@@ -29,6 +29,7 @@ import { SNIPPET_HIGHLIGHT, SNIPPET_LANGUAGES, snippet } from './snippets.js';
 /** @typedef {import('./message.js').HttpRequest} HttpRequest */
 /** @typedef {import('./message.js').HttpResponse} HttpResponse */
 /** @typedef {import('./message.js').Header} Header */
+/** @typedef {import('./message.js').HttpConnection} HttpConnection */
 /** @typedef {import('./snippets.js').SnippetLanguage} SnippetLanguage */
 
 const VIEWS = /** @type {const} */ (['exchange', 'code']);
@@ -60,11 +61,14 @@ const LANGUAGE_LABELS = /** @type {Record<SnippetLanguage, string>} */ ({
  * @attr {string} snippets - Code languages and their order, separated by spaces (default `curl fetch python httpie`).
  * @attr {boolean} mask-secrets - Masks credentials until revealed (default on).
  * @attr {"stacked"|"columns"} layout - Response under the request (default) or next to it on wide screens.
+ * @attr {string} entry - In a whole HAR file, the entry shown: its index (from 0) or its URL. Default: the first one. A list lets the reader pick another.
  *
  * @prop {string} content - The exchange as raw HTTP, a curl command or JSON.
  * @prop {{ request: object | null, response: object | null }} exchange - The parsed exchange (read and write).
  *
- * @fires vt-tab-change - A view, section or code language was chosen. Detail: `{ tab }`.
+ * @prop {number | null} entryIndex - Index of the HAR entry shown, `null` without a whole HAR file (read and write).
+ *
+ * @fires vt-tab-change - A view, section, code language or HAR entry was chosen. Detail: `{ tab }` (`entry-3` for an entry).
  *
  * @csspart request - The request section.
  * @csspart response - The response section.
@@ -74,6 +78,9 @@ const LANGUAGE_LABELS = /** @type {Record<SnippetLanguage, string>} */ ({
  * @csspart headers - A headers or parameters table.
  * @csspart message-body - A message body.
  * @csspart snippet - The generated code.
+ * @csspart entries - The bar to pick an entry of a HAR file.
+ * @csspart connection - The Connection table.
+ * @csspart body-image - An image body.
  *
  * @example
  * <vt-http variant="full">
@@ -92,7 +99,7 @@ export class VtHttp extends VtBase {
   static type = 'http';
 
   static componentAttributes = Object.freeze([
-    'view', 'tabs', 'snippets', 'mask-secrets', 'layout',
+    'view', 'tabs', 'snippets', 'mask-secrets', 'layout', 'entry',
   ]); // prettier-ignore
 
   static presets = {
@@ -109,7 +116,7 @@ export class VtHttp extends VtBase {
 
   constructor() {
     super();
-    /** @type {{ text: string, exchange: HttpExchange | null, error: Error | null } | null} */
+    /** @type {{ text: string, entry: number | string | null, exchange: HttpExchange | null, error: Error | null } | null} */
     this.parsed = null;
     /** @type {View | null} */
     this.viewState = null;
@@ -122,6 +129,8 @@ export class VtHttp extends VtBase {
     /** Secrets shown by the reader. */
     this.revealed = false;
     this.panelId = uid('panel');
+    /** @type {number | null} HAR entry picked by the reader; `null` follows `entry`. */
+    this.entryState = null;
     /** @type {CodeEditor | null} */
     this.editor = null;
     /** @type {HTMLElement | null} */
@@ -138,6 +147,7 @@ export class VtHttp extends VtBase {
 
   contentChanged() {
     this.parsed = null;
+    this.entryState = null;
     this.requestTab = null;
     this.responseTab = null;
   }
@@ -150,6 +160,7 @@ export class VtHttp extends VtBase {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'view') this.viewState = null;
     if (name === 'snippets') this.language = null;
+    if (name === 'entry') this.entryState = null;
     super.attributeChangedCallback(name, oldValue, newValue);
   }
 
@@ -158,12 +169,14 @@ export class VtHttp extends VtBase {
   /** @returns {{ exchange: HttpExchange | null, error: Error | null }} */
   parse() {
     const text = this.text ?? '';
-    if (this.parsed?.text !== text) {
+    const entry = this.entryState ?? this.getAttribute('entry');
+    if (this.parsed?.text !== text || this.parsed.entry !== entry) {
       try {
-        this.parsed = { text, exchange: parseExchange(text), error: null };
+        this.parsed = { text, entry, exchange: parseExchange(text, { entry }), error: null };
       } catch (error) {
         this.parsed = {
           text,
+          entry,
           exchange: null,
           error: error instanceof Error ? error : new HttpParseError(String(error)),
         };
@@ -179,6 +192,16 @@ export class VtHttp extends VtBase {
       request: exchange?.request ? structuredClone(exchange.request) : null,
       response: exchange?.response ? structuredClone(exchange.response) : null,
     };
+  }
+
+  /** @type {number | null} */
+  get entryIndex() {
+    return this.parse().exchange?.entry ?? null;
+  }
+
+  set entryIndex(value) {
+    this.entryState = Number.isInteger(value) && Number(value) >= 0 ? Number(value) : null;
+    this.render();
   }
 
   set exchange(value) {
@@ -354,12 +377,83 @@ export class VtHttp extends VtBase {
     if (error) return [noticeView(this.t('invalidHttp', { message: error.message }))];
     if (!exchange || (!exchange.request && !exchange.response))
       return [h('div', { class: 'empty', part: 'empty', text: this.t('empty') })];
-    if (this.view === 'code' && exchange.request) return [this.codeView(exchange)];
+    const bar = exchange.entries ? this.entriesBar(exchange.entries, exchange.entry ?? 0) : null;
+    if (this.view === 'code' && exchange.request)
+      return bar ? [bar, this.codeView(exchange)] : [this.codeView(exchange)];
     const layout = parseEnum(this.getAttribute('layout'), LAYOUTS, 'stacked');
     const http = h('div', { class: `http ${layout}` });
     if (exchange.request) http.append(this.requestSection(exchange.request));
-    if (exchange.response) http.append(this.responseSection(exchange.response));
-    return [http];
+    if (exchange.response)
+      http.append(this.responseSection(exchange.response, exchange.connection ?? null));
+    else if (exchange.connection) http.append(this.connectionTable(exchange.connection));
+    return bar ? [bar, http] : [http];
+  }
+
+  /**
+   * The bar to pick an entry of a HAR file: previous, a list of every entry, next.
+   *
+   * @param {import('./message.js').HarEntrySummary[]} entries
+   * @param {number} index
+   * @returns {HTMLElement}
+   */
+  entriesBar(entries, index) {
+    const t = this.t;
+    const id = `${this.panelId}-entry`;
+    /** @param {number} next */
+    const go = (next) => {
+      if (next < 0 || next >= entries.length || next === index) return;
+      this.entryState = next;
+      this.requestTab = null;
+      this.responseTab = null;
+      this.render();
+      this.shadowRoot?.getElementById(id)?.focus();
+      emit(this, EVENTS.TAB_CHANGE, { tab: `entry-${next}` });
+    };
+    const select = h(
+      'select',
+      {
+        class: 'entry-select',
+        attrs: { id },
+        on: {
+          change: (event) => go(Number(/** @type {HTMLSelectElement} */ (event.target).value)),
+        },
+      },
+      ...entries.map((entry, i) =>
+        h('option', {
+          text: `${i + 1}. ${entry.status ?? '…'} ${entry.method} ${shortUrl(entry.url)}${entry.mimeType ? ` (${entry.mimeType})` : ''}`,
+          attrs: { value: String(i), selected: i === index },
+        }),
+      ),
+    );
+    const previous = iconButton({
+      icon: 'chevron-left',
+      label: t('httpEntryPrevious'),
+      key: 'entry-previous',
+      onClick: () => go(index - 1),
+    });
+    const next = iconButton({
+      icon: 'chevron-right',
+      label: t('httpEntryNext'),
+      key: 'entry-next',
+      onClick: () => go(index + 1),
+    });
+    previous.disabled = index === 0;
+    next.disabled = index === entries.length - 1;
+    return h(
+      'div',
+      { class: 'entries', part: 'entries' },
+      h('label', { class: 'entries-label', text: t('httpEntry'), attrs: { for: id } }),
+      previous,
+      select,
+      next,
+      h('span', {
+        class: 'meta',
+        text: t('httpEntryCount', {
+          index: formatNumber(index + 1, this.locale),
+          total: formatNumber(entries.length, this.locale),
+        }),
+      }),
+    );
   }
 
   /**
@@ -410,15 +504,20 @@ export class VtHttp extends VtBase {
 
   /**
    * @param {HttpResponse} response
+   * @param {HttpConnection | null} connection
    * @returns {HTMLElement}
    */
-  responseSection(response) {
+  responseSection(response, connection) {
     const t = this.t;
     const sections = [
       { id: 'body', label: t('httpBody') },
       { id: 'headers', label: `${t('httpHeaders')} ${response.headers.length}` },
     ];
-    const tab = this.responseTab === 'headers' ? 'headers' : 'body';
+    if (connection) sections.push({ id: 'connection', label: t('httpConnection') });
+    const tab =
+      this.responseTab === 'headers' || (this.responseTab === 'connection' && connection)
+        ? this.responseTab
+        : 'body';
     const kind = `${Math.floor(response.status / 100)}xx`;
     const line = h(
       'div',
@@ -433,14 +532,18 @@ export class VtHttp extends VtBase {
     const meta = [];
     if (response.time !== null)
       meta.push(`${formatNumber(Math.round(response.time), this.locale)} ms`);
-    if (response.body)
-      meta.push(formatSize(new TextEncoder().encode(response.body).length, this.locale));
+    const bytes = connection?.contentSize ?? (response.body ? bodyBytes(response) : null);
+    if (bytes !== null) meta.push(formatSize(bytes, this.locale));
+    if (connection?.tls?.protocol) meta.push(connection.tls.protocol);
     if (meta.length) line.append(h('span', { class: 'meta', text: meta.join(', ') }));
 
-    const content =
-      tab === 'headers'
-        ? this.table(response.headers, t('httpHeaders'))
-        : this.bodyView(response.body, getHeader(response.headers, 'content-type'));
+    const type = getHeader(response.headers, 'content-type') ?? connection?.mimeType ?? null;
+    /** @type {HTMLElement} */
+    let content;
+    if (tab === 'headers') content = this.table(response.headers, t('httpHeaders'));
+    else if (tab === 'connection' && connection) content = this.connectionTable(connection);
+    else if (response.encoding === 'base64') content = this.binaryView(response.body, type);
+    else content = this.bodyView(response.body, type);
     return h(
       'section',
       {
@@ -518,6 +621,98 @@ export class VtHttp extends VtBase {
   }
 
   /**
+   * Server address, HTTP version, TLS and sizes of the exchange.
+   *
+   * @param {HttpConnection} connection
+   * @returns {HTMLElement}
+   */
+  connectionTable(connection) {
+    const t = this.t;
+    const locale = this.locale;
+    /** @type {Header[]} */
+    const rows = [];
+    /** @param {string} label @param {string | null | undefined} value */
+    const add = (label, value) => {
+      if (value) rows.push([label, value]);
+    };
+    /** @param {number | null} value */
+    const bytes = (value) =>
+      value === null ? null : `${formatSize(value, locale)} (${formatNumber(value, locale)} B)`;
+    /** @param {Date | null} value */
+    const date = (value) => (value ? formatDate(value, locale) : null);
+    add(t('httpServerIp'), connection.serverIp);
+    add(t('httpVersion'), connection.httpVersion);
+    add(t('httpMimeType'), connection.mimeType);
+    add(t('httpBodySize'), bytes(connection.bodySize));
+    add(t('httpContentSize'), bytes(connection.contentSize));
+    add(t('httpTransferSize'), bytes(connection.transferSize));
+    const tls = connection.tls;
+    if (tls) {
+      add(t('httpTlsProtocol'), tls.protocol);
+      add(t('httpTlsCipher'), tls.cipher);
+      add(t('httpTlsSubject'), tls.subject);
+      add(t('httpTlsSans'), tls.sans.join(', '));
+      add(t('httpTlsIssuer'), tls.issuer);
+      add(t('httpTlsValidFrom'), date(tls.validFrom));
+      add(t('httpTlsValidTo'), date(tls.validTo));
+    }
+    const table = this.table(rows, t('httpConnection'));
+    table.setAttribute('part', 'connection');
+    table.classList.add('connection');
+    if (tls?.validTo && tls.validTo.getTime() < Date.now()) {
+      const cells = [...table.querySelectorAll('th')];
+      const row = cells.find((cell) => cell.textContent === t('httpTlsValidTo'))?.parentElement;
+      row?.classList.add('expired');
+      row?.lastElementChild?.append(h('span', { class: 'badge', text: ` ${t('httpTlsExpired')}` }));
+    }
+    return table;
+  }
+
+  /**
+   * A binary body (base64 in a HAR): images and icons are shown, anything else (fonts,
+   * archives…) is summed up. Scripts never run: SVG is shown as source, other images go
+   * through an <img> from a data URL built here with a known image type.
+   *
+   * @param {string} body - Base64.
+   * @param {string | null} contentType
+   * @returns {HTMLElement}
+   */
+  binaryView(body, contentType) {
+    if (!body) return h('p', { class: 'none', text: this.t('httpNoBody') });
+    const type = (contentType ?? '').toLowerCase().split(';')[0].trim();
+    const clean = body.replace(/\s+/g, '');
+    if (!/^[a-z0-9+/]*={0,2}$/i.test(clean))
+      return h('p', { class: 'none', text: this.t('httpBinary', { type: type || '?' }) });
+    if (type === 'image/svg+xml' || /(?:xml|html|css|javascript|json|text)/.test(type)) {
+      let decoded;
+      try {
+        decoded = new TextDecoder().decode(Uint8Array.from(atob(clean), (c) => c.charCodeAt(0)));
+      } catch {
+        decoded = '';
+      }
+      if (decoded) return this.bodyView(decoded, type);
+    }
+    const size = Math.floor((clean.length * 3) / 4) - (clean.match(/=+$/)?.[0].length ?? 0);
+    if (RASTER_IMAGES.has(type)) {
+      const image = h('img', {
+        class: 'body-image',
+        part: 'body-image',
+        attrs: { alt: this.t('httpImage', { type }), src: `data:${type};base64,${clean}` },
+      });
+      return h(
+        'figure',
+        { class: 'message-body image-body', part: 'message-body' },
+        image,
+        h('figcaption', { class: 'meta', text: `${type}, ${formatSize(size, this.locale)}` }),
+      );
+    }
+    return h('p', {
+      class: 'none',
+      text: `${this.t('httpBinary', { type: type || '?' })} (${formatSize(size, this.locale)})`,
+    });
+  }
+
+  /**
    * A body, formatted by content type.
    *
    * @param {string} body
@@ -540,6 +735,7 @@ export class VtHttp extends VtBase {
     } else if (/xml|html|svg/.test(type) || (!type && /^\s*</.test(body))) language = 'xml';
     else if (/javascript|ecmascript/.test(type)) language = 'javascript';
     else if (/yaml/.test(type)) language = 'yaml';
+    else if (/\bcss\b/.test(type)) language = 'css';
     const view = buildCodeView(text, {
       language,
       lineNumbers: false,
@@ -727,4 +923,60 @@ function formatSize(bytes, locale) {
     unit += 1;
   }
   return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value)} ${units[unit]}`;
+}
+
+/** Image types shown inline (no script can run in them). */
+const RASTER_IMAGES = new Set([
+  'image/png',
+  'image/gif',
+  'image/jpeg',
+  'image/jpg',
+  'image/webp',
+  'image/avif',
+  'image/bmp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+]);
+
+/**
+ * Decoded size of a response body.
+ *
+ * @param {HttpResponse} response
+ * @returns {number}
+ */
+function bodyBytes(response) {
+  if (response.encoding === 'base64') {
+    const clean = response.body.replace(/\s+/g, '');
+    return Math.max(0, Math.floor((clean.length * 3) / 4) - (clean.match(/=+$/)?.[0].length ?? 0));
+  }
+  return new TextEncoder().encode(response.body).length;
+}
+
+/**
+ * @param {Date} value
+ * @param {string} locale
+ * @returns {string}
+ */
+function formatDate(value, locale) {
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+  }).format(value);
+}
+
+/**
+ * A URL without its scheme, cut in the middle when long.
+ *
+ * @param {string} url
+ * @returns {string}
+ */
+function shortUrl(url) {
+  const bare = url.replace(/^https?:\/\//i, '');
+  return bare.length > 90 ? `${bare.slice(0, 60)}…${bare.slice(-28)}` : bare;
 }

@@ -1,0 +1,384 @@
+/*
+ * Packet captures: a summary, filters, the packet list, the opened packet with its layers
+ * beside its bytes, conversations and host names. Protocols are written in words; colors
+ * only repeat them.
+ */
+.pcap-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.pcap-body.dragging {
+  outline: 2px dashed var(--_accent);
+  outline-offset: -6px;
+}
+
+.pcap-muted {
+  color: var(--_fg-muted);
+}
+
+.pcap-error {
+  margin: 0;
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.pcap-label {
+  margin: 0 0 var(--_space-1);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pcap-zone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-2);
+  padding: var(--_space-4) var(--_space-3);
+  border: 1px dashed var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  color: var(--_fg-muted);
+}
+
+.pcap-zone svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.pcap-zone .text-btn,
+.pcap-facts .text-btn,
+.pcap-packet-head .text-btn {
+  color: var(--_accent-fg);
+}
+
+.pcap-note {
+  flex-basis: 100%;
+  font-size: var(--_font-size-small);
+}
+
+.pcap-summary {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.pcap-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+}
+
+.pcap-file {
+  overflow-wrap: anywhere;
+}
+
+.pcap-protocols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pcap-proto {
+  display: inline-block;
+  padding: 0 6px;
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pcap-proto.p-dns {
+  border-inline-start-color: var(--_syntax-function);
+}
+
+.pcap-proto.p-tls {
+  border-inline-start-color: var(--_success);
+}
+
+.pcap-proto.p-http {
+  border-inline-start-color: var(--_warning);
+}
+
+.pcap-proto.p-tcp {
+  border-inline-start-color: var(--_syntax-keyword);
+}
+
+.pcap-proto.p-udp {
+  border-inline-start-color: var(--_syntax-type);
+}
+
+.pcap-proto.p-icmp {
+  border-inline-start-color: var(--_syntax-string);
+}
+
+.pcap-proto.p-arp {
+  border-inline-start-color: var(--_syntax-number);
+}
+
+.pcap-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.pcap-chip {
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--_font-size-small);
+  cursor: pointer;
+}
+
+.pcap-chip.on {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  font-weight: 600;
+}
+
+.pcap-chip:focus-visible,
+.pcap-open:focus-visible,
+.pcap-field:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.pcap-query {
+  flex: 1 1 14em;
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font: inherit;
+}
+
+.pcap-scroll {
+  max-height: min(60vh, 520px);
+  overflow: auto;
+}
+
+.pcap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--_font-size-small);
+}
+
+.pcap-table th,
+.pcap-table td {
+  padding: 3px var(--_space-2);
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.pcap-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--_surface);
+  color: var(--_fg-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.pcap-table tbody th {
+  font-weight: 500;
+}
+
+.pcap-table code {
+  font-family: var(--_font-mono);
+  white-space: nowrap;
+}
+
+.pcap-num {
+  font-variant-numeric: tabular-nums;
+  text-align: end !important;
+  white-space: nowrap;
+}
+
+.pcap-info {
+  min-width: 16em;
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+}
+
+.pcap-row.open > * {
+  background: var(--_accent-soft);
+}
+
+.pcap-open {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--_accent-fg);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pcap-more {
+  margin-top: var(--_space-2);
+}
+
+.pcap-packet {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.pcap-packet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.pcap-packet-head h3 {
+  margin: 0;
+  font-size: 1em;
+}
+
+.pcap-packet-head .text-btn {
+  margin-inline-start: auto;
+}
+
+.pcap-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--_space-3);
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .pcap-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pcap-layers {
+  display: grid;
+  gap: var(--_space-1);
+  min-width: 0;
+}
+
+.pcap-layer summary {
+  cursor: pointer;
+}
+
+.pcap-layer-name {
+  font-weight: 600;
+}
+
+.pcap-layer dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 1px var(--_space-3);
+  margin: var(--_space-1) 0 var(--_space-2);
+  padding-inline-start: var(--_space-4);
+}
+
+.pcap-layer dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.pcap-layer code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.pcap-field {
+  padding: 0 2px;
+  border: 0;
+  border-radius: var(--_radius-sm);
+  background: none;
+  color: var(--_fg-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.pcap-field:hover {
+  color: var(--_fg);
+}
+
+.pcap-field.on {
+  background: var(--_accent-soft);
+  color: var(--_fg);
+  font-weight: 600;
+}
+
+.pcap-dump-box {
+  min-width: 0;
+}
+
+.pcap-dump {
+  max-height: 360px;
+  padding: var(--_space-2);
+  overflow: auto;
+  border-radius: var(--_radius-sm);
+  background: var(--_code-bg);
+  color: var(--_code-fg);
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+  line-height: 1.5;
+}
+
+.pcap-dump-row {
+  display: flex;
+  gap: var(--_space-3);
+  white-space: pre;
+}
+
+.pcap-offset {
+  color: var(--_syntax-comment);
+}
+
+.pcap-hex {
+  display: inline-grid;
+  grid-template-columns: repeat(16, 2.5ch);
+}
+
+.pcap-hex .b:nth-child(8) {
+  margin-inline-end: 0.5ch;
+}
+
+.pcap-ascii {
+  display: inline-grid;
+  grid-template-columns: repeat(16, 1ch);
+}
+
+.pcap-dump .b.mark {
+  border-radius: 2px;
+  background: var(--_accent);
+  color: var(--_on-accent);
+}
+
+@media (forced-colors: active) {
+  .pcap-dump .b.mark,
+  .pcap-field.on {
+    outline: 1px solid Highlight;
+  }
+}

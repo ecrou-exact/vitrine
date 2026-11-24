@@ -31,6 +31,29 @@
  * @property {Header[]} headers
  * @property {string} body
  * @property {number | null} time - Duration in milliseconds, when known.
+ * @property {"base64" | null} [encoding] - `base64` when the body is binary, encoded (HAR).
+ */
+
+/**
+ * @typedef {object} TlsDetails
+ * @property {string | null} protocol - `TLS 1.3`…
+ * @property {string | null} cipher
+ * @property {string | null} subject - Subject name of the server certificate.
+ * @property {string[]} sans - Subject alternative names.
+ * @property {string | null} issuer
+ * @property {Date | null} validFrom
+ * @property {Date | null} validTo
+ */
+
+/**
+ * @typedef {object} HttpConnection
+ * @property {string | null} serverIp
+ * @property {string | null} httpVersion - `HTTP/2`, `h3`…
+ * @property {TlsDetails | null} tls
+ * @property {number | null} bodySize - Body bytes on the wire (compressed).
+ * @property {number | null} contentSize - Decoded body bytes.
+ * @property {number | null} transferSize - Headers and body on the wire.
+ * @property {string | null} mimeType
  */
 
 /**
@@ -38,7 +61,21 @@
  * @property {HttpRequest | null} request
  * @property {HttpResponse | null} response
  * @property {"http" | "curl" | "json" | "har"} format
+ * @property {HttpConnection | null} [connection] - Server address, TLS and sizes, when known.
+ * @property {HarEntrySummary[]} [entries] - Every entry of a whole HAR file, in order.
+ * @property {number} [entry] - Index of the entry shown, in `entries`.
  */
+
+/**
+ * @typedef {object} HarEntrySummary
+ * @property {string} method
+ * @property {string} url
+ * @property {number | null} status
+ * @property {string | null} mimeType
+ */
+
+/** Entries of a HAR file listed at most. */
+export const MAX_ENTRIES = 5000;
 
 /** Headers kept at most per message. */
 export const MAX_HEADERS = 200;
@@ -94,13 +131,16 @@ export function getHeader(headers, name) {
  * Reads an HTTP exchange.
  *
  * @param {string} text
+ * @param {{ entry?: number | string | null }} [options] - `entry`: in a whole HAR file, the
+ *   entry to read, by index (from 0) or by URL (the first entry with this exact URL, else
+ *   the first whose URL contains it). Default: the first entry.
  * @returns {HttpExchange}
  * @throws {HttpParseError}
  */
-export function parseExchange(text) {
+export function parseExchange(text, options = {}) {
   const trimmed = text.replace(/^\uFEFF/, '').trim();
   if (!trimmed) return { request: null, response: null, format: 'http' };
-  if (/^[[{]/.test(trimmed)) return fromJson(trimmed);
+  if (/^[[{]/.test(trimmed)) return fromJson(trimmed, options.entry ?? null);
   if (/^curl(?:\s|$)/.test(trimmed))
     return { request: fromCurl(trimmed), response: null, format: 'curl' };
   return fromRaw(trimmed);
@@ -424,9 +464,10 @@ function toBase64(text) {
 
 /**
  * @param {string} text
+ * @param {number | string | null} entry
  * @returns {HttpExchange}
  */
-function fromJson(text) {
+function fromJson(text, entry) {
   /** @type {any} */
   let data;
   try {
@@ -434,8 +475,17 @@ function fromJson(text) {
   } catch (error) {
     throw new HttpParseError(error instanceof Error ? error.message : 'Invalid JSON.');
   }
-  // A whole HAR file: take its first entry.
-  if (data?.log?.entries) data = data.log.entries[0] ?? {};
+  // A whole HAR file: one of its entries, the others listed.
+  /** @type {HarEntrySummary[] | null} */
+  let entries = null;
+  let index = 0;
+  if (Array.isArray(data?.log?.entries)) {
+    const all = data.log.entries.slice(0, MAX_ENTRIES);
+    const list = all.map(summarize);
+    entries = list;
+    index = findEntry(list, entry);
+    data = all[index] ?? {};
+  }
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
     throw new HttpParseError('Expected an object with "request" and/or "response".');
   }
@@ -478,6 +528,7 @@ function fromJson(text) {
           : REASONS[status] || '',
       headers: readJsonHeaders(res.headers),
       body: bodyText(res.body ?? res.content?.text),
+      encoding: res.content?.encoding === 'base64' ? 'base64' : null,
       time:
         typeof data.time === 'number' && data.time >= 0
           ? data.time
@@ -490,7 +541,131 @@ function fromJson(text) {
   }
   if (!request && !response)
     throw new HttpParseError('Expected an object with "request" and/or "response".');
-  return { request, response, format: har ? 'har' : 'json' };
+  /** @type {HttpExchange} */
+  const exchange = {
+    request,
+    response,
+    format: har || entries ? 'har' : 'json',
+    connection: readConnection(data),
+  };
+  if (entries && entries.length > 1) {
+    exchange.entries = entries;
+    exchange.entry = index;
+  }
+  return exchange;
+}
+
+/**
+ * @param {any} item - A HAR entry.
+ * @returns {HarEntrySummary}
+ */
+function summarize(item) {
+  const status = Number(item?.response?.status);
+  const method = String(item?.request?.method ?? 'GET').toUpperCase();
+  return {
+    method: METHOD.test(method) ? method : 'GET',
+    url: typeof item?.request?.url === 'string' ? item.request.url.slice(0, MAX_HEADER) : '',
+    status: Number.isInteger(status) && status >= 100 && status <= 999 ? status : null,
+    mimeType: text(item?.response?.content?.mimeType)?.split(';')[0].trim() ?? null,
+  };
+}
+
+/**
+ * Index of the entry asked for: a number (from 0) or a URL.
+ *
+ * @param {HarEntrySummary[]} entries
+ * @param {number | string | null} wanted
+ * @returns {number}
+ */
+function findEntry(entries, wanted) {
+  if (wanted === null || wanted === '') return 0;
+  const number = typeof wanted === 'number' ? wanted : /^\d+$/.test(wanted) ? Number(wanted) : NaN;
+  if (Number.isInteger(number)) return number >= 0 && number < entries.length ? number : 0;
+  const url = String(wanted);
+  const exact = entries.findIndex((e) => e.url === url);
+  if (exact >= 0) return exact;
+  const partial = entries.findIndex((e) => e.url.includes(url));
+  return partial >= 0 ? partial : 0;
+}
+
+/**
+ * Connection details of a HAR entry (or of a `connection` object in plain JSON): server
+ * address, HTTP version, TLS (`_securityDetails`, as recorded by Chromium and Playwright)
+ * and sizes. `null` when there is none.
+ *
+ * @param {any} data
+ * @returns {HttpConnection | null}
+ */
+function readConnection(data) {
+  const extra = data.connection && typeof data.connection === 'object' ? data.connection : {};
+  const res = data.response && typeof data.response === 'object' ? data.response : {};
+  const security = data._securityDetails ?? res._securityDetails ?? extra.tls ?? null;
+  const ip = text(data.serverIPAddress ?? extra.serverIp);
+  const connection = {
+    serverIp: ip ? ip.replace(/^\[(.*)\]$/, '$1') : null,
+    httpVersion: text(res.httpVersion ?? extra.httpVersion),
+    tls: security && typeof security === 'object' ? readTls(security) : null,
+    bodySize: size(res.bodySize ?? extra.bodySize),
+    contentSize: size(res.content?.size ?? extra.contentSize),
+    transferSize: size(res._transferSize ?? extra.transferSize),
+    mimeType: text(res.content?.mimeType ?? extra.mimeType),
+  };
+  // A MIME type alone is already in the headers: no connection to show.
+  const known = Object.entries(connection).filter(([key]) => key !== 'mimeType');
+  return known.some(([, value]) => value !== null) ? connection : null;
+}
+
+/**
+ * @param {any} value
+ * @returns {TlsDetails}
+ */
+function readTls(value) {
+  const sans = Array.isArray(value.sanList) ? value.sanList : value.sans;
+  return {
+    protocol: text(value.protocol),
+    cipher: text(value.cipher),
+    subject: text(value.subjectName ?? value.subject),
+    sans: Array.isArray(sans) ? sans.slice(0, MAX_HEADERS).map(String) : [],
+    issuer: text(value.issuer),
+    validFrom: date(value.validFrom),
+    validTo: date(value.validTo),
+  };
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string | null}
+ */
+function text(value) {
+  if (typeof value !== 'string' && typeof value !== 'number') return null;
+  const result = String(value).trim().slice(0, MAX_HEADER);
+  return result || null;
+}
+
+/**
+ * Sizes in HAR use -1 for "unknown".
+ *
+ * @param {unknown} value
+ * @returns {number | null}
+ */
+function size(value) {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+/**
+ * A date as an ISO string, or as Unix seconds (`_securityDetails`).
+ *
+ * @param {unknown} value
+ * @returns {Date | null}
+ */
+function date(value) {
+  /** @type {Date} */
+  let result;
+  if (typeof value === 'number' && Number.isFinite(value))
+    result = new Date(value < 1e11 ? value * 1000 : value);
+  else if (typeof value === 'string' && value.trim()) result = new Date(value.trim());
+  else return null;
+  return Number.isNaN(result.getTime()) ? null : result;
 }
 
 /**

@@ -171,6 +171,93 @@ const MORE = {
     "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nset-cookie: a=1; SameSite=None",
     { variant: 'full' },
   ],
+  'vt-email': [
+    'Authentication-Results: mx; spf=pass; dkim=fail; dmarc=fail\nReceived: from a ([203.0.113.6]) by mx with SMTP; Tue, 17 Nov 2026 10:00:02 +0100\nFrom: "a@bank.example" <x@evil.xyz>\nReply-To: r@other.example\nSubject: Hi\nContent-Type: multipart/mixed; boundary=b\n\n--b\nContent-Type: text/html\n\n<a href="https://evil.xyz">https://bank.example</a>\n--b\nContent-Type: application/octet-stream; name="a.pdf.exe"\nContent-Transfer-Encoding: base64\n\nTVqQ\n--b--',
+    { variant: 'full' },
+  ],
+  'vt-dns': [
+    'example.com. 300 IN TXT "v=spf1 +all"\n_dmarc.example.com. 300 IN TXT "v=DMARC1; p=none"\nexample.com. 300 IN MX 10 mail.example.com.',
+    { variant: 'full' },
+  ],
+  'vt-nmap': [
+    'Nmap scan report for a.example (203.0.113.10)\nHost is up (0.01s latency).\nPORT STATE SERVICE VERSION\n22/tcp open ssh OpenSSH 9\n| ssh-hostkey:\n|_  256 aa (ED25519)\n3389/tcp open ms-wbt-server\n25/tcp filtered smtp',
+    { variant: 'full', all: '' },
+  ],
+  'vt-url': [
+    'https://www.paypal.com@evil.example/login?utm_source=mail&next=https://evil.example/x\nhttps://xn--80ak6aa92e.com/',
+    { variant: 'full', chain: '' },
+  ],
+  'vt-hash': ['Hello, Vitrine', { variant: 'full', expected: 'd41d8cd98f00b204e9800998ecf8427e' }],
+  'vt-waterfall': [
+    JSON.stringify({
+      log: {
+        pages: [{ id: 'p', title: 'Shop', startedDateTime: '2026-11-17T10:00:00.000Z', pageTimings: { onContentLoad: 300, onLoad: 400 } }], // prettier-ignore
+        entries: [
+          { pageref: 'p', startedDateTime: '2026-11-17T10:00:00.000Z', time: 120, _resourceType: 'document', request: { method: 'GET', url: 'https://shop.example/' }, response: { status: 200, content: { size: 9000, mimeType: 'text/html' }, bodySize: 3000 }, timings: { dns: 10, connect: 30, ssl: 15, send: 1, wait: 60, receive: 19 } }, // prettier-ignore
+          { pageref: 'p', startedDateTime: '2026-11-17T10:00:00.150Z', time: 80, request: { method: 'GET', url: 'https://cdn.other.example/a.js' }, response: { status: 404, content: { size: 0, mimeType: 'text/javascript' } }, timings: { wait: 70, receive: 10 } }, // prettier-ignore
+        ],
+      },
+    }),
+    { variant: 'full' },
+  ],
+  'vt-yara': [
+    'rule Loader : banker {\n  meta:\n    description = "Loader"\n  strings:\n    $mz = { 4D 5A ?? [2-4] 00 }\n    $a = "cmd.exe" nocase wide\n    $b = "ab"\n  condition:\n    uint16(0) == 0x5A4D and filesize < 200KB and any of them and $c\n}',
+    { variant: 'full' },
+  ],
+  'vt-sigma': [
+    '{"title":"Whoami","id":"502b42de-4306-40b4-9596-6f590c81f073","status":"test","level":"high","tags":["attack.discovery","attack.t1033"],"logsource":{"category":"process_creation","product":"windows"},"detection":{"selection":{"Image|endswith":"\\\\whoami.exe"},"filter":{"User|contains":["AUTHORI","AUTORI"]},"unused":{"a":1},"condition":"selection and not filter"},"falsepositives":["Admins"]}',
+    { variant: 'full' },
+  ],
+  'vt-pcap': [
+    '1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==',
+    { variant: 'full' },
+  ],
+  'vt-semver': ['1.0.0 1.2.3 1.4.2 1.5.0-rc.1 2.0.0', { variant: 'full', range: '^1.2.3' }],
+  'vt-contrast': [
+    'Body: #333 on #fff\nMuted: #999 on #fff\nLink: #0b6bcb / #f5f5f5',
+    { variant: 'full' },
+  ],
+  'vt-sbom': [
+    '{"bomFormat":"CycloneDX","specVersion":"1.6","serialNumber":"urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79","version":1,"metadata":{"timestamp":"2026-11-17T10:00:00Z","tools":{"components":[{"type":"application","vendor":"anchore","name":"syft","version":"1.16.0"}]},"component":{"type":"application","bom-ref":"app","name":"shop-web","version":"3.2.0","purl":"pkg:npm/shop-web@3.2.0"}},"components":[{"type":"framework","bom-ref":"pkg:npm/express@4.19.2","name":"express","version":"4.19.2","purl":"pkg:npm/express@4.19.2","licenses":[{"license":{"id":"MIT"}}],"hashes":[{"alg":"SHA-512","content":"aa11"}]},{"type":"library","bom-ref":"pkg:npm/body-parser@1.20.2","name":"body-parser","version":"1.20.2","purl":"pkg:npm/body-parser@1.20.2","licenses":[{"license":{"id":"MIT"}}]},{"type":"library","bom-ref":"pkg:npm/qs@6.11.0","name":"qs","version":"6.11.0","purl":"pkg:npm/qs@6.11.0","licenses":[{"license":{"id":"BSD-3-Clause"}}]},{"type":"library","bom-ref":"pkg:npm/%40img/sharp@0.33.0","group":"@img","name":"sharp","version":"0.33.0","purl":"pkg:npm/%40img/sharp@0.33.0","licenses":[{"expression":"Apache-2.0 AND LGPL-3.0-or-later"}]},{"type":"library","bom-ref":"pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1","group":"org.apache.logging.log4j","name":"log4j-core","version":"2.14.1","purl":"pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1","licenses":[{"license":{"id":"Apache-2.0"}}],"scope":"optional"},{"type":"library","bom-ref":"pkg:npm/left-pad@1.3.0","name":"left-pad","version":"1.3.0","purl":"pkg:npm/left-pad@1.3.0"}],"dependencies":[{"ref":"app","dependsOn":["pkg:npm/express@4.19.2","pkg:npm/%40img/sharp@0.33.0","pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"]},{"ref":"pkg:npm/express@4.19.2","dependsOn":["pkg:npm/body-parser@1.20.2","pkg:npm/qs@6.11.0"]},{"ref":"pkg:npm/body-parser@1.20.2","dependsOn":["pkg:npm/qs@6.11.0"]},{"ref":"pkg:npm/qs@6.11.0","dependsOn":[]}],"vulnerabilities":[{"id":"CVE-2021-44228","source":{"name":"NVD","url":"https://nvd.nist.gov/vuln/detail/CVE-2021-44228"},"ratings":[{"source":{"name":"NVD"},"score":10.0,"severity":"critical","method":"CVSSv31","vector":"CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"}],"cwes":[502,400,20],"description":"Apache Log4j2 JNDI features do not protect against attacker-controlled LDAP endpoints.","recommendation":"Upgrade to 2.17.1 or later.","analysis":{"state":"exploitable"},"affects":[{"ref":"pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"}]},{"id":"GHSA-hrpp-h998-j3pp","source":{"name":"GitHub"},"ratings":[{"severity":"high","method":"CVSSv31","score":7.5}],"description":"qs vulnerable to prototype pollution.","affects":[{"ref":"pkg:npm/qs@6.11.0"}]},{"id":"CVE-2024-43796","source":{"name":"NVD"},"ratings":[{"severity":"low","score":2.3,"method":"CVSSv4"}],"analysis":{"state":"not_affected","justification":"code_not_reachable"},"affects":[{"ref":"pkg:npm/express@4.19.2"}]}]}',
+    { variant: 'full' },
+  ],
+  'vt-dockerfile': [
+    'FROM node:20-alpine AS build\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npm run build\n\nFROM nginx:latest\nCOPY --from=build /app/dist /usr/share/nginx/html\nRUN apt-get update && apt-get install -y curl\nEXPOSE 80\nCMD ["nginx", "-g", "daemon off;"]',
+    { variant: 'full' },
+  ],
+  'vt-lighthouse': [
+    '{"id":"https://shop.example/","loadingExperience":{"id":"https://shop.example/","overall_category":"AVERAGE","metrics":{"LARGEST_CONTENTFUL_PAINT_MS":{"percentile":2900,"category":"AVERAGE","distributions":[{"min":0,"max":2500,"proportion":0.68},{"min":2500,"max":4000,"proportion":0.2},{"min":4000,"proportion":0.12}]},"INTERACTION_TO_NEXT_PAINT":{"percentile":180,"category":"FAST","distributions":[{"proportion":0.8},{"proportion":0.15},{"proportion":0.05}]},"CUMULATIVE_LAYOUT_SHIFT_SCORE":{"percentile":31,"category":"SLOW","distributions":[{"proportion":0.55},{"proportion":0.2},{"proportion":0.25}]}}},"lighthouseResult":{"requestedUrl":"https://shop.example/","finalDisplayedUrl":"https://shop.example/","lighthouseVersion":"12.2.1","fetchTime":"2026-11-17T10:00:00.000Z","configSettings":{"formFactor":"mobile"},"runWarnings":["The page loaded too slowly to finish within the time limit."],"categories":{"performance":{"title":"Performance","score":0.62,"auditRefs":[{"id":"first-contentful-paint","weight":10,"group":"metrics"},{"id":"largest-contentful-paint","weight":25,"group":"metrics"},{"id":"total-blocking-time","weight":30,"group":"metrics"},{"id":"cumulative-layout-shift","weight":25,"group":"metrics"},{"id":"speed-index","weight":10,"group":"metrics"},{"id":"render-blocking-resources","weight":0,"group":"load-opportunities"},{"id":"uses-optimized-images","weight":0,"group":"load-opportunities"},{"id":"dom-size","weight":0,"group":"diagnostics"}]},"accessibility":{"title":"Accessibility","score":0.88,"auditRefs":[{"id":"color-contrast","weight":7,"group":"a11y-color-contrast"},{"id":"image-alt","weight":10,"group":"a11y-names-labels"}]},"best-practices":{"title":"Best Practices","score":0.96,"auditRefs":[{"id":"is-on-https","weight":5}]},"seo":{"title":"SEO","score":1,"auditRefs":[{"id":"document-title","weight":1}]}},"audits":{"first-contentful-paint":{"id":"first-contentful-paint","title":"First Contentful Paint","score":0.72,"scoreDisplayMode":"numeric","numericValue":2210,"displayValue":"2.2 s"},"largest-contentful-paint":{"id":"largest-contentful-paint","title":"Largest Contentful Paint","score":0.31,"scoreDisplayMode":"numeric","numericValue":4630,"displayValue":"4.6 s"},"total-blocking-time":{"id":"total-blocking-time","title":"Total Blocking Time","score":0.58,"scoreDisplayMode":"numeric","numericValue":420,"displayValue":"420 ms"},"cumulative-layout-shift":{"id":"cumulative-layout-shift","title":"Cumulative Layout Shift","score":0.9,"scoreDisplayMode":"numeric","numericValue":0.08,"displayValue":"0.08"},"speed-index":{"id":"speed-index","title":"Speed Index","score":0.66,"scoreDisplayMode":"numeric","numericValue":4900,"displayValue":"4.9 s"},"render-blocking-resources":{"id":"render-blocking-resources","title":"Eliminate render-blocking resources","description":"Resources are blocking the first paint of your page. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).","score":0.3,"scoreDisplayMode":"metricSavings","displayValue":"Potential savings of 780 ms","details":{"type":"opportunity","overallSavingsMs":780,"headings":[{"key":"url","valueType":"url","label":"URL"},{"key":"totalBytes","valueType":"bytes","label":"Transfer Size"},{"key":"wastedMs","valueType":"timespanMs","label":"Potential Savings"}],"items":[{"url":"https://shop.example/css/app.css","totalBytes":48200,"wastedMs":540},{"url":"https://fonts.example/css2?family=Inter","totalBytes":1300,"wastedMs":240}]}},"uses-optimized-images":{"id":"uses-optimized-images","title":"Efficiently encode images","description":"Optimized images load faster.","score":0.5,"scoreDisplayMode":"metricSavings","displayValue":"Potential savings of 312 KiB","details":{"type":"opportunity","overallSavingsMs":300,"overallSavingsBytes":319488,"headings":[{"key":"url","valueType":"url","label":"URL"}],"items":[{"url":"https://shop.example/img/hero.jpg"}]}},"dom-size":{"id":"dom-size","title":"Avoid an excessive DOM size","score":0.6,"scoreDisplayMode":"numeric","displayValue":"1,840 elements"},"color-contrast":{"id":"color-contrast","title":"Background and foreground colors do not have a sufficient contrast ratio.","score":0,"scoreDisplayMode":"binary","details":{"type":"table","headings":[{"key":"node","valueType":"node","label":"Failing Elements"}],"items":[{"node":{"type":"node","snippet":"<a class=\\"muted\\">Terms</a>","selector":"footer a.muted"}}]}},"image-alt":{"id":"image-alt","title":"Image elements have [alt] attributes","score":1,"scoreDisplayMode":"binary"},"is-on-https":{"id":"is-on-https","title":"Uses HTTPS","score":1,"scoreDisplayMode":"binary"},"document-title":{"id":"document-title","title":"Document has a <title> element","score":1,"scoreDisplayMode":"binary"}}}}',
+    { variant: 'full' },
+  ],
+  'vt-a11y': [
+    '{"testEngine":{"name":"axe-core","version":"4.10.2"},"timestamp":"2026-11-17T10:00:00.000Z","url":"https://shop.example/checkout","violations":[{"id":"color-contrast","impact":"serious","tags":["cat.color","wcag2aa","wcag143","TTv5","EN-301-549"],"description":"Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds","help":"Elements must meet minimum color contrast ratio thresholds","helpUrl":"https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI","nodes":[{"impact":"serious","html":"<a class=\\"muted\\" href=\\"/terms\\">Terms</a>","target":["footer > a.muted"],"failureSummary":"Fix any of the following:\\n  Element has insufficient color contrast of 2.84 (foreground color: #999999, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"},{"impact":"serious","html":"<span class=\\"hint\\">Optional</span>","target":["#email-hint"],"failureSummary":"Fix any of the following:\\n  Element has insufficient color contrast of 3.1"}]},{"id":"label","impact":"critical","tags":["cat.forms","wcag2a","wcag412","wcag131"],"description":"Ensure every form element has a label","help":"Form elements must have labels","helpUrl":"https://dequeuniversity.com/rules/axe/4.10/label?application=axeAPI","nodes":[{"impact":"critical","html":"<input type=\\"text\\" name=\\"zip\\">","target":[["#payment-frame","input[name=\\"zip\\"]"]],"failureSummary":"Fix any of the following:\\n  Form element does not have an implicit (wrapped) <label>\\n  Form element does not have an explicit <label>\\n  Element has no title attribute"}]},{"id":"region","impact":"moderate","tags":["cat.keyboard","best-practice"],"description":"Ensure all page content is contained by landmarks","help":"All page content should be contained by landmarks","helpUrl":"javascript:alert(1)","nodes":[{"impact":"moderate","html":"<div class=\\"promo\\">Free shipping</div>","target":[".promo"],"failureSummary":"Fix all of the following:\\n  Some page content is not contained by landmarks"}]}],"incomplete":[{"id":"color-contrast","impact":"serious","tags":["wcag2aa","wcag143"],"help":"Elements must meet minimum color contrast ratio thresholds","nodes":[{"html":"<h1 class=\\"over-image\\">Sale</h1>","target":["h1.over-image"],"failureSummary":"Fix any of the following:\\n  Element\'s background color could not be determined due to a background image"}]}],"passes":[{"id":"document-title"},{"id":"html-has-lang"},{"id":"image-alt"}],"inapplicable":[{"id":"video-caption"}]}',
+    { variant: 'full' },
+  ],
+  'vt-cookies': [
+    'Set-Cookie: __Host-sid=abc123; Domain=example.com; Path=/; Secure; HttpOnly; SameSite=Lax\nSet-Cookie: sessionid=1; Max-Age=63072000\nSet-Cookie: theme=dark; Path=/; Secure; HttpOnly; SameSite=Strict',
+    { variant: 'full', url: 'https://shop.example.com/', 'mask-values': 'false' },
+  ],
+  'vt-spinner': ['', { type: 'dots', text: 'Loading results…' }],
+  'vt-progress': ['', { value: '42', text: 'Uploading', 'show-value': 'percent', buffer: '60' }],
+  'vt-progress-ring': ['', { value: '72', text: 'Storage', status: 'warning' }],
+  'vt-skeleton': ['', { shape: 'card', media: '', avatar: '' }],
+  'vt-loading-overlay': ['', { text: 'Saving…', value: '40', cancelable: '' }],
+  'vt-page-progress': ['', { active: '', value: '0.4' }],
+  'vt-loading-steps': [
+    'done Build (42s)\nrunning Push — layer 3\nerror Migrate — timeout\nskipped Notify\npending Roll out',
+    { text: 'Deploying', cancelable: '' },
+  ],
+  'vt-typing': ['', { name: 'Ada', 'show-text': '' }],
+  'vt-loading-button': ['', { loading: '', 'loading-text': 'Saving…' }],
+  'vt-loading-message': ['Connecting…\nFetching…', { elapsed: '', 'slow-after': '1ms' }],
+  'vt-map': [
+    'Paris\nOffice: 35.6762, 139.6503\nBrazil 213\nParis -> New York',
+    { variant: 'full' },
+  ],
+  'vt-redirects': [
+    '301 http://a.example/\n302 https://a.example/?utm_source=x\n302 http://b.example.net/ (js)\n404 https://b.example.net/x',
+    { variant: 'full' },
+  ],
 };
 
 test.describe('Accessibility (axe-core, WCAG 2.2 AA)', () => {

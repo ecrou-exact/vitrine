@@ -245,6 +245,84 @@ test.describe('<vt-http>', () => {
     await expect(el.locator('[part~="url"]')).toHaveText('https://x.dev/items/7');
   });
 
+  const PNG =
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  /** @param {object} response */
+  const harEntry = (response) =>
+    JSON.stringify({
+      serverIPAddress: '192.0.2.10',
+      _securityDetails: {
+        protocol: 'TLS 1.3',
+        subjectName: 'static.example.org',
+        issuer: 'R11',
+        validFrom: '2020-01-01T00:00:00Z',
+        validTo: '2021-01-01T00:00:00Z',
+      },
+      request: { method: 'GET', url: 'https://static.example.org/a', headers: [] },
+      response: { status: 200, headers: [], httpVersion: 'HTTP/2', bodySize: 70, ...response },
+    });
+
+  test('shows the connection: server IP, TLS and an expired certificate', async ({ page }) => {
+    await mount(
+      page,
+      'vt-http',
+      { variant: 'full' },
+      harEntry({ content: { mimeType: 'text/css', size: 12, text: 'a{color:red}' } }),
+    );
+    const el = page.locator('#el');
+    await expect(el.locator('[part~="response"] .meta')).toContainText('TLS 1.3');
+    await el.getByRole('tab', { name: 'Connection' }).click();
+    const table = el.locator('[part~="connection"]');
+    await expect(table).toContainText('192.0.2.10');
+    await expect(table).toContainText('static.example.org');
+    await expect(table.locator('tr.expired')).toContainText('expired');
+  });
+
+  test('shows images and icons, and sums up other binary bodies', async ({ page }) => {
+    await mount(
+      page,
+      'vt-http',
+      { variant: 'full' },
+      harEntry({ content: { mimeType: 'image/png', encoding: 'base64', text: PNG } }),
+    );
+    const img = page.locator('#el [part~="body-image"]');
+    await expect(img).toHaveAttribute('src', `data:image/png;base64,${PNG}`);
+    await expect.poll(() => img.evaluate((node) => node.naturalWidth)).toBe(1);
+
+    await mount(
+      page,
+      'vt-http',
+      { variant: 'full' },
+      harEntry({ content: { mimeType: 'font/woff2', encoding: 'base64', text: 'd09GMgABAAA=' } }),
+    );
+    await expect(page.locator('#el [part~="response"]')).toContainText(
+      'Binary content (font/woff2)',
+    );
+  });
+
+  test('browses the entries of a HAR file', async ({ page }) => {
+    const har = JSON.stringify({
+      log: {
+        entries: ['/', '/app.css', '/logo.png'].map((path) => ({
+          request: { method: 'GET', url: `https://example.org${path}`, headers: [] },
+          response: { status: 200, headers: [], content: { mimeType: 'text/plain' } },
+        })),
+      },
+    });
+    await mount(page, 'vt-http', { variant: 'full', entry: 'app.css' }, har);
+    await recordEvents(page, ['vt-tab-change']);
+    const el = page.locator('#el');
+    const url = el.locator('[part~="url"]');
+    await expect(url).toHaveText('https://example.org/app.css');
+    await expect(el.locator('[part~="entries"]')).toContainText('2 of 3');
+    await el.getByRole('button', { name: 'Next entry' }).click();
+    await expect(url).toHaveText('https://example.org/logo.png');
+    await expect(el.getByRole('button', { name: 'Next entry' })).toBeDisabled();
+    await el.getByLabel('Entry', { exact: true }).selectOption('0');
+    await expect(url).toHaveText('https://example.org/');
+    expect((await events(page)).map((e) => e.detail.tab)).toEqual(['entry-2', 'entry-0']);
+  });
+
   test('explains what is wrong with an unreadable message', async ({ page }) => {
     await mount(page, 'vt-http', {}, 'curl -s');
     await expect(page.locator('#el [part~="notice"]')).toContainText(

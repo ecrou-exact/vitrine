@@ -18,6 +18,9 @@ changing a dependency.
 | [Lucide (icon set)](https://lucide.dev) | 1.73.0 | ISC; icons derived from Feather: MIT | Lucide icons of `<vt-icon-picker>` | dist/vendor/icons/lucide.js, loaded by `<vt-icon-picker>` only |
 | [Bootstrap Icons](https://icons.getbootstrap.com) | 1.13.2 | MIT | Bootstrap icons of `<vt-icon-picker>` | dist/vendor/icons/bootstrap.js, loaded by `<vt-icon-picker>` only |
 | [flag-icons](https://github.com/lipis/flag-icons) | 7.6.0 | MIT | Country flags of `<vt-icon-picker>` | dist/vendor/icons/flags.js, loaded by `<vt-icon-picker>` only |
+| [d3-geo](https://github.com/d3/d3-geo) | 3.1.2 | ISC | Map projections and paths of `<vt-map>` | dist/vendor/geo.js, loaded by `<vt-map>` only |
+| [TopoJSON Client](https://github.com/topojson/topojson-client) | 3.1.0 | ISC | Decoding the world shapes of `<vt-map>` | dist/vendor/geo.js, loaded by `<vt-map>` only |
+| [World Atlas TopoJSON (Natural Earth 1:110m)](https://github.com/topojson/world-atlas) | 2.0.2 | ISC; Natural Earth data: public domain | Country shapes of `<vt-map>` | dist/vendor/geo.js, loaded by `<vt-map>` only |
 | [Mermaid](https://github.com/mermaid-js/mermaid) | 12.3.0 | MIT | Diagrams drawn by `<vt-diagram>` | dist/vendor/mermaid.js and dist/vendor/mermaid/, loaded by `<vt-diagram>` only |
 | [Mermaid parser](https://github.com/mermaid-js/mermaid) | 2.0.1 | MIT | Diagram syntax (Mermaid) | dist/vendor/mermaid.js and dist/vendor/mermaid/, loaded by `<vt-diagram>` only |
 | [D3](https://github.com/d3/d3) | 7.9.2 | ISC | Drawing and layout (Mermaid) | dist/vendor/mermaid.js and dist/vendor/mermaid/, loaded by `<vt-diagram>` only |
@@ -1021,6 +1024,93 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+---
+
+## d3-geo 3.1.2
+
+License: ISC. Source: https://github.com/d3/d3-geo
+
+```text
+Copyright 2010-2026 Mike Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+
+This license applies to GeographicLib, versions 1.12 and later.
+
+Copyright 2008-2012 Charles Karney
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+---
+
+## TopoJSON Client 3.1.0
+
+License: ISC. Source: https://github.com/topojson/topojson-client
+
+```text
+Copyright 2012-2019 Michael Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
+```
+
+---
+
+## World Atlas TopoJSON (Natural Earth 1:110m) 2.0.2
+
+License: ISC; Natural Earth data: public domain. Source: https://github.com/topojson/world-atlas
+
+```text
+Copyright 2013-2019 Michael Bostock
+
+Permission to use, copy, modify, and/or distribute this software for any purpose
+with or without fee is hereby granted, provided that the above copyright notice
+and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.
 ```
 
 ---

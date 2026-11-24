@@ -1,0 +1,23 @@
+; <<>> DiG 9.18.24 <<>> example.com ANY
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4242
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;example.com.			IN	ANY
+
+;; ANSWER SECTION:
+example.com.		3600	IN	A	93.184.215.14
+example.com.		3600	IN	MX	10 mail.example.com.
+example.com.		300	IN	TXT	"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com " "ptr ?all"
+example.com.		300	IN	TXT	"v=spf1 -all"
+example.com.		86400	IN	CAA	0 issue "letsencrypt.org"
+example.com.		3600	IN	SOA	ns1.example.com. host\.master.example.com. 2026111701 7200 3600 1209600 300
+_dmarc.example.com.	300	IN	TXT	"v=DMARC1; p=none; pct=50"
+
+;; Query time: 24 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)
+;; WHEN: Tue Nov 17 10:00:00 CET 2026

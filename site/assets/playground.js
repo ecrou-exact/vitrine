@@ -117,6 +117,85 @@ const SAMPLES = {
   cvss: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N',
   headers:
     "HTTP/2 200\nserver: nginx/1.18.0\nstrict-transport-security: max-age=86400\ncontent-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https:\nx-frame-options: SAMEORIGIN\nset-cookie: PHPSESSID=8f2a; path=/; HttpOnly\n",
+  email:
+    'Authentication-Results: mx.example.org; spf=softfail smtp.mailfrom=bulk-sender.xyz; dkim=none; dmarc=fail\nReceived: from unknown ([203.0.113.66]) by mx.example.org with SMTP; Tue, 17 Nov 2026 10:00:02 +0100\nFrom: "service@paypal.com" <security@paypa1-support.xyz>\nReply-To: help@other-domain.example\nTo: alice@example.org\nSubject: Action required on your account\nDate: Tue, 17 Nov 2026 09:59:58 +0100\nContent-Type: text/html; charset=utf-8\n\n<p>Please confirm your account:</p>\n<a href="https://paypa1-support.xyz/login">https://www.paypal.com/signin</a>\n',
+  dns: 'example.com.\t300\tIN\tTXT\t"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all"\n_dmarc.example.com.\t300\tIN\tTXT\t"v=DMARC1; p=none"\nexample.com.\t86400\tIN\tCAA\t0 issue "letsencrypt.org"\nexample.com.\t3600\tIN\tMX\t10 mail.example.com.\n',
+  nmap: 'Nmap scan report for shop.example.com (203.0.113.10)\nHost is up (0.012s latency).\nPORT     STATE    SERVICE VERSION\n22/tcp   open     ssh     OpenSSH 8.9p1\n| ssh-hostkey:\n|_  256 aa:bb (ED25519)\n443/tcp  open     ssl/http nginx 1.18.0\n3306/tcp open     mysql   MySQL 8.0.35\n6379/tcp filtered redis\n',
+  url: 'https://www.paypal.com@evil.example/login?next=https://evil.example/x&utm_source=mail\nhttps://xn--80ak6aa92e.com/\n',
+  hash: 'Hello, Vitrine',
+  waterfall: JSON.stringify(
+    {
+      log: {
+        pages: [
+          {
+            id: 'p',
+            title: 'shop.example',
+            startedDateTime: '2026-11-17T10:00:00.000Z',
+            pageTimings: { onContentLoad: 300, onLoad: 420 },
+          },
+        ],
+        entries: [
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.000Z',
+            time: 180,
+            _resourceType: 'document',
+            request: { method: 'GET', url: 'https://shop.example/' },
+            response: {
+              status: 200,
+              content: { size: 18000, mimeType: 'text/html' },
+              bodySize: 6000,
+            },
+            timings: { dns: 15, connect: 40, ssl: 25, send: 1, wait: 80, receive: 19 },
+          },
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.200Z',
+            time: 120,
+            _resourceType: 'script',
+            request: { method: 'GET', url: 'https://cdn.tracker.example/t.js' },
+            response: {
+              status: 200,
+              content: { size: 9000, mimeType: 'text/javascript' },
+              bodySize: 3000,
+            },
+            timings: { dns: 20, connect: 30, ssl: 20, wait: 40, receive: 10 },
+          },
+          {
+            pageref: 'p',
+            startedDateTime: '2026-11-17T10:00:00.250Z',
+            time: 60,
+            _resourceType: 'image',
+            request: { method: 'GET', url: 'http://img.other.example/a.png' },
+            response: { status: 404, content: { size: 0, mimeType: 'image/png' } },
+            timings: { wait: 50, receive: 10 },
+          },
+        ],
+      },
+    },
+    null,
+    2,
+  ),
+  yara: 'import "pe"\n\nrule Loader_PE_Dropper : loader dropper {\n  meta:\n    author = "CIRCL"\n    description = "PE dropper with an encoded PowerShell stage"\n    date = "2026-11-17"\n    score = 80\n  strings:\n    $mz = { 4D 5A 90 00 }\n    $stub = { E8 ?? ?? ?? ?? 5B [2-6] 8B 45 ( 08 | 0C ) }\n    $cmd = "cmd.exe /c" nocase wide ascii\n    $ps = "powershell -enc" base64\n    $key = "Sup3rS3cret" xor(1-255)\n    $c2 = /https?:\\/\\/[a-z0-9]{8,}\\.(top|xyz)\\// nocase\n  condition:\n    uint16(0) == 0x5A4D and filesize < 2MB and\n    $mz at 0 and $stub and 2 of ($cmd, $ps, $key) and #c2 > 1 and\n    pe.number_of_sections > 3\n}',
+  sigma:
+    "title: Whoami Execution by a Web Server\nid: 502b42de-4306-40b4-9596-6f590c81f073\nstatus: test\ndescription: A web server process runs whoami, a common first step after a web shell is planted.\nauthor: Vitrine examples\ndate: 2026-11-17\nreferences:\n  - https://attack.mitre.org/techniques/T1033/\ntags:\n  - attack.discovery\n  - attack.t1033\n  - attack.persistence\n  - attack.t1505.003\nlogsource:\n  category: process_creation\n  product: windows\ndetection:\n  selection_parent:\n    ParentImage|endswith:\n      - '\\w3wp.exe'\n      - '\\httpd.exe'\n      - '\\nginx.exe'\n  selection_child:\n    - Image|endswith: '\\whoami.exe'\n    - OriginalFileName: 'whoami.exe'\n  filter_health:\n    CommandLine|contains|all:\n      - '/healthcheck'\n      - '--quiet'\n  condition: all of selection_* and not filter_health\nfalsepositives:\n  - Monitoring scripts run by the web server account\nlevel: high\n",
+  pcap: '1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==',
+  semver: '^1.2.3\n1.0.0\n1.2.3\n1.4.2\n1.9.1\n2.0.0\n2.1.0-rc.1',
+  map: 'Paris\nTokyo office: 35.6762, 139.6503\nBrazil 213\nIndia 1430\nParis -> New York\n',
+  contrast: 'Body: #333333 on #ffffff\nMuted: #999999 on #ffffff\nLink: #0b6bcb on #f5f5f5',
+  sbom: '{\n  "bomFormat": "CycloneDX",\n  "specVersion": "1.6",\n  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",\n  "version": 1,\n  "metadata": {\n    "timestamp": "2026-11-17T10:00:00Z",\n    "tools": {\n      "components": [\n        {\n          "type": "application",\n          "vendor": "anchore",\n          "name": "syft",\n          "version": "1.16.0"\n        }\n      ]\n    },\n    "component": {\n      "type": "application",\n      "bom-ref": "app",\n      "name": "shop-web",\n      "version": "3.2.0",\n      "purl": "pkg:npm/shop-web@3.2.0"\n    }\n  },\n  "components": [\n    {\n      "type": "framework",\n      "bom-ref": "pkg:npm/express@4.19.2",\n      "name": "express",\n      "version": "4.19.2",\n      "purl": "pkg:npm/express@4.19.2",\n      "licenses": [\n        {\n          "license": {\n            "id": "MIT"\n          }\n        }\n      ],\n      "hashes": [\n        {\n          "alg": "SHA-512",\n          "content": "aa11"\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/body-parser@1.20.2",\n      "name": "body-parser",\n      "version": "1.20.2",\n      "purl": "pkg:npm/body-parser@1.20.2",\n      "licenses": [\n        {\n          "license": {\n            "id": "MIT"\n          }\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/qs@6.11.0",\n      "name": "qs",\n      "version": "6.11.0",\n      "purl": "pkg:npm/qs@6.11.0",\n      "licenses": [\n        {\n          "license": {\n            "id": "BSD-3-Clause"\n          }\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/%40img/sharp@0.33.0",\n      "group": "@img",\n      "name": "sharp",\n      "version": "0.33.0",\n      "purl": "pkg:npm/%40img/sharp@0.33.0",\n      "licenses": [\n        {\n          "expression": "Apache-2.0 AND LGPL-3.0-or-later"\n        }\n      ]\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",\n      "group": "org.apache.logging.log4j",\n      "name": "log4j-core",\n      "version": "2.14.1",\n      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",\n      "licenses": [\n        {\n          "license": {\n            "id": "Apache-2.0"\n          }\n        }\n      ],\n      "scope": "optional"\n    },\n    {\n      "type": "library",\n      "bom-ref": "pkg:npm/left-pad@1.3.0",\n      "name": "left-pad",\n      "version": "1.3.0",\n      "purl": "pkg:npm/left-pad@1.3.0"\n    }\n  ],\n  "dependencies": [\n    {\n      "ref": "app",\n      "dependsOn": [\n        "pkg:npm/express@4.19.2",\n        "pkg:npm/%40img/sharp@0.33.0",\n        "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"\n      ]\n    },\n    {\n      "ref": "pkg:npm/express@4.19.2",\n      "dependsOn": [\n        "pkg:npm/body-parser@1.20.2",\n        "pkg:npm/qs@6.11.0"\n      ]\n    },\n    {\n      "ref": "pkg:npm/body-parser@1.20.2",\n      "dependsOn": [\n        "pkg:npm/qs@6.11.0"\n      ]\n    },\n    {\n      "ref": "pkg:npm/qs@6.11.0",\n      "dependsOn": []\n    }\n  ],\n  "vulnerabilities": [\n    {\n      "id": "CVE-2021-44228",\n      "source": {\n        "name": "NVD",\n        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"\n      },\n      "ratings": [\n        {\n          "source": {\n            "name": "NVD"\n          },\n          "score": 10.0,\n          "severity": "critical",\n          "method": "CVSSv31",\n          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"\n        }\n      ],\n      "cwes": [\n        502,\n        400,\n        20\n      ],\n      "description": "Apache Log4j2 JNDI features do not protect against attacker-controlled LDAP endpoints.",\n      "recommendation": "Upgrade to 2.17.1 or later.",\n      "analysis": {\n        "state": "exploitable"\n      },\n      "affects": [\n        {\n          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"\n        }\n      ]\n    },\n    {\n      "id": "GHSA-hrpp-h998-j3pp",\n      "source": {\n        "name": "GitHub"\n      },\n      "ratings": [\n        {\n          "severity": "high",\n          "method": "CVSSv31",\n          "score": 7.5\n        }\n      ],\n      "description": "qs vulnerable to prototype pollution.",\n      "affects": [\n        {\n          "ref": "pkg:npm/qs@6.11.0"\n        }\n      ]\n    },\n    {\n      "id": "CVE-2024-43796",\n      "source": {\n        "name": "NVD"\n      },\n      "ratings": [\n        {\n          "severity": "low",\n          "score": 2.3,\n          "method": "CVSSv4"\n        }\n      ],\n      "analysis": {\n        "state": "not_affected",\n        "justification": "code_not_reachable"\n      },\n      "affects": [\n        {\n          "ref": "pkg:npm/express@4.19.2"\n        }\n      ]\n    }\n  ]\n}',
+  dockerfile:
+    'FROM ubuntu\nMAINTAINER ops@example.com\nRUN apt-get update\nRUN apt-get install curl python3 python3-pip\nRUN curl -fsSL https://get.example.sh | sh\nENV API_TOKEN=change-me\nADD app.py /app/app.py\nRUN cd /app && pip install flask && chmod 777 /app\nEXPOSE 5000 22\nCMD python3 /app/app.py',
+  lighthouse:
+    '{\n  "id": "https://shop.example/",\n  "loadingExperience": {\n    "id": "https://shop.example/",\n    "overall_category": "AVERAGE",\n    "metrics": {\n      "LARGEST_CONTENTFUL_PAINT_MS": {\n        "percentile": 2900,\n        "category": "AVERAGE",\n        "distributions": [\n          {\n            "min": 0,\n            "max": 2500,\n            "proportion": 0.68\n          },\n          {\n            "min": 2500,\n            "max": 4000,\n            "proportion": 0.2\n          },\n          {\n            "min": 4000,\n            "proportion": 0.12\n          }\n        ]\n      },\n      "INTERACTION_TO_NEXT_PAINT": {\n        "percentile": 180,\n        "category": "FAST",\n        "distributions": [\n          {\n            "proportion": 0.8\n          },\n          {\n            "proportion": 0.15\n          },\n          {\n            "proportion": 0.05\n          }\n        ]\n      },\n      "CUMULATIVE_LAYOUT_SHIFT_SCORE": {\n        "percentile": 31,\n        "category": "SLOW",\n        "distributions": [\n          {\n            "proportion": 0.55\n          },\n          {\n            "proportion": 0.2\n          },\n          {\n            "proportion": 0.25\n          }\n        ]\n      }\n    }\n  },\n  "lighthouseResult": {\n    "requestedUrl": "https://shop.example/",\n    "finalDisplayedUrl": "https://shop.example/",\n    "lighthouseVersion": "12.2.1",\n    "fetchTime": "2026-11-17T10:00:00.000Z",\n    "configSettings": {\n      "formFactor": "mobile"\n    },\n    "runWarnings": [\n      "The page loaded too slowly to finish within the time limit."\n    ],\n    "categories": {\n      "performance": {\n        "title": "Performance",\n        "score": 0.62,\n        "auditRefs": [\n          {\n            "id": "first-contentful-paint",\n            "weight": 10,\n            "group": "metrics"\n          },\n          {\n            "id": "largest-contentful-paint",\n            "weight": 25,\n            "group": "metrics"\n          },\n          {\n            "id": "total-blocking-time",\n            "weight": 30,\n            "group": "metrics"\n          },\n          {\n            "id": "cumulative-layout-shift",\n            "weight": 25,\n            "group": "metrics"\n          },\n          {\n            "id": "speed-index",\n            "weight": 10,\n            "group": "metrics"\n          },\n          {\n            "id": "render-blocking-resources",\n            "weight": 0,\n            "group": "load-opportunities"\n          },\n          {\n            "id": "uses-optimized-images",\n            "weight": 0,\n            "group": "load-opportunities"\n          },\n          {\n            "id": "dom-size",\n            "weight": 0,\n            "group": "diagnostics"\n          }\n        ]\n      },\n      "accessibility": {\n        "title": "Accessibility",\n        "score": 0.88,\n        "auditRefs": [\n          {\n            "id": "color-contrast",\n            "weight": 7,\n            "group": "a11y-color-contrast"\n          },\n          {\n            "id": "image-alt",\n            "weight": 10,\n            "group": "a11y-names-labels"\n          }\n        ]\n      },\n      "best-practices": {\n        "title": "Best Practices",\n        "score": 0.96,\n        "auditRefs": [\n          {\n            "id": "is-on-https",\n            "weight": 5\n          }\n        ]\n      },\n      "seo": {\n        "title": "SEO",\n        "score": 1,\n        "auditRefs": [\n          {\n            "id": "document-title",\n            "weight": 1\n          }\n        ]\n      }\n    },\n    "audits": {\n      "first-contentful-paint": {\n        "id": "first-contentful-paint",\n        "title": "First Contentful Paint",\n        "score": 0.72,\n        "scoreDisplayMode": "numeric",\n        "numericValue": 2210,\n        "displayValue": "2.2 s"\n      },\n      "largest-contentful-paint": {\n        "id": "largest-contentful-paint",\n        "title": "Largest Contentful Paint",\n        "score": 0.31,\n        "scoreDisplayMode": "numeric",\n        "numericValue": 4630,\n        "displayValue": "4.6 s"\n      },\n      "total-blocking-time": {\n        "id": "total-blocking-time",\n        "title": "Total Blocking Time",\n        "score": 0.58,\n        "scoreDisplayMode": "numeric",\n        "numericValue": 420,\n        "displayValue": "420 ms"\n      },\n      "cumulative-layout-shift": {\n        "id": "cumulative-layout-shift",\n        "title": "Cumulative Layout Shift",\n        "score": 0.9,\n        "scoreDisplayMode": "numeric",\n        "numericValue": 0.08,\n        "displayValue": "0.08"\n      },\n      "speed-index": {\n        "id": "speed-index",\n        "title": "Speed Index",\n        "score": 0.66,\n        "scoreDisplayMode": "numeric",\n        "numericValue": 4900,\n        "displayValue": "4.9 s"\n      },\n      "render-blocking-resources": {\n        "id": "render-blocking-resources",\n        "title": "Eliminate render-blocking resources",\n        "description": "Resources are blocking the first paint of your page. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",\n        "score": 0.3,\n        "scoreDisplayMode": "metricSavings",\n        "displayValue": "Potential savings of 780 ms",\n        "details": {\n          "type": "opportunity",\n          "overallSavingsMs": 780,\n          "headings": [\n            {\n              "key": "url",\n              "valueType": "url",\n              "label": "URL"\n            },\n            {\n              "key": "totalBytes",\n              "valueType": "bytes",\n              "label": "Transfer Size"\n            },\n            {\n              "key": "wastedMs",\n              "valueType": "timespanMs",\n              "label": "Potential Savings"\n            }\n          ],\n          "items": [\n            {\n              "url": "https://shop.example/css/app.css",\n              "totalBytes": 48200,\n              "wastedMs": 540\n            },\n            {\n              "url": "https://fonts.example/css2?family=Inter",\n              "totalBytes": 1300,\n              "wastedMs": 240\n            }\n          ]\n        }\n      },\n      "uses-optimized-images": {\n        "id": "uses-optimized-images",\n        "title": "Efficiently encode images",\n        "description": "Optimized images load faster.",\n        "score": 0.5,\n        "scoreDisplayMode": "metricSavings",\n        "displayValue": "Potential savings of 312 KiB",\n        "details": {\n          "type": "opportunity",\n          "overallSavingsMs": 300,\n          "overallSavingsBytes": 319488,\n          "headings": [\n            {\n              "key": "url",\n              "valueType": "url",\n              "label": "URL"\n            }\n          ],\n          "items": [\n            {\n              "url": "https://shop.example/img/hero.jpg"\n            }\n          ]\n        }\n      },\n      "dom-size": {\n        "id": "dom-size",\n        "title": "Avoid an excessive DOM size",\n        "score": 0.6,\n        "scoreDisplayMode": "numeric",\n        "displayValue": "1,840 elements"\n      },\n      "color-contrast": {\n        "id": "color-contrast",\n        "title": "Background and foreground colors do not have a sufficient contrast ratio.",\n        "score": 0,\n        "scoreDisplayMode": "binary",\n        "details": {\n          "type": "table",\n          "headings": [\n            {\n              "key": "node",\n              "valueType": "node",\n              "label": "Failing Elements"\n            }\n          ],\n          "items": [\n            {\n              "node": {\n                "type": "node",\n                "snippet": "<a class=\\"muted\\">Terms</a>",\n                "selector": "footer a.muted"\n              }\n            }\n          ]\n        }\n      },\n      "image-alt": {\n        "id": "image-alt",\n        "title": "Image elements have [alt] attributes",\n        "score": 1,\n        "scoreDisplayMode": "binary"\n      },\n      "is-on-https": {\n        "id": "is-on-https",\n        "title": "Uses HTTPS",\n        "score": 1,\n        "scoreDisplayMode": "binary"\n      },\n      "document-title": {\n        "id": "document-title",\n        "title": "Document has a <title> element",\n        "score": 1,\n        "scoreDisplayMode": "binary"\n      }\n    }\n  }\n}',
+  a11y: '{\n  "testEngine": {\n    "name": "axe-core",\n    "version": "4.10.2"\n  },\n  "timestamp": "2026-11-17T10:00:00.000Z",\n  "url": "https://shop.example/checkout",\n  "violations": [\n    {\n      "id": "color-contrast",\n      "impact": "serious",\n      "tags": [\n        "cat.color",\n        "wcag2aa",\n        "wcag143",\n        "TTv5",\n        "EN-301-549"\n      ],\n      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",\n      "help": "Elements must meet minimum color contrast ratio thresholds",\n      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",\n      "nodes": [\n        {\n          "impact": "serious",\n          "html": "<a class=\\"muted\\" href=\\"/terms\\">Terms</a>",\n          "target": [\n            "footer > a.muted"\n          ],\n          "failureSummary": "Fix any of the following:\\n  Element has insufficient color contrast of 2.84 (foreground color: #999999, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"\n        },\n        {\n          "impact": "serious",\n          "html": "<span class=\\"hint\\">Optional</span>",\n          "target": [\n            "#email-hint"\n          ],\n          "failureSummary": "Fix any of the following:\\n  Element has insufficient color contrast of 3.1"\n        }\n      ]\n    },\n    {\n      "id": "label",\n      "impact": "critical",\n      "tags": [\n        "cat.forms",\n        "wcag2a",\n        "wcag412",\n        "wcag131"\n      ],\n      "description": "Ensure every form element has a label",\n      "help": "Form elements must have labels",\n      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=axeAPI",\n      "nodes": [\n        {\n          "impact": "critical",\n          "html": "<input type=\\"text\\" name=\\"zip\\">",\n          "target": [\n            [\n              "#payment-frame",\n              "input[name=\\"zip\\"]"\n            ]\n          ],\n          "failureSummary": "Fix any of the following:\\n  Form element does not have an implicit (wrapped) <label>\\n  Form element does not have an explicit <label>\\n  Element has no title attribute"\n        }\n      ]\n    },\n    {\n      "id": "region",\n      "impact": "moderate",\n      "tags": [\n        "cat.keyboard",\n        "best-practice"\n      ],\n      "description": "Ensure all page content is contained by landmarks",\n      "help": "All page content should be contained by landmarks",\n      "helpUrl": "javascript:alert(1)",\n      "nodes": [\n        {\n          "impact": "moderate",\n          "html": "<div class=\\"promo\\">Free shipping</div>",\n          "target": [\n            ".promo"\n          ],\n          "failureSummary": "Fix all of the following:\\n  Some page content is not contained by landmarks"\n        }\n      ]\n    }\n  ],\n  "incomplete": [\n    {\n      "id": "color-contrast",\n      "impact": "serious",\n      "tags": [\n        "wcag2aa",\n        "wcag143"\n      ],\n      "help": "Elements must meet minimum color contrast ratio thresholds",\n      "nodes": [\n        {\n          "html": "<h1 class=\\"over-image\\">Sale</h1>",\n          "target": [\n            "h1.over-image"\n          ],\n          "failureSummary": "Fix any of the following:\\n  Element\'s background color could not be determined due to a background image"\n        }\n      ]\n    }\n  ],\n  "passes": [\n    {\n      "id": "document-title"\n    },\n    {\n      "id": "html-has-lang"\n    },\n    {\n      "id": "image-alt"\n    }\n  ],\n  "inapplicable": [\n    {\n      "id": "video-caption"\n    }\n  ]\n}',
+  'loading-steps':
+    'done Build image (42s)\ndone Run tests — 214 passed (1m 3s)\nrunning Push to registry — layer 3 of 7\npending Migrate database\npending Roll out\n',
+  'loading-message': 'Connecting to the server…\nCollecting your invoices…\nGenerating the PDF…\n',
+  cookies:
+    'Set-Cookie: __Host-sid=4f2a9c1e7b; Path=/; Secure; HttpOnly; SameSite=Lax\nSet-Cookie: cart=3; Path=/; Max-Age=86400\nSet-Cookie: _ga=GA1.2.1234567.1700000000; Domain=example.com; Path=/; Max-Age=63072000\nSet-Cookie: track=1; SameSite=None\n',
+  redirects:
+    '301 http://example.com/promo\n302 https://example.com/promo\n302 https://go.example.net/r?id=7&utm_source=mail&gclid=abc\n200 https://shop.example.com/offer?id=7&utm_source=mail\n',
 };
 
 /** Boolean features shared by every component. */
@@ -248,6 +327,7 @@ const SCHEMA = {
       { name: 'view', type: 'select', options: ['', 'exchange', 'code'] },
       { name: 'layout', type: 'select', options: ['', 'stacked', 'columns'] },
       { name: 'snippets', type: 'text', placeholder: 'curl fetch python httpie' },
+      { name: 'entry', type: 'text', placeholder: '0 or a URL' },
     ],
   },
   log: {
@@ -593,6 +673,50 @@ const SCHEMA = {
       },
     ],
   },
+  map: {
+    tag: 'vt-map',
+    flags: ['controls', 'list', 'graticule', 'labels', 'pick', 'movie'],
+    fields: [
+      {
+        name: 'projection',
+        type: 'select',
+        options: [
+          '',
+          'natural-earth',
+          'equal-earth',
+          'mercator',
+          'equirectangular',
+          'globe',
+          'azimuthal-equal-area',
+          'azimuthal-equidistant',
+          'stereographic',
+          'gnomonic',
+          'transverse-mercator',
+          'conic-equal-area',
+          'conic-conformal',
+        ],
+      },
+      {
+        name: 'basemap',
+        type: 'select',
+        options: [
+          '',
+          'light',
+          'dark',
+          'political',
+          'satellite',
+          'night',
+          'blueprint',
+          'vintage',
+          'mono',
+        ],
+      },
+      { name: 'center', type: 'text', placeholder: 'Paris or 48.85, 2.35' },
+      { name: 'zoom', type: 'number', placeholder: '1' },
+      { name: 'highlight', type: 'text', placeholder: 'FR DE IT' },
+      { name: 'coords-format', type: 'select', options: ['', 'decimal', 'dms'] },
+    ],
+  },
   heatmap: {
     tag: 'vt-heatmap',
     flags: [],
@@ -840,6 +964,358 @@ const SCHEMA = {
     flags: ['https', 'passed', 'policy', 'headers'],
     fields: [],
   },
+  email: {
+    tag: 'vt-email',
+    flags: ['defang', 'hashes', 'tabs'],
+    fields: [
+      {
+        name: 'view',
+        type: 'select',
+        options: ['', 'summary', 'path', 'body', 'links', 'attachments', 'headers'],
+      },
+    ],
+  },
+  dns: {
+    tag: 'vt-dns',
+    flags: ['explain', 'checks', 'filters'],
+    fields: [],
+  },
+  nmap: {
+    tag: 'vt-nmap',
+    flags: ['all', 'down', 'scripts', 'risky'],
+    fields: [],
+  },
+  url: {
+    tag: 'vt-url',
+    flags: ['defang', 'parts', 'chain'],
+    fields: [],
+  },
+  hash: {
+    tag: 'vt-hash',
+    flags: ['file', 'compare'],
+    fields: [
+      { name: 'algorithms', type: 'text', placeholder: 'sha256 sha512' },
+      { name: 'format', type: 'select', options: ['', 'hex', 'upper', 'base64', 'sri'] },
+      { name: 'expected', type: 'text', placeholder: 'sha256:…' },
+    ],
+  },
+  waterfall: {
+    tag: 'vt-waterfall',
+    flags: ['filters', 'defang', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'requests', 'domains'] }],
+  },
+  yara: {
+    tag: 'vt-yara',
+    flags: ['lint', 'explain', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'rules', 'source'] }],
+  },
+  sigma: {
+    tag: 'vt-sigma',
+    flags: ['lint', 'links', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'rules', 'source'] }],
+  },
+  pcap: {
+    tag: 'vt-pcap',
+    flags: ['filters', 'file', 'defang', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'packets', 'conversations', 'names'] }],
+  },
+  semver: {
+    tag: 'vt-semver',
+    flags: ['field', 'prerelease'],
+    fields: [{ name: 'range', type: 'text', placeholder: '^1.2.3' }],
+  },
+  contrast: {
+    tag: 'vt-contrast',
+    flags: ['field', 'suggest'],
+    fields: [
+      { name: 'fg', type: 'text', placeholder: '#767676' },
+      { name: 'bg', type: 'text', placeholder: '#ffffff' },
+    ],
+  },
+  sbom: {
+    tag: 'vt-sbom',
+    flags: ['filters', 'tabs'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'tree', 'components', 'vulnerabilities'] },
+      { name: 'depth', type: 'text', placeholder: '1' },
+    ],
+  },
+  dockerfile: {
+    tag: 'vt-dockerfile',
+    flags: ['lint', 'explain', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'stages', 'source'] }],
+  },
+  lighthouse: {
+    tag: 'vt-lighthouse',
+    flags: ['tabs'],
+    fields: [
+      {
+        name: 'category',
+        type: 'select',
+        options: ['', 'performance', 'accessibility', 'best-practices', 'seo'],
+      },
+    ],
+  },
+  a11y: {
+    tag: 'vt-a11y',
+    flags: ['filters', 'tabs'],
+    fields: [{ name: 'view', type: 'select', options: ['', 'violations', 'review'] }],
+  },
+  'loading-button': {
+    tag: 'vt-loading-button',
+    indicator: true,
+    flags: ['loading', 'block', 'disabled'],
+    fields: [
+      { name: 'loading-text', type: 'text', placeholder: 'Saving…' },
+      {
+        name: 'spinner',
+        type: 'select',
+        options: ['', 'ring', 'arc', 'dual-ring', 'dots', 'bars', 'pulse', 'orbit'],
+      },
+      { name: 'spinner-position', type: 'select', options: ['', 'start', 'end', 'replace'] },
+      { name: 'variant', type: 'select', options: ['', 'primary', 'secondary', 'ghost', 'danger'] },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  'loading-message': {
+    tag: 'vt-loading-message',
+    indicator: true,
+    content: true,
+    flags: ['active', 'elapsed', 'loop'],
+    fields: [
+      { name: 'interval', type: 'text', placeholder: '2.5s' },
+      { name: 'slow-after', type: 'text', placeholder: '10s' },
+      {
+        name: 'spinner',
+        type: 'select',
+        options: [...['', 'ring', 'arc', 'dual-ring', 'dots', 'bars', 'pulse', 'orbit'], 'none'],
+      },
+      { name: 'layout', type: 'select', options: ['', 'inline', 'stacked'] },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  'loading-overlay': {
+    tag: 'vt-loading-overlay',
+    indicator: true,
+    flags: ['active', 'cancelable', 'fullscreen'],
+    fields: [
+      { name: 'text', type: 'text', placeholder: 'Saving…' },
+      { name: 'value', type: 'text', placeholder: '0 to 100' },
+      { name: 'scrim', type: 'select', options: ['', 'light', 'dark', 'blur', 'none'] },
+      {
+        name: 'spinner',
+        type: 'select',
+        options: [...['', 'ring', 'arc', 'dual-ring', 'dots', 'bars', 'pulse', 'orbit'], 'none'],
+      },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  'loading-steps': {
+    tag: 'vt-loading-steps',
+    indicator: true,
+    content: true,
+    flags: ['active', 'progress', 'durations', 'details', 'cancelable'],
+    fields: [
+      { name: 'text', type: 'text', placeholder: 'Deploying' },
+      { name: 'layout', type: 'select', options: ['', 'list', 'compact', 'horizontal'] },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  'page-progress': {
+    tag: 'vt-page-progress',
+    indicator: true,
+    flags: ['active', 'trickle', 'glow', 'spinner'],
+    fields: [
+      { name: 'value', type: 'text', placeholder: '0 to 1' },
+      { name: 'position', type: 'select', options: ['', 'top', 'bottom'] },
+      { name: 'placement', type: 'select', options: ['', 'fixed', 'absolute'] },
+      { name: 'thickness', type: 'text', placeholder: '3px' },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  progress: {
+    tag: 'vt-progress',
+    indicator: true,
+    flags: ['active', 'striped', 'animated', 'square'],
+    fields: [
+      { name: 'value', type: 'text', placeholder: 'empty: indeterminate' },
+      { name: 'max', type: 'text', placeholder: '100' },
+      { name: 'buffer', type: 'text', placeholder: '70' },
+      { name: 'text', type: 'text', placeholder: 'Uploading…' },
+      { name: 'show-value', type: 'select', options: ['', 'percent', 'value', 'fraction', 'none'] },
+      { name: 'unit', type: 'text', placeholder: 'MB' },
+      { name: 'status', type: 'select', options: ['', 'normal', 'success', 'warning', 'error'] },
+      { name: 'segments', type: 'text', placeholder: '5' },
+      { name: 'thickness', type: 'text', placeholder: 'xs sm md lg xl' },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  'progress-ring': {
+    tag: 'vt-progress-ring',
+    indicator: true,
+    flags: ['active'],
+    fields: [
+      { name: 'value', type: 'text', placeholder: 'empty: indeterminate' },
+      { name: 'max', type: 'text', placeholder: '100' },
+      { name: 'text', type: 'text', placeholder: 'Storage' },
+      { name: 'show-value', type: 'select', options: ['', 'percent', 'value', 'fraction', 'none'] },
+      { name: 'unit', type: 'text', placeholder: 'GB' },
+      { name: 'status', type: 'select', options: ['', 'normal', 'success', 'warning', 'error'] },
+      { name: 'thickness', type: 'text', placeholder: '4 to 30' },
+      { name: 'cap', type: 'select', options: ['', 'round', 'butt'] },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  skeleton: {
+    tag: 'vt-skeleton',
+    indicator: true,
+    flags: ['active', 'avatar', 'media'],
+    fields: [
+      {
+        name: 'shape',
+        type: 'select',
+        options: [
+          '',
+          'text',
+          'paragraph',
+          'heading',
+          'avatar',
+          'button',
+          'media',
+          'card',
+          'list',
+          'table',
+          'form',
+          'article',
+          'block',
+        ],
+      },
+      { name: 'lines', type: 'text', placeholder: '3' },
+      { name: 'rows', type: 'text', placeholder: '3' },
+      { name: 'columns', type: 'text', placeholder: '4' },
+      { name: 'animation', type: 'select', options: ['', 'shimmer', 'pulse', 'none'] },
+      { name: 'width', type: 'text', placeholder: '320px' },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  spinner: {
+    tag: 'vt-spinner',
+    indicator: true,
+    flags: ['active'],
+    fields: [
+      {
+        name: 'type',
+        type: 'select',
+        options: ['', 'ring', 'arc', 'dual-ring', 'dots', 'bars', 'pulse', 'orbit'],
+      },
+      { name: 'text', type: 'text', placeholder: 'Loading results…' },
+      { name: 'text-position', type: 'select', options: ['', 'end', 'below'] },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  typing: {
+    tag: 'vt-typing',
+    indicator: true,
+    flags: ['active', 'show-text'],
+    fields: [
+      { name: 'type', type: 'select', options: ['', 'bubble', 'dots', 'wave'] },
+      { name: 'name', type: 'text', placeholder: 'Ada, Linus' },
+      { name: 'size', type: 'text', placeholder: 'xs sm md lg xl or 32px' },
+      {
+        name: 'tone',
+        type: 'select',
+        options: ['', 'accent', 'neutral', 'success', 'warning', 'danger', 'info', 'current'],
+      },
+      { name: 'speed', type: 'text', placeholder: 'slow normal fast or 800ms' },
+      { name: 'delay', type: 'text', placeholder: '200ms' },
+      { name: 'motion', type: 'select', options: ['', 'auto', 'full', 'reduce'] },
+    ],
+  },
+  cookies: {
+    tag: 'vt-cookies',
+    flags: ['issues', 'mask-values'],
+    fields: [
+      { name: 'url', type: 'text', placeholder: 'https://shop.example.com/' },
+      { name: 'site', type: 'text', placeholder: 'example.com' },
+    ],
+  },
+  redirects: {
+    tag: 'vt-redirects',
+    flags: ['params'],
+    fields: [{ name: 'start', type: 'text', placeholder: 'https://example.com/' }],
+  },
 };
 
 const form = document.getElementById('controls');
@@ -881,6 +1357,8 @@ function field(label, control) {
 
 function buildControls() {
   const schema = SCHEMA[state.type];
+  // Loading indicators have no variant, mode, syntax theme or toolbar features.
+  const indicator = Boolean(schema.indicator);
   const general = el('fieldset', {}, el('legend', {}, 'Component'));
   general.append(
     field(
@@ -927,7 +1405,12 @@ function buildControls() {
       ),
     ),
   );
-  for (const name of ['label', 'max-height']) {
+  if (indicator)
+    for (const control of general.querySelectorAll(
+      '[name="variant"], [name="mode"], [name="syntax-theme"]',
+    ))
+      control.closest('.field, label')?.remove();
+  for (const name of indicator ? ['label'] : ['label', 'max-height']) {
     const input = el('input', {
       type: 'text',
       name,
@@ -942,10 +1425,16 @@ function buildControls() {
     'fieldset',
     {},
     el('legend', {}, 'Features'),
-    el('p', { class: 'hint' }, 'Default follows the variant; on and off override it.'),
+    el(
+      'p',
+      { class: 'hint' },
+      indicator
+        ? 'Default: see the reference page.'
+        : 'Default follows the variant; on and off override it.',
+    ),
   );
   const grid = el('div', { class: 'flag-grid' });
-  for (const name of [...COMMON_FLAGS, ...schema.flags]) {
+  for (const name of indicator ? schema.flags : [...COMMON_FLAGS, ...schema.flags]) {
     grid.append(
       field(
         name,
@@ -992,7 +1481,12 @@ function buildControls() {
     field('Set through the content property', content),
   );
 
-  form.replaceChildren(general, flags, specific, contentSet);
+  form.replaceChildren(
+    general,
+    flags,
+    specific,
+    ...(indicator && !schema.content ? [] : [contentSet]),
+  );
 }
 
 function switchType(type) {
@@ -1009,7 +1503,7 @@ function switchType(type) {
       'date-picker': { mode: 'range', min: 'today', 'disabled-dates': 'sun' },
       upload: { accept: 'image/*,.pdf', 'max-size': '5MB', 'max-files': '3' },
     }[type] ?? {};
-  state.content = SAMPLES[type];
+  state.content = SAMPLES[type] ?? '';
   state.attrs.label = {
     code: 'fibonacci.py',
     markdown: 'release.md',
@@ -1080,6 +1574,24 @@ function switchType(type) {
     ioc: 'Phishing report',
     cvss: 'CVE-2026-0001',
     headers: 'shop.example.com',
+    email: 'suspicious.eml',
+    dns: 'dig example.com',
+    nmap: 'nmap -sV',
+    url: 'Suspicious links',
+    hash: 'Checksum',
+    waterfall: 'capture.har',
+    yara: 'loader.yar',
+    sigma: 'web_server_whoami.yml',
+    pcap: 'login.pcap',
+    semver: 'left-pad-ish',
+    contrast: 'Palette',
+    sbom: 'bom.cdx.json',
+    dockerfile: 'Dockerfile',
+    lighthouse: 'shop.example',
+    a11y: 'axe-results.json',
+    cookies: 'shop.example.com',
+    'loading-steps': '',
+    redirects: 'Redirects',
   }[type];
   buildControls();
   render();
@@ -1088,7 +1600,9 @@ function switchType(type) {
 /** Attributes as they would be written in HTML, in a stable order. */
 function attributes() {
   const result = [];
+  const indicator = Boolean(SCHEMA[state.type].indicator);
   for (const [name, value] of Object.entries(state.attrs)) {
+    if (indicator && ['variant', 'mode', 'syntax-theme', 'max-height'].includes(name)) continue;
     if (value && !(name === 'variant' && value === 'simple')) result.push([name, value]);
   }
   for (const [name, value] of Object.entries(state.fields)) if (value) result.push([name, value]);
@@ -1108,7 +1622,13 @@ function render() {
   const attrs = attributes();
   const element = document.createElement(tag);
   for (const [name, value] of attrs) element.setAttribute(name, value);
-  element.content = state.content;
+  if (!SCHEMA[state.type].indicator || SCHEMA[state.type].content) element.content = state.content;
+  if (tag === 'vt-loading-button') element.textContent = 'Save';
+  if (tag === 'vt-loading-overlay') {
+    const sample = document.createElement('p');
+    sample.textContent = 'Profile settings, notifications and billing details.';
+    element.append(sample);
+  }
   preview.replaceChildren(element);
 
   const htmlAttrs = attrs
@@ -1118,7 +1638,9 @@ function render() {
     .split('\n')
     .map((line) => `    ${line}`.trimEnd())
     .join('\n');
-  htmlOut.content = `<${tag}${htmlAttrs}>\n  <template>\n${body}\n  </template>\n</${tag}>`;
+  htmlOut.content = state.content.trim()
+    ? `<${tag}${htmlAttrs}>\n  <template>\n${body}\n  </template>\n</${tag}>`
+    : `<${tag}${htmlAttrs}></${tag}>`;
 
   const toKey = (name) => (/^[a-z]+$/.test(name) ? name : `'${name}'`);
   const options = attrs

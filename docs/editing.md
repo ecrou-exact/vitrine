@@ -165,6 +165,23 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-ioc>`          | `content`                                                                                |
 | `<vt-cvss>`         | `content`; with `editable`, each metric is a select that updates `content`               |
 | `<vt-headers>`      | `content`                                                                                |
+| `<vt-email>`        | `content`                                                                                |
+| `<vt-dns>`          | `content`                                                                                |
+| `<vt-cookies>`      | `content`, `cookies` (read only)                                                         |
+| `<vt-redirects>`    | `content`, `hops` (read only)                                                            |
+| `<vt-map>`          | `content`, `items` and `view` (read only)                                                |
+| `<vt-nmap>`         | `content`                                                                                |
+| `<vt-url>`          | `content`                                                                                |
+| `<vt-hash>`         | `content`; the hashes follow as you type                                                 |
+| `<vt-waterfall>`    | `content`                                                                                |
+| `<vt-yara>`         | `content`; the rules follow as you type                                                  |
+| `<vt-sigma>`        | `content` (YAML, highlighted); the rules follow as you type                              |
+| `<vt-semver>`       | `content` (versions, or the range then versions); the range field edits the range alone  |
+| `<vt-contrast>`     | `content` (pairs or a palette); the color fields edit a single pair                      |
+| `<vt-sbom>`         | `content` (JSON)                                                                         |
+| `<vt-dockerfile>`   | `content`; the stages and problems follow as you type                                    |
+| `<vt-lighthouse>`   | `content` (JSON)                                                                         |
+| `<vt-a11y>`         | `content` (JSON)                                                                         |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

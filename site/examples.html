@@ -37,7 +37,7 @@
         <a href="#browse-visuals-planning">
           <strong>Visuals &amp; planning</strong>
           <span>Show patterns, relationships, images, events and progress visually.</span>
-          <small>12 sections</small>
+          <small>14 sections</small>
         </a>
         <a href="#browse-forms-navigation">
           <strong>Forms &amp; navigation</strong>
@@ -47,12 +47,17 @@
         <a href="#browse-apis-operations">
           <strong>APIs &amp; operations</strong>
           <span>Explain APIs, inspect requests and monitor services, jobs and diagnostics.</span>
-          <small>12 sections</small>
+          <small>29 sections</small>
         </a>
         <a href="#browse-project-product">
           <strong>Project &amp; product</strong>
           <span>Build release pages, project summaries, pricing and community sections.</span>
-          <small>12 sections</small>
+          <small>14 sections</small>
+        </a>
+        <a href="#browse-loading-feedback">
+          <strong>Loading &amp; feedback</strong>
+          <span>Show that something is happening: spinners, progress, skeletons and busy states.</span>
+          <small>10 sections</small>
         </a>
         <a href="#browse-customization">
           <strong>Customize &amp; integrate</strong>
@@ -95,12 +100,14 @@
             <option value="board">Board</option>
             <option value="calendar">Calendar</option>
             <option value="chart">Chart</option>
+            <option value="contrast">Color contrast</option>
             <option value="countdown">Countdown</option>
             <option value="diagram">Diagram</option>
             <option value="flame">Flame graph</option>
             <option value="gallery">Gallery</option>
             <option value="git">Git</option>
             <option value="heatmap">Heat map</option>
+            <option value="map">Map</option>
             <option value="stats">Stats</option>
             <option value="timeline">Timeline</option>
             <option value="treemap">Treemap</option>
@@ -119,20 +126,34 @@
           </optgroup>
           <optgroup label="APIs &amp; operations">
             <option value="access-log">Access log</option>
+            <option value="a11y">Accessibility report</option>
             <option value="cert">Certificates</option>
+            <option value="cookies">Cookies</option>
             <option value="cron">Cron</option>
             <option value="cvss">CVSS score</option>
+            <option value="dns">DNS records</option>
+            <option value="dockerfile">Dockerfile</option>
+            <option value="email">E-mail analysis</option>
+            <option value="hash">Hashes</option>
             <option value="http">HTTP</option>
             <option value="ioc">Indicators of compromise</option>
             <option value="job">Job</option>
             <option value="jwt">JWT</option>
+            <option value="lighthouse">Lighthouse report</option>
             <option value="log">Log</option>
+            <option value="waterfall">Network waterfall</option>
+            <option value="nmap">Nmap scan</option>
             <option value="openapi">OpenAPI</option>
+            <option value="pcap">Packet capture</option>
+            <option value="redirects">Redirect chain</option>
             <option value="headers">Security headers</option>
+            <option value="sigma">Sigma rules</option>
             <option value="status">Status</option>
             <option value="test-report">Test report</option>
             <option value="trace">Trace</option>
+            <option value="url">URL analysis</option>
             <option value="workflow">Workflow run</option>
+            <option value="yara">YARA rules</option>
           </optgroup>
           <optgroup label="Project &amp; product">
             <option value="changelog">Changelog</option>
@@ -144,9 +165,23 @@
             <option value="licenses">License report</option>
             <option value="pricing">Pricing</option>
             <option value="repo">Repository card</option>
+            <option value="sbom">SBOM</option>
             <option value="advisories">Security report</option>
             <option value="lifecycle">Support schedule</option>
             <option value="testimonials">Testimonials</option>
+            <option value="semver">Version ranges</option>
+          </optgroup>
+          <optgroup label="Loading &amp; feedback">
+            <option value="loading-button">Loading button</option>
+            <option value="loading-message">Loading message</option>
+            <option value="loading-overlay">Loading overlay</option>
+            <option value="page-progress">Page progress</option>
+            <option value="progress">Progress bar</option>
+            <option value="progress-ring">Progress ring</option>
+            <option value="skeleton">Skeleton</option>
+            <option value="spinner">Spinner</option>
+            <option value="loading-steps">Task steps</option>
+            <option value="typing">Typing indicator</option>
           </optgroup>
           <optgroup label="Customize &amp; integrate">
             <option value="editing">Editing</option>
@@ -1754,6 +1789,44 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="contrast" aria-labelledby="contrast-title">
+        <h3 id="contrast-title">&lt;vt-contrast&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Check a pair of colors</h4>
+            <p>
+              Light gray on white fails AA. The element gives the nearest gray that passes AA and
+              AAA. Change either color with its field or the picker.
+            </p>
+          </div>
+          <template>
+            <vt-contrast variant="full" fg="#999999" bg="#ffffff"></vt-contrast>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A palette, every pair at once</h4>
+            <p>
+              Colors one per line make a grid: each text color on each background, with its ratio
+              and the level it reaches.
+            </p>
+          </div>
+          <template>
+            <vt-contrast>
+              <template>
+                ink: #1a1a2e
+                paper: #fbfaf7
+                brand: #0b6bcb
+                accent: #e8590c
+                muted: #8a8f98
+              </template>
+            </vt-contrast>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="countdown" aria-labelledby="countdown-title">
         <h3 id="countdown-title">&lt;vt-countdown&gt;</h3>
         <p class="muted prose">Units are written in the words of the reader’s language.</p>
@@ -2003,6 +2076,94 @@ Helsinki;656000;FI</template>
                 Fri,20h,140
               </template>
             </vt-heatmap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="map" aria-labelledby="map-title">
+        <h3 id="map-title">&lt;vt-map&gt;</h3>
+        <p class="muted prose">Drag to move, use the wheel or + and - to zoom, and change the projection or the style from the menus.</p>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Offices and routes</h4>
+            <p>Cities by name, coordinates in decimal degrees or in degrees, minutes and seconds, and routes along great circles with their distance.</p>
+          </div>
+          <template>
+            <vt-map variant="full" label="Offices" highlight="FR JP BR" lang-ui="en">
+              <template>
+                Paris
+                Tokyo office: 35.6762, 139.6503
+                48°51′30″N 2°17′40″E Eiffel Tower
+                São Paulo #16a34a
+                Paris -> New York -> São Paulo
+                Paris -> Tokyo #e11d48
+              </template>
+            </vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>The Earth seen from the sky</h4>
+            <p>A globe that turns, with land colored by climate. With <code>pick</code>, a click drops a pin and gives its coordinates.</p>
+          </div>
+          <template>
+            <vt-map variant="full" projection="globe" basemap="satellite" center="Nairobi" pick lang-ui="en">
+              <template>
+                Nairobi
+                Cape Town
+                Cairo
+                Cape Town -> Cairo #fde047
+              </template>
+            </vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Film mode</h4>
+            <p>Press the crosshair: the globe tracks the target, zooms in stage by stage and locks on. Typing <code>track Tokyo</code> in the search field of any map does the same.</p>
+          </div>
+          <template>
+            <vt-map variant="full" projection="globe" basemap="satellite" movie="Eiffel Tower: 48.8584, 2.2945" lang-ui="en"></vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Easter egg: track from the search field</h4>
+            <p>No <code>movie</code> attribute here. Type <code>track Tokyo</code>, <code>locate 40.6892, -74.0445</code> or <code>traquer Brésil</code> in the search field and press Enter: any map runs the film sequence. Escape stops it.</p>
+          </div>
+          <template>
+            <vt-map variant="full" basemap="night" label="Mission control" lang-ui="en">
+              <template>
+                Moscow
+                Washington
+                Beijing
+              </template>
+            </vt-map>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Values by country</h4>
+            <p>A number after a country shades it on a scale, with a legend. Names work in English, in French or as ISO codes.</p>
+          </div>
+          <template>
+            <vt-map variant="full" projection="equal-earth" basemap="political" label="Population (millions)" lang-ui="en">
+              <template>
+                China 1410
+                India 1430
+                USA 335
+                Indonésie 278
+                BRA 216
+                Nigeria 224
+                Pakistan 240
+                Russia 144
+              </template>
+            </vt-map>
           </template>
         </article>
       </section>
@@ -2863,6 +3024,152 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="a11y" aria-labelledby="a11y-title">
+        <h3 id="a11y-title">&lt;vt-a11y&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>An axe-core run on a checkout page</h4>
+            <p>
+              A missing label inside a shadow root, two contrast failures and content outside
+              landmarks, each with its WCAG criterion and how to fix it. The To review tab holds
+              what axe could not decide alone.
+            </p>
+          </div>
+          <template>
+            <vt-a11y variant="full" label="axe-results.json">
+              <template>
+                {
+                  "testEngine": {
+                    "name": "axe-core",
+                    "version": "4.10.2"
+                  },
+                  "timestamp": "2026-11-17T10:00:00.000Z",
+                  "url": "https://shop.example/checkout",
+                  "violations": [
+                    {
+                      "id": "color-contrast",
+                      "impact": "serious",
+                      "tags": [
+                        "cat.color",
+                        "wcag2aa",
+                        "wcag143",
+                        "TTv5",
+                        "EN-301-549"
+                      ],
+                      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+                      "help": "Elements must meet minimum color contrast ratio thresholds",
+                      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+                      "nodes": [
+                        {
+                          "impact": "serious",
+                          "html": "&lt;a class=\"muted\" href=\"/terms\">Terms&lt;/a>",
+                          "target": [
+                            "footer > a.muted"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.84 (foreground color: #999999, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                        },
+                        {
+                          "impact": "serious",
+                          "html": "&lt;span class=\"hint\">Optional&lt;/span>",
+                          "target": [
+                            "#email-hint"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.1"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "label",
+                      "impact": "critical",
+                      "tags": [
+                        "cat.forms",
+                        "wcag2a",
+                        "wcag412",
+                        "wcag131"
+                      ],
+                      "description": "Ensure every form element has a label",
+                      "help": "Form elements must have labels",
+                      "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/label?application=axeAPI",
+                      "nodes": [
+                        {
+                          "impact": "critical",
+                          "html": "&lt;input type=\"text\" name=\"zip\">",
+                          "target": [
+                            [
+                              "#payment-frame",
+                              "input[name=\"zip\"]"
+                            ]
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Form element does not have an implicit (wrapped) &lt;label>\n  Form element does not have an explicit &lt;label>\n  Element has no title attribute"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "region",
+                      "impact": "moderate",
+                      "tags": [
+                        "cat.keyboard",
+                        "best-practice"
+                      ],
+                      "description": "Ensure all page content is contained by landmarks",
+                      "help": "All page content should be contained by landmarks",
+                      "helpUrl": "javascript:alert(1)",
+                      "nodes": [
+                        {
+                          "impact": "moderate",
+                          "html": "&lt;div class=\"promo\">Free shipping&lt;/div>",
+                          "target": [
+                            ".promo"
+                          ],
+                          "failureSummary": "Fix all of the following:\n  Some page content is not contained by landmarks"
+                        }
+                      ]
+                    }
+                  ],
+                  "incomplete": [
+                    {
+                      "id": "color-contrast",
+                      "impact": "serious",
+                      "tags": [
+                        "wcag2aa",
+                        "wcag143"
+                      ],
+                      "help": "Elements must meet minimum color contrast ratio thresholds",
+                      "nodes": [
+                        {
+                          "html": "&lt;h1 class=\"over-image\">Sale&lt;/h1>",
+                          "target": [
+                            "h1.over-image"
+                          ],
+                          "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background image"
+                        }
+                      ]
+                    }
+                  ],
+                  "passes": [
+                    {
+                      "id": "document-title"
+                    },
+                    {
+                      "id": "html-has-lang"
+                    },
+                    {
+                      "id": "image-alt"
+                    }
+                  ],
+                  "inapplicable": [
+                    {
+                      "id": "video-caption"
+                    }
+                  ]
+                }
+              </template>
+            </vt-a11y>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="cert" aria-labelledby="cert-title">
         <h3 id="cert-title">&lt;vt-cert&gt;</h3>
 
@@ -2942,6 +3249,111 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="cookies" aria-labelledby="cookies-title">
+        <h3 id="cookies-title">&lt;vt-cookies&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Set-Cookie headers checked</h4>
+            <p>
+              The headers of a response, with <code>url</code> for the host that set them. Each cookie
+              gets its flags, its lifetime and its issues: a <code>__Host-</code> prefix with a
+              <code>Domain</code>, <code>SameSite=None</code> without <code>Secure</code>, a session
+              readable by scripts, a lifetime over 400 days. Values stay masked until the eye button.
+            </p>
+          </div>
+          <template>
+            <vt-cookies variant="full" url="https://shop.example.com/login" label="Response cookies">
+              <template>
+HTTP/2 302
+location: /account
+Set-Cookie: __Host-sid=f3a9c1e07b2d; Domain=example.com; Path=/; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: sessionid=6b1d22e4a9; Path=/; Secure; SameSite=Strict
+Set-Cookie: cart=3; Path=/; Max-Age=86400
+Set-Cookie: track=1; Path=/; SameSite=None
+Set-Cookie: prefs=dark; Path=/; Max-Age=63072000; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: old_token=; Path=/; Max-Age=0</template>
+            </vt-cookies>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Every cookie of a page, from a HAR file</h4>
+            <p>
+              The cookies set by each response, with the URL that set them. The first entry gives the
+              site, so cookies from other sites are marked third-party; the filter button keeps the
+              cookies with errors or warnings.
+            </p>
+          </div>
+          <template>
+            <vt-cookies variant="full" mask-values="false" label="www.example.com">
+              <template>
+                {
+                  "log": {
+                    "entries": [
+                      {
+                        "request": {
+                          "url": "https://www.example.com/"
+                        },
+                        "response": {
+                          "status": 200,
+                          "headers": [
+                            {
+                              "name": "Set-Cookie",
+                              "value": "__Host-session=7c1f0e9a42d8b3; Path=/; Secure; HttpOnly; SameSite=Lax"
+                            },
+                            {
+                              "name": "Set-Cookie",
+                              "value": "lang=fr; Path=/; Max-Age=31536000; Secure; SameSite=Lax"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "request": {
+                          "url": "https://analytics.example.net/collect"
+                        },
+                        "response": {
+                          "status": 204,
+                          "headers": [
+                            {
+                              "name": "Set-Cookie",
+                              "value": "uid=a81f3c2e-55d1; Domain=example.net; Path=/; Max-Age=63072000; Secure; SameSite=None"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "request": {
+                          "url": "https://ads.example.org/pixel.gif"
+                        },
+                        "response": {
+                          "status": 200,
+                          "headers": [],
+                          "cookies": [
+                            {
+                              "name": "IDE",
+                              "value": "AHWqTUm3x",
+                              "domain": ".example.org",
+                              "path": "/",
+                              "expires": "2027-12-01T00:00:00Z",
+                              "httpOnly": true,
+                              "secure": true,
+                              "sameSite": "None"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              </template>
+            </vt-cookies>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="cron" aria-labelledby="cron-title">
         <h3 id="cron-title">&lt;vt-cron&gt;</h3>
 
@@ -3017,6 +3429,206 @@ Helsinki;656000;FI</template>
         </article>
       </section>
 
+      <section class="example-group" id="dns" aria-labelledby="dns-title">
+        <h3 id="dns-title">&lt;vt-dns&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Mail records explained</h4>
+            <p>Paste <code>dig</code> output: SPF, DMARC, CAA and SOA explained term by term, and the mail setup checked.</p>
+          </div>
+          <template>
+            <vt-dns variant="full" label="dig example.com ANY">
+              <template>
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4242
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;example.com.			IN	ANY
+
+;; ANSWER SECTION:
+example.com.		3600	IN	A	93.184.215.14
+example.com.		3600	IN	MX	10 mail.example.com.
+example.com.		300	IN	TXT	"v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all"
+example.com.		86400	IN	CAA	0 issue "letsencrypt.org"
+example.com.		3600	IN	SOA	ns1.example.com. hostmaster.example.com. 2026111701 7200 3600 1209600 300
+_dmarc.example.com.	300	IN	TXT	"v=DMARC1; p=none; rua=mailto:dmarc@example.com"
+
+;; Query time: 24 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)</template>
+            </vt-dns>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A zone file</h4>
+            <p><code>$ORIGIN</code>, <code>$TTL</code>, relative names and records in parentheses are read.</p>
+          </div>
+          <template>
+            <vt-dns checks="false">
+              <template>
+$ORIGIN example.org.
+$TTL 1h
+@   IN  SOA ns1 hostmaster (
+        2026111701 ; serial
+        2h 1h 2w 5m )
+    IN  NS  ns1
+    IN  MX  0 .
+www 300 IN CNAME @
+_sip._tcp IN SRV 10 60 5060 sip</template>
+            </vt-dns>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="dockerfile" aria-labelledby="dockerfile-title">
+        <h3 id="dockerfile-title">&lt;vt-dockerfile&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A multi-stage build</h4>
+            <p>
+              Dependencies, build and runtime stages, what each copies from the others, and a
+              final image that runs as a non-root user with a health check. Hover a keyword to
+              read what it does.
+            </p>
+          </div>
+          <template>
+            <vt-dockerfile variant="full" label="Dockerfile">
+              <template>
+                # syntax=docker/dockerfile:1
+                FROM node:20-alpine AS deps
+                WORKDIR /app
+                COPY package.json package-lock.json ./
+                RUN npm ci
+
+                FROM node:20-alpine AS build
+                WORKDIR /app
+                COPY --from=deps /app/node_modules ./node_modules
+                COPY . .
+                RUN npm run build
+
+                FROM node:20-alpine
+                ENV NODE_ENV=production
+                WORKDIR /app
+                COPY --from=build /app/dist ./dist
+                COPY --from=deps /app/node_modules ./node_modules
+                USER node
+                EXPOSE 3000
+                HEALTHCHECK CMD ["wget", "-qO-", "http://localhost:3000/health"]
+                CMD ["node", "dist/server.js"]
+              </template>
+            </vt-dockerfile>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a review would flag</h4>
+            <p>
+              An untagged base image, a secret in ENV, a script piped to a shell, apt caches left
+              in layers, root at run time, a shell-form CMD.
+            </p>
+          </div>
+          <template>
+            <vt-dockerfile variant="full" tabs="false">
+              <template>
+                FROM ubuntu
+                MAINTAINER ops@example.com
+                RUN apt-get update
+                RUN apt-get install curl python3 python3-pip
+                RUN curl -fsSL https://get.example.sh | sh
+                ENV API_TOKEN=change-me
+                ADD app.py /app/app.py
+                RUN cd /app &amp;&amp; pip install flask &amp;&amp; chmod 777 /app
+                EXPOSE 5000 22
+                CMD python3 /app/app.py
+              </template>
+            </vt-dockerfile>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="email" aria-labelledby="email-title">
+        <h3 id="email-title">&lt;vt-email&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A phishing message</h4>
+            <p>Failed authentication, a spoofed sender name, a link that shows one site and opens another, and an executable hidden behind <code>.pdf</code>. Nothing in the message is rendered or loaded.</p>
+          </div>
+          <template>
+            <vt-email variant="full" label="suspicious.eml">
+              <template>
+Return-Path: &lt;bounce@mailer.bulk-sender.xyz&gt;
+Received: from mx.example.org (mx.example.org [198.51.100.7])
+	by inbox.example.org with ESMTPS id abc; Tue, 17 Nov 2026 10:00:09 +0100
+Received: from unknown (HELO pc) ([203.0.113.66])
+	by mx.example.org with SMTP id 42; Tue, 17 Nov 2026 10:00:02 +0100
+Authentication-Results: mx.example.org; spf=softfail smtp.mailfrom=bulk-sender.xyz; dkim=none; dmarc=fail header.from=paypal.com
+From: "service@paypal.com" &lt;security@paypa1-support.xyz&gt;
+Reply-To: help@other-domain.example
+To: alice@example.org
+Subject: =?UTF-8?B?QWN0aW9uIHJlcXVpcmVkIG9uIHlvdXIgYWNjb3VudA==?=
+Date: Tue, 17 Nov 2026 09:59:58 +0100
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="b1"
+
+--b1
+Content-Type: text/html; charset=utf-8
+
+&lt;p&gt;Please confirm your account:&lt;/p&gt;
+&lt;a href="https://paypa1-support.xyz/login"&gt;https://www.paypal.com/signin&lt;/a&gt;
+&lt;img src="https://tracker.example.net/p.gif"&gt;
+--b1
+Content-Type: application/octet-stream; name="invoice.pdf.exe"
+Content-Disposition: attachment; filename="invoice.pdf.exe"
+Content-Transfer-Encoding: base64
+
+TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA==
+--b1--</template>
+            </vt-email>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="hash" aria-labelledby="hash-title">
+        <h3 id="hash-title">&lt;vt-hash&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Verify a download</h4>
+            <p>
+              Paste the published checksum: the element finds the algorithm and says whether it
+              matches. Drop a file on it to hash the file instead; it never leaves the page.
+            </p>
+          </div>
+          <template>
+            <vt-hash
+              variant="full"
+              label="release notes"
+              expected="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  notes.txt"
+              ><template>abc</template></vt-hash
+            >
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A Subresource Integrity value</h4>
+            <p>
+              Only SHA-384, written as an <code>integrity</code> value, to copy into a script tag.
+            </p>
+          </div>
+          <template>
+            <vt-hash algorithms="sha384" format="sri" compare="false"
+              ><template>console.log('Hello, Vitrine');</template></vt-hash
+            >
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="http" aria-labelledby="http-title">
         <h3 id="http-title">&lt;vt-http&gt;</h3>
 
@@ -3084,6 +3696,253 @@ Helsinki;656000;FI</template>
                 Content-Type: application/json
 
                 {"errors": [{"field": "email", "message": "is not a valid address"}]}
+              </template>
+            </vt-http>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>The resources of a page, from a HAR file</h4>
+            <p>
+              A whole HAR file: pick a resource in the list or with the arrows. The Connection tab
+              gives the server IP, the HTTP version, the sizes and the TLS certificate recorded by
+              the browser; CSS is highlighted, images and icons are shown, fonts are summed up.
+              <code>entry</code> chooses the resource shown first.
+            </p>
+          </div>
+          <template>
+            <vt-http variant="full" entry="site.css" label="static.example.com">
+              <template>
+                {
+                  "log": {
+                    "version": "1.2",
+                    "entries": [
+                      {
+                        "serverIPAddress": "203.0.113.20",
+                        "time": 12.6,
+                        "_securityDetails": {
+                          "protocol": "TLS 1.3",
+                          "cipher": "AES_128_GCM",
+                          "subjectName": "static.example.com",
+                          "sanList": [
+                            "static.example.com",
+                            "www.example.com"
+                          ],
+                          "issuer": "Example CA R3",
+                          "validFrom": 1790000000,
+                          "validTo": 1797800000
+                        },
+                        "request": {
+                          "method": "GET",
+                          "url": "https://static.example.com/js/app.js",
+                          "headers": [
+                            {
+                              "name": "Accept",
+                              "value": "*/*"
+                            },
+                            {
+                              "name": "Referer",
+                              "value": "https://www.example.com/"
+                            }
+                          ]
+                        },
+                        "response": {
+                          "status": 200,
+                          "httpVersion": "HTTP/2",
+                          "headers": [
+                            {
+                              "name": "Content-Type",
+                              "value": "application/javascript"
+                            },
+                            {
+                              "name": "Cache-Control",
+                              "value": "public, max-age=31536000, immutable"
+                            },
+                            {
+                              "name": "Server",
+                              "value": "nginx/1.24.0 (Ubuntu)"
+                            }
+                          ],
+                          "bodySize": 92,
+                          "_transferSize": 402,
+                          "content": {
+                            "mimeType": "application/javascript",
+                            "size": 180,
+                            "text": "import { start } from './boot.js';\n\nstart({ theme: 'auto' });\n"
+                          }
+                        }
+                      },
+                      {
+                        "serverIPAddress": "203.0.113.20",
+                        "time": 12.6,
+                        "_securityDetails": {
+                          "protocol": "TLS 1.3",
+                          "cipher": "AES_128_GCM",
+                          "subjectName": "static.example.com",
+                          "sanList": [
+                            "static.example.com",
+                            "www.example.com"
+                          ],
+                          "issuer": "Example CA R3",
+                          "validFrom": 1790000000,
+                          "validTo": 1797800000
+                        },
+                        "request": {
+                          "method": "GET",
+                          "url": "https://static.example.com/css/site.css",
+                          "headers": [
+                            {
+                              "name": "Accept",
+                              "value": "*/*"
+                            },
+                            {
+                              "name": "Referer",
+                              "value": "https://www.example.com/"
+                            }
+                          ]
+                        },
+                        "response": {
+                          "status": 200,
+                          "httpVersion": "HTTP/2",
+                          "headers": [
+                            {
+                              "name": "Content-Type",
+                              "value": "text/css"
+                            },
+                            {
+                              "name": "Cache-Control",
+                              "value": "public, max-age=31536000, immutable"
+                            },
+                            {
+                              "name": "Server",
+                              "value": "nginx/1.24.0 (Ubuntu)"
+                            }
+                          ],
+                          "bodySize": 60,
+                          "_transferSize": 370,
+                          "content": {
+                            "mimeType": "text/css",
+                            "size": 64,
+                            "text": "body {\n  margin: 0;\n  font-family: system-ui, sans-serif;\n}\n"
+                          }
+                        }
+                      },
+                      {
+                        "serverIPAddress": "203.0.113.20",
+                        "time": 12.6,
+                        "_securityDetails": {
+                          "protocol": "TLS 1.3",
+                          "cipher": "AES_128_GCM",
+                          "subjectName": "static.example.com",
+                          "sanList": [
+                            "static.example.com",
+                            "www.example.com"
+                          ],
+                          "issuer": "Example CA R3",
+                          "validFrom": 1790000000,
+                          "validTo": 1797800000
+                        },
+                        "request": {
+                          "method": "GET",
+                          "url": "https://static.example.com/favicon.png",
+                          "headers": [
+                            {
+                              "name": "Accept",
+                              "value": "*/*"
+                            },
+                            {
+                              "name": "Referer",
+                              "value": "https://www.example.com/"
+                            }
+                          ]
+                        },
+                        "response": {
+                          "status": 200,
+                          "httpVersion": "HTTP/2",
+                          "headers": [
+                            {
+                              "name": "Content-Type",
+                              "value": "image/png"
+                            },
+                            {
+                              "name": "Cache-Control",
+                              "value": "public, max-age=31536000, immutable"
+                            },
+                            {
+                              "name": "Server",
+                              "value": "nginx/1.24.0 (Ubuntu)"
+                            }
+                          ],
+                          "bodySize": 116,
+                          "_transferSize": 428,
+                          "content": {
+                            "mimeType": "image/png",
+                            "size": 116,
+                            "encoding": "base64",
+                            "text": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAO0lEQVR42mNgoDZQTX79Hx8mSjMugNcQfBqxGYTXZlzOx+kSYjRjM2TUAGobQFE0UpyQqJKUqZKZyAEAA+4HN6wWtrMAAAAASUVORK5CYII="
+                          }
+                        }
+                      },
+                      {
+                        "serverIPAddress": "203.0.113.20",
+                        "time": 12.6,
+                        "_securityDetails": {
+                          "protocol": "TLS 1.3",
+                          "cipher": "AES_128_GCM",
+                          "subjectName": "static.example.com",
+                          "sanList": [
+                            "static.example.com",
+                            "www.example.com"
+                          ],
+                          "issuer": "Example CA R3",
+                          "validFrom": 1790000000,
+                          "validTo": 1797800000
+                        },
+                        "request": {
+                          "method": "GET",
+                          "url": "https://static.example.com/fonts/inter.woff2",
+                          "headers": [
+                            {
+                              "name": "Accept",
+                              "value": "*/*"
+                            },
+                            {
+                              "name": "Referer",
+                              "value": "https://www.example.com/"
+                            }
+                          ]
+                        },
+                        "response": {
+                          "status": 200,
+                          "httpVersion": "HTTP/2",
+                          "headers": [
+                            {
+                              "name": "Content-Type",
+                              "value": "font/woff2"
+                            },
+                            {
+                              "name": "Cache-Control",
+                              "value": "public, max-age=31536000, immutable"
+                            },
+                            {
+                              "name": "Server",
+                              "value": "nginx/1.24.0 (Ubuntu)"
+                            }
+                          ],
+                          "bodySize": 24,
+                          "_transferSize": 334,
+                          "content": {
+                            "mimeType": "font/woff2",
+                            "size": 24,
+                            "encoding": "base64",
+                            "text": "d09GMgABAAAAAAAYAAoAAAAA"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
               </template>
             </vt-http>
           </template>
@@ -3198,6 +4057,339 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
         </article>
       </section>
 
+      <section class="example-group" id="lighthouse" aria-labelledby="lighthouse-title">
+        <h3 id="lighthouse-title">&lt;vt-lighthouse&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A PageSpeed Insights answer</h4>
+            <p>
+              Scores, the Core Web Vitals of real users next to the lab measurements, and the
+              opportunities that would save the most time. Each category tab lists what to fix.
+            </p>
+          </div>
+          <template>
+            <vt-lighthouse variant="full" label="shop.example (mobile)">
+              <template>
+                {
+                  "id": "https://shop.example/",
+                  "loadingExperience": {
+                    "id": "https://shop.example/",
+                    "overall_category": "AVERAGE",
+                    "metrics": {
+                      "LARGEST_CONTENTFUL_PAINT_MS": {
+                        "percentile": 2900,
+                        "category": "AVERAGE",
+                        "distributions": [
+                          {
+                            "min": 0,
+                            "max": 2500,
+                            "proportion": 0.68
+                          },
+                          {
+                            "min": 2500,
+                            "max": 4000,
+                            "proportion": 0.2
+                          },
+                          {
+                            "min": 4000,
+                            "proportion": 0.12
+                          }
+                        ]
+                      },
+                      "INTERACTION_TO_NEXT_PAINT": {
+                        "percentile": 180,
+                        "category": "FAST",
+                        "distributions": [
+                          {
+                            "proportion": 0.8
+                          },
+                          {
+                            "proportion": 0.15
+                          },
+                          {
+                            "proportion": 0.05
+                          }
+                        ]
+                      },
+                      "CUMULATIVE_LAYOUT_SHIFT_SCORE": {
+                        "percentile": 31,
+                        "category": "SLOW",
+                        "distributions": [
+                          {
+                            "proportion": 0.55
+                          },
+                          {
+                            "proportion": 0.2
+                          },
+                          {
+                            "proportion": 0.25
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "lighthouseResult": {
+                    "requestedUrl": "https://shop.example/",
+                    "finalDisplayedUrl": "https://shop.example/",
+                    "lighthouseVersion": "12.2.1",
+                    "fetchTime": "2026-11-17T10:00:00.000Z",
+                    "configSettings": {
+                      "formFactor": "mobile"
+                    },
+                    "runWarnings": [
+                      "The page loaded too slowly to finish within the time limit."
+                    ],
+                    "categories": {
+                      "performance": {
+                        "title": "Performance",
+                        "score": 0.62,
+                        "auditRefs": [
+                          {
+                            "id": "first-contentful-paint",
+                            "weight": 10,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "largest-contentful-paint",
+                            "weight": 25,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "total-blocking-time",
+                            "weight": 30,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "cumulative-layout-shift",
+                            "weight": 25,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "speed-index",
+                            "weight": 10,
+                            "group": "metrics"
+                          },
+                          {
+                            "id": "render-blocking-resources",
+                            "weight": 0,
+                            "group": "load-opportunities"
+                          },
+                          {
+                            "id": "uses-optimized-images",
+                            "weight": 0,
+                            "group": "load-opportunities"
+                          },
+                          {
+                            "id": "dom-size",
+                            "weight": 0,
+                            "group": "diagnostics"
+                          }
+                        ]
+                      },
+                      "accessibility": {
+                        "title": "Accessibility",
+                        "score": 0.88,
+                        "auditRefs": [
+                          {
+                            "id": "color-contrast",
+                            "weight": 7,
+                            "group": "a11y-color-contrast"
+                          },
+                          {
+                            "id": "image-alt",
+                            "weight": 10,
+                            "group": "a11y-names-labels"
+                          }
+                        ]
+                      },
+                      "best-practices": {
+                        "title": "Best Practices",
+                        "score": 0.96,
+                        "auditRefs": [
+                          {
+                            "id": "is-on-https",
+                            "weight": 5
+                          }
+                        ]
+                      },
+                      "seo": {
+                        "title": "SEO",
+                        "score": 1,
+                        "auditRefs": [
+                          {
+                            "id": "document-title",
+                            "weight": 1
+                          }
+                        ]
+                      }
+                    },
+                    "audits": {
+                      "first-contentful-paint": {
+                        "id": "first-contentful-paint",
+                        "title": "First Contentful Paint",
+                        "score": 0.72,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 2210,
+                        "displayValue": "2.2 s"
+                      },
+                      "largest-contentful-paint": {
+                        "id": "largest-contentful-paint",
+                        "title": "Largest Contentful Paint",
+                        "score": 0.31,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 4630,
+                        "displayValue": "4.6 s"
+                      },
+                      "total-blocking-time": {
+                        "id": "total-blocking-time",
+                        "title": "Total Blocking Time",
+                        "score": 0.58,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 420,
+                        "displayValue": "420 ms"
+                      },
+                      "cumulative-layout-shift": {
+                        "id": "cumulative-layout-shift",
+                        "title": "Cumulative Layout Shift",
+                        "score": 0.9,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 0.08,
+                        "displayValue": "0.08"
+                      },
+                      "speed-index": {
+                        "id": "speed-index",
+                        "title": "Speed Index",
+                        "score": 0.66,
+                        "scoreDisplayMode": "numeric",
+                        "numericValue": 4900,
+                        "displayValue": "4.9 s"
+                      },
+                      "render-blocking-resources": {
+                        "id": "render-blocking-resources",
+                        "title": "Eliminate render-blocking resources",
+                        "description": "Resources are blocking the first paint of your page. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+                        "score": 0.3,
+                        "scoreDisplayMode": "metricSavings",
+                        "displayValue": "Potential savings of 780 ms",
+                        "details": {
+                          "type": "opportunity",
+                          "overallSavingsMs": 780,
+                          "headings": [
+                            {
+                              "key": "url",
+                              "valueType": "url",
+                              "label": "URL"
+                            },
+                            {
+                              "key": "totalBytes",
+                              "valueType": "bytes",
+                              "label": "Transfer Size"
+                            },
+                            {
+                              "key": "wastedMs",
+                              "valueType": "timespanMs",
+                              "label": "Potential Savings"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "url": "https://shop.example/css/app.css",
+                              "totalBytes": 48200,
+                              "wastedMs": 540
+                            },
+                            {
+                              "url": "https://fonts.example/css2?family=Inter",
+                              "totalBytes": 1300,
+                              "wastedMs": 240
+                            }
+                          ]
+                        }
+                      },
+                      "uses-optimized-images": {
+                        "id": "uses-optimized-images",
+                        "title": "Efficiently encode images",
+                        "description": "Optimized images load faster.",
+                        "score": 0.5,
+                        "scoreDisplayMode": "metricSavings",
+                        "displayValue": "Potential savings of 312 KiB",
+                        "details": {
+                          "type": "opportunity",
+                          "overallSavingsMs": 300,
+                          "overallSavingsBytes": 319488,
+                          "headings": [
+                            {
+                              "key": "url",
+                              "valueType": "url",
+                              "label": "URL"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "url": "https://shop.example/img/hero.jpg"
+                            }
+                          ]
+                        }
+                      },
+                      "dom-size": {
+                        "id": "dom-size",
+                        "title": "Avoid an excessive DOM size",
+                        "score": 0.6,
+                        "scoreDisplayMode": "numeric",
+                        "displayValue": "1,840 elements"
+                      },
+                      "color-contrast": {
+                        "id": "color-contrast",
+                        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+                        "score": 0,
+                        "scoreDisplayMode": "binary",
+                        "details": {
+                          "type": "table",
+                          "headings": [
+                            {
+                              "key": "node",
+                              "valueType": "node",
+                              "label": "Failing Elements"
+                            }
+                          ],
+                          "items": [
+                            {
+                              "node": {
+                                "type": "node",
+                                "snippet": "&lt;a class=\"muted\">Terms&lt;/a>",
+                                "selector": "footer a.muted"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "image-alt": {
+                        "id": "image-alt",
+                        "title": "Image elements have [alt] attributes",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      },
+                      "is-on-https": {
+                        "id": "is-on-https",
+                        "title": "Uses HTTPS",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      },
+                      "document-title": {
+                        "id": "document-title",
+                        "title": "Document has a &lt;title> element",
+                        "score": 1,
+                        "scoreDisplayMode": "binary"
+                      }
+                    }
+                  }
+                }
+              </template>
+            </vt-lighthouse>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="log" aria-labelledby="log-title">
         <h3 id="log-title">&lt;vt-log&gt;</h3>
 
@@ -3241,6 +4433,97 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
                 [18:00:09] ERROR job 1842 failed: timeout after 30s
               </template>
             </vt-log>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="waterfall" aria-labelledby="waterfall-title">
+        <h3 id="waterfall-title">&lt;vt-waterfall&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A capture of a phishing page</h4>
+            <p>
+              A HAR file as Lookyloo or Playwright exports it: the short link redirects to the
+              page, a tracker and an image load from other domains, the image over HTTP, and a
+              request fails. Open a row for its timings and headers, or switch to the domains.
+            </p>
+          </div>
+          <template>
+            <vt-waterfall variant="full" label="capture.har">
+              <template>
+                {
+                "log": {
+                  "creator": { "name": "Lookyloo", "version": "1.30" },
+                  "pages": [{ "id": "page_1", "title": "Sign in", "startedDateTime": "2026-11-17T10:00:00.000Z", "pageTimings": { "onContentLoad": 520, "onLoad": 780 } }],
+                  "entries": [
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.000Z", "time": 90, "_resourceType": "document", "serverIPAddress": "203.0.113.20",
+                      "request": { "method": "GET", "url": "http://bit.example/x7", "httpVersion": "HTTP/1.1", "headers": [] },
+                      "response": { "status": 301, "statusText": "Moved Permanently", "httpVersion": "HTTP/1.1", "redirectURL": "https://login.shop.example/signin", "headers": [{ "name": "Location", "value": "https://login.shop.example/signin" }], "content": { "size": 0, "mimeType": "text/html" }, "bodySize": 0, "headersSize": 180 },
+                      "timings": { "blocked": 2, "dns": 20, "connect": 28, "send": 1, "wait": 37, "receive": 2 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.100Z", "time": 240, "_resourceType": "document", "serverIPAddress": "198.51.100.7",
+                      "request": { "method": "GET", "url": "https://login.shop.example/signin", "httpVersion": "HTTP/2", "headers": [{ "name": "User-Agent", "value": "Mozilla/5.0" }] },
+                      "response": { "status": 200, "httpVersion": "HTTP/2", "headers": [{ "name": "Content-Type", "value": "text/html; charset=utf-8" }], "content": { "size": 18400, "mimeType": "text/html" }, "bodySize": 6200, "headersSize": 300 },
+                      "timings": { "blocked": 1, "dns": 15, "connect": 60, "ssl": 35, "send": 1, "wait": 120, "receive": 43 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.350Z", "time": 110, "_resourceType": "stylesheet", "serverIPAddress": "198.51.100.7",
+                      "request": { "method": "GET", "url": "https://login.shop.example/site.css", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 24000, "mimeType": "text/css" }, "bodySize": 5100, "headersSize": 200 },
+                      "timings": { "send": 0, "wait": 70, "receive": 40 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.360Z", "time": 190, "_resourceType": "script", "serverIPAddress": "192.0.2.50",
+                      "request": { "method": "GET", "url": "https://cdn.tracker.example/t.js?id=42", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 31000, "mimeType": "text/javascript" }, "bodySize": 9800, "headersSize": 150 },
+                      "timings": { "dns": 30, "connect": 50, "ssl": 25, "send": 1, "wait": 60, "receive": 49 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.480Z", "time": 70, "_resourceType": "image",
+                      "request": { "method": "GET", "url": "http://img.other.example/logo.png", "headers": [] },
+                      "response": { "status": 200, "headers": [], "content": { "size": 4000, "mimeType": "image/png" }, "bodySize": 4000, "headersSize": 100 },
+                      "timings": { "dns": 12, "connect": 18, "send": 0, "wait": 30, "receive": 10 } },
+                    { "pageref": "page_1", "startedDateTime": "2026-11-17T10:00:00.600Z", "time": 45, "_resourceType": "fetch",
+                      "request": { "method": "POST", "url": "https://collect.other.example/api/c", "headers": [] },
+                      "response": { "status": 0, "headers": [], "content": { "size": -1, "mimeType": "" } },
+                      "timings": { "send": 0, "wait": 45, "receive": 0 } }
+                  ]
+                }
+              }
+              </template>
+            </vt-waterfall>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="nmap" aria-labelledby="nmap-title">
+        <h3 id="nmap-title">&lt;vt-nmap&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A service scan</h4>
+            <p>Normal output from <code>nmap -sV</code>: open ports with their version and script output; the exposed database is marked. The filter button shows closed and filtered ports.</p>
+          </div>
+          <template>
+            <vt-nmap variant="full" label="nmap -sV 203.0.113.0/30">
+              <template>
+Starting Nmap 7.94 ( https://nmap.org ) at 2026-11-17 10:00 CET
+Nmap scan report for shop.example.com (203.0.113.10)
+Host is up (0.012s latency).
+Not shown: 995 closed tcp ports (reset)
+PORT     STATE    SERVICE    VERSION
+22/tcp   open     ssh        OpenSSH 8.9p1 Ubuntu 3ubuntu0.6 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   256 aa:bb:cc:dd (ECDSA)
+|_  256 ee:ff:00:11 (ED25519)
+80/tcp   open     http       nginx 1.18.0 (Ubuntu)
+|_http-title: Did not follow redirect to https://shop.example.com/
+443/tcp  open     ssl/http   nginx 1.18.0
+3306/tcp open     mysql      MySQL 8.0.35
+6379/tcp filtered redis
+OS details: Linux 5.0 - 5.14
+
+Nmap scan report for 203.0.113.11
+Host is up (0.020s latency).
+PORT   STATE SERVICE VERSION
+23/tcp open  telnet  BusyBox telnetd
+
+Nmap done: 4 IP addresses (2 hosts up) scanned in 12.34 seconds</template>
+            </vt-nmap>
           </template>
         </article>
       </section>
@@ -3317,6 +4600,154 @@ Initial access: T1566.001. The VPN was exploited through CVE-2024-3400; 45.33.32
         </article>
       </section>
 
+      <section class="example-group" id="pcap" aria-labelledby="pcap-title">
+        <h3 id="pcap-title">&lt;vt-pcap&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A capture opened in the page</h4>
+            <p>
+              A DNS lookup, a TCP handshake, a TLS Client Hello and an HTTP request. Open a packet
+              by its number, then press a field: its bytes light up in the dump. Drop your own
+              <code>.pcap</code> or <code>.pcapng</code> on it; the file never leaves the page.
+            </p>
+          </div>
+          <template>
+            <vt-pcap variant="full" label="login.pcap"><template>1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==</template></vt-pcap>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Host names as indicators</h4>
+            <p>
+              Every name seen in DNS questions and answers, TLS server names and HTTP Host
+              headers, defanged, with what it resolves to. Copy the names as a list.
+            </p>
+          </div>
+          <template>
+            <vt-pcap variant="full" view="names" defang file="false"><template>1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==</template></vt-pcap>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="redirects" aria-labelledby="redirects-title">
+        <h3 id="redirects-title">&lt;vt-redirects&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A link from an e-mail, from a HAR file</h4>
+            <p>
+              The chain is followed from entry to entry. Each step says how it redirects and what
+              changes: another site, tracking parameters added, and a redirect that leaves HTTPS for
+              plain HTTP, reported as an error.
+            </p>
+          </div>
+          <template>
+            <vt-redirects variant="full" label="bit.example/sp4m">
+              <template>
+                {
+                  "log": {
+                    "entries": [
+                      {
+                        "serverIPAddress": "198.51.100.4",
+                        "time": 38,
+                        "request": {
+                          "url": "http://bit.example/sp4m"
+                        },
+                        "response": {
+                          "status": 301,
+                          "redirectURL": "https://bit.example/sp4m",
+                          "headers": []
+                        }
+                      },
+                      {
+                        "serverIPAddress": "198.51.100.4",
+                        "time": 61,
+                        "request": {
+                          "url": "https://bit.example/sp4m"
+                        },
+                        "response": {
+                          "status": 302,
+                          "redirectURL": "https://click.example.net/r?c=91&amp;utm_source=newsletter&amp;utm_campaign=nov",
+                          "headers": []
+                        }
+                      },
+                      {
+                        "serverIPAddress": "203.0.113.80",
+                        "time": 74,
+                        "request": {
+                          "url": "https://click.example.net/r?c=91&amp;utm_source=newsletter&amp;utm_campaign=nov"
+                        },
+                        "response": {
+                          "status": 302,
+                          "redirectURL": "http://promo.example.org/landing?c=91&amp;utm_source=newsletter&amp;utm_campaign=nov&amp;gclid=EAIa1",
+                          "headers": []
+                        }
+                      },
+                      {
+                        "serverIPAddress": "192.0.2.15",
+                        "time": 120,
+                        "request": {
+                          "url": "http://promo.example.org/landing?c=91&amp;utm_source=newsletter&amp;utm_campaign=nov&amp;gclid=EAIa1"
+                        },
+                        "response": {
+                          "status": 200,
+                          "headers": []
+                        }
+                      }
+                    ]
+                  }
+                }
+              </template>
+            </vt-redirects>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>From curl -sIL</h4>
+            <p>
+              The output of <code>curl -sIL</code>, with the command for the first URL. Relative
+              <code>Location</code> headers are resolved.
+            </p>
+          </div>
+          <template>
+            <vt-redirects variant="full">
+              <template>
+$ curl -sIL http://example.com/docs
+HTTP/1.1 301 Moved Permanently
+Location: https://example.com/docs
+
+HTTP/2 308
+location: /docs/
+
+HTTP/2 302
+location: https://www.example.com/en/docs/
+
+HTTP/2 200
+content-type: text/html; charset=utf-8</template>
+            </vt-redirects>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Client-side redirects, as a list</h4>
+            <p>
+              URLs joined with arrows (<code>→</code> or <code>-&gt;</code>); <code>(meta)</code> and <code>(js)</code> mark a
+              meta refresh and a JavaScript redirect, which a HAR file does not record.
+            </p>
+          </div>
+          <template>
+            <vt-redirects variant="full">
+              <template>
+302 https://login.example.com/ → https://login.example.com/wait (meta) → https://portal.example.com/ (js) → 200 https://portal.example.com/home</template>
+            </vt-redirects>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="headers" aria-labelledby="headers-title">
         <h3 id="headers-title">&lt;vt-headers&gt;</h3>
 
@@ -3356,6 +4787,91 @@ permissions-policy: camera=(), microphone=(), geolocation=()
 cross-origin-opener-policy: same-origin
 set-cookie: __Host-sid=abc; Path=/; Secure; HttpOnly; SameSite=Lax</template>
             </vt-headers>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="sigma" aria-labelledby="sigma-title">
+        <h3 id="sigma-title">&lt;vt-sigma&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A detection rule explained</h4>
+            <p>
+              The level in words, ATT&amp;CK tags as links, each search as a table with its
+              modifiers read out, and the condition as a tree with <code>all of selection_*</code>
+              expanded. The Source tab keeps the YAML.
+            </p>
+          </div>
+          <template>
+            <vt-sigma variant="full" label="web_server_whoami.yml">
+              <template>
+                title: Whoami Execution by a Web Server
+                id: 502b42de-4306-40b4-9596-6f590c81f073
+                status: test
+                description: A web server process runs whoami, a common first step after a web shell is planted.
+                author: Vitrine examples
+                date: 2026-11-17
+                references:
+                  - https://attack.mitre.org/techniques/T1033/
+                tags:
+                  - attack.discovery
+                  - attack.t1033
+                  - attack.persistence
+                  - attack.t1505.003
+                logsource:
+                  category: process_creation
+                  product: windows
+                detection:
+                  selection_parent:
+                    ParentImage|endswith:
+                      - '\w3wp.exe'
+                      - '\httpd.exe'
+                      - '\nginx.exe'
+                  selection_child:
+                    - Image|endswith: '\whoami.exe'
+                    - OriginalFileName: 'whoami.exe'
+                  filter_health:
+                    CommandLine|contains|all:
+                      - '/healthcheck'
+                      - '--quiet'
+                  condition: all of selection_* and not filter_health
+                falsepositives:
+                  - Monitoring scripts run by the web server account
+                level: high
+              </template>
+            </vt-sigma>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a review would flag</h4>
+            <p>
+              A condition naming a search that does not exist, a search never used, a misspelled
+              modifier, a level, status, identifier and date outside the specification.
+            </p>
+          </div>
+          <template>
+            <vt-sigma variant="full" tabs="false">
+              <template>
+                title: Suspicious logins
+                id: 42
+                status: beta
+                level: severe
+                date: 2023/04/01
+                logsource:
+                  product: linux
+                  service: auth
+                detection:
+                  selection:
+                    message|contain: 'Failed password'
+                    user|startswith: 'adm*'
+                  burst:
+                    - 'Too many authentication failures'
+                  condition: selection and brute
+              </template>
+            </vt-sigma>
           </template>
         </article>
       </section>
@@ -3578,6 +5094,52 @@ AssertionError: assert 404 == 200</failure>
                 ]
               </template>
             </vt-trace>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="url" aria-labelledby="url-title">
+        <h3 id="url-title">&lt;vt-url&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Phishing links taken apart</h4>
+            <p>
+              A host before the <code>@</code>, a homograph in Cyrillic letters, a deceptive
+              subdomain carrying the victim's address, and a Google redirect to another site:
+              each URL gets a verdict, its findings and its parts. URLs are defanged and never
+              links.
+            </p>
+          </div>
+          <template>
+            <vt-url variant="full">
+              <template>
+                https://www.paypal.com@evil.example/login
+                https://xn--80ak6aa92e.com/
+                https://paypal.com.secure-login.xyz/verify?email=alice@example.org
+                https://www.google.com/url?q=https://evil.example/x&amp;sa=D&amp;utm_source=mail
+              </template>
+            </vt-url>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A redirect chain</h4>
+            <p>
+              With <code>chain</code>, the lines are the steps of a redirect chain: the domains
+              crossed, and the step that drops HTTPS.
+            </p>
+          </div>
+          <template>
+            <vt-url chain parts="false">
+              <template>
+                https://t.example/c/8f2a
+                https://ads.example/r?to=http%3A%2F%2Fpromo.example%2Fwin
+                http://promo.example/win
+                https://shop.example/offer
+              </template>
+            </vt-url>
           </template>
         </article>
       </section>
@@ -3831,6 +5393,74 @@ AssertionError: assert 404 == 200</failure>
                 }
               </template>
             </vt-workflow>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="yara" aria-labelledby="yara-title">
+        <h3 id="yara-title">&lt;vt-yara&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A rule explained</h4>
+            <p>
+              Hex strings with their wildcards, jumps and alternatives, modifiers in words (hover
+              them), and the condition read out: a Windows executable under 2 MB, two of three
+              strings, a module.
+            </p>
+          </div>
+          <template>
+            <vt-yara variant="full" label="loader.yar">
+              <template>
+                import "pe"
+
+                rule Loader_PE_Dropper : loader dropper {
+                  meta:
+                    author = "CIRCL"
+                    description = "PE dropper with an encoded PowerShell stage"
+                    date = "2026-11-17"
+                    score = 80
+                  strings:
+                    $mz = { 4D 5A 90 00 }
+                    $stub = { E8 ?? ?? ?? ?? 5B [2-6] 8B 45 ( 08 | 0C ) }
+                    $cmd = "cmd.exe /c" nocase wide ascii
+                    $ps = "powershell -enc" base64
+                    $key = "Sup3rS3cret" xor(1-255)
+                    $c2 = /https?:\/\/[a-z0-9]{8,}\.(top|xyz)\// nocase
+                  condition:
+                    uint16(0) == 0x5A4D and filesize < 2MB and
+                    $mz at 0 and $stub and 2 of ($cmd, $ps, $key) and #c2 > 1 and
+                    pe.number_of_sections > 3
+                }
+              </template>
+            </vt-yara>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What the compiler would refuse</h4>
+            <p>
+              A string used but never defined, one defined but never used, a module without its
+              import, <code>nocase</code> with <code>xor</code>, a two-byte string and an
+              unbounded jump.
+            </p>
+          </div>
+          <template>
+            <vt-yara variant="full" tabs="false">
+              <template>
+                rule webshell_quick {
+                  strings:
+                    $a = "eval"
+                    $b = "ab"
+                    $c = { 3C ?? [-] 3E }
+                    $d = "base64_decode" nocase xor
+                    $old = "assert("
+                  condition:
+                    any of ($a, $b, $c, $d) and $e and math.entropy(0, filesize) > 6
+                }
+              </template>
+            </vt-yara>
           </template>
         </article>
       </section>
@@ -4790,6 +6420,242 @@ AssertionError: assert 404 == 200</failure>
         </article>
       </section>
 
+      <section class="example-group" id="sbom" aria-labelledby="sbom-title">
+        <h3 id="sbom-title">&lt;vt-sbom&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A CycloneDX SBOM with its vulnerabilities</h4>
+            <p>
+              The dependency tree of an application, its license kinds, and a VEX: Log4Shell in an
+              optional Java dependency, a prototype pollution brought in twice through Express. The
+              Components tab shows the path that brings each one in.
+            </p>
+          </div>
+          <template>
+            <vt-sbom variant="full" label="bom.cdx.json">
+              <template>
+                {
+                  "bomFormat": "CycloneDX",
+                  "specVersion": "1.6",
+                  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+                  "version": 1,
+                  "metadata": {
+                    "timestamp": "2026-11-17T10:00:00Z",
+                    "tools": {
+                      "components": [
+                        {
+                          "type": "application",
+                          "vendor": "anchore",
+                          "name": "syft",
+                          "version": "1.16.0"
+                        }
+                      ]
+                    },
+                    "component": {
+                      "type": "application",
+                      "bom-ref": "app",
+                      "name": "shop-web",
+                      "version": "3.2.0",
+                      "purl": "pkg:npm/shop-web@3.2.0"
+                    }
+                  },
+                  "components": [
+                    {
+                      "type": "framework",
+                      "bom-ref": "pkg:npm/express@4.19.2",
+                      "name": "express",
+                      "version": "4.19.2",
+                      "purl": "pkg:npm/express@4.19.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ],
+                      "hashes": [
+                        {
+                          "alg": "SHA-512",
+                          "content": "aa11"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/body-parser@1.20.2",
+                      "name": "body-parser",
+                      "version": "1.20.2",
+                      "purl": "pkg:npm/body-parser@1.20.2",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "MIT"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/qs@6.11.0",
+                      "name": "qs",
+                      "version": "6.11.0",
+                      "purl": "pkg:npm/qs@6.11.0",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "BSD-3-Clause"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/%40img/sharp@0.33.0",
+                      "group": "@img",
+                      "name": "sharp",
+                      "version": "0.33.0",
+                      "purl": "pkg:npm/%40img/sharp@0.33.0",
+                      "licenses": [
+                        {
+                          "expression": "Apache-2.0 AND LGPL-3.0-or-later"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+                      "group": "org.apache.logging.log4j",
+                      "name": "log4j-core",
+                      "version": "2.14.1",
+                      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+                      "licenses": [
+                        {
+                          "license": {
+                            "id": "Apache-2.0"
+                          }
+                        }
+                      ],
+                      "scope": "optional"
+                    },
+                    {
+                      "type": "library",
+                      "bom-ref": "pkg:npm/left-pad@1.3.0",
+                      "name": "left-pad",
+                      "version": "1.3.0",
+                      "purl": "pkg:npm/left-pad@1.3.0"
+                    }
+                  ],
+                  "dependencies": [
+                    {
+                      "ref": "app",
+                      "dependsOn": [
+                        "pkg:npm/express@4.19.2",
+                        "pkg:npm/%40img/sharp@0.33.0",
+                        "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/express@4.19.2",
+                      "dependsOn": [
+                        "pkg:npm/body-parser@1.20.2",
+                        "pkg:npm/qs@6.11.0"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/body-parser@1.20.2",
+                      "dependsOn": [
+                        "pkg:npm/qs@6.11.0"
+                      ]
+                    },
+                    {
+                      "ref": "pkg:npm/qs@6.11.0",
+                      "dependsOn": []
+                    }
+                  ],
+                  "vulnerabilities": [
+                    {
+                      "id": "CVE-2021-44228",
+                      "source": {
+                        "name": "NVD",
+                        "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228"
+                      },
+                      "ratings": [
+                        {
+                          "source": {
+                            "name": "NVD"
+                          },
+                          "score": 10.0,
+                          "severity": "critical",
+                          "method": "CVSSv31",
+                          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"
+                        }
+                      ],
+                      "cwes": [
+                        502,
+                        400,
+                        20
+                      ],
+                      "description": "Apache Log4j2 JNDI features do not protect against attacker-controlled LDAP endpoints.",
+                      "recommendation": "Upgrade to 2.17.1 or later.",
+                      "analysis": {
+                        "state": "exploitable"
+                      },
+                      "affects": [
+                        {
+                          "ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "GHSA-hrpp-h998-j3pp",
+                      "source": {
+                        "name": "GitHub"
+                      },
+                      "ratings": [
+                        {
+                          "severity": "high",
+                          "method": "CVSSv31",
+                          "score": 7.5
+                        }
+                      ],
+                      "description": "qs vulnerable to prototype pollution.",
+                      "affects": [
+                        {
+                          "ref": "pkg:npm/qs@6.11.0"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "CVE-2024-43796",
+                      "source": {
+                        "name": "NVD"
+                      },
+                      "ratings": [
+                        {
+                          "severity": "low",
+                          "score": 2.3,
+                          "method": "CVSSv4"
+                        }
+                      ],
+                      "analysis": {
+                        "state": "not_affected",
+                        "justification": "code_not_reachable"
+                      },
+                      "affects": [
+                        {
+                          "ref": "pkg:npm/express@4.19.2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              </template>
+            </vt-sbom>
+          </template>
+        </article>
+      </section>
+
       <section class="example-group" id="advisories" aria-labelledby="advisories-title">
         <h3 id="advisories-title">&lt;vt-advisories&gt;</h3>
 
@@ -5241,8 +7107,343 @@ AssertionError: assert 404 == 200</failure>
         </article>
       </section>
 
+      <section class="example-group" id="semver" aria-labelledby="semver-title">
+        <h3 id="semver-title">&lt;vt-semver&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>What a dependency range accepts</h4>
+            <p>
+              The range of a <code>package.json</code> against the versions published on npm (a
+              registry document): which versions match, which one is installed, and how far the
+              latest is. Type another range or test a version below.
+            </p>
+          </div>
+          <template>
+            <vt-semver variant="full" range="^1.2.3" label="left-pad-ish">
+              <template>
+                {
+                  "name": "left-pad-ish",
+                  "dist-tags": {
+                    "latest": "3.1.0",
+                    "next": "3.2.0-beta.1"
+                  },
+                  "versions": {
+                    "1.0.0": {},
+                    "1.2.0": {},
+                    "1.2.3": {},
+                    "1.4.2": {},
+                    "1.9.1": {},
+                    "2.0.0": {},
+                    "2.3.0": {},
+                    "2.5.4": {},
+                    "3.0.0": {},
+                    "3.1.0": {},
+                    "3.2.0-beta.1": {}
+                  }
+                }
+              </template>
+            </vt-semver>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Ranges with a catch</h4>
+            <p>
+              Several sets joined by <code>||</code>: <code>^</code> below 1.0.0, a range without
+              upper bound, a pre-release. Each one is read in words, with a warning.
+            </p>
+          </div>
+          <template>
+            <vt-semver range="^0.4.1 || &gt;=2.0.0-rc.1">0.4.0 0.4.5 0.5.0 1.0.0 2.0.0-rc.1 2.0.0-rc.2 2.0.0 3.1.0</vt-semver>
+          </template>
+        </article>
       </section>
 
+      </section>
+
+
+      <section class="example-category" id="browse-loading-feedback" aria-labelledby="browse-loading-feedback-title">
+        <header class="example-category-head">
+          <h2 id="browse-loading-feedback-title">Loading &amp; feedback</h2>
+          <p>Show that something is happening: spinners, progress, skeletons, overlays, steps and busy buttons.</p>
+        </header>
+
+      <section class="example-group" id="loading-button" aria-labelledby="loading-button-title">
+        <h3 id="loading-button-title">&lt;vt-loading-button&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Variants and spinner positions</h4>
+            <p><code>variant</code> sets the look; <code>spinner-position</code> puts the spinner before the text, after it, or instead of it, keeping the width.</p>
+          </div>
+          <template>
+            <vt-loading-button loading loading-text="Saving…">Save</vt-loading-button>
+            <vt-loading-button variant="secondary" loading spinner="dots" spinner-position="end">Load more</vt-loading-button>
+            <vt-loading-button variant="danger" loading spinner-position="replace">Delete</vt-loading-button>
+            <vt-loading-button variant="ghost">Cancel</vt-loading-button>
+          </template>
+        </article>
+
+        <article class="example" data-script="loadingButtonSave">
+          <div class="example-text">
+            <h4>Track a request</h4>
+            <p>Click: the button shows "Saving…", ignores more clicks, then says "Saved" or, one time in three, "Could not save". <code>track()</code> takes the promise and does the rest.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="example-group" id="loading-message" aria-labelledby="loading-message-title">
+        <h3 id="loading-message-title">&lt;vt-loading-message&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A long export</h4>
+            <p>Messages follow one another, the elapsed time counts, and after 6 seconds a reassuring message appears.</p>
+          </div>
+          <template>
+            <vt-loading-message elapsed slow-after="6s" interval="2s">
+              Connecting to the server…
+              Collecting 1,284 invoices…
+              Generating the PDF…
+              Compressing the archive…
+            </vt-loading-message>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Stacked, for an empty panel</h4>
+            <p><code>layout="stacked"</code> centers the spinner above the message.</p>
+          </div>
+          <template>
+            <vt-loading-message layout="stacked" spinner="bars" size="md" messages="Crunching the numbers…"></vt-loading-message>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="loading-overlay" aria-labelledby="loading-overlay-title">
+        <h3 id="loading-overlay-title">&lt;vt-loading-overlay&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Dark scrim, no spinner</h4>
+            <p><code>scrim="dark"</code> puts the message in a card; <code>spinner="none"</code> keeps only the text and the bar.</p>
+          </div>
+          <template>
+            <vt-loading-overlay scrim="dark" spinner="none" text="Recalculating totals" value="64">
+              <vt-table variant="simple" label="Orders">
+                <template>
+            order,customer,total
+            1042,Ada Lovelace,€ 320.00
+            1043,Alan Turing,€ 89.90
+            1044,Grace Hopper,€ 1204.50
+                </template>
+              </vt-table>
+            </vt-loading-overlay>
+          </template>
+        </article>
+
+        <article class="example" data-script="loadingOverlayToggle">
+          <div class="example-text">
+            <h4>Saving a form</h4>
+            <p>Submit the form: it is covered, made inert (try tabbing into it) and a progress bar fills; Cancel fires <code>vt-cancel</code>.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="example-group" id="page-progress" aria-labelledby="page-progress-title">
+        <h3 id="page-progress-title">&lt;vt-page-progress&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>The bar at 60%</h4>
+            <p>A bar along the top edge, with its glow and a corner spinner. In a page it is fixed to the window; <code>placement="absolute"</code> keeps it in its container.</p>
+          </div>
+          <template>
+            <div class="demo-frame">
+              <vt-page-progress active value="0.6" trickle="false" placement="absolute" spinner></vt-page-progress>
+              <p>Loading the next page…</p>
+            </div>
+          </template>
+        </article>
+
+        <article class="example" data-script="pageProgressNavigate">
+          <div class="example-text">
+            <h4>A navigation</h4>
+            <p><code>start()</code> shows the bar and lets it creep forward; <code>done()</code> fills it and fades it out. In a page it sits along the top of the window; here <code>placement="absolute"</code> keeps it in the box.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="example-group" id="progress" aria-labelledby="progress-title">
+        <h3 id="progress-title">&lt;vt-progress&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Values, buffer, segments and stripes</h4>
+            <p>The value as a percentage or a fraction with a unit, a buffer ahead of the value, steps, stripes and status colors.</p>
+          </div>
+          <template>
+            <vt-progress value="42" text="Uploading report.pdf" show-value="percent"></vt-progress>
+            <vt-progress value="30" buffer="65" text="Streaming" show-value="fraction" unit="MB" thickness="md"></vt-progress>
+            <vt-progress value="3" max="5" segments="5" status="success" thickness="md" text="Profile completed" show-value="fraction"></vt-progress>
+            <vt-progress value="92" status="warning" striped animated thickness="lg" text="Disk usage" show-value="percent"></vt-progress>
+            <vt-progress text="Preparing…"></vt-progress>
+          </template>
+        </article>
+
+        <article class="example" data-script="progressUpload">
+          <div class="example-text">
+            <h4>A live upload</h4>
+            <p>Update <code>value</code> as bytes are sent; <code>vt-complete</code> fires at the end.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="example-group" id="progress-ring" aria-labelledby="progress-ring-title">
+        <h3 id="progress-ring-title">&lt;vt-progress-ring&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Gauges</h4>
+            <p>The value in the center as a percentage, a value with a unit or any text; status colors; indeterminate without a value.</p>
+          </div>
+          <template>
+            <vt-progress-ring value="72"></vt-progress-ring>
+            <vt-progress-ring value="88" max="128" show-value="value" unit="GB" text="Storage" status="warning" size="xl"></vt-progress-ring>
+            <vt-progress-ring value="5" max="5" value-text="5/5" status="success" text="Checks"></vt-progress-ring>
+            <vt-progress-ring size="md" text="Syncing"></vt-progress-ring>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="skeleton" aria-labelledby="skeleton-title">
+        <h3 id="skeleton-title">&lt;vt-skeleton&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Card, list and table</h4>
+            <p>Placeholders in the shape of the content, with a shimmer. Put the real content inside: it shows when the skeleton stops.</p>
+          </div>
+          <template>
+            <vt-skeleton shape="card" media avatar width="320px"></vt-skeleton>
+            <vt-skeleton shape="list" avatar rows="3"></vt-skeleton>
+            <vt-skeleton shape="table" rows="3" columns="4" animation="pulse"></vt-skeleton>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Content ready</h4>
+            <p>With <code>active="false"</code> the real content shows, as after <code>stop()</code>.</p>
+          </div>
+          <template>
+            <vt-skeleton shape="paragraph" active="false">
+              <p>The quarterly report is ready: revenue grew 12% and churn fell to 2.1%.</p>
+            </vt-skeleton>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="spinner" aria-labelledby="spinner-title">
+        <h3 id="spinner-title">&lt;vt-spinner&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Seven shapes</h4>
+            <p>Ring, arc, dual ring, dots, bars, pulse and orbit, drawn with CSS only.</p>
+          </div>
+          <template>
+            <vt-spinner></vt-spinner>
+            <vt-spinner type="arc"></vt-spinner>
+            <vt-spinner type="dual-ring"></vt-spinner>
+            <vt-spinner type="dots"></vt-spinner>
+            <vt-spinner type="bars"></vt-spinner>
+            <vt-spinner type="pulse"></vt-spinner>
+            <vt-spinner type="orbit"></vt-spinner>
+          </template>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Sizes, tones, speed and text</h4>
+            <p><code>size</code>, <code>tone</code>, <code>speed</code> and a visible <code>text</code>, after the spinner or under it.</p>
+          </div>
+          <template>
+            <vt-spinner size="xs" tone="neutral"></vt-spinner>
+            <vt-spinner size="lg" tone="success" speed="slow"></vt-spinner>
+            <vt-spinner type="arc" size="xl" tone="info" speed="fast"></vt-spinner>
+            <vt-spinner type="dots" text="Loading results…"></vt-spinner>
+            <vt-spinner type="ring" size="lg" text="Uploading" text-position="below"></vt-spinner>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="loading-steps" aria-labelledby="loading-steps-title">
+        <h3 id="loading-steps-title">&lt;vt-loading-steps&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A deployment</h4>
+            <p>Steps written one per line, with details and durations; the running step has a spinner.</p>
+          </div>
+          <template>
+            <vt-loading-steps text="Deploying shop-api v2.4.0">
+              <template>
+                done Build image (42s)
+                done Run tests — 214 passed (1m 3s)
+                running Push to registry — layer 3 of 7
+                pending Migrate database
+                pending Roll out
+              </template>
+            </vt-loading-steps>
+          </template>
+        </article>
+
+        <article class="example" data-script="stepsDeploy">
+          <div class="example-text">
+            <h4>Live steps</h4>
+            <p><code>steps</code> and <code>setStep()</code> drive it from script; <code>vt-complete</code> fires at the end.</p>
+          </div>
+        </article>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>A checkout stepper</h4>
+            <p><code>layout="horizontal"</code>, without the overall bar.</p>
+          </div>
+          <template>
+            <vt-loading-steps layout="horizontal" progress="false" label="Checkout">
+              <template>
+                done Cart
+                done Shipping
+                running Payment
+                pending Confirmation
+              </template>
+            </vt-loading-steps>
+          </template>
+        </article>
+      </section>
+
+      <section class="example-group" id="typing" aria-labelledby="typing-title">
+        <h3 id="typing-title">&lt;vt-typing&gt;</h3>
+
+        <article class="example">
+          <div class="example-text">
+            <h4>Who is typing</h4>
+            <p>A bubble, dots or a wave, with names in the reader's language.</p>
+          </div>
+          <template>
+            <vt-typing name="Ada" show-text></vt-typing>
+            <vt-typing name="Ada, Linus" type="dots" show-text></vt-typing>
+            <vt-typing type="wave" tone="accent"></vt-typing>
+          </template>
+        </article>
+      </section>
+
+      </section>
 
       <section class="example-category" id="browse-customization" aria-labelledby="browse-customization-title">
         <header class="example-category-head">

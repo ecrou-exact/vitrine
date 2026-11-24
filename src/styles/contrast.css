@@ -1,0 +1,340 @@
+/*
+ * Color contrast: the color fields, a card per pair with its preview, ratio and criteria, the
+ * nearest passing colors, and the grid of a palette. Results are written in words; colors
+ * only repeat them. Preview colors are set through CSSOM.
+ */
+.contrast-body {
+  display: grid;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.contrast-muted {
+  margin: 0;
+  color: var(--_fg-muted);
+}
+
+.contrast-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2) var(--_space-4);
+}
+
+.contrast-field {
+  display: flex;
+  flex: 1 1 14em;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.contrast-field label {
+  font-weight: 600;
+}
+
+.contrast-input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: inherit;
+  font-family: var(--_font-mono);
+}
+
+.contrast-picker {
+  flex: none;
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.contrast-input:focus-visible,
+.contrast-picker:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.contrast-pairs {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.contrast-pair {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+  padding: var(--_space-3);
+  border: 1px solid var(--_border);
+  border-inline-start: 3px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+}
+
+.contrast-pair.aaa,
+.contrast-pair.aa {
+  border-inline-start-color: var(--_success);
+}
+
+.contrast-pair.large {
+  border-inline-start-color: var(--_warning);
+}
+
+.contrast-pair.fail {
+  border-inline-start-color: var(--_danger);
+}
+
+.contrast-title {
+  margin: 0;
+  font-size: 1em;
+}
+
+.contrast-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--_space-3);
+  align-items: stretch;
+}
+
+@media (max-width: 560px) {
+  .contrast-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.contrast-preview {
+  display: grid;
+  gap: var(--_space-2);
+  align-content: center;
+  padding: var(--_space-3) var(--_space-4);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.contrast-sample {
+  display: block;
+  margin: 0;
+  font-size: 16px;
+}
+
+.contrast-sample::before,
+.contrast-aa::before {
+  content: attr(data-sample);
+}
+
+.contrast-sample.large {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contrast-ui {
+  width: 48px;
+  height: 18px;
+  border: 3px solid currentColor;
+  border-radius: 999px;
+}
+
+.contrast-score {
+  display: grid;
+  gap: 2px;
+  align-content: center;
+  justify-items: start;
+  min-width: 11em;
+}
+
+.contrast-label {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.contrast-value {
+  font-size: 2em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.contrast-grade {
+  padding: 0 var(--_space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-full);
+  font-size: var(--_font-size-small);
+  font-weight: 700;
+}
+
+.contrast-grade.aaa,
+.contrast-grade.aa {
+  color: var(--_success);
+}
+
+.contrast-grade.large {
+  color: var(--_warning);
+}
+
+.contrast-grade.fail {
+  color: var(--_danger);
+}
+
+.contrast-colors code,
+.contrast-grid code {
+  font-family: var(--_font-mono);
+  font-size: var(--_font-size-small);
+}
+
+.contrast-levels {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contrast-levels th,
+.contrast-levels td {
+  padding: 4px var(--_space-3) 4px 0;
+  border-bottom: 1px solid var(--_border);
+  text-align: start;
+}
+
+.contrast-levels thead th {
+  color: var(--_fg-muted);
+  font-weight: 500;
+}
+
+.contrast-levels tbody th {
+  font-weight: 500;
+}
+
+.contrast-levels tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.contrast-result {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  font-weight: 600;
+}
+
+.contrast-levels td svg {
+  width: 14px;
+  height: 14px;
+}
+
+.contrast-levels td.pass svg {
+  color: var(--_success);
+}
+
+.contrast-levels td.fail svg {
+  color: var(--_danger);
+}
+
+.contrast-suggest {
+  display: grid;
+  gap: var(--_space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contrast-suggest li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.contrast-swatch {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--_border-strong);
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.contrast-scroll {
+  overflow-x: auto;
+}
+
+.contrast-grid {
+  border-collapse: collapse;
+}
+
+.contrast-grid caption {
+  padding-bottom: var(--_space-2);
+  color: var(--_fg-muted);
+  text-align: start;
+}
+
+.contrast-grid th,
+.contrast-grid td {
+  padding: var(--_space-1);
+  border: 1px solid var(--_border);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.contrast-grid thead th {
+  white-space: nowrap;
+}
+
+.contrast-grid thead .contrast-swatch {
+  margin-inline-end: 4px;
+}
+
+.contrast-grid tbody th {
+  text-align: start;
+  white-space: nowrap;
+}
+
+.contrast-grid td.same {
+  background: var(--_surface-sunken);
+}
+
+.contrast-grid td.cell {
+  min-width: 5.5em;
+}
+
+.contrast-aa {
+  display: block;
+  padding: 2px 0;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.contrast-cell-ratio {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.contrast-cell-grade {
+  display: block;
+  font-size: var(--_font-size-small);
+}
+
+.contrast-grid td.fail .contrast-cell-grade {
+  color: var(--_danger);
+}
+
+.contrast-grid td.large .contrast-cell-grade {
+  color: var(--_warning);
+}
+
+.contrast-grid td.aa .contrast-cell-grade,
+.contrast-grid td.aaa .contrast-cell-grade {
+  color: var(--_success);
+}
+
+.contrast-edit > .editor-body {
+  max-height: min(35vh, 240px);
+  border-bottom: 1px solid var(--_border);
+}

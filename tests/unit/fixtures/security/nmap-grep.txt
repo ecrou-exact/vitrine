@@ -1,0 +1,4 @@
+# Nmap 7.94 scan initiated Tue Nov 17 10:00:00 2026 as: nmap -oG - 203.0.113.0/30
+Host: 203.0.113.10 (shop.example.com)	Status: Up
+Host: 203.0.113.10 (shop.example.com)	Ports: 22/open/tcp//ssh//OpenSSH 8.9p1/, 443/open/tcp//ssl|http//nginx/, 23/open/tcp//telnet///	Ignored State: closed (997)
+# Nmap done at Tue Nov 17 10:00:05 2026 -- 4 IP addresses (1 host up) scanned in 5.01 seconds

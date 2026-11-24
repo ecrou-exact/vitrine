@@ -1,31 +1,41 @@
 # Ideas for new components
 
-Backlog of components to build. None of them exists yet (checked against the 61 elements in `src/components/` on 2026-11-17). When one is built, remove it from this list.
+Backlog of components to build. None of them exists yet (checked against the 84 elements in `src/components/` on 2026-11-17). When one is built, remove it from this list.
 
 ## Cybersecurity
 
-- **`vt-yara`** / **`vt-sigma`**: colored, explained rules (strings, conditions, logsource, fields, level).
 - **`vt-attack`**: MITRE ATT&CK matrix with covered / detected techniques highlighted.
-- **`vt-pcap`**: packet list from a capture, layers you can expand, hex of each packet (reuses `vt-hex`).
-- **`vt-email`**: raw `.eml`: `Received` path, SPF / DKIM / DMARC results, links and attachments made safe. For phishing analysis.
-- **`vt-dns`**: `dig` output or DNS records as a table, with SPF / DMARC / CAA explained.
-- **`vt-sbom`**: CycloneDX / SPDX SBOM as a dependency tree with linked vulnerabilities and licenses.
-- **`vt-hash`**: local hashing (MD5, SHA-1, SHA-256) of a text or file, compare and verify a fingerprint.
-- **`vt-nmap`**: Nmap result (XML or text) as hosts → ports → services.
 
 ## Web development
 
 - **`vt-graphql`**: navigable GraphQL schema and highlighted queries (the counterpart of `vt-openapi`).
-- **`vt-lighthouse`**: Lighthouse JSON report: scores, Core Web Vitals, opportunities.
-- **`vt-waterfall`**: HAR as a network waterfall (DNS, TLS, TTFB, download).
-- **`vt-a11y`**: axe-core report: violations by impact, target element, suggested fix.
-- **`vt-contrast`**: color contrast checker with WCAG AA / AAA and a preview.
 - **`vt-tokens`**: design tokens as swatches and scales (could document Vitrine's own `design-tokens.json`).
-- **`vt-semver`**: a semver range explained, with the versions it matches.
-- **`vt-dockerfile`** / **`vt-compose`**: layers, stages, services with ports and volumes, warnings (`latest`, root).
+- **`vt-compose`**: Docker Compose services with ports, volumes, networks and dependencies, warnings (`latest`, privileged, host network).
 - **`vt-k8s`**: Kubernetes manifests as linked resources.
-- **`vt-url`**: URL taken apart (scheme, host, path, decoded params), homograph and redirect detection.
+
+## Web capture analysis (for Lookyloo)
+
+Needed to show Lookyloo captures. Already built: `<vt-http>` (HAR entries list, server IP, TLS details, sizes, image / CSS / binary bodies), `<vt-cookies>`, `<vt-redirects>`, `<vt-waterfall>`, `<vt-url>`, `<vt-hash>`.
+
+- **`vt-domains`**: domains and IPs contacted, grouped first party / third party, with a count of resources each.
+- **`vt-screenshot`**: a capture screenshot, with zoom and a before / after comparison.
+- **`vt-http` → `vt-cert`**: open the full certificate from the Connection tab when the PEM is available.
+
+## Loading & feedback (next)
+
+The family started with ten loading indicators (`docs/loading.md`). Next in it:
+
+- **`vt-toast`**: notifications that stack, with a type (info, success, warning, error), an action, a timeout paused on hover and focus, and announcements.
+- **`vt-banner`** / **`vt-alert`**: inline messages, dismissible.
+- **`vt-empty-state`**: what to show when there is nothing yet, with an action.
 
 ## Done
 
 - `vt-ioc`, `vt-cvss`, `vt-headers` (its CSP table covers the planned `vt-csp`).
+- `vt-email`, `vt-dns`, `vt-nmap`.
+- `vt-url`, `vt-hash`, `vt-waterfall` (with Lookyloo captures in mind: HAR, redirects, SHA-512 body hashes).
+- `vt-dockerfile`, `vt-lighthouse`, `vt-a11y` (`vt-compose` left for later).
+- `vt-semver`, `vt-contrast`, `vt-sbom`.
+- `vt-yara`, `vt-sigma`, `vt-pcap` (detection rules and captures for CIRCL tooling; the pcap hex dump is built in rather than a nested `vt-hex`).
+- `vt-cookies`, `vt-redirects`, HAR entries in `vt-http`.
+- Loading & feedback: `vt-spinner`, `vt-progress`, `vt-progress-ring`, `vt-skeleton`, `vt-loading-overlay`, `vt-page-progress`, `vt-loading-steps`, `vt-typing`, `vt-loading-button`, `vt-loading-message`.

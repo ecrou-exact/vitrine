@@ -1,0 +1,518 @@
+/*
+ * Network waterfall: summary, filters, a table of requests whose last column is a time lane
+ * with each request's bar split into phases, opened requests, the domains, and the legend.
+ * Each phase has a color, always named in the legend, the bar label and the details.
+ */
+.wf-body {
+  display: grid;
+  align-content: start;
+  gap: var(--_space-3);
+  padding: var(--_space-4);
+  background: var(--_surface);
+  font-family: var(--_font-ui);
+  font-size: var(--_font-size-ui);
+}
+
+.ph-blocked {
+  --_ph: var(--_border-strong);
+}
+
+.ph-dns {
+  --_ph: var(--_syntax-type);
+}
+
+.ph-connect {
+  --_ph: var(--_warning);
+}
+
+.ph-ssl {
+  --_ph: var(--_syntax-keyword);
+}
+
+.ph-send {
+  --_ph: var(--_success);
+}
+
+.ph-wait {
+  --_ph: var(--_accent);
+}
+
+.ph-receive {
+  --_ph: var(--_info);
+}
+
+.wf-summary {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.wf-summary p {
+  margin: 0;
+}
+
+.wf-title code {
+  font-family: var(--_font-mono);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.wf-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1) var(--_space-4);
+}
+
+.wf-muted,
+.wf-host {
+  color: var(--_fg-muted);
+}
+
+.wf-bad {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  color: var(--_danger);
+  font-weight: 600;
+}
+
+.wf-bad svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wf-dcl-text::before,
+.wf-load-text::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 0.9em;
+  margin-inline-end: var(--_space-1);
+  vertical-align: -0.1em;
+  background: var(--_info);
+}
+
+.wf-load-text::before {
+  background: var(--_danger);
+}
+
+.wf-label {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 600;
+}
+
+.wf-redirects ol {
+  margin: var(--_space-1) 0 0;
+  padding-inline-start: var(--_space-5);
+}
+
+.wf-redirects code {
+  font-family: var(--_font-mono);
+  overflow-wrap: anywhere;
+}
+
+.wf-page {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-2);
+}
+
+.wf-page label {
+  font-weight: 600;
+}
+
+.wf-page select,
+.wf-query {
+  min-height: 30px;
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface-sunken);
+  color: var(--_fg);
+  font: inherit;
+}
+
+.wf-page select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wf-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.wf-chip {
+  min-height: 28px;
+  padding: 2px var(--_space-2);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  background: transparent;
+  color: var(--_fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.wf-chip:hover {
+  background: var(--_accent-soft);
+}
+
+.wf-chip.on {
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+  color: var(--_accent-fg);
+  font-weight: 600;
+}
+
+.wf-chip:focus-visible,
+.wf-query:focus-visible,
+.wf-name:focus-visible,
+.wf-page select:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 1px;
+}
+
+.wf-query {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+.wf-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.wf-table,
+.wf-domains {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+}
+
+.wf-table {
+  table-layout: fixed;
+}
+
+.wf-table th,
+.wf-table td,
+.wf-domains th,
+.wf-domains td {
+  padding: 4px var(--_space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--_border) 70%, transparent);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.wf-table thead th,
+.wf-domains thead th {
+  background: var(--_surface-sunken);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wf-c-name {
+  width: var(--vt-waterfall-name-width, 34%);
+}
+
+.wf-c-status {
+  width: 64px;
+}
+
+.wf-c-type {
+  width: 84px;
+}
+
+.wf-c-size,
+.wf-c-time {
+  width: 76px;
+  text-align: end !important;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.wf-table tbody th {
+  font-weight: 400;
+}
+
+.wf-row.failed > * {
+  background: color-mix(in srgb, var(--_danger) 6%, transparent);
+}
+
+.wf-row:hover > * {
+  background: color-mix(in srgb, var(--_accent-soft) 60%, transparent);
+}
+
+.wf-name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.wf-chevron {
+  display: inline-flex;
+  flex: none;
+  transition: transform var(--_duration-fast) var(--_easing);
+}
+
+.wf-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wf-chevron.open {
+  transform: rotate(90deg);
+}
+
+.wf-file {
+  display: grid;
+  min-width: 0;
+}
+
+.wf-path,
+.wf-host {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wf-path {
+  font-family: var(--_font-mono);
+}
+
+.wf-host {
+  font-size: var(--_font-size-small);
+}
+
+.wf-tag {
+  display: inline-block;
+  margin-inline-start: var(--_space-1);
+  padding: 0 6px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  white-space: nowrap;
+}
+
+.wf-tag.bad {
+  border-color: var(--_danger);
+  color: var(--_danger);
+}
+
+.wf-c-status {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.st-0,
+.st-4,
+.st-5 {
+  color: var(--_danger);
+}
+
+.st-3 {
+  color: var(--_warning);
+}
+
+.st-2 {
+  color: var(--_success);
+}
+
+.wf-c-lane {
+  position: relative;
+}
+
+.wf-ruler {
+  position: relative;
+  height: 1.5em;
+}
+
+.wf-tick {
+  position: absolute;
+  top: 0;
+  padding-inline-start: 3px;
+  border-inline-start: 1px solid var(--_border-strong);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.wf-lane {
+  position: relative;
+  height: 14px;
+}
+
+.wf-bar {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  display: flex;
+  min-width: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--_border);
+}
+
+.wf-seg {
+  height: 100%;
+  background: var(--_ph);
+}
+
+.wf-mark {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 1px;
+  background: var(--_info);
+}
+
+.wf-mark.load {
+  background: var(--_danger);
+}
+
+.wf-detail-row > td {
+  padding: var(--_space-3);
+  background: var(--_surface-sunken);
+}
+
+.wf-details {
+  display: grid;
+  gap: var(--_space-3);
+}
+
+.wf-facts-list,
+.wf-headers dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 2px var(--_space-3);
+  margin: 0;
+}
+
+.wf-facts-list dt,
+.wf-headers dt {
+  color: var(--_fg-muted);
+}
+
+.wf-facts-list dd,
+.wf-headers dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.wf-facts-list code,
+.wf-headers dl,
+.wf-domains code {
+  font-family: var(--_font-mono);
+}
+
+.wf-timings table {
+  border-collapse: collapse;
+}
+
+.wf-timings th,
+.wf-timings td {
+  padding: 1px var(--_space-3) 1px 0;
+  border: 0;
+  font-weight: 400;
+}
+
+.wf-timings td {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.wf-timings th {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.wf-headers summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.wf-headers[open] summary {
+  margin-bottom: var(--_space-1);
+}
+
+.wf-num {
+  text-align: end !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.wf-domains tbody th {
+  font-weight: 400;
+}
+
+.wf-domains code {
+  overflow-wrap: anywhere;
+}
+
+.wf-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+  padding: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  list-style: none;
+}
+
+.wf-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-1);
+}
+
+.wf-swatch {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--_ph);
+}
+
+.wf-swatch-line {
+  display: inline-block;
+  width: 3px;
+  height: 12px;
+  background: var(--_info);
+}
+
+.wf-swatch-line.load {
+  background: var(--_danger);
+}
+
+.wf-more {
+  justify-self: start;
+  margin-top: var(--_space-2);
+}
+
+.wf-edit > .editor-body {
+  max-height: min(35vh, 280px);
+  border-bottom: 1px solid var(--_border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-chevron {
+    transition: none;
+  }
+}

@@ -1,0 +1,79 @@
+/* <vt-progress-ring>: an SVG circle; the arc starts at the top and runs clockwise. */
+.indicator {
+  flex-direction: column;
+  gap: var(--_space-2);
+}
+
+.ring-box {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: calc(var(--_ind-size) * 2);
+  height: calc(var(--_ind-size) * 2);
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.ring-track,
+.ring-arc {
+  fill: none;
+}
+
+.ring-track {
+  stroke: var(--_ind-track);
+}
+
+.ring-arc {
+  stroke: var(--_ind-color);
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+@keyframes vt-ring-rotate {
+  from {
+    transform: rotate(-90deg);
+  }
+
+  to {
+    transform: rotate(270deg);
+  }
+}
+
+.ring.indeterminate {
+  transform-origin: center;
+  animation: vt-ring-rotate var(--_ind-duration) linear infinite;
+}
+
+.ring-value {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: max(10px, calc(var(--_ind-size) * 0.42));
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: center;
+}
+
+.indicator[data-motion='reduce'] .ring.indeterminate {
+  animation-name: vt-fade;
+}
+
+.indicator[data-motion='reduce'] .ring-arc {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .ring-arc {
+    stroke: Highlight;
+  }
+
+  .ring-track {
+    stroke: GrayText;
+  }
+}

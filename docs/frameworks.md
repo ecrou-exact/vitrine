@@ -663,7 +663,25 @@ vt-changelog:not(:defined),
 vt-repo:not(:defined),
 vt-ioc:not(:defined),
 vt-cvss:not(:defined),
-vt-headers:not(:defined) {
+vt-headers:not(:defined),
+vt-email:not(:defined),
+vt-dns:not(:defined),
+vt-nmap:not(:defined),
+vt-url:not(:defined),
+vt-hash:not(:defined),
+vt-waterfall:not(:defined),
+vt-yara:not(:defined),
+vt-sigma:not(:defined),
+vt-pcap:not(:defined),
+vt-semver:not(:defined),
+vt-contrast:not(:defined),
+vt-sbom:not(:defined),
+vt-dockerfile:not(:defined),
+vt-lighthouse:not(:defined),
+vt-a11y:not(:defined) {
+vt-cookies:not(:defined),
+vt-redirects:not(:defined),
+vt-map:not(:defined) {
   display: block;
   min-height: 3rem;
   visibility: hidden;

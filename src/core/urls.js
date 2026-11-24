@@ -52,3 +52,23 @@ export function isSameOrigin(url) {
     return false;
   }
 }
+
+/**
+ * The registrable part of a host name, roughly: its last two labels, or three for common
+ * second-level endings (`co.uk`, `com.au`…). IP addresses are returned whole. Without the
+ * Public Suffix List this is an approximation, good enough to tell sites apart in a view.
+ *
+ * @param {string} domain
+ * @returns {string}
+ */
+export function baseDomain(domain) {
+  const host = domain
+    .toLowerCase()
+    .replace(/^\[|\]$/g, '')
+    .replace(/\.$/, '');
+  if (host.includes(':') || /^\d{1,3}(?:\.\d{1,3}){3}$/.test(host)) return host;
+  const labels = host.split('.').filter(Boolean);
+  const two = labels.slice(-2).join('.');
+  if (labels.length > 2 && /^(?:co|com|net|org|gov|ac|edu|ne|or)\.[a-z]{2}$/.test(two)) return labels.slice(-3).join('.'); // prettier-ignore
+  return two;
+}

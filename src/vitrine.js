@@ -65,6 +65,34 @@ import { VtRepo } from './components/repo/vt-repo.js';
 import { VtIoc } from './components/ioc/vt-ioc.js';
 import { VtCvss } from './components/cvss/vt-cvss.js';
 import { VtHeaders } from './components/headers/vt-headers.js';
+import { VtEmail } from './components/email/vt-email.js';
+import { VtDns } from './components/dns/vt-dns.js';
+import { VtNmap } from './components/nmap/vt-nmap.js';
+import { VtUrl } from './components/url/vt-url.js';
+import { VtHash } from './components/hash/vt-hash.js';
+import { VtWaterfall } from './components/waterfall/vt-waterfall.js';
+import { VtYara } from './components/yara/vt-yara.js';
+import { VtSigma } from './components/sigma/vt-sigma.js';
+import { VtPcap } from './components/pcap/vt-pcap.js';
+import { VtSemver } from './components/semver/vt-semver.js';
+import { VtContrast } from './components/contrast/vt-contrast.js';
+import { VtSbom } from './components/sbom/vt-sbom.js';
+import { VtDockerfile } from './components/dockerfile/vt-dockerfile.js';
+import { VtLighthouse } from './components/lighthouse/vt-lighthouse.js';
+import { VtA11y } from './components/a11y/vt-a11y.js';
+import { VtCookies } from './components/cookies/vt-cookies.js';
+import { VtRedirects } from './components/redirects/vt-redirects.js';
+import { VtMap } from './components/map/vt-map.js';
+import { VtLoadingButton } from './components/loading-button/vt-loading-button.js';
+import { VtLoadingMessage } from './components/loading-message/vt-loading-message.js';
+import { VtLoadingOverlay } from './components/loading-overlay/vt-loading-overlay.js';
+import { VtLoadingSteps } from './components/loading-steps/vt-loading-steps.js';
+import { VtPageProgress } from './components/page-progress/vt-page-progress.js';
+import { VtProgress } from './components/progress/vt-progress.js';
+import { VtProgressRing } from './components/progress-ring/vt-progress-ring.js';
+import { VtSkeleton } from './components/skeleton/vt-skeleton.js';
+import { VtSpinner } from './components/spinner/vt-spinner.js';
+import { VtTyping } from './components/typing/vt-typing.js';
 import { VtDescribe } from './components/describe/vt-describe.js';
 import { VtTreemap } from './components/treemap/vt-treemap.js';
 import { VtFlame } from './components/flame/vt-flame.js';
@@ -152,6 +180,34 @@ export {
   VtIoc,
   VtCvss,
   VtHeaders,
+  VtEmail,
+  VtDns,
+  VtNmap,
+  VtUrl,
+  VtHash,
+  VtWaterfall,
+  VtYara,
+  VtSigma,
+  VtPcap,
+  VtSemver,
+  VtContrast,
+  VtSbom,
+  VtDockerfile,
+  VtLighthouse,
+  VtA11y,
+  VtCookies,
+  VtRedirects,
+  VtMap,
+  VtLoadingButton,
+  VtLoadingMessage,
+  VtLoadingOverlay,
+  VtLoadingSteps,
+  VtPageProgress,
+  VtProgress,
+  VtProgressRing,
+  VtSkeleton,
+  VtSpinner,
+  VtTyping,
   registerIconSet,
   configure,
   getConfig,
@@ -250,6 +306,34 @@ export const registry = new Map(
     ['vt-ioc', VtIoc],
     ['vt-cvss', VtCvss],
     ['vt-headers', VtHeaders],
+    ['vt-email', VtEmail],
+    ['vt-dns', VtDns],
+    ['vt-nmap', VtNmap],
+    ['vt-url', VtUrl],
+    ['vt-hash', VtHash],
+    ['vt-waterfall', VtWaterfall],
+    ['vt-yara', VtYara],
+    ['vt-sigma', VtSigma],
+    ['vt-pcap', VtPcap],
+    ['vt-semver', VtSemver],
+    ['vt-contrast', VtContrast],
+    ['vt-sbom', VtSbom],
+    ['vt-dockerfile', VtDockerfile],
+    ['vt-lighthouse', VtLighthouse],
+    ['vt-a11y', VtA11y],
+    ['vt-cookies', VtCookies],
+    ['vt-redirects', VtRedirects],
+    ['vt-map', VtMap],
+    ['vt-loading-button', VtLoadingButton],
+    ['vt-loading-message', VtLoadingMessage],
+    ['vt-loading-overlay', VtLoadingOverlay],
+    ['vt-loading-steps', VtLoadingSteps],
+    ['vt-page-progress', VtPageProgress],
+    ['vt-progress', VtProgress],
+    ['vt-progress-ring', VtProgressRing],
+    ['vt-skeleton', VtSkeleton],
+    ['vt-spinner', VtSpinner],
+    ['vt-typing', VtTyping],
   ]),
 );
 
@@ -324,6 +408,34 @@ const TYPES = /** @type {const} */ ({
   ioc: 'vt-ioc',
   cvss: 'vt-cvss',
   headers: 'vt-headers',
+  email: 'vt-email',
+  dns: 'vt-dns',
+  nmap: 'vt-nmap',
+  url: 'vt-url',
+  hash: 'vt-hash',
+  waterfall: 'vt-waterfall',
+  yara: 'vt-yara',
+  sigma: 'vt-sigma',
+  pcap: 'vt-pcap',
+  semver: 'vt-semver',
+  contrast: 'vt-contrast',
+  sbom: 'vt-sbom',
+  dockerfile: 'vt-dockerfile',
+  lighthouse: 'vt-lighthouse',
+  a11y: 'vt-a11y',
+  cookies: 'vt-cookies',
+  redirects: 'vt-redirects',
+  map: 'vt-map',
+  'loading-button': 'vt-loading-button',
+  'loading-message': 'vt-loading-message',
+  'loading-overlay': 'vt-loading-overlay',
+  'loading-steps': 'vt-loading-steps',
+  'page-progress': 'vt-page-progress',
+  progress: 'vt-progress',
+  'progress-ring': 'vt-progress-ring',
+  skeleton: 'vt-skeleton',
+  spinner: 'vt-spinner',
+  typing: 'vt-typing',
 });
 
 /**

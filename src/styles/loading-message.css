@@ -1,0 +1,41 @@
+/* <vt-loading-message>: a spinner and the current message, the elapsed time, the slow message. */
+.indicator {
+  gap: var(--_space-3);
+}
+
+.indicator[data-layout='stacked'] {
+  flex-direction: column;
+  text-align: center;
+}
+
+.message-text {
+  display: grid;
+  gap: 2px;
+}
+
+.message {
+  line-height: 1.4;
+  animation: vt-message-in 0.25s ease-out;
+}
+
+@keyframes vt-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.elapsed {
+  opacity: var(--_dim);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.slow {
+  font-style: italic;
+  font-size: var(--_font-size-small);
+}
+
+.indicator[data-motion='reduce'] .message {
+  animation: none;
+}

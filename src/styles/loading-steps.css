@@ -1,0 +1,249 @@
+/*
+ * <vt-loading-steps>: an ordered list of steps with a status mark each, joined by a line
+ * (list), dense (compact) or side by side (horizontal); an overall bar above.
+ */
+:host {
+  display: block;
+}
+
+.indicator {
+  display: grid;
+  gap: var(--_space-3);
+  --_mark: calc(var(--_ind-size) + 8px);
+}
+
+.steps-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--_space-3);
+}
+
+.steps-title {
+  margin: 0;
+  font-weight: 650;
+}
+
+.steps-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--_space-1) var(--_space-3);
+}
+
+.steps-count {
+  opacity: var(--_dim);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.steps-track {
+  grid-column: 1 / -1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--_ind-track);
+}
+
+.steps-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--_ind-color);
+  transform: scaleX(var(--_ratio));
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+
+.indicator[data-status='error'] .steps-bar {
+  background: var(--_danger);
+}
+
+.indicator[data-status='done'] .steps-bar {
+  background: var(--_success);
+}
+
+.steps {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--_mark) 1fr auto;
+  gap: var(--_space-3);
+  align-items: start;
+  padding-bottom: var(--_space-3);
+}
+
+.step:last-child {
+  padding-bottom: 0;
+}
+
+/* The line joining a mark to the next one. */
+.indicator[data-layout='list'] .step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--_mark) + 2px);
+  bottom: 2px;
+  inset-inline-start: calc(var(--_mark) / 2 - 1px);
+  border-inline-start: 2px solid var(--_border);
+}
+
+.indicator[data-layout='list'] .step.done:not(:last-child)::before {
+  border-color: color-mix(in srgb, var(--_success) 55%, var(--_border));
+}
+
+.step-mark {
+  display: grid;
+  place-items: center;
+  width: var(--_mark);
+  height: var(--_mark);
+  border: 2px solid var(--_border);
+  border-radius: 50%;
+  background: var(--_surface, transparent);
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 650;
+}
+
+.step-mark svg {
+  width: 60%;
+  height: 60%;
+}
+
+.step-mark .spinner {
+  --_ind-size: calc(var(--_mark) - 4px);
+  border-width: 2px;
+}
+
+.step-mark.running {
+  border: 0;
+}
+
+.step-mark.done {
+  border-color: var(--_success);
+  background: var(--_success);
+  color: var(--_surface, #fff);
+}
+
+.step-mark.warning {
+  border-color: var(--_warning);
+  color: var(--_warning);
+}
+
+.step-mark.error {
+  border-color: var(--_danger);
+  background: var(--_danger);
+  color: var(--_surface, #fff);
+}
+
+.step-mark.skipped {
+  border-style: dashed;
+}
+
+.step-body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding-top: calc((var(--_mark) - 1.4em) / 2);
+}
+
+.step-label {
+  line-height: 1.4;
+}
+
+.step.pending .step-label,
+.step.skipped .step-label {
+  opacity: var(--_dim);
+}
+
+.step.skipped .step-label {
+  text-decoration: line-through;
+}
+
+.step.running .step-label {
+  font-weight: 650;
+}
+
+.step.error .step-label {
+  font-weight: 650;
+}
+
+.step-detail {
+  opacity: var(--_dim);
+  font-size: var(--_font-size-small);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.step-duration {
+  padding-top: calc((var(--_mark) - 1.4em) / 2);
+  opacity: var(--_dim);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.indicator[data-layout='compact'] .step {
+  padding-bottom: var(--_space-1);
+}
+
+.indicator[data-layout='horizontal'] .steps {
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+
+.indicator[data-layout='horizontal'] .step {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: var(--_space-1);
+  padding: 0 var(--_space-1);
+  text-align: center;
+}
+
+.indicator[data-layout='horizontal'] .step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--_mark) / 2 - 1px);
+  inset-inline-start: calc(50% + var(--_mark) / 2 + 4px);
+  inset-inline-end: calc(-50% + var(--_mark) / 2 + 4px);
+  border-top: 2px solid var(--_border);
+}
+
+.indicator[data-layout='horizontal'] .step.done:not(:last-child)::after {
+  border-color: var(--_success);
+}
+
+.indicator[data-layout='horizontal'] .step-body,
+.indicator[data-layout='horizontal'] .step-duration {
+  padding-top: 0;
+}
+
+.steps-cancel {
+  padding: 4px 12px;
+  border: 1px solid currentColor;
+  border-radius: var(--_radius-sm, 6px);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.steps-cancel:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.indicator[data-motion='reduce'] .steps-bar {
+  transition: none;
+}
+
+@media (max-width: 480px) {
+  .indicator[data-layout='horizontal'] .step-label {
+    font-size: var(--_font-size-small);
+  }
+}

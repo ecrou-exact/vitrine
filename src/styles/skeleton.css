@@ -1,0 +1,175 @@
+/*
+ * <vt-skeleton>: shapes ("bones") in a muted color, with a shimmer sweeping across them or
+ * a pulse. The real content stays in the light DOM and is shown when the skeleton stops.
+ */
+:host {
+  display: block;
+}
+
+.indicator {
+  --_sk-color: var(--vt-skeleton-color, color-mix(in srgb, currentColor 10%, transparent));
+  --_sk-highlight: var(
+    --vt-skeleton-highlight,
+    color-mix(in srgb, var(--_surface, #fff) 70%, transparent)
+  );
+  display: block;
+  width: var(--_sk-width, auto);
+  color: inherit;
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.bone {
+  position: relative;
+  display: block;
+  width: var(--_w, 100%);
+  height: 0.8em;
+  overflow: hidden;
+  border-radius: var(--_sk-radius, 4px);
+  background: var(--_sk-color);
+}
+
+.bone.small {
+  height: 0.6em;
+}
+
+.bone.heading {
+  height: 1.35em;
+  margin-bottom: var(--_space-1);
+}
+
+.bone.avatar {
+  flex: none;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50%;
+}
+
+.skeleton.avatar .bone.avatar {
+  width: var(--_sk-width, 3em);
+  height: var(--_sk-width, 3em);
+}
+
+.bone.button {
+  width: 7em;
+  height: 2.3em;
+  border-radius: var(--_sk-radius, var(--_radius-sm, 6px));
+}
+
+.bone.media {
+  height: var(--_sk-height, 10em);
+  border-radius: var(--_sk-radius, var(--_radius-sm, 6px));
+}
+
+.bone.block {
+  height: var(--_sk-height, 6em);
+  border-radius: var(--_sk-radius, var(--_radius-sm, 6px));
+}
+
+.bone.input {
+  height: 2.3em;
+  border-radius: var(--_sk-radius, var(--_radius-sm, 6px));
+}
+
+.bone.cell {
+  height: 0.75em;
+}
+
+.stack {
+  display: grid;
+  flex: 1;
+  gap: var(--_space-2);
+  align-content: center;
+}
+
+.row-head,
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--_space-3);
+}
+
+.list-row {
+  padding-block: var(--_space-2);
+}
+
+.skeleton.card {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius, 10px);
+}
+
+.skeleton.card > .bone.media {
+  border-radius: 0;
+}
+
+.card-body {
+  display: grid;
+  gap: var(--_space-2);
+  padding: var(--_space-4);
+}
+
+.skeleton.table {
+  gap: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm, 6px);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
+  gap: var(--_space-4);
+  padding: var(--_space-3) var(--_space-4);
+  border-top: 1px solid var(--_border);
+}
+
+.table-row.head {
+  border-top: 0;
+  background: color-mix(in srgb, currentColor 3%, transparent);
+}
+
+.field {
+  display: grid;
+  gap: var(--_space-2);
+  margin-bottom: var(--_space-2);
+}
+
+.skeleton.article {
+  gap: var(--_space-3);
+}
+
+/* Shimmer: a light band sweeping each bone. */
+.indicator[data-animation='shimmer'] .bone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--_sk-highlight), transparent);
+  transform: translateX(-100%);
+  animation: vt-shimmer calc(var(--_ind-duration) * 1.5) ease-in-out infinite;
+}
+
+.indicator[data-animation='pulse'] .bone {
+  animation: vt-fade calc(var(--_ind-duration) * 1.6) ease-in-out infinite;
+}
+
+.indicator[data-motion='reduce'] .bone::after {
+  display: none;
+}
+
+.indicator[data-motion='reduce'][data-animation='shimmer'] .bone {
+  animation: vt-fade calc(var(--_ind-duration) * 3) ease-in-out infinite;
+}
+
+.content[hidden] {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .bone {
+    background: GrayText;
+  }
+}

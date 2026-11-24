@@ -92,6 +92,74 @@ const PAYLOADS = [
   '- [x] <img src=x onerror=alert(1)>',
 ];
 
+/**
+ * A pcap whose HTTP request, Host header, DNS question and TLS server name carry the payload.
+ *
+ * @param {string} payload
+ * @returns {string} Base64.
+ */
+function pcapWith(payload) {
+  const text = [...Buffer.from(payload, 'utf8')];
+  const be16 = (n) => [(n >> 8) & 255, n & 255];
+  const le32 = (n) => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255];
+  const ip = (proto, body) => [0x45, 0, ...be16(20 + body.length), 0, 0, 0, 0, 64, proto, 0, 0, 10, 0, 0, 1, 10, 0, 0, 2, ...body]; // prettier-ignore
+  const eth = (body) => [2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1, 8, 0, ...body];
+  const tcp = (dp, body) => [...be16(40000), ...be16(dp), 0, 0, 0, 1, 0, 0, 0, 0, 0x50, 0x18, 1, 0, 0, 0, 0, 0, ...body]; // prettier-ignore
+  const http = [
+    ...Buffer.from(`GET /${payload} HTTP/1.1\r\nHost: `, 'utf8'),
+    ...text,
+    13,
+    10,
+    13,
+    10,
+  ];
+  const labels = [];
+  for (let i = 0; i < text.length; i += 60)
+    labels.push(Math.min(60, text.length - i), ...text.slice(i, i + 60));
+  const dns = [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, ...labels.slice(0, 250), 0, 0, 1, 0, 1];
+  const udp = [...be16(40001), ...be16(53), ...be16(8 + dns.length), 0, 0, ...dns];
+  const host = text.slice(0, 200);
+  const sni = [
+    0,
+    0,
+    ...be16(host.length + 5),
+    ...be16(host.length + 3),
+    0,
+    ...be16(host.length),
+    ...host,
+  ];
+  const hello = [
+    3,
+    3,
+    ...new Array(32).fill(1),
+    0,
+    0,
+    2,
+    0x13,
+    1,
+    1,
+    0,
+    ...be16(sni.length),
+    ...sni,
+  ];
+  const tls = [22, 3, 1, ...be16(hello.length + 4), 1, 0, ...be16(hello.length), ...hello];
+  const frames = [eth(ip(6, tcp(80, http))), eth(ip(17, udp)), eth(ip(6, tcp(443, tls)))];
+  const bytes = [
+    ...le32(0xa1b2c3d4),
+    2,
+    0,
+    4,
+    0,
+    ...le32(0),
+    ...le32(0),
+    ...le32(65535),
+    ...le32(1),
+  ];
+  for (const f of frames)
+    bytes.push(...le32(1), ...le32(0), ...le32(f.length), ...le32(f.length), ...f);
+  return Buffer.from(bytes).toString('base64');
+}
+
 const MODES = [
   {
     tag: 'vt-faq',
@@ -367,6 +435,26 @@ const MODES = [
       JSON.stringify({
         request: { method: 'POST', url: `/a?q=${p}`, headers: { 'X-Test': p }, body: p },
         response: { status: 200, headers: { 'Content-Type': 'text/html' }, body: p },
+      }),
+  },
+  {
+    tag: 'vt-http',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        serverIPAddress: p,
+        _securityDetails: { protocol: p, subjectName: p, issuer: p, sanList: [p] },
+        request: { method: 'GET', url: `https://x.dev/${p}`, headers: [] },
+        response: {
+          status: 200,
+          httpVersion: p,
+          headers: [],
+          content: {
+            mimeType: 'image/svg+xml',
+            encoding: 'base64',
+            text: Buffer.from(p).toString('base64'),
+          },
+        },
       }),
   },
   {
@@ -718,6 +806,225 @@ const MODES = [
     attrs: {},
     wrap: (p) => JSON.stringify({ [p]: p, 'Set-Cookie': [p] }),
   },
+  {
+    tag: 'vt-email',
+    attrs: { variant: 'full', defang: 'false', view: 'links' },
+    wrap: (p) =>
+      `From: "${p}" <${p}@evil.xyz>\nSubject: ${p}\nAuthentication-Results: x; spf=${p}\nReceived: from ${p} ([1.2.3.4]) by ${p}; ${p}\nContent-Type: text/html\n\n${p}<a href="javascript:alert(1)">${p}</a><a href="https://x.example/${p}">${p}</a>`,
+  },
+  {
+    tag: 'vt-email',
+    attrs: { view: 'attachments' },
+    wrap: (p) =>
+      `From: a@b.example\nContent-Type: multipart/mixed; boundary=b\n\n--b\nContent-Type: text/plain\n\n${p}\n--b\nContent-Disposition: attachment; filename="${p}.exe"\n\n${p}\n--b--`,
+  },
+  {
+    tag: 'vt-dns',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `;; ->>HEADER<<- opcode: QUERY, status: ${p}\n${p}. 300 IN TXT "v=spf1 include:${p} -all"\n_dmarc.x. 300 IN TXT "v=DMARC1; p=${p}"\nx. 300 IN CAA 0 issue "${p}"`,
+  },
+  {
+    tag: 'vt-dns',
+    attrs: {},
+    wrap: (p) => JSON.stringify({ Answer: [{ name: p, type: 16, TTL: 1, data: p }] }),
+  },
+  {
+    tag: 'vt-nmap',
+    attrs: { variant: 'full', all: '' },
+    wrap: (p) =>
+      `Nmap scan report for ${p} (1.2.3.4)\nOS details: ${p}\nPORT STATE SERVICE VERSION\n22/tcp open ${p} ${p}\n| ${p}: ${p}\n|_  ${p}`,
+  },
+  {
+    tag: 'vt-nmap',
+    attrs: {},
+    wrap: (p) =>
+      `<nmaprun args="${p.replace(/[<&"]/g, '')}"><host><address addr="1.2.3.4" addrtype="ipv4"/><ports><port protocol="tcp" portid="80"><state state="open"/><service name="http" product="${p.replace(/[<&"]/g, '')}"/><script id="x" output="${p.replace(/[<&"]/g, '')}"/></port></ports></host></nmaprun>`,
+  },
+  {
+    tag: 'vt-url',
+    attrs: { variant: 'full', defang: 'false', chain: '' },
+    wrap: (p) =>
+      `javascript:${p}
+data:text/html,${p}
+https://${p}@x.example/${p}?q=${encodeURIComponent(p)}&next=https://y.example/${encodeURIComponent(p)}#${p}`,
+  },
+  {
+    tag: 'vt-hash',
+    attrs: { variant: 'full', expected: '' },
+    wrap: (p) => p,
+  },
+  {
+    tag: 'vt-waterfall',
+    attrs: { variant: 'full', defang: 'false' },
+    wrap: (p) =>
+      JSON.stringify({
+        log: {
+          pages: [{ id: 'p', title: p }],
+          entries: [
+            { pageref: 'p', startedDateTime: p, time: 1, _resourceType: p, serverIPAddress: p, request: { method: p, url: `https://x.example/${p}`, headers: [{ name: p, value: p }] }, response: { status: 302, statusText: p, httpVersion: p, redirectURL: `javascript:${p}`, headers: [{ name: p, value: p }], content: { mimeType: p, size: 1 } } }, // prettier-ignore
+            { pageref: 'p', request: { url: `javascript:${p}` }, response: { status: 200 } },
+          ],
+        },
+      }),
+  },
+  {
+    tag: 'vt-yara',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `import "${p.replace(/"/g, '')}"
+rule R_${p.replace(/\W/g, '')} : ${p.replace(/\W/g, '')} {
+  meta:
+    d = "${p.replace(/["\\\n]/g, '')}"
+  strings:
+    $a = "${p.replace(/["\\\n]/g, '')}" nocase
+  condition:
+    $a and ${p}
+}
+${p}`,
+  },
+  {
+    tag: 'vt-sigma',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ title: p, id: p, status: p, level: p, description: p, author: p, date: p, references: [p, `javascript:${p}`], tags: [p, 'attack.t1059'], logsource: { product: p, [p]: p }, detection: { [p]: { [`${p}|${p}`]: [p, null] }, s: [p], condition: `${p} and s` }, falsepositives: [p], fields: [p] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-pcap',
+    attrs: { variant: 'full', defang: 'false' },
+    wrap: (p) => pcapWith(p),
+  },
+  {
+    tag: 'vt-semver',
+    attrs: { variant: 'full', range: '^1.2.3' },
+    wrap: (p) =>
+      JSON.stringify({
+        versions: { '1.2.3': {}, [p]: {} },
+        'dist-tags': { [p]: '1.2.3', latest: p },
+      }),
+  },
+  {
+    tag: 'vt-semver',
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p}\n1.2.3 ${p}`,
+  },
+  {
+    tag: 'vt-contrast',
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p.replace(/[:\n]/g, '')}: #333 on #fff\nrgb(${p}) on #fff\n${p}\n#fff`,
+  },
+  {
+    tag: 'vt-contrast',
+    attrs: { variant: 'full', fg: 'red', bg: 'white' },
+    wrap: (p) => p,
+  },
+  {
+    tag: 'vt-sbom',
+    attrs: { variant: 'full', view: 'components' },
+    wrap: (p) =>
+      JSON.stringify({ bomFormat: 'CycloneDX', specVersion: p, metadata: { timestamp: p, tools: [{ name: p }], component: { 'bom-ref': 'r', name: p } }, components: [{ 'bom-ref': 'c', name: p, group: p, version: p, purl: `pkg:${p}`, scope: p, licenses: [{ expression: p }] }], dependencies: [{ ref: 'r', dependsOn: ['c'] }], vulnerabilities: [{ id: p, source: { url: `javascript:${p}` }, description: p, recommendation: p, ratings: [{ severity: p, vector: p, method: p }], analysis: { state: p }, affects: [{ ref: 'c' }] }] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-sbom',
+    attrs: { variant: 'full', view: 'vulnerabilities' },
+    wrap: (p) =>
+      JSON.stringify({ spdxVersion: p, name: p, creationInfo: { creators: [`Tool: ${p}`] }, packages: [{ SPDXID: 'a', name: p, versionInfo: p, licenseConcluded: p, supplier: p }] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-dockerfile',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `# ${p}\nFROM ${p} AS ${p}\nRUN ${p} <<EOF\n${p}\nEOF\nCOPY --from=${p} ${p} ${p}\nENV ${p}=${p}\nLABEL a="${p}"\n${p}`,
+  },
+  {
+    tag: 'vt-dockerfile',
+    attrs: { variant: 'full', view: 'source' },
+    wrap: (p) => `FROM a:1\nRUN echo "${p}" $${p}\n# ${p}`,
+  },
+  {
+    tag: 'vt-lighthouse',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ lighthouseResult: { finalDisplayedUrl: p, lighthouseVersion: p, fetchTime: p, runWarnings: [p], configSettings: { formFactor: p }, categories: { [p]: { title: p, score: 0.5, auditRefs: [{ id: 'a' }, { id: 'b' }] } }, audits: { a: { title: p, description: `${p} [${p}](javascript:${p})`, score: 0, scoreDisplayMode: 'binary', displayValue: p, details: { overallSavingsMs: 5, headings: [{ key: 'u', valueType: 'url', label: p }, { key: 'n', valueType: 'node', label: p }], items: [{ u: p, n: { type: 'node', snippet: p } }] } }, b: { title: p, score: 1 } } }, loadingExperience: { overall_category: p, metrics: { LARGEST_CONTENTFUL_PAINT_MS: { percentile: 1, category: p, distributions: [{ proportion: 1 }] } } } }), // prettier-ignore
+  },
+  {
+    tag: 'vt-a11y',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({ url: p, testEngine: { name: p, version: p }, violations: [{ id: p, impact: 'critical', tags: [p, 'wcag143'], help: p, description: p, helpUrl: `javascript:${p}`, nodes: [{ html: p, target: [p, [p, p]], failureSummary: `Fix any of the following:\n  ${p}` }] }], incomplete: [{ id: p, help: p, nodes: [{ html: p, target: [p] }] }], passes: [] }), // prettier-ignore
+  },
+  {
+    tag: 'vt-cookies',
+    attrs: { variant: 'full', 'mask-values': 'false', url: 'https://x.dev/' },
+    wrap: (p) =>
+      `Set-Cookie: ${p.replace(/[;=\n]/g, '')}=${p.replace(/[;\n]/g, '')}; Domain=${p.replace(/[;\n]/g, '')}; Path=${p.replace(/[;\n]/g, '')}`,
+  },
+  {
+    tag: 'vt-cookies',
+    attrs: { variant: 'full', 'mask-values': 'false' },
+    wrap: (p) =>
+      JSON.stringify({
+        log: {
+          entries: [
+            {
+              request: { url: `https://x.dev/${p}` },
+              response: {
+                headers: [],
+                cookies: [{ name: p, value: p, domain: p, path: p, expires: p }],
+              },
+            },
+          ],
+        },
+      }),
+  },
+  {
+    tag: 'vt-redirects',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify([
+        { url: `https://x.dev/?${p}`, status: 302, ip: p },
+        { url: `javascript:${p}`, type: 'js' },
+        { url: p, status: 200, location: p },
+      ]),
+  },
+  {
+    tag: 'vt-redirects',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      `$ curl -sIL https://x.dev/\nHTTP/1.1 301 ${p}\nLocation: ${p.replace(/\s/g, '')}\n\nHTTP/1.1 200 OK`,
+  },
+  {
+    tag: 'vt-map',
+    slow: true,
+    attrs: { variant: 'full' },
+    wrap: (p) => `${p}: 48.85, 2.35\nFR 12\nParis -> ${p}`,
+  },
+  {
+    tag: 'vt-map',
+    slow: true,
+    attrs: { variant: 'full', projection: 'globe' },
+    wrap: (p) =>
+      JSON.stringify({
+        type: 'Feature',
+        properties: { name: p, color: p },
+        geometry: { type: 'Point', coordinates: [2, 48] },
+      }),
+  },
+  {
+    tag: 'vt-loading-steps',
+    attrs: { text: 'Steps' },
+    wrap: (p) => `done ${p} — ${p} (42s)\nrunning ${p}\n${p}`,
+  },
+  {
+    tag: 'vt-loading-steps',
+    attrs: {},
+    wrap: (p) => JSON.stringify([{ label: p, status: p, detail: p, duration: p }]),
+  },
+  {
+    tag: 'vt-loading-message',
+    attrs: { elapsed: '', 'slow-after': '1ms' },
+    wrap: (p) => `${p}\n${p}`,
+  },
 ];
 
 /** Inspects every shadow root for dangerous markup. Runs in the page. */
@@ -791,6 +1098,8 @@ test.describe('XSS payloads', () => {
     test(`${mode.tag} ${JSON.stringify(mode.attrs)} (#${modeIndex}) neutralizes every payload`, async ({
       page,
     }) => {
+      // A map draws every country of the world for each payload.
+      if (mode.slow) test.slow();
       for (const payload of PAYLOADS) {
         const content = mode.wrap ? mode.wrap(payload) : payload;
         // `data` modes go through the json attribute, so the JSON layer is tested too.
@@ -807,6 +1116,39 @@ test.describe('XSS payloads', () => {
       expect(await page.evaluate(() => window.__xss), 'a payload executed').toBeUndefined();
     });
   }
+
+  test('loading indicators render their text attributes as text', async ({ page }) => {
+    const TEXT = {
+      'vt-spinner': ['text', 'label'],
+      'vt-progress': ['text', 'label', 'unit', 'value-text'],
+      'vt-progress-ring': ['text', 'unit', 'value-text'],
+      'vt-skeleton': ['label', 'width'],
+      'vt-loading-overlay': ['text', 'cancel-text'],
+      'vt-page-progress': ['label', 'thickness'],
+      'vt-typing': ['name', 'text'],
+      'vt-loading-button': ['loading-text', 'label'],
+      'vt-loading-message': ['messages', 'slow-text'],
+    };
+    for (const payload of PAYLOADS.slice(0, 30)) {
+      for (const [tag, names] of Object.entries(TEXT)) {
+        const attrs = Object.fromEntries(names.map((name) => [name, payload]));
+        await mount(page, tag, {
+          ...attrs,
+          value: '40',
+          'show-value': 'value',
+          'show-text': '',
+          active: '',
+          loading: '',
+          cancelable: '',
+          'slow-after': '1ms',
+        });
+        const problems = await page.evaluate(audit);
+        expect(problems, `${tag}, payload: ${payload}`).toEqual([]);
+      }
+    }
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => window.__xss), 'a payload executed').toBeUndefined();
+  });
 
   test('label and title attributes are rendered as text', async ({ page }) => {
     for (const payload of PAYLOADS.slice(0, 20)) {

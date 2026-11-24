@@ -136,6 +136,109 @@ describe('parseExchange: curl', () => {
   });
 });
 
+describe('parseExchange: entries of a HAR file', () => {
+  const har = JSON.stringify({
+    log: {
+      entries: ['/', '/app.css', '/logo.png'].map((path, i) => ({
+        request: { method: 'GET', url: `https://example.org${path}`, headers: [] },
+        response: {
+          status: i === 0 ? 200 : 304,
+          headers: [],
+          content: { mimeType: ['text/html', 'text/css; charset=utf-8', 'image/png'][i] },
+        },
+      })),
+    },
+  });
+
+  it('lists every entry and shows the first one by default', () => {
+    const exchange = parseExchange(har);
+    expect(exchange.entry).toBe(0);
+    expect(exchange.entries).toEqual([
+      { method: 'GET', url: 'https://example.org/', status: 200, mimeType: 'text/html' },
+      { method: 'GET', url: 'https://example.org/app.css', status: 304, mimeType: 'text/css' },
+      { method: 'GET', url: 'https://example.org/logo.png', status: 304, mimeType: 'image/png' },
+    ]);
+  });
+
+  it('picks an entry by index or by URL', () => {
+    expect(parseExchange(har, { entry: 2 }).request.url).toBe('https://example.org/logo.png');
+    expect(parseExchange(har, { entry: '1' }).entry).toBe(1);
+    expect(parseExchange(har, { entry: 'https://example.org/app.css' }).entry).toBe(1);
+    expect(parseExchange(har, { entry: 'logo' }).entry).toBe(2);
+    expect(parseExchange(har, { entry: 9 }).entry).toBe(0);
+    expect(parseExchange(har, { entry: 'missing' }).entry).toBe(0);
+  });
+
+  it('lists nothing for a HAR file with a single entry', () => {
+    const one = JSON.parse(har);
+    one.log.entries.length = 1;
+    expect(parseExchange(JSON.stringify(one)).entries).toBeUndefined();
+  });
+});
+
+describe('parseExchange: HAR connection details', () => {
+  const entry = {
+    serverIPAddress: '[2001:db8::1]',
+    _securityDetails: {
+      protocol: 'TLS 1.3',
+      subjectName: 'example.org',
+      sanList: ['example.org', 'www.example.org'],
+      issuer: 'R11',
+      validFrom: 1790000000,
+      validTo: '2026-12-25T23:43:32Z',
+    },
+    request: { method: 'GET', url: 'https://example.org/app.css', headers: [] },
+    response: {
+      status: 200,
+      httpVersion: 'HTTP/2',
+      headers: [],
+      bodySize: 2252,
+      _transferSize: 2600,
+      content: { mimeType: 'text/css', size: 2281, text: 'a{color:red}' },
+    },
+  };
+
+  it('reads the server IP, TLS details and sizes', () => {
+    const { connection } = parseExchange(JSON.stringify(entry));
+    expect(connection).toMatchObject({
+      serverIp: '2001:db8::1',
+      httpVersion: 'HTTP/2',
+      bodySize: 2252,
+      contentSize: 2281,
+      transferSize: 2600,
+      mimeType: 'text/css',
+    });
+    expect(connection.tls).toMatchObject({
+      protocol: 'TLS 1.3',
+      subject: 'example.org',
+      sans: ['example.org', 'www.example.org'],
+      issuer: 'R11',
+    });
+    expect(connection.tls.validFrom.getTime()).toBe(1790000000 * 1000);
+    expect(connection.tls.validTo.toISOString()).toBe('2026-12-25T23:43:32.000Z');
+  });
+
+  it('keeps base64 bodies marked as such, and treats -1 sizes as unknown', () => {
+    const { response, connection } = parseExchange(
+      JSON.stringify({
+        request: { method: 'GET', url: 'https://x.dev/favicon.ico', headers: [] },
+        response: {
+          status: 200,
+          headers: [],
+          bodySize: -1,
+          content: { mimeType: 'image/x-icon', encoding: 'base64', text: 'AAABAA==', size: -1 },
+        },
+      }),
+    );
+    expect(response.encoding).toBe('base64');
+    expect(connection).toBeNull();
+  });
+
+  it('has no connection for raw HTTP', () => {
+    expect(parseExchange('GET / HTTP/1.1\nHost: x.dev\n').connection ?? null).toBeNull();
+  });
+});
+
 describe('parseExchange: JSON and HAR', () => {
   it('reads request / response objects with header objects or pairs', () => {
     const { request, response, format } = parseExchange(

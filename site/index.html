@@ -23,21 +23,21 @@
                 ><span>anywhere<span class="cursor" aria-hidden="true">_</span></span></span
               >
             </h1>
-            <p class="lede intro">
+            <p class="lede">
               Web components that show code, Markdown, JSON, tables, diffs, terminals, file trees,
               HTTP calls, logs, charts and API references on any site. One script tag, no framework, safe with content you did
               not write.
             </p>
-            <div class="hero-actions intro">
+            <div class="hero-actions">
               <a class="btn btn-primary" href="docs.html?page=getting-started">Get started</a>
               <a class="btn btn-secondary" href="playground.html">Open the playground</a>
             </div>
-            <vt-code class="install intro" language="html" copy label="Install">
+            <vt-code class="install" language="html" copy label="Install">
               <template><script src="https://cdn.jsdelivr.net/gh/ecrou-exact/vitrine@0/dist/vitrine.min.js"></script></template>
             </vt-code>
           </div>
 
-          <div class="showcase intro">
+          <div class="showcase">
             <div class="showcase-controls">
               <div class="segmented" role="group" aria-label="Content type">
                 <button type="button" data-type="code" aria-pressed="true">Code</button>
@@ -102,7 +102,7 @@
       <section class="section" aria-labelledby="components-title">
         <div class="wrap">
           <div class="section-head">
-            <h2 id="components-title">Thirty-nine elements, view or edit</h2>
+            <h2 id="components-title">Eighty-six elements, view or edit</h2>
             <p>
               Each element works as a plain block in its simple variant. Add
               <code>variant="full"</code> for the toolbar, search and tabs, switch features on one
@@ -117,7 +117,7 @@
                 Syntax highlighting for 190 languages and 258 color themes, line numbers, diffs,
                 search, download, and an editor.
               </p>
-              <vt-code class="preview" language="js" line-numbers highlight-lines="2" data-type-in="chars">
+              <vt-code class="preview" language="js" line-numbers highlight-lines="2">
                 <script type="text/plain">
                   const user = await fetch('/me').then((r) => r.json());
                   greet(user.name);
@@ -131,7 +131,7 @@
                 GitHub Flavored Markdown, sanitized. Preview, source and split tabs, table of
                 contents and anchors.
               </p>
-              <vt-markdown class="preview" data-type-in="chars">
+              <vt-markdown class="preview">
                 <script type="text/markdown">
                   **Release notes**
 
@@ -157,7 +157,7 @@
             <article class="component">
               <h3>&lt;vt-csv&gt;</h3>
               <p>CSV and TSV as an accessible table: sorting by type, pagination and search.</p>
-              <vt-csv class="preview" page-size="10" data-type-in="lines">
+              <vt-csv class="preview" page-size="10">
                 <template>city,people
 Paris,2148000
 Berlin,3645000
@@ -209,7 +209,7 @@ $ git push</template>
                 File trees from <code>tree</code> output, paths or JSON, with icons, change markers
                 and keyboard navigation.
               </p>
-              <vt-tree class="preview" data-type-in="lines">
+              <vt-tree class="preview">
                 <template>src/
   + Button.tsx  # new
   app.ts
@@ -223,7 +223,7 @@ package.json</template>
                 HTTP requests and responses for API docs, with masked secrets and the same request
                 as curl, fetch or Python.
               </p>
-              <vt-http class="preview" data-type-in="lines">
+              <vt-http class="preview">
                 <template>GET /v1/users/42 HTTP/1.1
 Host: api.example.com
 
@@ -240,7 +240,7 @@ Content-Type: application/json
                 Application logs with levels, timestamps, fields and stack traces, filters and
                 live streaming.
               </p>
-              <vt-log class="preview" time="short" data-type-in="lines">
+              <vt-log class="preview" time="short">
                 <template>2026-10-07T18:00:00Z INFO  server listening on :8080
 {"level":40,"time":"2026-10-07T18:00:03Z","msg":"slow query","ms":812}
 2026-10-07T18:00:04Z ERROR payment failed: card declined
@@ -289,7 +289,7 @@ paths:
                 Dotenv, INI and properties files as a table, with references linked and secrets
                 masked until revealed.
               </p>
-              <vt-env class="preview" data-type-in="lines">
+              <vt-env class="preview">
                 <template># Database
 DATABASE_URL=postgres://app@db:5432/shop
 DB_PASSWORD=s3cr3t-value
@@ -662,6 +662,20 @@ AQH/BAQDAgEGMAoGCCqGSM49BAMCA0gAMEUCIQDiRbgrI/yFZzq9IQ/2sbEcAn4/
               <a href="examples.html#heatmap">Heat map examples</a>
             </article>
             <article class="component">
+              <h3>&lt;vt-map&gt;</h3>
+              <p>
+                A world map: places, countries, routes, flat projections or a 3D globe that turns.
+              </p>
+              <vt-map class="preview" lang-ui="en" projection="globe" basemap="satellite" center="Paris" highlight="FR">
+                <template>Paris
+Tokyo
+New York
+Paris -> Tokyo
+Paris -> New York</template>
+              </vt-map>
+              <a href="examples.html#map">Map examples</a>
+            </article>
+            <article class="component">
               <h3>&lt;vt-flame&gt;</h3>
               <p>
                 Flame graphs of CPU profiles, with zoom and the costliest functions.
@@ -916,6 +930,261 @@ server: nginx/1.18.0</template>
               </vt-headers>
               <a href="examples.html#headers">Header examples</a>
             </article>
+            <article class="component">
+              <h3>&lt;vt-email&gt;</h3>
+              <p>
+                Raw e-mails checked for phishing: authentication, path, deceptive links, risky attachments.
+              </p>
+              <vt-email class="preview" lang-ui="en" tabs="false">
+                <template>Authentication-Results: mx.example.org; spf=pass; dkim=none; dmarc=fail
+From: "billing@bank.example" &lt;alerts@bank-secure.xyz&gt;
+Reply-To: help@other.example
+Subject: Action required
+
+Please confirm your account.</template>
+              </vt-email>
+              <a href="examples.html#email">E-mail examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-dns&gt;</h3>
+              <p>
+                DNS records from dig or a zone file, with SPF, DMARC and CAA explained and checked.
+              </p>
+              <vt-dns class="preview" lang-ui="en" filters="false">
+                <template>example.com. 300 IN TXT "v=spf1 include:_spf.google.com ~all"
+_dmarc.example.com. 300 IN TXT "v=DMARC1; p=reject; rua=mailto:dmarc@example.com"</template>
+              </vt-dns>
+              <a href="examples.html#dns">DNS examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-nmap&gt;</h3>
+              <p>
+                Nmap results as hosts and ports, with risky exposed services marked.
+              </p>
+              <vt-nmap class="preview" lang-ui="en" scripts="false">
+                <template>Nmap scan report for 203.0.113.10
+Host is up (0.012s latency).
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 9.6
+443/tcp  open  https   nginx 1.25.3
+3389/tcp open  ms-wbt-server</template>
+              </vt-nmap>
+              <a href="examples.html#nmap">Nmap examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-url&gt;</h3>
+              <p>
+                URLs taken apart and checked: hosts before @, homographs, hidden redirects.
+              </p>
+              <vt-url class="preview" lang-ui="en" parts="false">
+                <template>https://www.paypal.com@evil.example/login</template>
+              </vt-url>
+              <a href="examples.html#url">URL examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-hash&gt;</h3>
+              <p>
+                MD5 to SHA-512 of a text or a file, in the page, compared with a fingerprint.
+              </p>
+              <vt-hash class="preview" lang-ui="en" algorithms="sha256 sha512" file="false" expected="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad">
+                <template>abc</template>
+              </vt-hash>
+              <a href="examples.html#hash">Hash examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-waterfall&gt;</h3>
+              <p>
+                HAR files as a network waterfall, with redirects and third parties.
+              </p>
+              <vt-waterfall class="preview" lang-ui="en" filters="false" tabs="false">
+                <template>{"log":{"pages":[{"id":"p","title":"shop.example","startedDateTime":"2026-11-17T10:00:00.000Z","pageTimings":{"onContentLoad":300,"onLoad":420}}],"entries":[{"pageref":"p","startedDateTime":"2026-11-17T10:00:00.000Z","time":180,"_resourceType":"document","request":{"method":"GET","url":"https://shop.example/"},"response":{"status":200,"content":{"size":18000,"mimeType":"text/html"},"bodySize":6000},"timings":{"dns":15,"connect":40,"ssl":25,"send":1,"wait":80,"receive":19}},{"pageref":"p","startedDateTime":"2026-11-17T10:00:00.200Z","time":120,"_resourceType":"script","request":{"method":"GET","url":"https://cdn.tracker.example/t.js"},"response":{"status":200,"content":{"size":9000,"mimeType":"text/javascript"},"bodySize":3000},"timings":{"dns":20,"connect":30,"ssl":20,"wait":40,"receive":10}}]}}</template>
+              </vt-waterfall>
+              <a href="examples.html#waterfall">Waterfall examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-yara&gt;</h3>
+              <p>YARA rules explained: strings, modifiers, the condition in words, problems.</p>
+              <vt-yara class="preview" lang-ui="en" tabs="false">
+                <template>rule Dropper {
+  strings:
+    $mz = { 4D 5A 90 00 }
+    $cmd = "cmd.exe /c" nocase wide
+    $ps = "powershell -enc" base64
+  condition:
+    uint16(0) == 0x5A4D and any of ($cmd, $ps)
+}</template>
+              </vt-yara>
+              <a href="examples.html#yara">YARA examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-sigma&gt;</h3>
+              <p>Sigma rules explained: level, ATT&amp;CK tags, searches in words, condition tree.</p>
+              <vt-sigma class="preview" lang-ui="en" tabs="false">
+                <template>{"title":"Whoami by a web server","status":"test","level":"high","tags":["attack.discovery","attack.t1033"],"logsource":{"category":"process_creation","product":"windows"},"detection":{"selection":{"ParentImage|endswith":"\\w3wp.exe","Image|endswith":"\\whoami.exe"},"condition":"selection"}}</template>
+              </vt-sigma>
+              <a href="examples.html#sigma">Sigma examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-pcap&gt;</h3>
+              <p>Packet captures read in the page: layers tied to their bytes, host names.</p>
+              <vt-pcap class="preview" lang-ui="en" filters="false" file="false">
+                <template>1MOyoQIABAAAAAAAAAAAAP//AAABAAAAoCX8agAAAAAqAAAAKgAAAP///////wIAXhAAAQgGAAEIAAYEAAECAF4QAAHAqAEUAAAAAAAAwKgBAaAl/GrUMAAAKgAAACoAAAACAF4QAAECAF4QAP4IBgABCAAGBAACAgBeEAD+wKgBAQIAXhAAAcCoARSgJfxqqGEAAE4AAABOAAAAAgBeEAD+AgBeEAABCABFAABAHEZAAEARAADAqAEUwKgBAc+EADUALAAAKh8BAAABAAAAAAAABWxvZ2luBHNob3AHZXhhbXBsZQAAAQABoCX8anySAAB8AAAAfAAAAAIAXhAAAQIAXhAA/ggARQAAbhxGQABAEQAAwKgBAcCoARQANc+EAFoAACofgYAAAQACAAAAAAVsb2dpbgRzaG9wB2V4YW1wbGUAAAEAAcAMAAUAAQAAASwAEgNjZG4Ec2hvcAdleGFtcGxlAMAwAAEAAQAAADwABMYzZAegJfxqkF8BADYAAAA2AAAAAgBeEAD+AgBeEAABCABFAAAoHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPoAAAAAFAC+vAAAAAAoCX8amSQAQA2AAAANgAAAAIAXhAAAQIAXhAA/ggARQAAKBxGQABABgAAxjNkB8CoARQBu8k6AAATiAAAA+lQEvrwAAAAAKAl/Go4wQEANgAAADYAAAACAF4QAP4CAF4QAAEIAEUAACgcRkAAQAYAAMCoARTGM2QHyToBuwAAA+kAABOJUBD68AAAAACgJfxqDPIBAKIAAACiAAAAAgBeEAD+AgBeEAABCABFAACUHEZAAEAGAADAqAEUxjNkB8k6AbsAAAPpAAATiVAY+vAAAAAAFgMBAGcBAABjAwMHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwAABBMBEwIBAAA2AAAAFwAVAAASbG9naW4uc2hvcC5leGFtcGxlABAADgAMAmgyCGh0dHAvMS4xACsABQQDBAMDoCX8auAiAgA2AAAANgAAAAIAXhAA/gIAXhAAAQgARQAAKBxGQABABgAAwKgBFMYzZAfJkABQAAAjKAAAAABQAvrwAAAAAKAl/Gq0UwIAnAAAAJwAAAACAF4QAP4CAF4QAAEIAEUAAI4cRkAAQAYAAMCoARTGM2QHyZAAUAAAIykAABtZUBj68AAAAABHRVQgL2xvZ2luP25leHQ9JTJGYWNjb3VudCBIVFRQLzEuMQ0KSG9zdDogbG9naW4uc2hvcC5leGFtcGxlDQpVc2VyLUFnZW50OiBjdXJsLzguNS4wDQpBY2NlcHQ6ICovKg0KDQqgJfxqiIQCADIAAAAyAAAAAgBeEAD+AgBeEAABCABFAAAkHEZAAEABAADAqAEUywBxCQgAAAASNAABYWJjZGVmZ2igJfxqXLUCAEYAAABGAAAAAgBeEAD+AgBeEAABht1gAAAAABA6QCABDbgAAAAAAAAAAAAAAAEgAQ24AAAAAAAAAAAAAAACgAAAAAAHAAFwaW5ncGluZw==</template>
+              </vt-pcap>
+              <a href="examples.html#pcap">Capture examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-semver&gt;</h3>
+              <p>Version ranges in words, with the versions they match and the one installed.</p>
+              <vt-semver class="preview" lang-ui="en" range="^1.2.3" field="false">
+                <template>1.0.0 1.2.3 1.4.2 1.9.1 2.0.0</template>
+              </vt-semver>
+              <a href="examples.html#semver">Version range examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-contrast&gt;</h3>
+              <p>WCAG contrast of two colors, and the nearest color that passes.</p>
+              <vt-contrast class="preview" lang-ui="en" fg="#999999" bg="#ffffff" field="false"></vt-contrast>
+              <a href="examples.html#contrast">Contrast examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-sbom&gt;</h3>
+              <p>SBOMs as a dependency tree, with licenses and vulnerabilities.</p>
+              <vt-sbom class="preview" lang-ui="en" depth="3">
+                <template>{"bomFormat":"CycloneDX","specVersion":"1.6","metadata":{"component":{"bom-ref":"app","name":"shop-web","version":"3.2.0"}},"components":[{"bom-ref":"e","name":"express","version":"4.19.2","purl":"pkg:npm/express@4.19.2","licenses":[{"license":{"id":"MIT"}}]},{"bom-ref":"q","name":"qs","version":"6.11.0","purl":"pkg:npm/qs@6.11.0","licenses":[{"license":{"id":"BSD-3-Clause"}}]}],"dependencies":[{"ref":"app","dependsOn":["e"]},{"ref":"e","dependsOn":["q"]}],"vulnerabilities":[{"id":"GHSA-hrpp-h998-j3pp","ratings":[{"severity":"high","score":7.5}],"affects":[{"ref":"q"}]}]}</template>
+              </vt-sbom>
+              <a href="examples.html#sbom">SBOM examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-dockerfile&gt;</h3>
+              <p>Dockerfiles as build stages, with each instruction and its problems.</p>
+              <vt-dockerfile class="preview" lang-ui="en" tabs="false">
+                <template>FROM node:latest
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD npm start</template>
+              </vt-dockerfile>
+              <a href="examples.html#dockerfile">Dockerfile examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-lighthouse&gt;</h3>
+              <p>Lighthouse reports: scores, Core Web Vitals and what to fix.</p>
+              <vt-lighthouse class="preview" lang-ui="en" tabs="false">
+                <template>{"lighthouseResult":{"finalDisplayedUrl":"https://shop.example/","categories":{"performance":{"title":"Performance","score":0.62,"auditRefs":[]},"accessibility":{"title":"Accessibility","score":0.88,"auditRefs":[]},"best-practices":{"title":"Best Practices","score":0.96,"auditRefs":[]},"seo":{"title":"SEO","score":1,"auditRefs":[]}},"audits":{}}}</template>
+              </vt-lighthouse>
+              <a href="examples.html#lighthouse">Lighthouse examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-a11y&gt;</h3>
+              <p>axe-core results by impact, with WCAG criteria and fixes.</p>
+              <vt-a11y class="preview" lang-ui="en" filters="false" tabs="false">
+                <template>{"testEngine":{"name":"axe-core","version":"4.10.2"},"violations":[{"id":"label","impact":"critical","tags":["wcag2a","wcag412"],"help":"Form elements must have labels","nodes":[{"html":"&lt;input name=\"zip\">","target":["input[name=\"zip\"]"],"failureSummary":"Fix any of the following:\n  Form element does not have an explicit &lt;label>"}]}],"incomplete":[],"passes":[{},{}]}</template>
+              </vt-a11y>
+              <a href="examples.html#a11y">Accessibility examples</a>
+              <h3>&lt;vt-cookies&gt;</h3>
+              <p>
+                Cookies with their flags, lifetime and party, each one checked.
+              </p>
+              <vt-cookies class="preview" lang-ui="en" url="https://shop.example.com/" issues="false">
+                <template>Set-Cookie: __Host-sid=4f2a9c; Path=/; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: _ga=GA1.2.1234; Domain=example.com; Max-Age=63072000
+Set-Cookie: track=7; SameSite=None</template>
+              </vt-cookies>
+              <a href="examples.html#cookies">Cookies examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-redirects&gt;</h3>
+              <p>
+                Redirect chains hop by hop: other sites, HTTPS changes, tracking parameters.
+              </p>
+              <vt-redirects class="preview" lang-ui="en">
+                <template>301 http://example.com/
+302 https://example.com/promo
+200 https://shop.example.net/offer?utm_source=mail</template>
+              </vt-redirects>
+              <a href="examples.html#redirects">Redirects examples</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="loading-title">
+        <div class="wrap">
+          <div class="section-head">
+            <h2 id="loading-title">Loading &amp; feedback</h2>
+            <p>
+              Ten light indicators (15 to 22 KB each) to show that something is happening: with a
+              delay so fast loads show nothing, a minimum duration so nothing flickers, theme colors,
+              reduced motion and screen reader announcements built in.
+            </p>
+          </div>
+          <div class="components">
+            <article class="component">
+              <h3>&lt;vt-loading-button&gt;</h3>
+              <p>A button that shows its wait, then "Saved".</p>
+              <vt-loading-button class="preview" lang-ui="en" loading loading-text="Saving…">Save</vt-loading-button>
+              <a href="examples.html#loading-button">Loading button examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-message&gt;</h3>
+              <p>Messages in turn, elapsed time, and a slow notice.</p>
+              <vt-loading-message class="preview" lang-ui="en" elapsed messages="Connecting…|Fetching your invoices…|Preparing the PDF…"></vt-loading-message>
+              <a href="examples.html#loading-message">Loading message examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-overlay&gt;</h3>
+              <p>Covers content while it saves: made inert, with progress.</p>
+              <vt-loading-overlay class="preview" lang-ui="en" text="Saving…" value="60">
+                <p>Profile settings, notifications and billing details.</p>
+              </vt-loading-overlay>
+              <a href="examples.html#loading-overlay">Loading overlay examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-loading-steps&gt;</h3>
+              <p>The steps of a long task, with status and durations.</p>
+              <vt-loading-steps class="preview" lang-ui="en" progress="false">
+                <template>done Build image (42s)
+running Push to registry
+pending Roll out</template>
+              </vt-loading-steps>
+              <a href="examples.html#loading-steps">Task steps examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-page-progress&gt;</h3>
+              <p>The thin bar along the top of the page: start, trickle, done.</p>
+              <vt-progress class="preview" lang-ui="en" value="62" thickness="xs" label="Page loading"></vt-progress>
+              <a href="examples.html#page-progress">Page progress examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-progress&gt;</h3>
+              <p>Linear progress with buffer, segments and stripes.</p>
+              <vt-progress class="preview" lang-ui="en" value="42" buffer="70" text="Uploading report.pdf" show-value="percent"></vt-progress>
+              <a href="examples.html#progress">Progress bar examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-progress-ring&gt;</h3>
+              <p>A circular gauge with the value in its center.</p>
+              <vt-progress-ring class="preview" lang-ui="en" value="72" text="Storage"></vt-progress-ring>
+              <a href="examples.html#progress-ring">Progress ring examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-skeleton&gt;</h3>
+              <p>Placeholders in the shape of the content to come.</p>
+              <vt-skeleton class="preview" lang-ui="en" shape="list" rows="2" avatar></vt-skeleton>
+              <a href="examples.html#skeleton">Skeleton examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-spinner&gt;</h3>
+              <p>Seven shapes, any size, tone and speed.</p>
+              <span class="preview"><vt-spinner></vt-spinner> <vt-spinner type="arc"></vt-spinner> <vt-spinner type="dots"></vt-spinner> <vt-spinner type="bars"></vt-spinner> <vt-spinner type="orbit"></vt-spinner></span>
+              <a href="examples.html#spinner">Spinner examples</a>
+            </article>
+            <article class="component">
+              <h3>&lt;vt-typing&gt;</h3>
+              <p>"Ada is typing…" for chats and assistants.</p>
+              <vt-typing class="preview" lang-ui="en" name="Ada" show-text></vt-typing>
+              <a href="examples.html#typing">Typing indicator examples</a>
+            </article>
           </div>
         </div>
       </section>
@@ -1052,7 +1321,7 @@ server: nginx/1.18.0</template>
                   ><span class="demo-title">Result</span>
                 </div>
                 <div class="demo-canvas">
-                  <vt-code language="python" label="hello.py" header data-type-in="chars">
+                  <vt-code language="python" label="hello.py" header>
                     <template>
                       def hello(name):
                           return f"Hello {name}"
@@ -1078,7 +1347,7 @@ server: nginx/1.18.0</template>
                   ><span class="demo-title">Result</span>
                 </div>
                 <div class="demo-canvas">
-                  <vt-code language="python" label="hello.py" header data-type-in="chars">
+                  <vt-code language="python" label="hello.py" header>
                     <template>
                       def hello(name):
                           return f"Hello {name}"
