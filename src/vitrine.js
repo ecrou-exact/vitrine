@@ -18,6 +18,7 @@ import { VtJson } from './components/json/vt-json.js';
 import { VtLog } from './components/log/vt-log.js';
 import { VtMarkdown } from './components/markdown/vt-markdown.js';
 import { VtOpenapi } from './components/openapi/vt-openapi.js';
+import { VtFlowtime } from './components/flowtime/vt-flowtime.js';
 import { VtTimeline } from './components/timeline/vt-timeline.js';
 import { VtGit } from './components/git/vt-git.js';
 import { VtJob } from './components/job/vt-job.js';
@@ -125,6 +126,7 @@ export {
   VtChart,
   VtOpenapi,
   VtTimeline,
+  VtFlowtime,
   VtGit,
   VtJob,
   VtHex,
@@ -220,6 +222,8 @@ export {
   listSyntaxThemes,
 };
 
+export { Flowtime } from './components/flowtime/engine/flowtime.js';
+
 /* global __VITRINE_VERSION__ */
 
 /**
@@ -251,6 +255,7 @@ export const registry = new Map(
     ['vt-chart', VtChart],
     ['vt-openapi', VtOpenapi],
     ['vt-timeline', VtTimeline],
+    ['vt-flowtime', VtFlowtime],
     ['vt-git', VtGit],
     ['vt-job', VtJob],
     ['vt-hex', VtHex],
@@ -353,6 +358,7 @@ const TYPES = /** @type {const} */ ({
   chart: 'vt-chart',
   openapi: 'vt-openapi',
   timeline: 'vt-timeline',
+  flowtime: 'vt-flowtime',
   git: 'vt-git',
   job: 'vt-job',
   hex: 'vt-hex',

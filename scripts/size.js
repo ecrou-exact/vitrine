@@ -33,6 +33,7 @@ const COMPONENTS = {
   'vt-chart': 64 * KB,
   'vt-openapi': 66 * KB,
   'vt-timeline': 64 * KB,
+  'vt-flowtime': 64 * KB,
   'vt-git': 66 * KB,
   'vt-job': 66 * KB,
   'vt-hex': 58 * KB,

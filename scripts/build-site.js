@@ -96,8 +96,14 @@ async function componentPreviews() {
     const document = window.document;
     document.write(await readFile('site/examples.html', 'utf8'));
     const previews = [];
+    // The docs router accepts only sidebar pages, so every component reference needs a link.
+    const navigation = await readFile('site/docs.html', 'utf8');
+    const listed = new Set(
+      [...navigation.matchAll(/data-page="components\/([^"]+)"/g)].map((match) => match[1]),
+    );
     for (const file of (await readdir('docs/components')).filter((file) => file.endsWith('.md'))) {
       const name = file.slice(0, -3);
+      if (!listed.has(name)) throw new Error(`Missing component docs navigation: ${name}`);
       const section = document.getElementById(name);
       const source = section?.querySelector('.example > template');
       if (!source?.content.querySelector(`vt-${name}`)) {

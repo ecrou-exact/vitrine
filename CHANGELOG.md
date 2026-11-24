@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `<vt-flowtime>`: Flowtime investigation workspace, with source lanes, combined timeline, chronological feed, activity filtering, inspector actions, custom views and timeline-only text sizing. The standalone `vitrine/flowtime` API supports existing framework integrations without a shadow root.
+
 - `<vt-map>`: a world map. Places from coordinates in any common notation (decimal degrees, degrees-minutes-seconds with hemispheres, `geo:` URIs, Google Maps and OpenStreetMap links), 170 built-in cities in English and French, or addresses through a geocoder the page chooses (`nominatim`, `photon`, `ban` or a URL template; off by default). Countries by ISO code or name in English or the interface language, highlighted with a color or shaded by a value with a legend; routes along great circles with their distance; GeoJSON and JSON. Twelve d3-geo projections, from Natural Earth and Mercator to a 3D globe that turns, and eight styles: light, dark, political, seen from the sky (land colored by climate, stars and atmosphere), night, blueprint, vintage, monochrome. Drag, wheel, pinch, double-click and keyboard to move and zoom; a search field flies to a place; `pick` drops a pin and gives its coordinates; tooltips with flags, the coordinates under the pointer, and a list of every item in words. Copy as text, download as GeoJSON. The library and the Natural Earth 1:110m shapes are in `dist/vendor/geo.js` (139 KB), loaded only when a map is drawn. Markdown fences `map` and `geojson`. A film mode (`movie`, `track()`, or `track Paris` in the search field): the globe tracks a target with stage-by-stage zooms under a surveillance screen until TARGET LOCATED shows in red.
 - A new family, loading and feedback: ten light elements (15 to 22 KB gzip each) sharing `delay` (fast loads show nothing), `min-duration` (no flicker), `size`, `tone`, `speed`, `motion` (reduced motion turns movement into a fade), `label`, `start()` / `stop()` and the events `vt-loading-start`, `vt-loading-end`, `vt-progress`, `vt-complete` and `vt-cancel`. Their text takes the page's color, so they read on any background. Guide: `docs/loading.md`.
   - `<vt-spinner>`: seven CSS-only shapes (ring, arc, dual ring, dots, bars, pulse, orbit) with an optional text.
@@ -90,6 +92,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Flowtime defaults to generic Events, Notes, Milestones and Attachments categories; events without a group use Events. Applications can replace the defaults through `groups`.
+- Flowtime docs use application-independent examples with event data passed directly to the viewer; integration ownership and update instructions are kept out of the public reference.
 - The Playground component selector is sorted alphabetically.
 - Examples are grouped by need, with category descriptions, a grouped sidebar and mobile menu, and alphabetical ordering within each category.
 - Docs component links are sorted alphabetically.
@@ -97,6 +101,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Third-party notices: Font Awesome Free, Lucide (icon set), Bootstrap Icons and flag-icons, in `dist/vendor/icons/` only.
 
 ### Fixed
+
+- Flowtime is listed in the docs sidebar and component indexes. The site build now checks that every component reference is reachable through the docs router.
 
 - Integrations navigation has a visible horizontal scrollbar and keyboard access so every section link is reachable.
 - Docs: the rows of `<vt-treemap>`, `<vt-describe>` and `<vt-compare>` were at the top of `README.md`, `docs/README.md`, `docs/editing.md` and `docs/security.md` instead of in their tables, and the start of `README.md` was written a second time inside the `<vt-math>` item.

@@ -17,6 +17,12 @@
   "main": "./dist/vitrine.esm.js",
   "module": "./dist/vitrine.esm.js",
   "exports": {
+    "./flowtime": {
+      "types": "./dist/flowtime.d.ts",
+      "import": "./dist/flowtime.js",
+      "default": "./dist/flowtime.js"
+    },
+    "./flowtime.css": "./dist/flowtime.css",
     ".": "./dist/vitrine.esm.js",
     "./all": "./dist/esm/vitrine.js",
     "./api": "./dist/esm/api.js",
@@ -25,7 +31,8 @@
     "./custom-elements.json": "./dist/custom-elements.json",
     "./markdown-it": "./dist/integrations/markdown-it.js",
     "./remark": "./dist/integrations/remark.js",
-    "./*": "./dist/esm/vt-*.js"
+    "./*": "./dist/esm/vt-*.js",
+    "./flowtime-element": "./dist/esm/vt-flowtime.js"
   },
   "customElements": "dist/custom-elements.json",
   "files": [
@@ -54,12 +61,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit -p jsconfig.json",
-    "test": "vitest run",
+    "test": "vitest run && npm run test:flowtime",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm run format:check && npm run typecheck && npm run test && node scripts/generate-tokens.js --check && node scripts/generate-notices.js --check",
     "notices": "node scripts/generate-notices.js",
-    "syntax-themes": "node scripts/generate-syntax-index.js"
+    "syntax-themes": "node scripts/generate-syntax-index.js",
+    "test:flowtime": "node --test tests/flowtime/*.test.js"
   },
   "keywords": [
     "web-components",
