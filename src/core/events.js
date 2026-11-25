@@ -111,6 +111,10 @@ export const EVENTS = Object.freeze({
   LOADING_START: 'vt-loading-start',
   /** Loading indicator: hidden again (after its minimum duration). Detail: `{ type, duration }`. */
   LOADING_END: 'vt-loading-end',
+  /** Questionnaire: the step changed. Detail: `{ from, to, id }`. */
+  STEP: 'vt-step',
+  /** Questionnaire: every answer passed the check. Detail: `{ value }`. */
+  SUBMIT: 'vt-submit',
   /** Progress indicator: the value changed. Detail: `{ value, max, ratio }`. */
   PROGRESS: 'vt-progress',
   /** Progress indicator or task list: finished. Detail: `{ status }`. */

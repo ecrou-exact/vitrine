@@ -1029,6 +1029,29 @@ ${p}`,
       }),
   },
   {
+    tag: 'vt-questionnaire',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify([
+        {
+          id: p,
+          type: 'single',
+          label: p,
+          hint: p,
+          short: p,
+          options: [{ value: p, label: p, description: p, group: p }],
+        },
+        { id: 'b', type: 'multiple', label: p, options: [p, { value: p, label: p }] },
+        { id: 'c', type: 'text', label: p, placeholder: p, pattern: p },
+        { id: 'd', type: 'tags', label: p, placeholder: p },
+      ]),
+  },
+  {
+    tag: 'vt-questionnaire',
+    attrs: { layout: 'all' },
+    wrap: (p) => JSON.stringify({ questions: [{ id: 'a', type: 'date', label: p, min: p }, { id: 'b', type: p, label: p }] }), // prettier-ignore
+  },
+  {
     tag: 'vt-loading-steps',
     attrs: { text: 'Steps' },
     wrap: (p) => `done ${p} — ${p} (42s)\nrunning ${p}\n${p}`,

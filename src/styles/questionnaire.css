@@ -1,0 +1,383 @@
+/*
+ * <vt-questionnaire>: a progress indicator, one question as a fieldset, its controls and the
+ * buttons. Colors, sizes and radii come from the tokens only, so light and dark both work.
+ */
+.q-body {
+  display: grid;
+  gap: var(--_space-4);
+  padding: var(--_space-4) var(--_space-5);
+  color: var(--_fg);
+  container-type: inline-size;
+}
+
+/* ---------- Progress ---------- */
+
+.progress {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.progress-text {
+  margin: 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--_radius-full);
+  background: var(--_surface-sunken);
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--_accent);
+  transform: scaleX(var(--_ratio, 0));
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+.progress-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-1) var(--_space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--_space-2);
+  min-height: 28px;
+  padding: 0 var(--_space-2) 0 0;
+  border: 0;
+  border-radius: var(--_radius-full);
+  background: transparent;
+  color: var(--_fg-muted);
+  font: inherit;
+  font-size: var(--_font-size-small);
+}
+
+button.progress-link {
+  cursor: pointer;
+}
+
+button.progress-link:hover {
+  color: var(--_fg);
+}
+
+button.progress-link:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.progress-link .mark {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-full);
+  background: var(--_surface);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-link .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.progress-item.done .mark {
+  border-color: var(--_accent-fg);
+  color: var(--_accent-fg);
+}
+
+.progress-item.current .progress-link {
+  color: var(--_fg);
+  font-weight: 650;
+}
+
+.progress-item.current .mark {
+  border-color: var(--_accent);
+  background: var(--_accent);
+  color: var(--_on-accent);
+}
+
+/* ---------- A question ---------- */
+
+.step {
+  display: grid;
+  gap: var(--_space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.q-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--_space-1) var(--_space-2);
+  padding: 0;
+}
+
+.q-title {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 650;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.q-title:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 3px;
+  border-radius: var(--_radius-sm);
+}
+
+.q-mark {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 400;
+}
+
+.q-hint {
+  margin: 0;
+  color: var(--_fg-muted);
+  overflow-wrap: anywhere;
+}
+
+/* The question is the legend: the label of an embedded field would say it twice. */
+.q-field::part(label),
+.q-field::part(required),
+.q-date::part(label) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* A field only keeps its own message to describe its input; the step shows the error. */
+.q-field::part(error) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---------- Choices ---------- */
+
+.options,
+.option-group {
+  display: grid;
+  gap: var(--_space-2);
+}
+
+.option-group-name {
+  margin: var(--_space-2) 0 0;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-3);
+  padding: var(--_space-3);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--_accent-soft);
+}
+
+.option:has(input:checked) {
+  border-color: var(--_accent-fg);
+  background: var(--_accent-soft);
+  box-shadow: inset 3px 0 0 var(--_accent);
+}
+
+.option:has(input:focus-visible) {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.option input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--_accent);
+}
+
+.option-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.option-label {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.option-desc {
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Errors: an icon and a word as well as the color ---------- */
+
+.q-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_space-2);
+  margin: 0;
+  color: var(--_danger);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.q-error .icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.step[data-invalid] .option {
+  border-color: var(--_danger);
+}
+
+/* ---------- Buttons ---------- */
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--_space-2);
+}
+
+.nav-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_space-2);
+  margin-inline-start: auto;
+}
+
+.btn-q {
+  min-height: 36px;
+  padding: 0 var(--_space-4);
+  border: 1px solid var(--_border-strong);
+  border-radius: var(--_radius-sm);
+  background: var(--_surface);
+  color: var(--_fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-q:hover {
+  background: var(--_accent-soft);
+}
+
+.btn-q:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+.btn-q.primary {
+  border-color: var(--_accent);
+  background: var(--_accent);
+  color: var(--_on-accent);
+}
+
+.btn-q.primary:hover {
+  background: var(--_accent);
+  filter: brightness(0.94);
+}
+
+.btn-q.ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--_accent-fg);
+}
+
+.btn-q.ghost:hover {
+  background: var(--_accent-soft);
+}
+
+/* ---------- Review ---------- */
+
+.review-list {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+}
+
+.review-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--_space-1) var(--_space-3);
+  align-items: center;
+  padding: var(--_space-3);
+}
+
+.review-row + .review-row {
+  border-top: 1px solid var(--_border);
+}
+
+.review-row > * {
+  margin: 0;
+}
+
+.review-q {
+  grid-column: 1;
+  color: var(--_fg-muted);
+  font-size: var(--_font-size-small);
+}
+
+.review-a {
+  grid-column: 1;
+  font-weight: 600;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.review-a.skipped {
+  color: var(--_fg-muted);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.review-edit {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill {
+    transition: none;
+  }
+}

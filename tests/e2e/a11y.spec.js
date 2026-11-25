@@ -258,6 +258,23 @@ const MORE = {
     'Paris\nOffice: 35.6762, 139.6503\nBrazil 213\nParis -> New York',
     { variant: 'full' },
   ],
+  'vt-questionnaire': [
+    JSON.stringify([
+      {
+        id: 'renderer',
+        type: 'single',
+        label: 'How do you render?',
+        hint: 'Pick one.',
+        required: true,
+        options: [
+          { value: 'csr', label: 'CSR', description: 'Client-side rendering.' },
+          { value: 'ssr', label: 'SSR' },
+        ],
+      },
+      { id: 'name', type: 'text', label: 'Project name', required: true },
+    ]),
+    { variant: 'full' },
+  ],
   'vt-redirects': [
     '301 http://a.example/\n302 https://a.example/?utm_source=x\n302 http://b.example.net/ (js)\n404 https://b.example.net/x',
     { variant: 'full' },

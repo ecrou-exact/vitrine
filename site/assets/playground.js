@@ -59,6 +59,8 @@ const SAMPLES = {
     '{\n  "columns": [\n    {\n      "id": "todo",\n      "title": "To do"\n    },\n    {\n      "id": "in-progress",\n      "title": "In progress",\n      "limit": 3\n    },\n    {\n      "id": "review",\n      "title": "Review"\n    },\n    {\n      "id": "done",\n      "title": "Done"\n    }\n  ],\n  "tasks": [\n    {\n      "id": "T-12",\n      "title": "Offline sync",\n      "column": "in-progress",\n      "priority": "high",\n      "labels": [\n        "mobile"\n      ],\n      "assignee": "Ada Lovelace",\n      "progress": 60,\n      "due": "2026-11-20",\n      "description": "Edit without a connection."\n    },\n    {\n      "id": "T-14",\n      "title": "Public API v2",\n      "column": "in-progress",\n      "priority": "medium",\n      "labels": [\n        "api"\n      ],\n      "assignee": "Alan Turing",\n      "progress": 25\n    },\n    {\n      "id": "T-15",\n      "title": "SSO with SAML",\n      "column": "todo",\n      "priority": "urgent",\n      "labels": [\n        "security"\n      ],\n      "due": "2026-11-12"\n    },\n    {\n      "id": "T-16",\n      "title": "Export to CSV",\n      "column": "todo",\n      "priority": "low",\n      "labels": [\n        "data"\n      ]\n    },\n    {\n      "id": "T-10",\n      "title": "Audit log page",\n      "column": "review",\n      "priority": "medium",\n      "labels": [\n        "security"\n      ],\n      "assignee": "Grace Hopper"\n    },\n    {\n      "id": "T-08",\n      "title": "Dark mode for the editor",\n      "column": "done",\n      "labels": [\n        "editor"\n      ],\n      "assignee": "Ada Lovelace"\n    }\n  ]\n}',
   field:
     '[\n  {\n    "group": "Front end",\n    "options": [\n      "HTML",\n      "CSS",\n      {\n        "value": "js",\n        "label": "JavaScript",\n        "description": "Browsers and Node.js"\n      }\n    ]\n  },\n  {\n    "group": "Back end",\n    "options": [\n      "Go",\n      "Python",\n      "Rust",\n      {\n        "value": "cobol",\n        "label": "COBOL",\n        "disabled": true\n      }\n    ]\n  }\n]',
+  questionnaire:
+    '{\n  "questions": [\n    {\n      "id": "renderer",\n      "type": "single",\n      "label": "How do you render?",\n      "hint": "Pick one.",\n      "required": true,\n      "options": [\n        {\n          "value": "csr",\n          "label": "CSR",\n          "description": "Client-side rendering."\n        },\n        {\n          "value": "ssr",\n          "label": "SSR",\n          "description": "Server-side rendering."\n        },\n        {\n          "value": "ssg",\n          "label": "SSG"\n        }\n      ]\n    },\n    {\n      "id": "components",\n      "type": "multiple",\n      "label": "Which components?",\n      "required": true,\n      "min": 1,\n      "options": [\n        {\n          "value": "code",\n          "label": "Code blocks",\n          "group": "Code"\n        },\n        {\n          "value": "json",\n          "label": "JSON viewer",\n          "group": "Code"\n        },\n        {\n          "value": "field",\n          "label": "Form fields",\n          "group": "Forms"\n        }\n      ]\n    },\n    {\n      "id": "name",\n      "type": "text",\n      "label": "Project name",\n      "required": true,\n      "pattern": "^[a-z][a-z0-9-]{2,29}$"\n    },\n    {\n      "id": "email",\n      "type": "email",\n      "label": "Email"\n    },\n    {\n      "id": "tags",\n      "type": "tags",\n      "label": "Tags"\n    },\n    {\n      "id": "start",\n      "type": "date",\n      "label": "Start date"\n    }\n  ]\n}',
   search:
     '[\n  {\n    "id": "getting-started",\n    "title": "Getting started",\n    "section": "Guides",\n    "content": "Install Vitrine from a CDN or npm and add your first element.",\n    "url": "docs.html?page=getting-started",\n    "featured": true\n  },\n  {\n    "id": "theming",\n    "title": "Theming",\n    "section": "Guides",\n    "content": "Colours, fonts and spacing with CSS custom properties, in light and dark.",\n    "url": "docs.html?page=theming",\n    "featured": true\n  },\n  {\n    "id": "security",\n    "title": "Security",\n    "section": "Guides",\n    "content": "Sanitized Markdown, safe links and Trusted Types.",\n    "url": "docs.html?page=security"\n  },\n  {\n    "id": "board",\n    "title": "<vt-board>",\n    "section": "Components",\n    "content": "A task board with drag and drop, a list and a table.",\n    "keywords": [\n      "kanban",\n      "tasks"\n    ],\n    "url": "docs.html?page=components/board"\n  },\n  {\n    "id": "field",\n    "title": "<vt-field>",\n    "section": "Components",\n    "content": "A form field with its label, hint, tip and lists.",\n    "keywords": [\n      "form",\n      "input",\n      "select"\n    ],\n    "url": "docs.html?page=components/field"\n  },\n  {\n    "id": "search",\n    "title": "<vt-search>",\n    "section": "Components",\n    "content": "Site search with a keyboard shortcut and results by id.",\n    "keywords": [\n      "find"\n    ],\n    "url": "docs.html?page=components/search"\n  }\n]',
   // The date picker and the upload are set by their attributes: they have no content.
@@ -576,6 +578,15 @@ const SCHEMA = {
       { name: 'searchable', type: 'select', options: ['', 'searchable'] },
       { name: 'max-selected', type: 'number', placeholder: '3' },
       { name: 'placeholder', type: 'text', placeholder: 'Choose…' },
+    ],
+  },
+  questionnaire: {
+    tag: 'vt-questionnaire',
+    flags: ['review', 'auto-advance', 'allow-skip'],
+    fields: [
+      { name: 'name', type: 'text', placeholder: 'setup' },
+      { name: 'layout', type: 'select', options: ['', 'steps', 'all'] },
+      { name: 'progress', type: 'select', options: ['', 'none', 'bar', 'steps'] },
     ],
   },
   search: {
@@ -1576,6 +1587,7 @@ function switchType(type) {
     workflow: 'CI',
     'access-log': 'access.log',
     password: 'Password',
+    questionnaire: 'Setup',
     secret: 'API key',
     version: 'Version',
     consent: 'Cookies',
