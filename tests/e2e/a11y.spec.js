@@ -250,6 +250,10 @@ const MORE = {
   'vt-typing': ['', { name: 'Ada', 'show-text': '' }],
   'vt-loading-button': ['', { loading: '', 'loading-text': 'Saving…' }],
   'vt-loading-message': ['Connecting…\nFetching…', { elapsed: '', 'slow-after': '1ms' }],
+  'vt-flowtime': [
+    '[{"id":"a","start":"2024-03-01T09:00:00Z","title":"Login","group":"events","metadata":{"ip":"10.0.0.1"}},{"id":"b","start":"2024-03-02T10:00:00Z","title":"Exfiltration","group":"notes"}]',
+    { variant: 'full' },
+  ],
   'vt-map': [
     'Paris\nOffice: 35.6762, 139.6503\nBrazil 213\nParis -> New York',
     { variant: 'full' },

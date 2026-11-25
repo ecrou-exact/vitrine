@@ -170,6 +170,7 @@ Edits update the `content` property without re-rendering the element (the caret 
 | `<vt-cookies>`      | `content`, `cookies` (read only)                                                         |
 | `<vt-redirects>`    | `content`, `hops` (read only)                                                            |
 | `<vt-map>`          | `content`, `items` and `view` (read only)                                                |
+| `<vt-flowtime>`     | `content`, `options` and `viewer` (read only)                                            |
 | `<vt-nmap>`         | `content`                                                                                |
 | `<vt-url>`          | `content`                                                                                |
 | `<vt-hash>`         | `content`; the hashes follow as you type                                                 |

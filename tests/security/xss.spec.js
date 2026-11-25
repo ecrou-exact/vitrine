@@ -994,6 +994,24 @@ ${p}`,
       `$ curl -sIL https://x.dev/\nHTTP/1.1 301 ${p}\nLocation: ${p.replace(/\s/g, '')}\n\nHTTP/1.1 200 OK`,
   },
   {
+    tag: 'vt-flowtime',
+    attrs: { variant: 'full' },
+    wrap: (p) =>
+      JSON.stringify({
+        events: [
+          {
+            id: p,
+            start: '2024-03-01T09:00:00Z',
+            title: p,
+            description: p,
+            group: p,
+            metadata: { [p]: p },
+          },
+        ],
+        groups: [{ id: p, label: p, color: p, icon: p }],
+      }),
+  },
+  {
     tag: 'vt-map',
     slow: true,
     attrs: { variant: 'full' },

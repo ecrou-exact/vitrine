@@ -72,7 +72,7 @@ const builds = [
 
 // Per-component ES modules with shared chunks: load only the elements you use.
 const components = [
-  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'consent', 'changelog', 'repo', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql', 'ioc', 'cvss', 'headers', 'email', 'dns', 'nmap', 'url', 'hash', 'waterfall', 'yara', 'sigma', 'pcap', 'semver', 'contrast', 'sbom', 'dockerfile', 'lighthouse', 'a11y', 'cookies', 'redirects', 'map', 'loading-button', 'loading-message', 'loading-overlay', 'loading-steps', 'page-progress', 'progress', 'progress-ring', 'skeleton', 'spinner', 'typing',
+  'code', 'markdown', 'json', 'csv', 'tags', 'diff', 'terminal', 'tree', 'http', 'log', 'chart', 'openapi', 'env', 'timeline', 'flowtime', 'git', 'job', 'hex', 'regex', 'toml', 'jwt', 'yaml', 'xml', 'cron', 'cert', 'table', 'status', 'calendar', 'pricing', 'faq', 'gallery', 'stats', 'testimonials', 'countdown', 'field', 'board', 'search', 'date-picker', 'menu', 'upload', 'install', 'download', 'contributors', 'lifecycle', 'advisories', 'licenses', 'icon-picker', 'workflow', 'access-log', 'password', 'secret', 'version', 'consent', 'changelog', 'repo', 'compare', 'describe', 'treemap', 'flame', 'heatmap', 'pivot', 'diagram', 'math', 'notebook', 'trace', 'test-report', 'sql', 'ioc', 'cvss', 'headers', 'email', 'dns', 'nmap', 'url', 'hash', 'waterfall', 'yara', 'sigma', 'pcap', 'semver', 'contrast', 'sbom', 'dockerfile', 'lighthouse', 'a11y', 'cookies', 'redirects', 'map', 'loading-button', 'loading-message', 'loading-overlay', 'loading-steps', 'page-progress', 'progress', 'progress-ring', 'skeleton', 'spinner', 'typing',
 ]; // prettier-ignore
 /** @type {import('esbuild').BuildOptions} */
 const split = {
@@ -90,6 +90,19 @@ const split = {
   chunkNames: 'chunks/[name]-[hash]',
 };
 builds.push(split);
+
+// Flowtime's standalone DOM API keeps framework integrations outside the custom element.
+builds.push({
+  ...shared,
+  entryPoints: ['src/entries/flowtime.js'],
+  format: 'esm',
+  outfile: 'dist/flowtime.js',
+  minify: true,
+  sourcemap: false,
+  banner: {
+    js: `/*! Vitrine Flowtime v${pkg.version} | MIT License | https://github.com/ecrou-exact/vitrine */`,
+  },
+});
 
 // One small classic script that loads only the elements a page uses (dist/esm/vt-*.js).
 builds.push({
@@ -282,6 +295,12 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
 
 await copyFile('src/styles/light-dom.css', 'dist/vitrine.css');
+await copyFile('src/components/flowtime/engine/flowtime.css', 'dist/flowtime.css');
+const flowtimeTypes = await readFile('src/components/flowtime/engine/flowtime.d.ts', 'utf8');
+await writeFile(
+  'dist/flowtime.d.ts',
+  flowtimeTypes + '\nexport function timestamp(value: unknown): number;\n',
+);
 
 // Syntax themes: one small stylesheet each, loaded on demand, plus an index for docs.
 const themes = await syntaxThemes();

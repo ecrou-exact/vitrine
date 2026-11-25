@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types vitrine" />
+    <title>Flowtime — Vitrine integration</title>
+    <link rel="stylesheet" href="fixture.css" />
+    <script type="module" src="flowtime.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Flowtime — Vitrine</h1>
+      <p>Investigation workspace, loaded from Vitrine under strict CSP.</p>
+      <button id="light" type="button">Light theme</button>
+      <button id="dark" type="button">Dark theme</button>
+      <output id="graph-state">Graph not mounted</output>
+      <div id="root">
+        <vt-flowtime id="el" label="Investigation workspace" view="combined" lang-ui="en">
+          <script type="application/json">
+            {"groups":[{"id":"notes","label":"Notes","color":"#6575d7","icon":"✎"},{"id":"evidence","label":"Evidence","color":"#249790","icon":"◇"}],"events":[{"id":"alert","start":"2026-11-24T08:15:00Z","title":"Suspicious sign-in","description":"An unfamiliar device triggered an identity alert.","group":"notes"},{"id":"logs","start":"2026-11-24T08:32:00Z","title":"Logs preserved","description":"Identity provider logs were collected as evidence.","group":"evidence"},{"id":"case","start":"2026-11-24T09:20:00Z","title":"Investigation opened","group":"notes"},{"id":"isolate","start":"2026-11-24T10:24:00Z","title":"Endpoint isolated","description":"Active sessions were revoked.","group":"notes"}]}
+          </script>
+        </vt-flowtime>
+      </div>
+      <dialog id="host-dialog">
+        <h2>Host-owned event form</h2>
+        <p>This action opens a form owned by the embedding project.</p>
+        <button id="close-dialog" type="button">Close event form</button>
+      </dialog>
+    </main>
+  </body>
+</html>

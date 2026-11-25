@@ -54,6 +54,7 @@ export const ELEMENTS = Object.freeze({
   cookies: 'vt-cookies', 'set-cookie': 'vt-cookies', 'cookies.txt': 'vt-cookies',
   redirects: 'vt-redirects',
   map: 'vt-map', geojson: 'vt-map',
+  flowtime: 'vt-flowtime',
 }); // prettier-ignore
 
 /** Attributes set from the language: the SQL dialect. */

@@ -22,6 +22,8 @@ const SAMPLES = {
     "openapi: 3.1.0\ninfo: { title: Orders API, version: 1.0.0 }\npaths:\n  /orders:\n    get: { summary: List orders, tags: [orders], responses: { '200': { description: OK } } }\n    post: { summary: Create an order, tags: [orders], responses: { '201': { description: Created } } }\n  /orders/{id}:\n    delete: { summary: Cancel an order, tags: [orders], responses: { '204': { description: Cancelled } } }\n",
   env: '# Database\nDB_HOST=db.internal\nDB_PASSWORD="s3cr3t-value"\nDATABASE_URL=postgres://app:${DB_PASSWORD}@${DB_HOST}:5432/shop\nexport NODE_ENV=production\n',
   hex: '89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52\n00 00 00 20 00 00 00 20 08 06 00 00 00 73 7a 7a\n',
+  flowtime:
+    '[{"id":"alert","start":"2026-11-24T08:15:00Z","title":"Suspicious sign-in","description":"An unfamiliar device triggered an alert."},{"id":"triage","start":"2026-11-24T09:20:00Z","title":"Investigation opened"}]',
   timeline:
     '[\n  {"time": "2026-10-07T18:00:00Z", "title": "Error rate above 5%", "kind": "danger"},\n  {"time": "2026-10-07T18:12:00Z", "title": "Rollback started", "kind": "warning"},\n  {"time": "2026-10-07T18:31:00Z", "title": "Service restored", "kind": "success"}\n]\n',
   job: "# deploy\n## Checkout\nstatus: success\nduration: 2s\nCloning into 'shop'...\n## Test\nstatus: running\nprogress: 64\nPASS src/cart.test.js\nRUNS src/payment.test.js\n## Deploy\nstatus: queued\n",
@@ -385,6 +387,15 @@ const SCHEMA = {
       { name: 'group', type: 'number', placeholder: '8' },
       { name: 'format', type: 'select', options: ['', 'auto', 'hex', 'base64'] },
       { name: 'offset', type: 'number', placeholder: '0' },
+    ],
+  },
+  flowtime: {
+    tag: 'vt-flowtime',
+    flags: ['text-size-control'],
+    fields: [
+      { name: 'view', type: 'select', options: ['', 'timeline', 'combined', 'feed'] },
+      { name: 'text-scale', type: 'number', placeholder: '1' },
+      { name: 'time-zone', type: 'text', placeholder: 'UTC' },
     ],
   },
   timeline: {
