@@ -376,7 +376,7 @@ The title, color scheme and measured contrast of each theme are in `dist/syntax-
 
 ## `defineAll()`
 
-Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar`, `vt-pricing`, `vt-faq`, `vt-gallery`, `vt-stats`, `vt-board`, `vt-field`, `vt-search`, `vt-date-picker`, `vt-menu`, `vt-upload`, `vt-testimonials`, `vt-countdown`, `vt-sql`, `vt-test-report`, `vt-trace`, `vt-notebook`, `vt-math`, `vt-diagram`, `vt-pivot`, `vt-heatmap`, `vt-flame`, `vt-treemap`, `vt-describe`, `vt-compare`, `vt-install`, `vt-download`, `vt-contributors`, `vt-lifecycle`, `vt-advisories`, `vt-licenses`, `vt-icon-picker`, `vt-workflow`, `vt-access-log`, `vt-password`, `vt-secret`, `vt-version`, `vt-consent`, `vt-changelog`, `vt-repo`, `vt-ioc`, `vt-cvss`, `vt-headers`, `vt-email`, `vt-dns`, `vt-nmap`, `vt-url`, `vt-hash`, `vt-waterfall`, `vt-yara`, `vt-sigma`, `vt-pcap`, `vt-semver`, `vt-contrast`, `vt-sbom`, `vt-dockerfile`, `vt-lighthouse`, `vt-a11y`, `vt-cookies`, `vt-redirects`, `vt-map`, `vt-flowtime`, `vt-loading-button`, `vt-loading-message`, `vt-loading-overlay`, `vt-loading-steps`, `vt-page-progress`, `vt-progress`, `vt-progress-ring`, `vt-skeleton`, `vt-spinner` and `vt-typing` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
+Defines `vt-code`, `vt-markdown`, `vt-json`, `vt-csv`, `vt-tags`, `vt-diff`, `vt-terminal`, `vt-tree`, `vt-http`, `vt-log`, `vt-chart`, `vt-openapi`, `vt-env`, `vt-hex`, `vt-timeline`, `vt-job`, `vt-git`, `vt-regex`, `vt-yaml`, `vt-xml`, `vt-toml`, `vt-jwt`, `vt-cron`, `vt-cert`, `vt-status`, `vt-calendar`, `vt-pricing`, `vt-faq`, `vt-gallery`, `vt-stats`, `vt-board`, `vt-field`, `vt-search`, `vt-date-picker`, `vt-menu`, `vt-upload`, `vt-testimonials`, `vt-countdown`, `vt-sql`, `vt-test-report`, `vt-trace`, `vt-notebook`, `vt-math`, `vt-diagram`, `vt-pivot`, `vt-heatmap`, `vt-flame`, `vt-treemap`, `vt-describe`, `vt-compare`, `vt-install`, `vt-download`, `vt-contributors`, `vt-lifecycle`, `vt-advisories`, `vt-licenses`, `vt-icon-picker`, `vt-workflow`, `vt-access-log`, `vt-password`, `vt-secret`, `vt-version`, `vt-consent`, `vt-changelog`, `vt-repo`, `vt-ioc`, `vt-cvss`, `vt-headers`, `vt-email`, `vt-dns`, `vt-nmap`, `vt-url`, `vt-hash`, `vt-waterfall`, `vt-yara`, `vt-sigma`, `vt-pcap`, `vt-semver`, `vt-contrast`, `vt-sbom`, `vt-dockerfile`, `vt-lighthouse`, `vt-a11y`, `vt-cookies`, `vt-redirects`, `vt-map`, `vt-flowtime`, `vt-loading-button`, `vt-loading-message`, `vt-loading-overlay`, `vt-loading-steps`, `vt-page-progress`, `vt-progress`, `vt-progress-ring`, `vt-questionnaire`, `vt-skeleton`, `vt-spinner` and `vt-typing` with `customElements.define()`, skipping any tag that is already defined. It returns the list of tags defined by this call.
 
 The classic script calls it automatically. With the ES module, call it yourself:
 
@@ -434,6 +434,8 @@ The event names, as a frozen object:
 | `PRICING_CHANGE`    | `vt-pricing-change`    |
 | `PLAN_SELECT`       | `vt-plan-select`       |
 | `COUNTDOWN_END`     | `vt-countdown-end`     |
+| `STEP`              | `vt-step`              |
+| `SUBMIT`            | `vt-submit`            |
 | `FILE_ADD`          | `vt-file-add`          |
 | `FILE_REMOVE`       | `vt-file-remove`       |
 | `UPLOAD_START`      | `vt-upload-start`      |

@@ -58,5 +58,28 @@
         { "id": 12345678901234567890, "name": "Ada", "tags": ["a", "b"], "nested": { "ok": true } }
       </script>
     </vt-json>
+
+    <h2>vt-questionnaire</h2>
+    <vt-questionnaire variant="full" name="setup">
+      <script type="application/json" data-json>
+        {
+          "questions": [
+            {
+              "id": "renderer",
+              "type": "single",
+              "label": "How do you render?",
+              "hint": "Pick one.",
+              "required": true,
+              "options": [
+                { "value": "csr", "label": "CSR", "description": "Client-side rendering." },
+                { "value": "ssr", "label": "SSR", "description": "Server-side rendering." }
+              ]
+            },
+            { "id": "name", "type": "text", "label": "Project name", "required": true },
+            { "id": "email", "type": "email", "label": "Email" }
+          ]
+        }
+      </script>
+    </vt-questionnaire>
   </body>
 </html>

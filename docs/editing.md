@@ -95,94 +95,95 @@ editor.addEventListener('vt-change', (event) => {
 
 Edits update the `content` property without re-rendering the element (the caret stays in place), so reading `content` returns the edited text at any time:
 
-| Component           | Read                                                                                     |
-| ------------------- | ---------------------------------------------------------------------------------------- |
-| `<vt-code>`         | `content`                                                                                |
-| `<vt-markdown>`     | `content`                                                                                |
-| `<vt-json>`         | `content` (the text, valid or not), or `data` (the parsed value, `undefined` if invalid) |
-| `<vt-csv>`          | `content`, or `rows` (the parsed rows)                                                   |
-| `<vt-diff>`         | `original`, `modified` and `patch`; `content` for a patch                                |
-| `<vt-tags>`         | `value` (selected values) or `tags` (selected tags with details)                         |
-| `<vt-terminal>`     | `content`                                                                                |
-| `<vt-tree>`         | `content`                                                                                |
-| `<vt-http>`         | `content`                                                                                |
-| `<vt-log>`          | `content`                                                                                |
-| `<vt-chart>`        | `content`                                                                                |
-| `<vt-openapi>`      | `content`                                                                                |
-| `<vt-env>`          | `content`                                                                                |
-| `<vt-hex>`          | `content`                                                                                |
-| `<vt-timeline>`     | `content`                                                                                |
-| `<vt-job>`          | `content`                                                                                |
-| `<vt-git>`          | `content`                                                                                |
-| `<vt-regex>`        | `content`                                                                                |
-| `<vt-yaml>`         | `content`                                                                                |
-| `<vt-xml>`          | `content`                                                                                |
-| `<vt-toml>`         | `content`                                                                                |
-| `<vt-jwt>`          | `content`                                                                                |
-| `<vt-cron>`         | `content`                                                                                |
-| `<vt-cert>`         | `content`                                                                                |
-| `<vt-status>`       | `content`                                                                                |
-| `<vt-calendar>`     | `content`                                                                                |
-| `<vt-pricing>`      | `content`                                                                                |
-| `<vt-faq>`          | `content`                                                                                |
-| `<vt-gallery>`      | `content`                                                                                |
-| `<vt-stats>`        | `content`                                                                                |
-| `<vt-board>`        | `content`, `board`; `addTask()`, `updateTask()`, `moveTask()`, `removeTask()`            |
-| `<vt-field>`        | `value`                                                                                  |
-| `<vt-date-picker>`  | `value`, `startDate`, `endDate`                                                          |
-| `<vt-menu>`         | `content`                                                                                |
-| `<vt-upload>`       | `files`; `clear()`, `upload()`                                                           |
-| `<vt-search>`       | `content`                                                                                |
-| `<vt-testimonials>` | `content`                                                                                |
-| `<vt-countdown>`    | `content`                                                                                |
-| `<vt-sql>`          | `content`, `statements`                                                                  |
-| `<vt-test-report>`  | `content`, `report`                                                                      |
-| `<vt-trace>`        | `content`, `traces`                                                                      |
-| `<vt-notebook>`     | `content`, `notebook`                                                                    |
-| `<vt-math>`         | `content`                                                                                |
-| `<vt-diagram>`      | `content`, `svg`                                                                         |
-| `<vt-pivot>`        | `content`, `settings`                                                                    |
-| `<vt-heatmap>`      | `content`                                                                                |
-| `<vt-flame>`        | `content`, `profile`                                                                     |
-| `<vt-treemap>`      | `content`, `tree`                                                                        |
-| `<vt-describe>`     | `content`, `profile`                                                                     |
-| `<vt-compare>`      | `original`, `modified`, `comparison` (read only: not editable in place)                  |
-| `<vt-install>`      | `content`, `tabs` (read only), `selected`                                                |
-| `<vt-download>`     | `content`, `release` (read only)                                                         |
-| `<vt-contributors>` | `content`, `groups` (read only)                                                          |
-| `<vt-lifecycle>`    | `content`, `cycles` (read only)                                                          |
-| `<vt-advisories>`   | `content`, `advisories` (read only)                                                      |
-| `<vt-licenses>`     | `content`, `dependencies`, `violations` (read only)                                      |
-| `<vt-icon-picker>`  | `value` (a form field, not an editor)                                                    |
-| `<vt-workflow>`     | `content`, `workflow` (read only; changed live with `updateJob()` and `appendLog()`)     |
-| `<vt-access-log>`   | `content`, `requests` (read only; lines added with `write()`)                            |
-| `<vt-password>`     | `value` (a form field, not an editor)                                                    |
-| `<vt-secret>`       | `value` (a form field with `editable`, not an editor)                                    |
-| `<vt-version>`      | `value` (a form field, not an editor)                                                    |
-| `<vt-consent>`      | `content` (the settings as JSON); the choice with `accept()`, `reject()` and `reset()`   |
-| `<vt-changelog>`    | `content`, `releases` (read only)                                                        |
-| `<vt-repo>`         | `content`, `repo` (read only)                                                            |
-| `<vt-ioc>`          | `content`                                                                                |
-| `<vt-cvss>`         | `content`; with `editable`, each metric is a select that updates `content`               |
-| `<vt-headers>`      | `content`                                                                                |
-| `<vt-email>`        | `content`                                                                                |
-| `<vt-dns>`          | `content`                                                                                |
-| `<vt-cookies>`      | `content`, `cookies` (read only)                                                         |
-| `<vt-redirects>`    | `content`, `hops` (read only)                                                            |
-| `<vt-map>`          | `content`, `items` and `view` (read only)                                                |
-| `<vt-flowtime>`     | `content`, `options` and `viewer` (read only)                                            |
-| `<vt-nmap>`         | `content`                                                                                |
-| `<vt-url>`          | `content`                                                                                |
-| `<vt-hash>`         | `content`; the hashes follow as you type                                                 |
-| `<vt-waterfall>`    | `content`                                                                                |
-| `<vt-yara>`         | `content`; the rules follow as you type                                                  |
-| `<vt-sigma>`        | `content` (YAML, highlighted); the rules follow as you type                              |
-| `<vt-semver>`       | `content` (versions, or the range then versions); the range field edits the range alone  |
-| `<vt-contrast>`     | `content` (pairs or a palette); the color fields edit a single pair                      |
-| `<vt-sbom>`         | `content` (JSON)                                                                         |
-| `<vt-dockerfile>`   | `content`; the stages and problems follow as you type                                    |
-| `<vt-lighthouse>`   | `content` (JSON)                                                                         |
-| `<vt-a11y>`         | `content` (JSON)                                                                         |
+| Component            | Read                                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| `<vt-code>`          | `content`                                                                                     |
+| `<vt-markdown>`      | `content`                                                                                     |
+| `<vt-json>`          | `content` (the text, valid or not), or `data` (the parsed value, `undefined` if invalid)      |
+| `<vt-csv>`           | `content`, or `rows` (the parsed rows)                                                        |
+| `<vt-diff>`          | `original`, `modified` and `patch`; `content` for a patch                                     |
+| `<vt-tags>`          | `value` (selected values) or `tags` (selected tags with details)                              |
+| `<vt-terminal>`      | `content`                                                                                     |
+| `<vt-tree>`          | `content`                                                                                     |
+| `<vt-http>`          | `content`                                                                                     |
+| `<vt-log>`           | `content`                                                                                     |
+| `<vt-chart>`         | `content`                                                                                     |
+| `<vt-openapi>`       | `content`                                                                                     |
+| `<vt-env>`           | `content`                                                                                     |
+| `<vt-hex>`           | `content`                                                                                     |
+| `<vt-timeline>`      | `content`                                                                                     |
+| `<vt-job>`           | `content`                                                                                     |
+| `<vt-git>`           | `content`                                                                                     |
+| `<vt-regex>`         | `content`                                                                                     |
+| `<vt-yaml>`          | `content`                                                                                     |
+| `<vt-xml>`           | `content`                                                                                     |
+| `<vt-toml>`          | `content`                                                                                     |
+| `<vt-jwt>`           | `content`                                                                                     |
+| `<vt-cron>`          | `content`                                                                                     |
+| `<vt-cert>`          | `content`                                                                                     |
+| `<vt-status>`        | `content`                                                                                     |
+| `<vt-calendar>`      | `content`                                                                                     |
+| `<vt-pricing>`       | `content`                                                                                     |
+| `<vt-faq>`           | `content`                                                                                     |
+| `<vt-gallery>`       | `content`                                                                                     |
+| `<vt-stats>`         | `content`                                                                                     |
+| `<vt-board>`         | `content`, `board`; `addTask()`, `updateTask()`, `moveTask()`, `removeTask()`                 |
+| `<vt-field>`         | `value`                                                                                       |
+| `<vt-date-picker>`   | `value`, `startDate`, `endDate`                                                               |
+| `<vt-menu>`          | `content`                                                                                     |
+| `<vt-upload>`        | `files`; `clear()`, `upload()`                                                                |
+| `<vt-questionnaire>` | `questions`, `value`, `step` (read only); `next()`, `back()`, `goTo()`, `reset()`, `submit()` |
+| `<vt-search>`        | `content`                                                                                     |
+| `<vt-testimonials>`  | `content`                                                                                     |
+| `<vt-countdown>`     | `content`                                                                                     |
+| `<vt-sql>`           | `content`, `statements`                                                                       |
+| `<vt-test-report>`   | `content`, `report`                                                                           |
+| `<vt-trace>`         | `content`, `traces`                                                                           |
+| `<vt-notebook>`      | `content`, `notebook`                                                                         |
+| `<vt-math>`          | `content`                                                                                     |
+| `<vt-diagram>`       | `content`, `svg`                                                                              |
+| `<vt-pivot>`         | `content`, `settings`                                                                         |
+| `<vt-heatmap>`       | `content`                                                                                     |
+| `<vt-flame>`         | `content`, `profile`                                                                          |
+| `<vt-treemap>`       | `content`, `tree`                                                                             |
+| `<vt-describe>`      | `content`, `profile`                                                                          |
+| `<vt-compare>`       | `original`, `modified`, `comparison` (read only: not editable in place)                       |
+| `<vt-install>`       | `content`, `tabs` (read only), `selected`                                                     |
+| `<vt-download>`      | `content`, `release` (read only)                                                              |
+| `<vt-contributors>`  | `content`, `groups` (read only)                                                               |
+| `<vt-lifecycle>`     | `content`, `cycles` (read only)                                                               |
+| `<vt-advisories>`    | `content`, `advisories` (read only)                                                           |
+| `<vt-licenses>`      | `content`, `dependencies`, `violations` (read only)                                           |
+| `<vt-icon-picker>`   | `value` (a form field, not an editor)                                                         |
+| `<vt-workflow>`      | `content`, `workflow` (read only; changed live with `updateJob()` and `appendLog()`)          |
+| `<vt-access-log>`    | `content`, `requests` (read only; lines added with `write()`)                                 |
+| `<vt-password>`      | `value` (a form field, not an editor)                                                         |
+| `<vt-secret>`        | `value` (a form field with `editable`, not an editor)                                         |
+| `<vt-version>`       | `value` (a form field, not an editor)                                                         |
+| `<vt-consent>`       | `content` (the settings as JSON); the choice with `accept()`, `reject()` and `reset()`        |
+| `<vt-changelog>`     | `content`, `releases` (read only)                                                             |
+| `<vt-repo>`          | `content`, `repo` (read only)                                                                 |
+| `<vt-ioc>`           | `content`                                                                                     |
+| `<vt-cvss>`          | `content`; with `editable`, each metric is a select that updates `content`                    |
+| `<vt-headers>`       | `content`                                                                                     |
+| `<vt-email>`         | `content`                                                                                     |
+| `<vt-dns>`           | `content`                                                                                     |
+| `<vt-cookies>`       | `content`, `cookies` (read only)                                                              |
+| `<vt-redirects>`     | `content`, `hops` (read only)                                                                 |
+| `<vt-map>`           | `content`, `items` and `view` (read only)                                                     |
+| `<vt-flowtime>`      | `content`, `options` and `viewer` (read only)                                                 |
+| `<vt-nmap>`          | `content`                                                                                     |
+| `<vt-url>`           | `content`                                                                                     |
+| `<vt-hash>`          | `content`; the hashes follow as you type                                                      |
+| `<vt-waterfall>`     | `content`                                                                                     |
+| `<vt-yara>`          | `content`; the rules follow as you type                                                       |
+| `<vt-sigma>`         | `content` (YAML, highlighted); the rules follow as you type                                   |
+| `<vt-semver>`        | `content` (versions, or the range then versions); the range field edits the range alone       |
+| `<vt-contrast>`      | `content` (pairs or a palette); the color fields edit a single pair                           |
+| `<vt-sbom>`          | `content` (JSON)                                                                              |
+| `<vt-dockerfile>`    | `content`; the stages and problems follow as you type                                         |
+| `<vt-lighthouse>`    | `content` (JSON)                                                                              |
+| `<vt-a11y>`          | `content` (JSON)                                                                              |
 
 Because edits are stored in `content`, they take priority over `src` and inline content from then on, as if `content` had been set.
 

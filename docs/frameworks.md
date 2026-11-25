@@ -682,6 +682,7 @@ vt-a11y:not(:defined) {
 vt-cookies:not(:defined),
 vt-redirects:not(:defined),
 vt-map:not(:defined),
+vt-questionnaire:not(:defined),
 vt-flowtime:not(:defined) {
   display: block;
   min-height: 3rem;

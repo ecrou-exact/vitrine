@@ -91,6 +91,7 @@ import { VtLoadingSteps } from './components/loading-steps/vt-loading-steps.js';
 import { VtPageProgress } from './components/page-progress/vt-page-progress.js';
 import { VtProgress } from './components/progress/vt-progress.js';
 import { VtProgressRing } from './components/progress-ring/vt-progress-ring.js';
+import { VtQuestionnaire } from './components/questionnaire/vt-questionnaire.js';
 import { VtSkeleton } from './components/skeleton/vt-skeleton.js';
 import { VtSpinner } from './components/spinner/vt-spinner.js';
 import { VtTyping } from './components/typing/vt-typing.js';
@@ -207,6 +208,7 @@ export {
   VtPageProgress,
   VtProgress,
   VtProgressRing,
+  VtQuestionnaire,
   VtSkeleton,
   VtSpinner,
   VtTyping,
@@ -336,6 +338,7 @@ export const registry = new Map(
     ['vt-page-progress', VtPageProgress],
     ['vt-progress', VtProgress],
     ['vt-progress-ring', VtProgressRing],
+    ['vt-questionnaire', VtQuestionnaire],
     ['vt-skeleton', VtSkeleton],
     ['vt-spinner', VtSpinner],
     ['vt-typing', VtTyping],
@@ -439,6 +442,7 @@ const TYPES = /** @type {const} */ ({
   'page-progress': 'vt-page-progress',
   progress: 'vt-progress',
   'progress-ring': 'vt-progress-ring',
+  questionnaire: 'vt-questionnaire',
   skeleton: 'vt-skeleton',
   spinner: 'vt-spinner',
   typing: 'vt-typing',
