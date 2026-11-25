@@ -33,6 +33,7 @@ jobs:
           npm run syntax-themes
           git diff --exit-code -- src/core/language-index.js src/core/syntax-theme-index.js
       - run: npm run build
+      - run: npm run manifest:check
       - name: Bundle size budget
         run: npm run size
       - name: Audit runtime dependencies

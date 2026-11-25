@@ -51,6 +51,7 @@
   "scripts": {
     "build": "node scripts/build.js && npm run manifest",
     "manifest": "cem analyze --config custom-elements-manifest.config.js",
+    "manifest:check": "node scripts/check-manifest.js",
     "dev": "node scripts/build.js --watch",
     "serve": "node scripts/serve.js . 4173",
     "languages": "node scripts/generate-language-index.js",
