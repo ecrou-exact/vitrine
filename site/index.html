@@ -1104,6 +1104,16 @@ Set-Cookie: track=7; SameSite=None</template>
               </vt-redirects>
               <a href="examples.html#redirects">Redirects examples</a>
             </article>
+            <article class="component component-wide">
+              <h3>&lt;vt-flowtime&gt;</h3>
+              <p>
+                An investigation workspace: source lanes, a combined timeline, a feed and an event inspector.
+              </p>
+              <vt-flowtime class="preview" lang-ui="en" view="combined">
+                <template>{"groups":[{"id":"alerts","label":"Alerts","color":"#d49635","icon":"!"},{"id":"evidence","label":"Evidence","color":"#249790","icon":"◇"}],"events":[{"id":"a","start":"2026-11-24T08:15:00Z","title":"Suspicious sign-in","group":"alerts"},{"id":"b","start":"2026-11-24T08:32:00Z","title":"Logs preserved","group":"evidence"},{"id":"c","start":"2026-11-24T09:20:00Z","title":"Beacon to 45.33.32.156","group":"alerts"},{"id":"d","start":"2026-11-24T10:24:00Z","title":"Endpoint isolated","group":"evidence"}]}</template>
+              </vt-flowtime>
+              <a href="examples.html#flowtime">Flowtime examples</a>
+            </article>
           </div>
         </div>
       </section>

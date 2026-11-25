@@ -687,6 +687,11 @@ kbd {
   align-self: start;
 }
 
+/* A workspace needs the whole row to show its timeline. */
+.component-wide {
+  grid-column: 1 / -1;
+}
+
 @media (max-width: 960px) {
   .components {
     grid-template-columns: minmax(0, 1fr);
@@ -2179,6 +2184,10 @@ kbd {
   border-radius: var(--radius);
   -webkit-mask-image: linear-gradient(#000 82%, transparent);
   mask-image: linear-gradient(#000 82%, transparent);
+}
+
+.components .component-wide .preview {
+  max-height: 560px;
 }
 
 .install-tabs {
