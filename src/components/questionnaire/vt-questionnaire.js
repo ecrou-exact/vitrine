@@ -21,6 +21,7 @@ import {
 } from './questions.js';
 import { en as strings, fr as stringsFr } from './strings.js';
 import {
+  UNREADABLE_DATE,
   firstControl,
   navView,
   paintError,
@@ -47,6 +48,14 @@ const DATA_KEYS = {
   layout: 'layout', progress: 'progress', review: 'review', autoAdvance: 'auto-advance',
   allowSkip: 'allow-skip',
 }; // prettier-ignore
+
+/**
+ * @param {Question} question
+ * @returns {string | never[]} What an event reports when there is no answer.
+ */
+function noAnswer(question) {
+  return question.type === 'multiple' || question.type === 'tags' ? [] : '';
+}
 
 /** Words of each problem, by code. */
 const MESSAGES = /** @type {Record<Problem['code'], StringKey>} */ ({
@@ -82,21 +91,21 @@ const MESSAGES = /** @type {Record<Problem['code'], StringKey>} */ ({
  * @attr {string} name - Name of the value in the submitted form: the answers as JSON.
  * @attr {"steps"|"all"} layout - One question per screen (default), or every question on one page.
  *   (Not `mode`: that attribute is the view / edit switch of every element.)
- * @attr {boolean} auto-advance - A single choice moves on after a short pause. Full variant: on.
- * @attr {boolean} review - A review screen with an Edit button per answer before the end. Full variant: on.
+ * @attr {boolean} auto-advance - A single choice moves on after a short pause. Full variant: on. `"false"` turns it off.
+ * @attr {boolean} review - A review screen with an Edit button per answer before the end. Full variant: on. `"false"` turns it off.
  * @attr {"none"|"bar"|"steps"} progress - "Step 2 of 6" with a bar, or a list of steps you can go back to. Default: `bar`, `steps` for the full variant.
- * @attr {boolean} allow-skip - Optional questions get a Skip button. Default: on.
+ * @attr {boolean} allow-skip - Optional questions get a Skip button. Default: on. `"false"` turns it off.
  * @attr {string} label - Accessible name of the questionnaire.
  * @attr {string} lang-ui - Language of the interface (`en` or `fr`, or one you registered).
  *
  * @prop {object[]} questions - The questions (read and write): `{ id, type, label, hint, required, options, … }`.
- * @prop {Record<string, unknown>} value - The answers, by question id (read and write). Unanswered and skipped questions are left out.
+ * @prop {Record<string, unknown>} value - The answers, by question id (read and write). Unanswered and skipped questions are left out, and so is an answer that fails its check (the control keeps what was typed). Setting it from code fires no `vt-change` or `vt-input`.
  * @prop {number} step - Index of the current step; the review screen comes after the last question (read-only).
  * @prop {HTMLFormElement | null} form - The form of the element (read-only).
  *
- * @fires vt-input - An answer is being edited. Detail: `{ id, value }`.
- * @fires vt-change - An answer was committed. Detail: `{ id, value }`.
- * @fires vt-step - The step changed. Detail: `{ from, to, id }` (`id` is `review` for the review screen).
+ * @fires vt-input - An answer is being edited, valid or not. Detail: `{ id, value }`.
+ * @fires vt-change - A valid answer was committed, or the answer in `value` was removed (cleared, skipped or no longer valid: `value` is then `''`, or `[]` for a list). An answer that fails its check fires nothing. Detail: `{ id, value }`.
+ * @fires vt-step - The step changed, by the reader or through `next()`, `back()`, `goTo()` and `reset()`. Detail: `{ from, to, id }` (`id` is `review` for the review screen).
  * @fires vt-submit - Every answer passed the check. Detail: `{ value }`.
  * @fires invalid - The form was submitted with a required answer missing or not valid.
  *
@@ -115,8 +124,8 @@ const MESSAGES = /** @type {Record<Problem['code'], StringKey>} */ ({
  *
  * @method next() - Checks the current step and goes to the next one; on the last step it submits. Returns `true` when it moved or submitted.
  * @method back() - Goes to the previous step, without checking. Returns `true` when it moved.
- * @method goTo(target) - Goes to a step by question id or index (`review` for the review screen). Going forward checks the current step. Returns `true` when it moved.
- * @method reset() - Clears the answers and goes back to the first step.
+ * @method goTo(target) - Goes to a step by question id or index (`review` for the review screen). Going forward checks the current step. Returns `true` when it moved. The focus moves to the new question only when it is already inside the questionnaire; called from elsewhere, it leaves the focus where it is.
+ * @method reset() - Clears the answers and goes back to the first step. Fires `vt-step` if the step changes, and no `vt-change`.
  * @method submit() - Checks every answer and fires `vt-submit`. Returns `true` when it passed.
  *
  * @example
@@ -176,8 +185,10 @@ export class VtQuestionnaire extends VtDataElement {
     this.questionList = null;
     /** @type {{ text: string, result: { questions: Question[], error: string } } | null} */
     this.parsed = null;
-    /** @type {Record<string, Answer>} */
+    /** @type {Record<string, Answer>} Every answer as given, valid or not: the checks need them. */
     this.answers = {};
+    /** @type {Map<string, Answer>} What `vt-change` last told the page, by question id. */
+    this.told = new Map();
     /** Position: a question, or the review screen after the last one. */
     this.index = 0;
     /** The furthest position reached, so the step list can go back and forth. */
@@ -222,14 +233,17 @@ export class VtQuestionnaire extends VtDataElement {
   /** @type {Record<string, Answer>} */
   get value() {
     const copy = /** @type {Record<string, Answer>} */ ({});
-    for (const [id, answer] of Object.entries(this.answers))
-      copy[id] = Array.isArray(answer) ? [...answer] : answer;
+    for (const question of this.list()) {
+      const answer = this.accepted(question);
+      if (answer !== undefined) copy[question.id] = Array.isArray(answer) ? [...answer] : answer;
+    }
     return copy;
   }
 
   set value(value) {
     this.answers = coerceValue(this.list(), value);
     this.problems.clear();
+    this.told = new Map(Object.entries(this.value));
     this.sync();
     this.requestRender();
   }
@@ -259,10 +273,13 @@ export class VtQuestionnaire extends VtDataElement {
     const list = this.list();
     this.answers = coerceValue(list, this.answers);
     this.problems.clear();
+    this.told = new Map(Object.entries(this.value));
+    const from = this.index;
     this.index = Math.min(this.index, this.lastPosition());
     this.reached = Math.min(this.reached, this.lastPosition());
     this.sync();
     this.requestRender();
+    if (this.index !== from) emit(this, EVENTS.STEP, { from, to: this.index, id: this.idAt(this.index) }); // prettier-ignore
   }
 
   contentChanged() {
@@ -290,7 +307,7 @@ export class VtQuestionnaire extends VtDataElement {
   sync() {
     if (!this.internals) return;
     const name = this.getAttribute('name');
-    this.internals.setFormValue(name ? JSON.stringify(this.answers) : null);
+    this.internals.setFormValue(name ? JSON.stringify(this.value) : null);
     const problem = firstProblem(this.list(), this.answers);
     if (!problem) this.internals.setValidity({});
     else {
@@ -328,7 +345,7 @@ export class VtQuestionnaire extends VtDataElement {
   // ---------------------------------------------------------------- answers
 
   /**
-   * Stores an answer. A number that is not one is kept as typed, so it can be reported.
+   * Stores an answer. A number or a date that is not one is kept as typed, so it can be reported.
    *
    * @param {Question} question
    * @param {unknown} raw
@@ -336,7 +353,8 @@ export class VtQuestionnaire extends VtDataElement {
    */
   store(question, raw) {
     let answer = coerceAnswer(question, raw);
-    if (answer === null && question.type === 'number' && typeof raw === 'string' && raw.trim())
+    const typed = question.type === 'number' || question.type === 'date';
+    if (answer === null && typed && typeof raw === 'string' && raw.trim())
       answer = raw.trim().slice(0, 50);
     if (answer === null) delete this.answers[question.id];
     else this.answers[question.id] = answer;
@@ -346,20 +364,44 @@ export class VtQuestionnaire extends VtDataElement {
 
   /**
    * @param {Question} question
+   * @returns {Answer | undefined} The answer when it passes its check; otherwise `undefined`.
+   */
+  accepted(question) {
+    const answer = this.answers[question.id];
+    return answer !== undefined && !validateAnswer(question, answer) ? answer : undefined;
+  }
+
+  /**
+   * Tells the page about the answer of a question if what `value` holds for it changed since
+   * the last `vt-change`: a valid answer, or its removal when it was cleared or stopped being
+   * valid. An answer that fails its check is not announced.
+   *
+   * @param {Question} question
+   */
+  tell(question) {
+    const now = this.accepted(question);
+    if (JSON.stringify(now) === JSON.stringify(this.told.get(question.id))) return;
+    if (now === undefined) this.told.delete(question.id);
+    else this.told.set(question.id, now);
+    emit(this, EVENTS.CHANGE, { id: question.id, value: now ?? noAnswer(question) });
+  }
+
+  /**
+   * @param {Question} question
    * @param {unknown} raw
    * @param {boolean} commit
    */
   answered(question, raw, commit) {
     const answer = this.store(question, raw);
-    const empty = question.type === 'multiple' || question.type === 'tags' ? [] : '';
-    const detail = { id: question.id, value: answer ?? empty };
     // An error shown for this step goes away as soon as the answer is right.
     if (this.problems.has(question.id)) this.showProblem(question);
-    if (!commit) emit(this, EVENTS.INPUT, detail);
-    else {
-      emit(this, EVENTS.CHANGE, detail);
-      this.maybeAdvance(question);
+    if (!commit) {
+      const unreadable = question.type === 'date' && answer === UNREADABLE_DATE;
+      emit(this, EVENTS.INPUT, { id: question.id, value: unreadable ? '' : (answer ?? noAnswer(question)) }); // prettier-ignore
+      return;
     }
+    this.tell(question);
+    this.maybeAdvance(question);
   }
 
   /** @param {Question} question */
@@ -439,7 +481,8 @@ export class VtQuestionnaire extends VtDataElement {
     this.index = to;
     this.reached = Math.max(this.reached, to);
     if (to >= this.list().length) this.fromReview = false;
-    this.pendingFocus = 'title';
+    // The focus follows the reader; a call from elsewhere does not take it from the page.
+    this.pendingFocus = this.root.activeElement ? 'title' : null;
     this.render();
     emit(this, EVENTS.STEP, { from, to, id: this.idAt(to) });
     this.announce(this.stepText());
@@ -503,6 +546,7 @@ export class VtQuestionnaire extends VtDataElement {
     const question = this.list()[this.index];
     if (!question || question.required) return;
     this.store(question, null);
+    this.tell(question);
     this.problems.delete(question.id);
     const to = this.fromReview ? this.list().length : nextPosition(this.index, this.list().length, this.hasReview); // prettier-ignore
     if (to < 0) this.submit();
@@ -520,6 +564,7 @@ export class VtQuestionnaire extends VtDataElement {
     clearTimeout(this.advanceTimer);
     const from = this.index;
     this.answers = {};
+    this.told.clear();
     this.problems.clear();
     this.index = 0;
     this.reached = 0;

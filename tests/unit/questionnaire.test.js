@@ -400,3 +400,134 @@ describe('<vt-questionnaire>', () => {
     expect(el.value).toEqual({});
   });
 });
+
+describe('answers that fail their check', () => {
+  const CHECKED = [
+    { id: 'name', type: 'text', label: 'Name', pattern: '[a-z-]+' },
+    { id: 'when', type: 'date', label: 'When' },
+    { id: 'tags', type: 'tags', label: 'Tags', min: 2 },
+  ];
+
+  /** @returns {{ el: any, seen: any[] }} */
+  function checked() {
+    const el = mount();
+    el.questions = CHECKED;
+    el.render();
+    const seen = /** @type {any[]} */ ([]);
+    el.addEventListener('vt-input', (/** @type {any} */ e) => seen.push(['input', e.detail]));
+    el.addEventListener('vt-change', (/** @type {any} */ e) => seen.push(['change', e.detail]));
+    return { el, seen };
+  }
+
+  it('keeps an invalid answer out of value and fires no vt-change, but still vt-input', () => {
+    const { el, seen } = checked();
+    const [name] = el.list();
+    el.answered(name, 'Bad Name', false);
+    el.answered(name, 'Bad Name', true);
+    expect(el.value).toEqual({});
+    expect(seen).toEqual([['input', { id: 'name', value: 'Bad Name' }]]);
+    // The step still refuses to go on, with the answer that was typed.
+    expect(el.next()).toBe(false);
+    expect(el.root.querySelector('[data-error]').textContent).toContain('expected format');
+  });
+
+  it('announces a valid answer once, and its removal when it stops being valid', () => {
+    const { el, seen } = checked();
+    const [name] = el.list();
+    el.answered(name, 'good-name', true);
+    el.answered(name, 'good-name', true);
+    expect(el.value).toEqual({ name: 'good-name' });
+    el.answered(name, 'Bad Name', true);
+    expect(el.value).toEqual({});
+    el.answered(name, 'Worse Name', true);
+    expect(seen).toEqual([
+      ['change', { id: 'name', value: 'good-name' }],
+      ['change', { id: 'name', value: '' }],
+    ]);
+    el.answered(name, 'fixed', true);
+    expect(seen.at(-1)).toEqual(['change', { id: 'name', value: 'fixed' }]);
+  });
+
+  it('reports a list that is too short as no answer', () => {
+    const { el, seen } = checked();
+    const tags = el.list()[2];
+    el.answered(tags, ['a'], true);
+    expect(seen).toEqual([]);
+    el.answered(tags, ['a', 'b'], true);
+    el.answered(tags, ['a'], true);
+    expect(seen.map((e) => e[1].value)).toEqual([['a', 'b'], []]);
+    expect(el.value).toEqual({});
+  });
+
+  it('fires nothing for a date that cannot be read, and blocks the step', () => {
+    const { el, seen } = checked();
+    el.goTo('when');
+    seen.length = 0;
+    const when = el.list()[1];
+    el.answered(when, '?', false);
+    el.answered(when, '?', true);
+    expect(seen).toEqual([['input', { id: 'when', value: '' }]]);
+    expect(el.value).toEqual({});
+    expect(el.next()).toBe(false);
+    expect(el.root.querySelector('[data-error]').textContent).toContain('Enter a date');
+    el.answered(when, '2027-01-15', true);
+    expect(seen.at(-1)).toEqual(['change', { id: 'when', value: '2027-01-15' }]);
+  });
+
+  it('does not put an invalid answer set from code into value, nor submit it', () => {
+    const { el } = checked();
+    el.value = { name: 'Bad Name' };
+    expect(el.value).toEqual({});
+    expect(el.submit()).toBe(false);
+  });
+
+  it('announces the removal of a skipped answer', () => {
+    const { el, seen } = checked();
+    el.value = { name: 'good' };
+    el.skip();
+    expect(seen).toEqual([['change', { id: 'name', value: '' }]]);
+  });
+});
+
+describe('programmatic changes', () => {
+  it('fires vt-step for goTo(), next() and back(), and for reset() when the step changes', () => {
+    const el = mount();
+    const steps = [];
+    el.addEventListener('vt-step', (/** @type {any} */ e) => steps.push(e.detail));
+    el.value = { renderer: 'csr', components: ['json'] };
+    el.goTo('note');
+    el.back();
+    el.next();
+    el.reset();
+    el.reset();
+    expect(steps).toEqual([
+      { from: 0, to: 2, id: 'note' },
+      { from: 2, to: 1, id: 'components' },
+      { from: 1, to: 2, id: 'note' },
+      { from: 2, to: 0, id: 'renderer' },
+    ]);
+  });
+
+  it('fires no vt-change or vt-input when value is set or the form is reset', () => {
+    const el = mount();
+    const seen = [];
+    el.addEventListener('vt-change', () => seen.push('change'));
+    el.addEventListener('vt-input', () => seen.push('input'));
+    el.value = { renderer: 'csr' };
+    el.questions = QUESTIONS;
+    el.reset();
+    expect(seen).toEqual([]);
+  });
+
+  it('moves the focus to the new question only when it was inside the questionnaire', () => {
+    const el = mount();
+    el.value = { renderer: 'csr' };
+    el.goTo('components');
+    expect(el.root.activeElement).toBeNull();
+    el.goTo('renderer');
+    el.root.querySelector('input').focus();
+    expect(el.root.activeElement).not.toBeNull();
+    el.goTo('components');
+    expect(el.root.activeElement).toBe(el.root.querySelector('h2'));
+  });
+});

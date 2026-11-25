@@ -240,4 +240,145 @@ test.describe('<vt-questionnaire>', () => {
     await expect(page.locator('#el [part~="progress"] .progress-text')).toHaveText('Étape 1 sur 6');
     await expect(page.getByRole('button', { name: 'Suivant' })).toBeVisible();
   });
+
+  /**
+   * Answers the first steps from code and goes to a question.
+   *
+   * @param {import('@playwright/test').Page} page
+   * @param {string} id
+   */
+  async function arrive(page, id) {
+    await page.evaluate((id) => {
+      const el = /** @type {any} */ (document.getElementById('el'));
+      el.value = {
+        renderer: 'csr',
+        components: ['code'],
+        name: id === 'name' ? undefined : 'my-app',
+      };
+      el.goTo(id);
+    }, id);
+  }
+
+  const changes = async (/** @type {import('@playwright/test').Page} */ page) =>
+    (await events(page)).filter((e) => e.type === 'vt-change');
+
+  test('an answer that fails its check is not in value and fires no vt-change', async ({
+    page,
+  }) => {
+    await place(page, { variant: 'simple' });
+    await arrive(page, 'name');
+    const name = page.locator('#el vt-field input');
+    await name.fill('Bad Name');
+    await name.blur();
+    await expect(page.locator('#el [data-error]')).toBeHidden();
+    await page.getByRole('button', { name: 'Next' }).click();
+    await expect(page.locator('#el [data-error]')).toContainText(
+      'does not have the expected format',
+    );
+    expect(await changes(page)).toEqual([]);
+    const typed = (await events(page)).filter((e) => e.type === 'vt-input');
+    expect(typed.at(-1).detail).toEqual({ id: 'name', value: 'Bad Name' });
+    expect(
+      await page.evaluate(() => /** @type {any} */ (document.getElementById('el')).value),
+    ).toEqual({
+      renderer: 'csr',
+      components: ['code'],
+    });
+    // The control keeps what was typed, so it can be corrected.
+    await expect(name).toHaveValue('Bad Name');
+
+    await name.fill('good-name');
+    await name.blur();
+    expect((await changes(page)).at(-1).detail).toEqual({ id: 'name', value: 'good-name' });
+    // A valid answer that becomes invalid is taken out of value.
+    await name.fill('Bad Again');
+    await name.blur();
+    expect((await changes(page)).at(-1).detail).toEqual({ id: 'name', value: '' });
+    expect(
+      await page.evaluate(() => /** @type {any} */ (document.getElementById('el')).value.name),
+    ).toBeUndefined();
+  });
+
+  test('a date that cannot be read fires no vt-change', async ({ page }) => {
+    await place(page, { variant: 'full' });
+    await arrive(page, 'start');
+    const input = page.locator('#el vt-date-picker input');
+    await input.fill('01152027');
+    await input.blur();
+    await expect(page.locator('#el vt-date-picker')).toContainText('Enter a date such as');
+    expect(await changes(page)).toEqual([]);
+    // Optional, but not left behind with text nobody can read.
+    await page.getByRole('button', { name: 'Review' }).click();
+    await expect(page.locator('#el h2')).toHaveText('Start date');
+    await expect(page.locator('#el [data-error]')).toContainText('Enter a date');
+    await input.fill('2027-01-15');
+    await input.blur();
+    expect((await changes(page)).map((e) => e.detail)).toEqual([
+      { id: 'start', value: '2027-01-15' },
+    ]);
+  });
+
+  test('Enter goes on from tags only when the tag editor did not use it', async ({ page }) => {
+    await place(page, { variant: 'full' });
+    await arrive(page, 'tags');
+    const input = page.locator('#el vt-tags input');
+    await input.focus();
+    await page.keyboard.type('alpha');
+    await page.keyboard.press('Enter');
+    // The text became a tag: still on the step.
+    await expect(page.locator('#el h2')).toHaveText('Tags');
+    await expect(page.locator('#el vt-tags')).toContainText('alpha');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#el h2')).toHaveText('Start date');
+    expect((await changes(page)).map((e) => e.detail)).toEqual([{ id: 'tags', value: ['alpha'] }]);
+  });
+
+  test('Enter goes on from a date once the typed date is valid and the calendar is closed', async ({
+    page,
+  }) => {
+    await place(page, { variant: 'full' });
+    await arrive(page, 'start');
+    const input = page.locator('#el vt-date-picker input');
+    // Not readable: the step stays, with the error.
+    await input.fill('01152027');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#el h2')).toHaveText('Start date');
+    await expect(page.locator('#el [data-error]')).toContainText('Enter a date');
+    // Readable: Enter commits it and goes on, like a text answer.
+    await input.fill('2027-01-15');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#el h2')).toHaveText('Review your answers');
+    expect((await changes(page)).map((e) => e.detail)).toEqual([
+      { id: 'start', value: '2027-01-15' },
+    ]);
+  });
+
+  test('Enter in the open calendar chooses a day and does not go on', async ({ page }) => {
+    await place(page, { variant: 'full' });
+    await arrive(page, 'start');
+    await page.locator('#el vt-date-picker [data-focus-key="toggle"]').click();
+    await expect(page.locator('#el vt-date-picker [data-day]:focus')).toHaveCount(1);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#el h2')).toHaveText('Start date');
+    expect(await changes(page)).toHaveLength(1);
+  });
+
+  test('goTo() moves the focus only when it is already inside the questionnaire', async ({
+    page,
+  }) => {
+    await place(page);
+    await page.evaluate(() => {
+      const el = /** @type {any} */ (document.getElementById('el'));
+      el.value = { renderer: 'csr', components: ['code'] };
+      /** @type {any} */ (document.activeElement)?.blur();
+      el.goTo('name');
+    });
+    await expect(page.locator('#el h2')).toHaveText('Project name');
+    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('BODY');
+
+    await page.locator('#el vt-field input').focus();
+    await page.evaluate(() => /** @type {any} */ (document.getElementById('el')).goTo('renderer'));
+    await expect(page.locator('#el h2')).toHaveText('How do you render?');
+    await expect(page.locator('#el h2')).toBeFocused();
+  });
 });

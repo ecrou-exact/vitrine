@@ -22,7 +22,7 @@ import { isEmpty } from './questions.js';
  * @property {Translate} t
  * @property {(question: Question, raw: unknown) => void} onInput - An answer is being edited.
  * @property {(question: Question, raw: unknown) => void} onChange - An answer was committed.
- * @property {() => void} onEnter - Enter was pressed in a control.
+ * @property {() => void} onEnter - Enter was pressed in a control that did not use it.
  * @property {() => void} onArrow - An arrow key moved the choice (it must not advance).
  * @property {string} locale
  */
@@ -36,6 +36,18 @@ import { isEmpty } from './questions.js';
  */
 function custom(tag, props) {
   return h(/** @type {any} */ (tag), props);
+}
+
+/** What a date answer holds when the picker has text it cannot read as a date. */
+export const UNREADABLE_DATE = '?';
+
+/**
+ * @param {KeyboardEvent} event
+ * @returns {boolean} Whether a plain Enter came from a text input, and nothing used it.
+ */
+function freeEnter(event) {
+  if (event.key !== 'Enter' || event.isComposing || event.defaultPrevented) return false;
+  return event.composedPath()[0] instanceof HTMLInputElement;
 }
 
 /**
@@ -230,6 +242,12 @@ function tagsControl(question, answer, ctx) {
   });
   for (const name of ['vt-input', 'vt-tag-add', 'vt-tag-remove'])
     tags.addEventListener(name, (/** @type {Event} */ event) => event.stopPropagation());
+  // The tag editor keeps an Enter that adds a tag or picks a suggestion (it cancels the event).
+  tags.addEventListener('keydown', (/** @type {KeyboardEvent} */ event) => {
+    if (!freeEnter(event)) return;
+    event.preventDefault();
+    ctx.onEnter();
+  });
   return tags;
 }
 
@@ -252,13 +270,31 @@ function dateControl(question, answer, ctx) {
       clearable: !question.required,
     },
   });
+  // Text the picker cannot read is not an answer, but it must still block the step.
+  const read = () => (picker.validity?.badInput ? UNREADABLE_DATE : picker.value);
   picker.addEventListener('vt-input', (/** @type {Event} */ event) => {
     event.stopPropagation();
-    ctx.onInput(question, picker.value);
+    ctx.onInput(question, read());
   });
   picker.addEventListener('vt-change', (/** @type {Event} */ event) => {
     event.stopPropagation();
-    ctx.onChange(question, picker.value);
+    ctx.onChange(question, read());
+  });
+  let open = false;
+  picker.addEventListener('vt-toggle', (/** @type {CustomEvent} */ event) => {
+    event.stopPropagation();
+    open = Boolean(event.detail?.expanded);
+  });
+  // Enter in the field commits the typed date: the browser fires `change` after the key goes
+  // down, so the step is checked when the key comes up, not before.
+  let armed = false;
+  picker.addEventListener('keydown', (/** @type {KeyboardEvent} */ event) => {
+    armed = !open && freeEnter(event);
+  });
+  picker.addEventListener('keyup', (/** @type {KeyboardEvent} */ event) => {
+    if (event.key !== 'Enter' || !armed) return;
+    armed = false;
+    ctx.onEnter();
   });
   return picker;
 }
