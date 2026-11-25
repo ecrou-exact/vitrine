@@ -102,6 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `custom-elements.json`: an attribute an element documents itself no longer takes the type of the attribute it inherits. `mode` on `<vt-date-picker>` is `"single"|"range"` (was `"view"|"edit"`), `mode` on `<vt-password>` is `"new"|"current"`, and `status` on `<vt-test-report>` is `"all"|"failed"|"passed"|"skipped"` (was `boolean`). Properties documented with `@prop` are marked `privacy: "public"`, so tools that read the manifest (framework wrappers, IDEs) can tell them from internal state. `npm run manifest:check` runs in CI and fails if an element of the registry is missing, an `@attr` type is lost or an `@prop` is not public.
 - Flowtime is listed in the docs sidebar and component indexes. The site build now checks that every component reference is reachable through the docs router.
 
 - Integrations navigation has a visible horizontal scrollbar and keyboard access so every section link is reachable.
